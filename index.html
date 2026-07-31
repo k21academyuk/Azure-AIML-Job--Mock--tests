@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Azure AI/ML/GenAI Job Oriented Program — Module Practice Tests | K21 Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#F7F8FA; --surface:#FFFFFF; --border:#E8EAEE;
+  --text-1:#111827; --text-2:#4B5563; --text-3:#9CA3AF;
+  --green:#8DC63F; --green-mid:#79B030; --green-bg:#F1F8E8; --green-dark:#4A7A1B;
+  --navy:#1A1248; --navy-mid:#2E2080; --blue:#1B9BD9;
+  --amber:#F5A623; --amber-bg:#FFF6E5; --amber-dark:#8A5A00;
+  --radius:16px; --radius-lg:24px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text-1);-webkit-font-smoothing:antialiased;min-height:100vh;}
+
+.topbar{
+  background:var(--navy); color:#fff; padding:16px 28px;
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;
+}
+.topbar .brand{display:flex; align-items:center; gap:10px; font-weight:800; font-size:15px;}
+.topbar .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--green);}
+.topbar .program{font-size:12px; color:#C9C4E8; font-weight:500;}
+
+.hero{max-width:1080px; margin:0 auto; padding:52px 20px 20px;}
+.eyebrow{
+  display:inline-flex; align-items:center; gap:7px; background:var(--green-bg);
+  border:1px solid #C8E89A; color:var(--green-dark); font-size:11px; font-weight:700;
+  letter-spacing:.08em; text-transform:uppercase; padding:5px 13px; border-radius:100px; margin-bottom:16px;
+}
+.eyebrow i{width:5px;height:5px;background:var(--green);border-radius:50%;display:inline-block;font-style:normal;}
+.hero-title{font-size:clamp(26px,4vw,38px); font-weight:800; letter-spacing:-.025em; line-height:1.15; margin-bottom:12px;}
+.hero-title .accent{color:var(--green-mid);}
+.hero-sub{color:var(--text-2); font-size:15.5px; line-height:1.65; max-width:680px; margin-bottom:20px;}
+
+.notice{
+  display:flex; gap:10px; align-items:flex-start; background:var(--amber-bg); border:1px solid #F0C77C;
+  border-radius:12px; padding:14px 16px; font-size:13.5px; color:var(--amber-dark); margin-bottom:24px; line-height:1.55; max-width:680px;
+}
+
+.summary-row{display:flex; gap:14px; flex-wrap:wrap; margin-bottom:8px;}
+.summary-chip{background:var(--surface); border:1.5px solid var(--border); border-radius:100px; padding:9px 18px; font-size:13.5px; font-weight:700; color:var(--navy); display:flex; align-items:center; gap:8px;}
+.summary-chip span{color:var(--text-3); font-weight:500;}
+
+.wrap{max-width:1080px; margin:0 auto; padding:12px 20px 80px;}
+
+.card-grid{
+  display:grid; grid-template-columns:1fr 1fr; gap:16px;
+}
+@media (max-width:680px){ .card-grid{ grid-template-columns:1fr; } }
+
+.test-card{
+  background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius);
+  padding:20px; display:flex; flex-direction:column; gap:10px; text-decoration:none; color:inherit;
+  transition:all .18s; position:relative; overflow:hidden; min-height:150px;
+}
+.test-card:hover{border-color:var(--green); box-shadow:0 8px 24px rgba(141,198,63,.18); transform:translateY(-2px);}
+.test-card.placeholder{border-style:dashed;}
+.test-card.placeholder:hover{border-color:var(--amber);}
+
+.card-top-row{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+.module-badge{background:var(--navy); color:#fff; font-weight:800; font-size:12px; padding:4px 11px; border-radius:100px; flex-shrink:0;}
+.sub-label{font-size:11.5px; font-weight:700; color:var(--green-dark); background:var(--green-bg); padding:3px 10px; border-radius:100px;}
+.bonus-tag{background:var(--amber-bg); color:var(--amber-dark); font-size:11px; font-weight:700; padding:3px 10px; border-radius:100px;}
+.tbd-tag{background:#F0F1F4; color:var(--text-2); font-size:11px; font-weight:700; padding:3px 10px; border-radius:100px;}
+
+.test-card .test-title{font-size:15px; font-weight:700; color:var(--text-1); line-height:1.4;}
+.test-card .meta-row{display:flex; gap:14px; font-size:12.5px; color:var(--text-3); font-weight:600; margin-top:auto; padding-top:6px;}
+.test-card .meta-row b{color:var(--navy); font-weight:800;}
+.test-card .go-arrow{
+  position:absolute; top:18px; right:18px; width:28px; height:28px; border-radius:50%;
+  background:var(--bg); display:flex; align-items:center; justify-content:center;
+  color:var(--text-3); font-size:14px; transition:all .18s;
+}
+.test-card:hover .go-arrow{background:var(--green); color:#fff;}
+
+footer.k21-footer{text-align:center; padding:28px 20px 40px; font-size:12px; color:var(--text-3);}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand"><span class="dot"></span> K21 Academy</div>
+  <div class="program">Azure AI/ML/GenAI Job Oriented Program</div>
+</div>
+
+<div class="hero">
+  <div class="eyebrow"><i></i>Module Practice Test Library</div>
+  <div class="hero-title">Azure AI/ML/GenAI <span class="accent">Practice Test Hub</span></div>
+  <p class="hero-sub">All module-wise mock tests in one place. Each test is untimed practice — elapsed time only, no pass/fail, just performance bands to guide what to review next. Pick a test below to get started.</p>
+  <div class="summary-row">
+    <div class="summary-chip">20 <span>Practice Tests</span></div>
+    <div class="summary-chip">442 <span>Total Questions</span></div>
+    <div class="summary-chip">M1–M22 <span>Coverage</span></div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="card-grid">
+
+    <a class="test-card" href="M1_Practice_Test.html">
+      <div class="card-top-row"><span class="module-badge">M1</span></div>
+      <div class="test-title">Introduction to AI, Generative AI &amp; Agents</div>
+      <div class="meta-row"><span><b>30</b> Questions</span><span><b>8</b> Lessons</span></div>
+      <div class="go-arrow">→</div>
+    </a>
+
+    <a class="test-card" href="M2_Practice_Test.html">
+      <div class="card-top-row"><span class="module-badge">M2</span></div>
+      <div class="test-title">Natural Language Processing (NLP)</div>
+      <div class="meta-row"><span><b>35</b> Questions</span><span><b>10</b> Lessons</span></div>
+      <div class="go-arrow">→</div>
+    </a>
+
+    <a class="test-card" href="M3_Practice_Test.html">
+      <div class="card-top-row"><span class="module-badge">M3</span></div>
+      <div class="test-title">Generative AI &amp; Large Language Models</div>
+      <div class="meta-row"><span><b>24</b> Questions</span><span><b>6</b> Lessons</span></div>
+      <div class="go-arrow">→</div>
+    </a>
+
+    <a class="test-card" href="M4_Practice_Test.html">
+      <div class="card-top-row"><span class="module-badge">M4</span></div>
+      <div class="test-title">Microsoft Foundry Deep Dive</div>
+      <div class="meta-row"><span><b>12</b> Questions</span><span><b>2</b> Lessons</span></div>
+      <div class="go-arrow">→</div>
+    </a>
+
+    <a class="test-card" href="M5_Practice_Test.html">
+      <div class="card-top-row"><span class="module-badge">M5</span></div>
+      <div class="test-title">Generative AI Chat App &amp; Tools Integration</div>
+      <div class="meta-row"><span><b>12</b> Questions</span><span><b>2</b> Lessons</span></div>
+      <div class="go-arrow">→</div>
+    </a>
+
+    <a class="test-card" href="M6_Practice_Test.html">
+      <div class="card-top-row"><span class="module-badge">M6</span></div>
+      <div class="test-title">RAG &amp; Fine-Tuning</div>
+      <div class="meta-row"><span><b>12</b> Questions</span><span><b>2</b> Lessons</span></div>
+      <div class="go-arrow">→</div>
+    </a>
+
+    <a class="test-card" href="M7_Practice_Test.html">
+      <div class="card-top-row"><span class="module-badge">M7</span></div>
+      <div class="test-title">Agentic AI &amp; Multimodal Systems</div>
+      <div class="meta-row"><span><b>20</b> Questions</span><span><b>5</b> Lessons</span></div>
+      <div class="go-arrow">→</div>
+    </a>
+
+    <a class="test-card placeholder" href="M8_Practice_Test.html">
+      <div class="card-top-row"><span class="module-badge">M8</span><span class="tbd-tag">confirm title</span></div>
+      <div class="test-title">Module 8 Practice Test</div>
+      <div class="meta-row"><span>Update with actual details</span></div>
+      <div class="go-arrow">→</div>
+    </a>
+
+    <a class="test-card placeholder" href="M9_Practice_Test.html">
+      <div class="card-top-row"><span class="module-badge">M9</span><span class="tbd-tag">confirm title</span></div>
+      <div class="test-title">Module 9 Practice Test</div>
+      <div class="meta-row"><span>Update with actual details</span></div>
+      <div class="go-arrow">→</div>
+    </a>
+
+    <a class="test-card placeholder" href="M10_Practice_Test.html">
+      <div class="card-top-row"><span class="module-badge">M10</span><span class="tbd-tag">confirm title</span></div>
+      <div class="test-title">Module 10 Practice Test</div>
+      <div class="meta-row"><span>Update with actual details</span></div>
+      <div class="go-arrow">→</div>
+    </a>
+
+    <a class="test-card" href="M11_Practice_Test.html">
+      <div class="card-top-row"><span class="module-badge">M11</span></div>
+      <div class="test-title">Computer Vision, Document Intelligence &amp; Knowledge Mining</div>
+      <div class="meta-row"><span><b>40</b> Questions</span><span><b>11</b> Lessons</span></div>
+      <div class="go-arrow">→</div>
+    </a>
+
+    <a class="test-card" href="M12_Practice_Test.html">
+      <div class="card-top-row"><span class="module-badge">M12</span></div>
+      <div class="test-title">Deep Dive into Transformer Architectures</div>
+      <div class="meta-row"><span><b>40</b> Questions</span><span><b>11</b> Lessons</span></div>
+      <div class="go-arrow">→</div>
+    </a>
+
+    <a class="test-card" href="M13_Practice_Test.html">
+      <div class="card-top-row"><span class="module-badge">M13</span></div>
+      <div class="test-title">Designing &amp; Deploying Copilots using Microsoft Copilot Studio</div>
+      <div class="meta-row"><span><b>45</b> Questions</span><span><b>13</b> Lessons</span></div>
+      <div class="go-arrow">→</div>
+    </a>
+
+    <a class="test-card" href="M14_Practice_Test.html">
+      <div class="card-top-row"><span class="module-badge">M14</span></div>
+      <div class="test-title">LangChain, LangGraph &amp; CrewAI</div>
+      <div class="meta-row"><span><b>12</b> Questions</span><span><b>2</b> Lessons</span></div>
+      <div class="go-arrow">→</div>
+    </a>
+
+    <a class="test-card" href="M15_Practice_Test.html">
+      <div class="card-top-row"><span class="module-badge">M15</span></div>
+      <div class="test-title">GitHub Fundamentals for MLOps &amp; GenAIOps</div>
+      <div class="meta-row"><span><b>12</b> Questions</span><span><b>2</b> Lessons</span></div>
+      <div class="go-arrow">→</div>
+    </a>
+
+    <a class="test-card" href="M16_Practice_Test.html">
+      <div class="card-top-row"><span class="module-badge">M16</span></div>
+      <div class="test-title">MLOps – Experiment with Azure ML</div>
+      <div class="meta-row"><span>Combined lesson groups</span></div>
+      <div class="go-arrow">→</div>
+    </a>
+
+    <a class="test-card placeholder" href="M17_Practice_Test.html">
+      <div class="card-top-row"><span class="module-badge">M17</span><span class="tbd-tag">confirm title</span></div>
+      <div class="test-title">Module 17 Practice Test</div>
+      <div class="meta-row"><span>Update with actual details</span></div>
+      <div class="go-arrow">→</div>
+    </a>
+
+    <a class="test-card" href="azure-aiml-m18-mock-test.html">
+      <div class="card-top-row"><span class="module-badge">M18</span></div>
+      <div class="test-title">Model Deployment and Monitoring on Azure</div>
+      <div class="meta-row"><span><b>24</b> Questions</span><span><b>6</b> Lessons</span></div>
+      <div class="go-arrow">→</div>
+    </a>
+
+    <a class="test-card" href="azure-aiml-m21-mock-test.html">
+      <div class="card-top-row"><span class="module-badge">M21</span></div>
+      <div class="test-title">AI Governance &amp; Compliance</div>
+      <div class="meta-row"><span><b>20</b> Questions</span><span><b>4</b> Lessons</span></div>
+      <div class="go-arrow">→</div>
+    </a>
+
+    <a class="test-card" href="azure-aiml-m22-bonus-mock-test.html">
+      <div class="card-top-row"><span class="module-badge">M22</span><span class="bonus-tag">BONUS</span></div>
+      <div class="test-title">AI for Testers &amp; QA</div>
+      <div class="meta-row"><span><b>24</b> Questions</span><span><b>6</b> Lessons</span></div>
+      <div class="go-arrow">→</div>
+    </a>
+
+  </div>
+</div>
+
+<footer class="k21-footer">K21 Academy · Azure AI/ML/GenAI Job Oriented Program · Module Practice Test Library</footer>
+</body>
+</html>
