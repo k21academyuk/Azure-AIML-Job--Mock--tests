@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M1 Practice Test · AWS AI/ML · K21 Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#F7F8FA; --surface:#FFFFFF; --border:#E8EAEE;
+  --t1:#111827; --t2:#4B5563; --t3:#9CA3AF;
+  --green:#8DC63F; --green-mid:#79B030; --green-bg:#F1F8E8;
+  --green-border:#C8E89A; --green-dark:#3D6B15;
+  --navy:#1A1248; --navy-mid:#2E2080; --navy-light:#EEF0F9;
+  --red:#EF4444; --red-bg:#FEF2F2; --red-border:#FECACA; --red-t:#DC2626;
+  --amber:#F59E0B; --blue-bg:#EFF6FF; --blue-b:#93C5FD;
+}
+body{font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased;background:var(--bg);color:var(--t1);min-height:100vh;}
+
+/* SCREENS */
+.screen{display:none;}
+.screen.active{display:block;min-height:100vh;}
+#quizScreen.active{display:flex;flex-direction:column;min-height:100vh;}
+
+/* SHARED HEADER */
+.k21-hdr{background:var(--surface);border-bottom:1.5px solid var(--border);box-shadow:0 1px 4px rgba(0,0,0,.05);padding:16px 40px;display:flex;align-items:center;justify-content:space-between;}
+.k21-brand{display:flex;align-items:center;gap:10px;}
+.k21-mark{width:34px;height:34px;background:var(--green);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;}
+.k21-name{font-size:14px;font-weight:700;color:var(--navy);}
+.k21-name b{color:var(--green-mid);}
+.hdr-pill{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:5px 13px;border-radius:100px;background:var(--navy-light);color:var(--navy);border:1px solid #D0D4E8;}
+
+/* BUTTONS */
+.btn-green{display:inline-flex;align-items:center;gap:10px;background:var(--green);color:#fff;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;padding:14px 32px;border-radius:100px;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(141,198,63,.3);transition:background .2s,transform .18s;}
+.btn-green:hover{background:var(--green-mid);transform:translateY(-2px);}
+.btn-navy{display:inline-flex;align-items:center;gap:8px;background:var(--navy);color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;padding:12px 24px;border-radius:100px;border:none;cursor:pointer;box-shadow:0 3px 12px rgba(26,18,72,.2);transition:background .2s,transform .18s;}
+.btn-navy:hover{background:var(--navy-mid);transform:translateY(-1px);}
+.btn-ghost{display:inline-flex;align-items:center;gap:7px;background:transparent;color:var(--t2);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:10px 20px;border-radius:100px;border:1.5px solid var(--border);cursor:pointer;transition:border-color .2s,color .2s,background .2s;}
+.btn-ghost:hover{border-color:var(--navy);color:var(--navy);background:var(--navy-light);}
+.btn-ghost:disabled{opacity:.38;cursor:not-allowed;}
+.btn-ghost:disabled:hover{border-color:var(--border);color:var(--t2);background:transparent;}
+.btn-red-outline{display:inline-flex;align-items:center;gap:7px;background:transparent;color:var(--red-t);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;padding:8px 16px;border-radius:100px;border:1.5px solid var(--red-border);cursor:pointer;transition:background .2s;}
+.btn-red-outline:hover{background:var(--red-bg);}
+
+/* ─── START SCREEN ─── */
+.start-body{max-width:780px;margin:0 auto;padding:52px 28px 80px;}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--green-bg);border:1px solid var(--green-border);color:var(--green-dark);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;padding:5px 13px;border-radius:100px;margin-bottom:20px;}
+.eyebrow .dot{width:5px;height:5px;background:var(--green);border-radius:50%;animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+.start-h1{font-size:clamp(28px,5vw,50px);font-weight:800;color:var(--navy);line-height:1.12;letter-spacing:-.03em;margin-bottom:14px;}
+.start-h1 .g{color:var(--green-mid);}
+.start-sub{font-size:16px;color:var(--t2);line-height:1.65;max-width:560px;margin-bottom:40px;}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:40px;}
+.stat-c{background:var(--surface);border:1.5px solid var(--border);border-radius:16px;padding:20px 16px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+.stat-ico{font-size:22px;margin-bottom:8px;}
+.stat-val{font-size:26px;font-weight:800;color:var(--navy);line-height:1;margin-bottom:3px;}
+.stat-lbl{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--t3);}
+.section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--t3);margin-bottom:12px;}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:40px;}
+.chip{display:flex;align-items:center;gap:7px;background:var(--surface);border:1.5px solid var(--border);border-radius:100px;padding:7px 14px;font-size:12px;color:var(--t2);font-weight:500;}
+.chip-n{width:20px;height:20px;background:var(--navy-light);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:var(--navy-mid);flex-shrink:0;}
+.start-cta{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:14px;}
+.start-note{font-size:13px;color:var(--t3);}
+
+/* ─── QUIZ SCREEN ─── */
+.quiz-hdr{background:var(--surface);border-bottom:1.5px solid var(--border);box-shadow:0 1px 4px rgba(0,0,0,.05);padding:0 32px;height:62px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:100;flex-shrink:0;}
+.qh-brand{display:flex;align-items:center;gap:7px;flex-shrink:0;}
+.qh-mark{width:27px;height:27px;background:var(--green);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff;}
+.qh-name{font-size:12px;font-weight:700;color:var(--navy);}
+.qh-sep{width:1px;height:18px;background:var(--border);flex-shrink:0;}
+.qh-mod{font-size:12px;font-weight:600;color:var(--t2);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.qh-counter{font-size:12px;font-weight:700;color:var(--t2);flex-shrink:0;}
+.qh-counter strong{color:var(--navy);}
+.qh-submit{display:inline-flex;align-items:center;gap:6px;background:var(--red-bg);color:var(--red-t);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;padding:7px 15px;border-radius:100px;border:1.5px solid var(--red-border);cursor:pointer;flex-shrink:0;transition:background .2s;}
+.qh-submit:hover{background:#FEE2E2;}
+.qh-timer{display:flex;align-items:center;gap:5px;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:5px 11px;flex-shrink:0;font-size:12px;font-weight:700;color:var(--t2);font-variant-numeric:tabular-nums;}
+.tdot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:blink 1s infinite;}
+.prog-wrap{height:3px;background:var(--border);flex-shrink:0;}
+.prog-fill{height:100%;background:var(--green);transition:width .5s cubic-bezier(.16,1,.3,1);width:0%;}
+
+/* Question Nav Dots */
+.qnav{background:var(--surface);border-bottom:1.5px solid var(--border);padding:9px 32px;display:flex;align-items:center;gap:5px;overflow-x:auto;flex-shrink:0;}
+.qnav::-webkit-scrollbar{height:0;}
+.qnd{flex-shrink:0;width:27px;height:27px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;cursor:pointer;border:1.5px solid var(--border);background:var(--surface);color:var(--t3);transition:all .15s;font-family:'DM Sans',sans-serif;}
+.qnd:hover{border-color:var(--navy);color:var(--navy);}
+.qnd.cur{background:var(--navy);color:#fff;border-color:var(--navy);}
+.qnd.ok{background:var(--green-bg);color:var(--green-dark);border-color:var(--green);}
+.qnd.err{background:var(--red-bg);color:var(--red-t);border-color:var(--red-border);}
+
+/* Quiz body */
+.quiz-body{flex:1;padding:32px 24px 60px;}
+.q-wrap{width:100%;max-width:740px;margin:0 auto;}
+.q-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.lesson-tag{display:inline-flex;align-items:center;gap:6px;background:var(--navy-light);color:var(--navy);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;padding:5px 12px;border-radius:100px;border:1px solid #D0D4E8;}
+.q-lbl{font-size:12px;font-weight:600;color:var(--t3);}
+.q-card{background:var(--surface);border:1.5px solid var(--border);border-radius:20px;padding:32px 36px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+.q-text{font-size:18px;font-weight:700;color:var(--navy);line-height:1.6;margin-bottom:22px;}
+.opts{display:flex;flex-direction:column;gap:10px;}
+.opt-btn{display:flex;align-items:flex-start;gap:12px;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:14px 18px;cursor:pointer;text-align:left;width:100%;font-family:'DM Sans',sans-serif;transition:border-color .17s,background .17s,transform .17s;}
+.opt-btn:hover:not(.off){border-color:var(--green);background:var(--green-bg);transform:translateX(3px);}
+.opt-btn.off{cursor:default;}
+.opt-btn.ok{background:var(--green-bg);border-color:var(--green);}
+.opt-btn.err{background:var(--red-bg);border-color:var(--red-border);}
+.opt-lbl{flex-shrink:0;width:28px;height:28px;border-radius:7px;background:var(--bg);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--t2);margin-top:2px;transition:all .17s;}
+.opt-btn.ok .opt-lbl{background:var(--green);border-color:var(--green);color:#fff;}
+.opt-btn.err .opt-lbl{background:var(--red);border-color:var(--red);color:#fff;}
+.opt-txt{font-size:14px;font-weight:500;color:var(--t1);line-height:1.55;flex:1;}
+.opt-btn.ok .opt-txt{color:var(--green-dark);font-weight:600;}
+.opt-btn.err .opt-txt{color:var(--red-t);}
+
+/* Feedback */
+.fb{display:none;background:var(--blue-bg);border:1.5px solid var(--blue-b);border-left:4px solid #3B82F6;border-radius:12px;padding:20px 24px;margin-bottom:16px;animation:slideUp .3s ease;}
+.fb.show{display:block;}
+@keyframes slideUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.fb-hdr{display:flex;align-items:center;gap:9px;margin-bottom:7px;}
+.fb-ico{width:23px;height:23px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;}
+.fb-ico.ok{background:var(--green-bg);color:var(--green-mid);}
+.fb-ico.err{background:var(--red-bg);color:var(--red);}
+.fb-status{font-size:14px;font-weight:700;}
+.fb-status.ok{color:var(--green-dark);}
+.fb-status.err{color:var(--red-t);}
+.fb-correct{font-size:12px;font-weight:600;color:#92400E;background:#FEF3C7;border:1px solid #FCD34D;border-radius:7px;padding:6px 11px;margin:6px 0 8px 32px;display:none;}
+.fb-correct.show{display:block;}
+.fb-exp{font-size:13px;color:var(--t2);line-height:1.65;padding-left:32px;margin-bottom:14px;}
+.fb-next-btn{display:inline-flex;align-items:center;gap:7px;background:var(--navy);color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:10px 22px;border-radius:100px;border:none;cursor:pointer;box-shadow:0 3px 10px rgba(26,18,72,.18);transition:background .2s,transform .2s;margin-left:32px;}
+.fb-next-btn:hover{background:var(--navy-mid);transform:translateY(-1px);}
+
+/* Bottom navigation */
+.q-nav{display:flex;align-items:center;justify-content:space-between;margin-top:4px;}
+.last-hint{display:none;background:#FFFBEB;border:1px solid #FCD34D;border-radius:10px;padding:10px 16px;font-size:13px;color:#92400E;text-align:center;margin-top:12px;}
+.last-hint.show{display:block;}
+
+/* ─── RESULTS SCREEN ─── */
+.res-body{max-width:800px;margin:0 auto;padding:48px 28px 80px;}
+.res-top{display:flex;gap:28px;align-items:flex-start;margin-bottom:36px;}
+.score-col{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:14px;}
+.score-wrap{position:relative;width:150px;height:150px;}
+.score-wrap svg{transform:rotate(-90deg);}
+.score-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.score-num{font-size:32px;font-weight:800;color:var(--navy);line-height:1;}
+.score-num sub{font-size:16px;font-weight:600;color:var(--t3);}
+.score-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--t3);margin-top:2px;}
+.score-tally{text-align:center;}
+.score-tally-v{font-size:20px;font-weight:800;color:var(--navy);}
+.score-tally-l{font-size:12px;color:var(--t3);}
+.band-card{flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:20px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+.band-title{font-size:22px;font-weight:800;color:var(--navy);margin-bottom:8px;}
+.band-msg{font-size:14px;color:var(--t2);line-height:1.65;margin-bottom:20px;}
+.stats-chips{display:flex;gap:10px;flex-wrap:wrap;}
+.sc{display:flex;align-items:center;gap:6px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:7px 12px;font-size:12px;font-weight:600;color:var(--t2);}
+.sc strong{font-weight:800;color:var(--navy);}
+.breakdown{background:var(--surface);border:1.5px solid var(--border);border-radius:20px;overflow:hidden;margin-bottom:32px;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+.bd-heading{padding:18px 24px;border-bottom:1.5px solid var(--border);font-size:14px;font-weight:700;color:var(--navy);}
+.bd-row{display:grid;grid-template-columns:1fr 68px 68px;align-items:center;gap:14px;padding:13px 24px;border-bottom:1px solid rgba(0,0,0,.04);}
+.bd-row:last-child{border-bottom:none;}
+.bd-lid{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--t3);margin-bottom:2px;}
+.bd-ltitle{font-size:13px;font-weight:600;color:var(--navy);}
+.bd-bar{height:5px;background:var(--bg);border-radius:10px;overflow:hidden;margin-top:6px;}
+.bd-bar-fill{height:100%;border-radius:10px;width:0%;transition:width 1.1s cubic-bezier(.16,1,.3,1);}
+.bd-score{font-size:13px;font-weight:700;color:var(--navy);text-align:right;}
+.bd-band{font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;text-align:center;justify-self:end;}
+.bs-strong{background:var(--green-bg);color:var(--green-dark);}
+.bs-good{background:#FEF3C7;color:#92400E;}
+.bs-review{background:var(--red-bg);color:var(--red-t);}
+.res-actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+
+/* ─── REVIEW SCREEN ─── */
+.review-topbar{background:var(--surface);border-bottom:1.5px solid var(--border);box-shadow:0 1px 4px rgba(0,0,0,.05);padding:16px 40px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.rv-body{max-width:820px;margin:0 auto;padding:36px 28px 80px;}
+.rv-page-hdr{text-align:center;margin-bottom:36px;}
+.rv-page-hdr h2{font-size:clamp(22px,4vw,30px);font-weight:800;color:var(--navy);margin-bottom:6px;}
+.rv-page-hdr p{font-size:14px;color:var(--t2);}
+.rv-card{background:var(--surface);border:1.5px solid var(--border);border-radius:20px;padding:26px;margin-bottom:18px;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+.rv-card-hdr{display:flex;align-items:center;gap:9px;margin-bottom:14px;flex-wrap:wrap;}
+.rv-qn{width:29px;height:29px;background:var(--navy);color:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;}
+.rv-badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px;}
+.rv-badge-skip{background:#FEF3C7;color:#92400E;border:1px solid #FCD34D;}
+.rv-badge-ok{background:var(--green-bg);color:var(--green-dark);border:1px solid var(--green-border);}
+.rv-badge-err{background:var(--red-bg);color:var(--red-t);border:1px solid var(--red-border);}
+.rv-lesson{margin-left:auto;font-size:11px;font-weight:600;background:var(--navy-light);color:var(--navy);border-radius:100px;padding:4px 12px;border:1px solid #D0D4E8;}
+.rv-qtxt{font-size:16px;font-weight:700;color:var(--navy);line-height:1.55;margin-bottom:16px;}
+.rv-opts{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
+.rv-opt{display:flex;align-items:center;gap:11px;padding:11px 15px;border-radius:10px;border:1.5px solid var(--border);background:var(--surface);}
+.rv-opt.rv-ok{background:var(--green-bg);border-color:var(--green);}
+.rv-opt.rv-err{background:var(--red-bg);border-color:var(--red-border);}
+.rv-opt-lbl{flex-shrink:0;width:25px;height:25px;border-radius:6px;background:var(--bg);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--t3);}
+.rv-opt.rv-ok .rv-opt-lbl{background:var(--green);border-color:var(--green);color:#fff;}
+.rv-opt.rv-err .rv-opt-lbl{background:var(--red);border-color:var(--red);color:#fff;}
+.rv-opt-txt{font-size:13px;color:var(--t1);line-height:1.45;flex:1;}
+.rv-opt.rv-ok .rv-opt-txt{color:var(--green-dark);font-weight:600;}
+.rv-opt.rv-err .rv-opt-txt{color:var(--red-t);}
+.rv-tag{flex-shrink:0;font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px;white-space:nowrap;}
+.rv-tag-ok{background:var(--green);color:#fff;}
+.rv-tag-err{background:var(--red);color:#fff;}
+.rv-exp{display:flex;gap:11px;background:var(--blue-bg);border:1.5px solid var(--blue-b);border-left:4px solid #3B82F6;border-radius:10px;padding:15px 16px;}
+.rv-exp-ico{font-size:15px;flex-shrink:0;margin-top:1px;}
+.rv-exp-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#2563EB;margin-bottom:4px;}
+.rv-exp-txt{font-size:13px;color:var(--t2);line-height:1.65;}
+.rv-bottom{display:flex;justify-content:center;gap:12px;margin-top:32px;flex-wrap:wrap;}
+
+/* ─── MODAL ─── */
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:1000;align-items:center;justify-content:center;backdrop-filter:blur(3px);}
+.modal-ov.show{display:flex;}
+.modal{background:var(--surface);border-radius:24px;padding:36px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.18);animation:pop .3s cubic-bezier(.16,1,.3,1);}
+@keyframes pop{from{opacity:0;transform:scale(.9);}to{opacity:1;transform:scale(1);}}
+.m-ico{font-size:38px;margin-bottom:16px;}
+.m-title{font-size:20px;font-weight:800;color:var(--navy);margin-bottom:8px;}
+.m-msg{font-size:14px;color:var(--t2);line-height:1.6;margin-bottom:6px;}
+.m-note{font-size:12px;color:var(--t3);margin-bottom:24px;}
+.m-btns{display:flex;gap:12px;justify-content:center;}
+.m-cancel{display:inline-flex;align-items:center;background:var(--bg);color:var(--t2);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;padding:12px 24px;border-radius:100px;border:1.5px solid var(--border);cursor:pointer;transition:all .2s;}
+.m-cancel:hover{border-color:var(--navy);color:var(--navy);}
+.m-submit{display:inline-flex;align-items:center;background:var(--navy);color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;padding:12px 24px;border-radius:100px;border:none;cursor:pointer;transition:background .2s;}
+.m-submit:hover{background:var(--navy-mid);}
+
+/* RESPONSIVE */
+@media(max-width:640px){
+  .k21-hdr,.quiz-hdr{padding:14px 18px;}
+  .start-body{padding:32px 18px 60px;}
+  .stats-row{grid-template-columns:repeat(3,1fr);}
+  .qh-mod{display:none;}
+  .quiz-hdr{gap:10px;}
+  .quiz-body{padding:22px 16px 50px;}
+  .q-card{padding:22px 18px;}
+  .q-text{font-size:15px;}
+  .res-top{flex-direction:column;align-items:center;}
+  .bd-row{grid-template-columns:1fr 56px;}
+  .bd-score{display:none;}
+  .review-topbar{padding:14px 18px;}
+  .rv-body{padding:28px 16px 60px;}
+  .start-cta{flex-direction:column;align-items:flex-start;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════ START SCREEN ══════════ -->
+<div class="screen active" id="startScreen">
+  <div class="k21-hdr">
+    <div class="k21-brand"><div class="k21-mark">K21</div><div class="k21-name">K21 <b>Academy</b></div></div>
+    <div class="hdr-pill">AWS AI/ML Job Focus Program</div>
+  </div>
+  <div class="start-body">
+    <div class="eyebrow"><span class="dot"></span>Module 1 · Practice Test</div>
+    <h1 class="start-h1">AI/ML &amp; GenAI<br>for <span class="g">Beginners</span></h1>
+    <p class="start-sub">Test your understanding across all 9 lessons in Module 1 of the AWS AI/ML Job Focus Program. Covers AI, Machine Learning, Deep Learning, Generative AI, and cloud ML platforms — with full explanations after every answer.</p>
+    <div class="stats-row">
+      <div class="stat-c"><div class="stat-ico">📝</div><div class="stat-val">25</div><div class="stat-lbl">Questions</div></div>
+      <div class="stat-c"><div class="stat-ico">📚</div><div class="stat-val">9</div><div class="stat-lbl">Lessons</div></div>
+      <div class="stat-c"><div class="stat-ico">🔄</div><div class="stat-val">∞</div><div class="stat-lbl">Retries</div></div>
+    </div>
+    <div class="section-label">9 Lessons Covered</div>
+    <div class="chips">
+      <div class="chip"><div class="chip-n">L1</div>AI, ML, and Gen AI</div>
+      <div class="chip"><div class="chip-n">L2</div>Artificial Intelligence</div>
+      <div class="chip"><div class="chip-n">L3</div>Machine Learning</div>
+      <div class="chip"><div class="chip-n">L4</div>Deep Learning</div>
+      <div class="chip"><div class="chip-n">L5</div>ML &amp; DL @ AWS, Azure, Google</div>
+      <div class="chip"><div class="chip-n">L6</div>Generative AI</div>
+      <div class="chip"><div class="chip-n">L7</div>ML vs DL: Key Differences</div>
+      <div class="chip"><div class="chip-n">L8</div>ML: Concepts, Process &amp; Use Cases</div>
+      <div class="chip"><div class="chip-n">L9</div>Types of Machine Learning</div>
+    </div>
+    <div class="start-cta">
+      <div>
+        <button class="btn-green" style="font-size:16px;padding:16px 40px;" onclick="startQuiz()">
+          Start Practice Test
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+      <p class="start-note">💡 Options shuffle every attempt · Explanations after every answer · No time pressure</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ QUIZ SCREEN ══════════ -->
+<div class="screen" id="quizScreen">
+  <div class="quiz-hdr">
+    <div class="qh-brand"><div class="qh-mark">K21</div><div class="qh-name">Academy</div></div>
+    <div class="qh-sep"></div>
+    <div class="qh-mod">M1: AI/ML &amp; GenAI for Beginners</div>
+    <div class="qh-counter">Q <strong id="qNumH">1</strong>&thinsp;/&thinsp;25</div>
+    <button class="qh-submit" onclick="openModal()">📋 Submit Exam</button>
+    <div class="qh-timer"><div class="tdot"></div><span id="timerEl">00:00</span></div>
+  </div>
+  <div class="prog-wrap"><div class="prog-fill" id="progFill"></div></div>
+  <div class="qnav" id="qnav"></div>
+
+  <div class="quiz-body">
+    <div class="q-wrap">
+      <div class="q-meta">
+        <div class="lesson-tag" id="lessonTag">L1</div>
+        <div class="q-lbl" id="qLbl">Question 1 of 25</div>
+      </div>
+      <div class="q-card">
+        <div class="q-text" id="qText">Loading…</div>
+        <div class="opts" id="optsGrid"></div>
+      </div>
+      <div class="fb" id="fbPanel">
+        <div class="fb-hdr">
+          <div class="fb-ico" id="fbIco"></div>
+          <div class="fb-status" id="fbStatus"></div>
+        </div>
+        <div class="fb-correct" id="fbCorrect"></div>
+        <p class="fb-exp" id="fbExp"></p>
+        <button class="fb-next-btn" onclick="handleFbNext()">
+          <span id="fbNextTxt">Next Question</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+      <div class="last-hint" id="lastHint">🎯 You've reached the last question! Click <strong>Submit Exam</strong> in the header to see your results and review all answers.</div>
+      <div class="q-nav" style="margin-top:16px;">
+        <button class="btn-ghost" id="prevBtn" onclick="goPrev()">← Previous</button>
+        <button class="btn-ghost" id="nextBtn" onclick="goNext()">Next →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ RESULTS SCREEN ══════════ -->
+<div class="screen" id="resultsScreen">
+  <div class="k21-hdr">
+    <div class="k21-brand"><div class="k21-mark">K21</div><div class="k21-name">K21 <b>Academy</b></div></div>
+    <div class="hdr-pill">Test Complete · AWS AI/ML Job Focus Program</div>
+  </div>
+  <div class="res-body">
+    <div class="res-top">
+      <div class="score-col">
+        <div class="score-wrap">
+          <svg width="150" height="150" viewBox="0 0 150 150">
+            <circle cx="75" cy="75" r="63" fill="none" stroke="#E8EAEE" stroke-width="10"/>
+            <circle id="scoreRing" cx="75" cy="75" r="63" fill="none" stroke="#8DC63F" stroke-width="10" stroke-linecap="round" stroke-dasharray="395.84 395.84" stroke-dashoffset="395.84"/>
+          </svg>
+          <div class="score-inner">
+            <div class="score-num"><span id="sPct">0</span><sub>%</sub></div>
+            <div class="score-lbl">Score</div>
+          </div>
+        </div>
+        <div class="score-tally">
+          <div class="score-tally-l">Correct Answers</div>
+          <div class="score-tally-v"><span id="sCorrect">0</span> / 25</div>
+        </div>
+      </div>
+      <div class="band-card">
+        <div class="band-title" id="bandTitle">—</div>
+        <div class="band-msg" id="bandMsg">—</div>
+        <div class="stats-chips">
+          <div class="sc">⏱️ Time: <strong id="sTime">—</strong></div>
+          <div class="sc">✅ Correct: <strong id="sRight">—</strong></div>
+          <div class="sc">❌ Incorrect: <strong id="sWrong">—</strong></div>
+          <div class="sc">⏭️ Skipped: <strong id="sSkip">—</strong></div>
+        </div>
+      </div>
+    </div>
+    <div class="breakdown">
+      <div class="bd-heading">📊 Per-Lesson Breakdown</div>
+      <div id="bdTable"></div>
+    </div>
+    <div class="res-actions">
+      <button class="btn-green" onclick="showReview()">📋 Review All Questions &amp; Answers</button>
+      <button class="btn-navy" onclick="retake()">🔄 Retake Test</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ REVIEW SCREEN ══════════ -->
+<div class="screen" id="reviewScreen">
+  <div class="review-topbar">
+    <div class="k21-brand"><div class="k21-mark">K21</div><div class="k21-name">K21 <b>Academy</b></div></div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn-ghost" onclick="backToResults()">← Back to Results</button>
+    </div>
+  </div>
+  <div class="rv-body">
+    <div class="rv-page-hdr">
+      <h2>Questions &amp; Answers Review</h2>
+      <p id="rvSubtitle">All 25 questions with correct answers and explanations</p>
+    </div>
+    <div id="reviewList"></div>
+    <div class="rv-bottom">
+      <button class="btn-navy" onclick="backToResults()">← Back to Results</button>
+      <button class="btn-ghost" onclick="retake()">🔄 Retake Test</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SUBMIT MODAL ══════════ -->
+<div class="modal-ov" id="submitModal">
+  <div class="modal">
+    <div class="m-ico">📋</div>
+    <div class="m-title">Submit Exam?</div>
+    <div class="m-msg" id="mMsg">Are you sure you want to submit?</div>
+    <div class="m-note" id="mNote"></div>
+    <div class="m-btns">
+      <button class="m-cancel" onclick="closeModal()">Continue Quiz</button>
+      <button class="m-submit" onclick="confirmSubmit()">Yes, Submit</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+//  QUESTION BANK — 25 Questions, 9 Lessons
+//  options[] shuffled at runtime per attempt
+// ══════════════════════════════════════════════
+const QB=[
+  // L1 (3)
+  {l:'L1',lt:'AI, ML, and Gen AI',q:'What is the primary distinction between traditional programming and Machine Learning?',
+   opts:['ML algorithms learn patterns from data rather than following hand-coded rules','Traditional programming requires more computational resources than ML','Machine learning always produces more accurate results than traditional programming','Traditional programming can only process numerical data, while ML handles all types'],
+   ans:'ML algorithms learn patterns from data rather than following hand-coded rules',
+   exp:'In traditional programming a developer writes explicit rules for every scenario. ML takes a different approach — algorithms are trained on data and discover patterns automatically, without being explicitly programmed for each case. This is why ML can tackle problems where writing rules manually would be impractical.'},
+  {l:'L1',lt:'AI, ML, and Gen AI',q:'Which statement correctly describes the hierarchical relationship between AI, Machine Learning, and Deep Learning?',
+   opts:['ML is a subset of Deep Learning, which is a subset of AI','They are three completely independent fields with no conceptual overlap','Deep Learning and ML are identical techniques, both contained within AI','AI is the broadest field; ML is a subset of AI; Deep Learning is a specialized subset of ML'],
+   ans:'AI is the broadest field; ML is a subset of AI; Deep Learning is a specialized subset of ML',
+   exp:'The relationship is nested: Deep Learning ⊂ Machine Learning ⊂ Artificial Intelligence. AI is the overarching discipline. ML is one way to achieve AI through data-driven learning. Deep Learning is a specific ML technique using multi-layer neural networks. Understanding this hierarchy is foundational for the entire AI/ML field.'},
+  {l:'L1',lt:'AI, ML, and Gen AI',q:'Generative AI is fundamentally different from traditional AI systems primarily because it:',
+   opts:['Creates new original content such as text, images, audio, and video rather than just analyzing existing data','Requires significantly less training data than conventional AI models to function effectively','Is a subset of classical rule-based expert systems with enhanced output formatting','Can only process and generate text-based outputs, not multimodal data'],
+   ans:'Creates new original content such as text, images, audio, and video rather than just analyzing existing data',
+   exp:'Traditional AI is primarily discriminative — it classifies, predicts, or analyzes existing data. Generative AI produces entirely new content: models like GPT-5 and Claude generate coherent text; DALL-E generates images; Sora generates video — all from patterns learned during training. This generative capability is what makes modern AI so transformative.'},
+  // L2 (3)
+  {l:'L2',lt:'Artificial Intelligence',q:'Which branch of AI specifically focuses on enabling machines to understand, interpret, and generate human language?',
+   opts:['Computer Vision (CV)','Edge Computing and IoT AI','Natural Language Processing (NLP)','Autonomous Robotics and Motion Planning'],
+   ans:'Natural Language Processing (NLP)',
+   exp:'NLP is the AI discipline dedicated to human-computer language interaction. It enables machines to read, understand, and generate human language — powering chatbots like Claude, machine translation, sentiment analysis, voice assistants, and summarization tools. It is one of the fastest-growing and most commercially impactful areas of AI today.'},
+  {l:'L2',lt:'Artificial Intelligence',q:'A chess AI that defeats grandmasters at chess but cannot perform any other task is best classified as:',
+   opts:['Artificial General Intelligence (AGI) applied narrowly','Narrow AI (Artificial Narrow Intelligence — ANI)','Superintelligence operating below its full capacity','A multimodal foundation model with chess-specific training'],
+   ans:'Narrow AI (Artificial Narrow Intelligence — ANI)',
+   exp:'Narrow AI (ANI) systems are designed and optimized for exactly one specific task. Despite being superhuman at chess, a chess AI has zero capability outside that domain. All current AI systems — including the most advanced LLMs — are forms of ANI. AGI would generalize across any intellectual task a human can perform, which does not yet exist.'},
+  {l:'L2',lt:'Artificial Intelligence',q:'The Turing Test, proposed by Alan Turing in 1950, is designed to evaluate whether:',
+   opts:['An AI can solve complex mathematical equations faster than a human','An AI model has more learnable parameters than a predecessor model','A deep learning model has reached a predefined benchmark accuracy threshold','A machine can exhibit conversational behavior indistinguishable from a human'],
+   ans:'A machine can exhibit conversational behavior indistinguishable from a human',
+   exp:'In the Turing Test, a human evaluator conducts text-based conversations with both a human and a machine without knowing which is which. If the evaluator cannot reliably distinguish the machine from the human, the machine is said to have passed. It remains one of the most influential frameworks for measuring machine intelligence.'},
+  // L3 (3)
+  {l:'L3',lt:'Machine Learning',q:'An email spam filter that learns to classify messages using thousands of pre-labeled spam and non-spam examples is applying:',
+   opts:['Supervised Learning','Reinforcement Learning with email-based rewards','Unsupervised Learning to cluster email patterns','Self-supervised Learning on unlabeled email data'],
+   ans:'Supervised Learning',
+   exp:'Supervised Learning trains on labeled examples — emails already tagged as spam or not-spam. The model learns the mapping from email features (subject, sender, keywords) to the correct label, then applies that pattern to classify new, unseen emails. It is called "supervised" because the labeled data acts as a teacher providing the correct answer for every training example.'},
+  {l:'L3',lt:'Machine Learning',q:'In machine learning, "overfitting" specifically describes a situation where:',
+   opts:['The model consumes too many computational resources during inference','The model is configured with more features than the dataset can statistically support','The model memorizes training data too closely and fails to generalize to new, unseen data','The training process exceeds the allocated compute and time budget'],
+   ans:'The model memorizes training data too closely and fails to generalize to new, unseen data',
+   exp:'An overfitted model has learned the noise and specific details of the training set rather than the underlying patterns. It scores very high on training data but performs poorly on new examples — like a student who memorized past exam papers but cannot solve genuinely new problems. Overfitting is one of the most fundamental challenges in machine learning.'},
+  {l:'L3',lt:'Machine Learning',q:'In the context of machine learning, a "feature" is best defined as:',
+   opts:['The final prediction or classification output produced by the trained model','An individual measurable input variable provided to the model to make predictions','The performance accuracy metric reported after evaluating the model on test data','A special algorithmic capability that differentiates one ML algorithm from another'],
+   ans:'An individual measurable input variable provided to the model to make predictions',
+   exp:'Features are the raw inputs a model uses to learn and make predictions. In a house price model: square footage, bedrooms, neighborhood. In a spam filter: word counts, sender domain, link density. Feature selection and engineering — choosing and transforming which inputs to use — is often the most impactful part of building an effective ML model.'},
+  // L4 (3)
+  {l:'L4',lt:'Deep Learning',q:'What is the primary reason Deep Learning significantly outperforms traditional ML on image recognition tasks?',
+   opts:['Deep Learning models always require far less labeled training data for comparable accuracy','Deep Learning architectures are simpler and process image pixels faster','Deep Learning requires less computational power and memory than traditional ML models','Deep Learning automatically learns hierarchical feature representations, eliminating manual feature engineering'],
+   ans:'Deep Learning automatically learns hierarchical feature representations, eliminating manual feature engineering',
+   exp:'In traditional ML, experts must manually craft image features such as edges, textures, and shapes. Deep Learning\'s multi-layer CNNs learn these automatically — early layers detect pixel edges, middle layers detect shapes, deeper layers detect complex objects. This automatic feature hierarchy is why Deep Learning dramatically outperforms manual approaches on visual tasks.'},
+  {l:'L4',lt:'Deep Learning',q:'Artificial Neural Networks (ANNs) draw their fundamental design inspiration from:',
+   opts:['The structure and electrochemical signaling of biological neurons in the human brain','The index and retrieval architecture of relational database systems','The split-and-compare structure of decision tree and random forest algorithms','The sequential clock-cycle processing operations of a traditional computer CPU'],
+   ans:'The structure and electrochemical signaling of biological neurons in the human brain',
+   exp:'ANNs are loosely inspired by biological neural networks. Biological neurons receive signals through dendrites, process them in the cell body, and fire output signals through axons to other neurons. Artificial neurons similarly receive weighted inputs, sum them, apply an activation function, and pass the result to connected neurons in the next layer.'},
+  {l:'L4',lt:'Deep Learning',q:'What is the primary purpose of an "activation function" within a neural network layer?',
+   opts:['To determine the optimal number of hidden layers during architecture design','To set the learning rate and adjust it dynamically throughout model training','To introduce non-linearity so the network can learn complex, non-linear patterns in data','To initialize the weight matrices of each layer with appropriate values before training'],
+   ans:'To introduce non-linearity so the network can learn complex, non-linear patterns in data',
+   exp:'Without activation functions, stacking multiple linear layers still produces only a linear transformation regardless of depth. Activation functions like ReLU, sigmoid, and tanh introduce non-linearity after each layer, enabling deep networks to model arbitrarily complex relationships. This is what makes deep networks qualitatively more powerful than shallow models.'},
+  // L5 (2)
+  {l:'L5',lt:'ML & DL @ AWS, Azure, Google',q:'Which AWS service provides a fully managed, integrated platform specifically designed for end-to-end machine learning workflows?',
+   opts:['AWS Lambda (serverless function execution)','Amazon SageMaker','Amazon Redshift (cloud data warehousing)','AWS Step Functions (workflow orchestration)'],
+   ans:'Amazon SageMaker',
+   exp:'Amazon SageMaker is AWS\'s flagship managed ML platform covering the complete ML lifecycle — data labeling, feature engineering (Feature Store), model training, hyperparameter tuning, experiment tracking, deployment, and monitoring — all in one integrated environment. It removes the infrastructure burden so teams can focus on model development rather than managing servers.'},
+  {l:'L5',lt:'ML & DL @ AWS, Azure, Google',q:'Azure Machine Learning and Google Vertex AI are best classified as:',
+   opts:['Open-source deep learning frameworks comparable to TensorFlow or PyTorch','Managed database systems optimized for storing and querying ML training datasets','Edge computing platforms for deploying lightweight ML models on IoT devices','Cloud-native MLOps platforms providing end-to-end ML lifecycle management at enterprise scale'],
+   ans:'Cloud-native MLOps platforms providing end-to-end ML lifecycle management at enterprise scale',
+   exp:'Both Azure ML and Google Vertex AI are enterprise-grade MLOps platforms built on their respective clouds. They provide managed services for data preparation, experiment tracking, distributed training, AutoML, deployment via managed endpoints, monitoring for data drift, and governance — enabling teams to operationalize ML reliably at scale.'},
+  // L6 (3)
+  {l:'L6',lt:'Generative AI',q:'A Large Language Model (LLM) is most accurately defined as:',
+   opts:['A deep learning model trained on massive text corpora that can understand, reason about, and generate human language at scale','A traditional keyword-matching search index optimized for retrieving relevant documents from large text databases','A rule-based expert system that parses, validates, and executes user-provided programming code instructions','A computer vision model specialized in extracting and recognizing printed text from scanned document images'],
+   ans:'A deep learning model trained on massive text corpora that can understand, reason about, and generate human language at scale',
+   exp:'LLMs like Claude and GPT-5 are transformer-based deep learning models trained on billions or trillions of text tokens. Through this training they develop emergent capabilities far beyond simple pattern matching — including language understanding, multi-step reasoning, summarization, code generation, and instruction following. They power modern AI assistants and copilots.'},
+  {l:'L6',lt:'Generative AI',q:'What is "prompt engineering" when working with AI language models?',
+   opts:['Designing and building the hardware infrastructure required to run and host large AI models','The process of training an entirely new foundation model from raw data','Crafting and optimizing input prompts to guide an AI model toward desired, accurate, and useful outputs','Configuring GPU memory allocation and batch sizes to maximize model inference throughput'],
+   ans:'Crafting and optimizing input prompts to guide an AI model toward desired, accurate, and useful outputs',
+   exp:'Prompt engineering is the art and science of structuring inputs to AI models. Effective prompts may include context, examples (few-shot prompting), role definitions, output format specifications, and chain-of-thought instructions. Good prompt engineering dramatically improves model output quality without changing the model itself — a high-leverage skill for anyone working with LLMs.'},
+  {l:'L6',lt:'Generative AI',q:'The architectural foundation underlying virtually all modern Large Language Models — including GPT and Claude — is:',
+   opts:['Convolutional Neural Networks (CNNs) with pooling layers and strided convolutions','The Transformer architecture with multi-head self-attention mechanisms','Recurrent Neural Networks (RNNs) enhanced with Long Short-Term Memory (LSTM) cells','Gradient-boosted decision trees scaled up with ensemble learning and stacking'],
+   ans:'The Transformer architecture with multi-head self-attention mechanisms',
+   exp:'The Transformer, introduced in the 2017 paper "Attention Is All You Need," revolutionized NLP. Its multi-head self-attention mechanism allows the model to simultaneously weigh the relevance of every token in a sequence — enabling superior context understanding and fully parallelizable training, making it possible to train LLMs at the massive scales we see today.'},
+  // L7 (2)
+  {l:'L7',lt:'ML vs DL: Key Differences',q:'In traditional Machine Learning (compared to Deep Learning), what is the data scientist\'s primary role regarding input features?',
+   opts:['Relying entirely on the algorithm to discover and extract all relevant features automatically','Simply providing raw images or audio directly to the model with no preprocessing','Writing deterministic if-then rules that eliminate the need for any data-driven learning','Manually selecting, creating, and transforming relevant input variables from raw data to improve model performance'],
+   ans:'Manually selecting, creating, and transforming relevant input variables from raw data to improve model performance',
+   exp:'Feature engineering is the central skill in traditional ML. Data scientists must understand the domain, identify which raw attributes are informative, create derived features, handle missing values and outliers, and select the most predictive set. The quality of features often matters more than the choice of algorithm.'},
+  {l:'L7',lt:'ML vs DL: Key Differences',q:'In which scenario would traditional Machine Learning be MORE appropriate than Deep Learning?',
+   opts:['A structured tabular dataset with 5,000 records where model interpretability and fast training are top priorities','Processing and generating coherent long-form text from a 500 GB web-crawled corpus','Analyzing continuous real-time 4K video feeds to detect and track multiple objects simultaneously','Building a face recognition system to identify individuals across millions of high-resolution photographs'],
+   ans:'A structured tabular dataset with 5,000 records where model interpretability and fast training are top priorities',
+   exp:'Traditional ML algorithms — XGBoost, Random Forest, Logistic Regression — often match or outperform Deep Learning on small-to-medium structured/tabular datasets. They train in seconds to minutes, are highly interpretable, and generalize better with limited data — making them the pragmatic default for many real-world business datasets.'},
+  // L8 (3)
+  {l:'L8',lt:'ML: Concepts, Process & Use Cases',q:'What is the correct sequence of steps in a standard Machine Learning project lifecycle?',
+   opts:['Deploy Model → Train → Collect Data → Evaluate → Monitor','Train Model → Define Problem → Collect Data → Deploy → Evaluate','Define Problem → Collect & Prepare Data → Train Model → Evaluate → Deploy → Monitor','Evaluate → Define Problem → Train Model → Collect Data → Deploy'],
+   ans:'Define Problem → Collect & Prepare Data → Train Model → Evaluate → Deploy → Monitor',
+   exp:'The ML lifecycle always begins with clearly defining the problem and success metrics. Then data is collected and prepared (often 70–80% of total project time). Only then is a model trained, evaluated on held-out data, deployed to production, and continuously monitored for performance drift. Skipping or reordering these steps is a leading cause of ML project failures.'},
+  {l:'L8',lt:'ML: Concepts, Process & Use Cases',q:'Why is a dataset typically split into separate training, validation, and test sets in an ML project?',
+   opts:['All three sets are fed simultaneously into the model in parallel during training to accelerate the process','The training set fits the model, the validation set guides hyperparameter tuning without leakage, and the test set provides an unbiased final evaluation','To reduce total dataset storage size and minimize cloud infrastructure costs during training','To artificially increase data diversity by exposing the model to different distributions of the same data'],
+   ans:'The training set fits the model, the validation set guides hyperparameter tuning without leakage, and the test set provides an unbiased final evaluation',
+   exp:'The three-way split prevents data leakage at each stage. Training data teaches the model. Validation data (unseen during training) guides hyperparameter decisions. The test set is held back completely and touched only once at the end, providing a clean, honest estimate of how the model will perform on real-world, never-before-seen data.'},
+  {l:'L8',lt:'ML: Concepts, Process & Use Cases',q:'Which of the following is NOT a realistic, real-world Machine Learning use case?',
+   opts:['Real-time detection of fraudulent transactions in financial processing systems','Personalized product recommendations for e-commerce and streaming platforms','Predictive maintenance that forecasts factory equipment failure before it occurs','Automatically discovering and permanently rewriting the fundamental laws of physics'],
+   ans:'Automatically discovering and permanently rewriting the fundamental laws of physics',
+   exp:'Machine Learning discovers statistical patterns in existing observational data — it cannot override or rewrite fundamental physical laws. The other three are well-established production ML applications deployed at massive scale: fraud detection (Visa, Mastercard), recommendation engines (Netflix, Amazon), and predictive maintenance (manufacturing IoT systems).'},
+  // L9 (3)
+  {l:'L9',lt:'Types of Machine Learning',q:'A robot learning to walk by receiving positive reward signals for stable movement and negative penalties for falling is applying which type of ML?',
+   opts:['Reinforcement Learning','Supervised Learning trained on labeled human walking motion capture data','Unsupervised Learning autonomously clustering movement trajectory patterns','Transfer Learning from a pre-trained bipedal locomotion foundation model'],
+   ans:'Reinforcement Learning',
+   exp:'Reinforcement Learning (RL) trains an agent through trial-and-error environmental interaction. The robot (agent) takes actions, transitions to new states, and receives scalar reward signals (positive for stable walking, negative for falling). Through many iterations it learns a policy that maximizes cumulative long-term reward — without needing any labeled training examples.'},
+  {l:'L9',lt:'Types of Machine Learning',q:'Automatically grouping customers into segments based on purchasing patterns — without any predefined category labels — is an example of:',
+   opts:['Supervised Classification using pre-labeled customer type training data','Reinforcement Learning using customer lifetime value as the reward signal','Unsupervised Learning using clustering algorithms','Few-shot Learning using minimal labeled customer profile examples'],
+   ans:'Unsupervised Learning using clustering algorithms',
+   exp:'Unsupervised Learning finds hidden structure in data without labeled examples. Customer segmentation via clustering (K-Means, DBSCAN, Hierarchical Clustering) groups customers with similar purchasing behaviors together — without any human pre-defining what those groups should be. The algorithm discovers natural groupings from the data itself.'},
+  {l:'L9',lt:'Types of Machine Learning',q:'What makes Semi-supervised Learning distinct from both Supervised and Unsupervised Learning?',
+   opts:['It relies exclusively on large unlabeled datasets with absolutely no human-provided ground truth labels','It combines a small amount of labeled training data with a large amount of unlabeled data during learning','It requires continuous human correction and labeling feedback after every individual prediction the model makes','It is a specialized variant of reinforcement learning applied exclusively to natural language processing'],
+   ans:'It combines a small amount of labeled training data with a large amount of unlabeled data during learning',
+   exp:'Semi-supervised Learning is powerful when labeled data is scarce or expensive — for example, medical imaging requiring specialist annotation. A small labeled set guides the model\'s learning direction, while a large unlabeled dataset provides additional structure. This often achieves near-supervised performance at a fraction of the annotation cost.'}
+];
+
+const LESSONS=[
+  {id:'L1',title:'AI, ML, and Gen AI'},
+  {id:'L2',title:'Artificial Intelligence'},
+  {id:'L3',title:'Machine Learning'},
+  {id:'L4',title:'Deep Learning'},
+  {id:'L5',title:'ML & DL @ AWS, Azure, Google'},
+  {id:'L6',title:'Generative AI'},
+  {id:'L7',title:'ML vs DL: Key Differences'},
+  {id:'L8',title:'ML: Concepts, Process & Use Cases'},
+  {id:'L9',title:'Types of Machine Learning'}
+];
+
+// ── STATE ──────────────────────────────────────
+let shuffled=[], qa=[], curIdx=0, elapsed=0, timerInt=null;
+let finalScore=0, finalTime=0, hasResults=false, fromStart=false;
+
+// ── UTILS ──────────────────────────────────────
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function fmtTime(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');}
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+
+// ── START ──────────────────────────────────────
+function startQuiz(){
+  shuffled=shuffle(QB).map(q=>({...q,dispOpts:shuffle(q.opts)}));
+  qa=new Array(shuffled.length).fill(null);
+  curIdx=0;elapsed=0;finalScore=0;finalTime=0;hasResults=false;fromStart=false;
+  clearInterval(timerInt);
+  timerInt=setInterval(()=>{elapsed++;document.getElementById('timerEl').textContent=fmtTime(elapsed);},1000);
+  buildDots();showScreen('quizScreen');renderQ(0);
+}
+
+function reviewDirect(){
+  shuffled=shuffle(QB).map(q=>({...q,dispOpts:shuffle(q.opts)}));
+  qa=new Array(shuffled.length).fill(null);
+  hasResults=false;fromStart=true;
+  showReview();
+}
+
+// ── NAV DOTS ───────────────────────────────────
+function buildDots(){
+  document.getElementById('qnav').innerHTML=shuffled.map((_,i)=>
+    `<button class="qnd" id="nd${i}" onclick="goTo(${i})">${i+1}</button>`
+  ).join('');
+}
+function refreshDots(){
+  shuffled.forEach((_,i)=>{
+    const d=document.getElementById(`nd${i}`);
+    if(!d)return;
+    d.className='qnd';
+    if(i===curIdx)d.classList.add('cur');
+    else if(qa[i])d.classList.add(qa[i].ok?'ok':'err');
+  });
+  const cur=document.getElementById(`nd${curIdx}`);
+  if(cur)cur.scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'});
+}
+
+// ── RENDER QUESTION ─────────────────────────────
+function renderQ(i){
+  curIdx=i;
+  const q=shuffled[i], a=qa[i], total=shuffled.length, L=['A','B','C','D'];
+  document.getElementById('qNumH').textContent=i+1;
+  document.getElementById('progFill').style.width=`${((i+1)/total)*100}%`;
+  document.getElementById('lessonTag').textContent=`${q.l} · ${q.lt}`;
+  document.getElementById('qLbl').textContent=`Question ${i+1} of ${total}`;
+  document.getElementById('qText').textContent=q.q;
+
+  const grid=document.getElementById('optsGrid'), fb=document.getElementById('fbPanel');
+  if(a){
+    grid.innerHTML=q.dispOpts.map((o,j)=>{
+      const isCor=o===q.ans, isWrong=o===a.selected&&!isCor;
+      return `<div class="opt-btn off ${isCor?'ok':isWrong?'err':''}">
+        <div class="opt-lbl">${isCor?'✓':isWrong?'✗':L[j]}</div>
+        <div class="opt-txt">${o}</div></div>`;
+    }).join('');
+    document.getElementById('fbIco').textContent=a.ok?'✓':'✗';
+    document.getElementById('fbIco').className=`fb-ico ${a.ok?'ok':'err'}`;
+    document.getElementById('fbStatus').textContent=a.ok?'Correct!':'Not quite — here\'s why:';
+    document.getElementById('fbStatus').className=`fb-status ${a.ok?'ok':'err'}`;
+    const ca=document.getElementById('fbCorrect');
+    if(!a.ok){ca.textContent=`✦ Correct answer: ${q.ans}`;ca.classList.add('show');}
+    else ca.classList.remove('show');
+    document.getElementById('fbExp').textContent=q.exp;
+    document.getElementById('fbNextTxt').textContent=i===total-1?'You\'re on the last question':'Next Question';
+    fb.classList.add('show');
+  } else {
+    grid.innerHTML=q.dispOpts.map((o,j)=>
+      `<button class="opt-btn" onclick="pick(${j})">
+        <div class="opt-lbl">${L[j]}</div>
+        <div class="opt-txt">${o}</div></button>`
+    ).join('');
+    fb.classList.remove('show');
+  }
+  document.getElementById('prevBtn').disabled=i===0;
+  document.getElementById('nextBtn').disabled=i===total-1;
+  document.getElementById('nextBtn').textContent=i===total-1?'Last ↓':'Next →';
+  document.getElementById('lastHint').classList.toggle('show',i===total-1);
+  refreshDots();
+}
+
+// ── ANSWER ─────────────────────────────────────
+function pick(si){
+  if(qa[curIdx])return;
+  const q=shuffled[curIdx], sel=q.dispOpts[si];
+  qa[curIdx]={selected:sel,ok:sel===q.ans};
+  renderQ(curIdx);
+}
+
+// ── NAVIGATE ───────────────────────────────────
+function goTo(i){renderQ(i);}
+function goPrev(){if(curIdx>0)renderQ(curIdx-1);}
+function goNext(){if(curIdx<shuffled.length-1)renderQ(curIdx+1);}
+function handleFbNext(){
+  if(curIdx<shuffled.length-1)renderQ(curIdx+1);
+  else openModal();
+}
+
+// ── MODAL ──────────────────────────────────────
+function openModal(){
+  const answered=qa.filter(a=>a!==null).length, total=shuffled.length, left=total-answered;
+  document.getElementById('mMsg').textContent=left===0
+    ?`You have answered all ${total} questions. Ready to submit?`
+    :`You have answered ${answered} of ${total} questions. ${left} question${left>1?'s are':' is'} still unanswered.`;
+  document.getElementById('mNote').textContent=left>0?'Unanswered questions will be counted as incorrect.':'';
+  document.getElementById('submitModal').classList.add('show');
+}
+function closeModal(){document.getElementById('submitModal').classList.remove('show');}
+function confirmSubmit(){
+  closeModal();clearInterval(timerInt);
+  finalTime=elapsed;
+  finalScore=qa.filter(a=>a&&a.ok).length;
+  hasResults=true;fromStart=false;
+  showResults();
+}
+
+// ── RESULTS ────────────────────────────────────
+function showResults(){
+  const total=shuffled.length, pct=Math.round((finalScore/total)*100);
+  const wrong=qa.filter(a=>a&&!a.ok).length, skipped=qa.filter(a=>a===null).length;
+  showScreen('resultsScreen');
+
+  let title,msg;
+  if(pct>=80){title='🟢 Strong Performance';msg=`Excellent work! You scored ${pct}% across all 9 lessons. You have a solid grasp of Module 1 concepts and are ready to advance to Module 2 of the AWS AI/ML Job Focus Program.`;}
+  else if(pct>=60){title='🟡 Good Progress';msg=`You scored ${pct}% — a solid foundation is forming! Review the lessons where you missed questions (see the breakdown below), then retake. A focused revision should push you past 80%.`;}
+  else{title='🔴 Needs Review';msg=`You scored ${pct}%. That is your starting point — not your ceiling! Revisit the lessons in Module 1. The explanations shown after each answer are your best study guide.`;}
+
+  document.getElementById('bandTitle').textContent=title;
+  document.getElementById('bandMsg').textContent=msg;
+  document.getElementById('sTime').textContent=fmtTime(finalTime);
+  document.getElementById('sRight').textContent=finalScore;
+  document.getElementById('sWrong').textContent=wrong;
+  document.getElementById('sSkip').textContent=skipped;
+  document.getElementById('sCorrect').textContent=finalScore;
+
+  const CIRC=395.84, ring=document.getElementById('scoreRing');
+  ring.setAttribute('stroke',pct>=80?'#8DC63F':pct>=60?'#F59E0B':'#EF4444');
+  setTimeout(()=>{ring.style.transition='stroke-dashoffset 1.5s cubic-bezier(.25,.46,.45,.94)';ring.style.strokeDashoffset=CIRC*(1-pct/100);},200);
+  let c=0;const pEl=document.getElementById('sPct'),step=pct/60;
+  const cnt=setInterval(()=>{c=Math.min(c+step,pct);pEl.textContent=Math.round(c);if(c>=pct)clearInterval(cnt);},25);
+
+  document.getElementById('bdTable').innerHTML=LESSONS.map(l=>{
+    const la=qa.map((a,i)=>({a,q:shuffled[i]})).filter(({q})=>q.l===l.id);
+    const lc=la.filter(({a})=>a&&a.ok).length, lt=la.length;
+    const lp=lt>0?Math.round((lc/lt)*100):0;
+    const col=lp>=80?'#8DC63F':lp>=60?'#F59E0B':'#EF4444';
+    const cls=lp>=80?'bs-strong':lp>=60?'bs-good':'bs-review';
+    const lbl=lp>=80?'Strong':lp>=60?'Good':'Review';
+    return `<div class="bd-row"><div><div class="bd-lid">${l.id}</div><div class="bd-ltitle">${l.title}</div><div class="bd-bar"><div class="bd-bar-fill" data-w="${lp}" style="background:${col}"></div></div></div><div class="bd-score">${lc}/${lt}</div><div class="bd-band ${cls}">${lbl}</div></div>`;
+  }).join('');
+  setTimeout(()=>{document.querySelectorAll('.bd-bar-fill').forEach(b=>{b.style.transition='width 1.1s cubic-bezier(.16,1,.3,1)';b.style.width=b.dataset.w+'%';});},450);
+}
+
+// ── REVIEW ─────────────────────────────────────
+function showReview(){
+  showScreen('reviewScreen');
+  const L=['A','B','C','D'];
+  const subtitle=fromStart?'All 25 questions with correct answers and explanations':`Showing all 25 questions · Your score: ${finalScore}/25`;
+  document.getElementById('rvSubtitle').textContent=subtitle;
+
+  document.getElementById('reviewList').innerHTML=shuffled.map((q,i)=>{
+    const a=qa[i], answered=a!==null, correct=answered&&a.ok;
+    let badge='';
+    if(!answered)badge='<span class="rv-badge rv-badge-skip">Not Answered</span>';
+    else if(correct)badge='<span class="rv-badge rv-badge-ok">✓ Correct</span>';
+    else badge='<span class="rv-badge rv-badge-err">✗ Incorrect</span>';
+
+    const opts=q.dispOpts.map((o,j)=>{
+      const isCor=o===q.ans, isUserWrong=answered&&o===a.selected&&!isCor;
+      let cls='',tag='',lbl=L[j];
+      if(isCor){cls='rv-ok';lbl='✓';tag='<span class="rv-tag rv-tag-ok">Correct Answer</span>';}
+      else if(isUserWrong){cls='rv-err';lbl='✗';tag='<span class="rv-tag rv-tag-err">Your Answer</span>';}
+      return `<div class="rv-opt ${cls}"><div class="rv-opt-lbl">${lbl}</div><div class="rv-opt-txt">${o}</div>${tag}</div>`;
+    }).join('');
+
+    return `<div class="rv-card">
+      <div class="rv-card-hdr">
+        <div class="rv-qn">${i+1}</div>
+        ${badge}
+        <div class="rv-lesson">${q.l} · ${q.lt}</div>
+      </div>
+      <div class="rv-qtxt">${q.q}</div>
+      <div class="rv-opts">${opts}</div>
+      <div class="rv-exp">
+        <div class="rv-exp-ico">📖</div>
+        <div><div class="rv-exp-lbl">Explanation</div><div class="rv-exp-txt">${q.exp}</div></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function backToResults(){
+  if(hasResults&&!fromStart)showScreen('resultsScreen');
+  else showScreen('startScreen');
+}
+
+function retake(){startQuiz();}
+</script>
+</body>
+</html>

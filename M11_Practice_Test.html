@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M11 Practice Test · AWS AI/ML · K21 Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--bg:#F7F8FA;--surface:#FFFFFF;--border:#E8EAEE;--t1:#111827;--t2:#4B5563;--t3:#9CA3AF;--green:#8DC63F;--green-mid:#79B030;--green-bg:#F1F8E8;--green-border:#C8E89A;--green-dark:#3D6B15;--navy:#1A1248;--navy-mid:#2E2080;--navy-light:#EEF0F9;--red:#EF4444;--red-bg:#FEF2F2;--red-border:#FECACA;--red-t:#DC2626;--blue-bg:#EFF6FF;--blue-b:#93C5FD;}
+body{font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased;background:var(--bg);color:var(--t1);min-height:100vh;}
+.screen{display:none;}.screen.active{display:block;min-height:100vh;}#quizScreen.active{display:flex;flex-direction:column;min-height:100vh;}
+.k21-hdr{background:var(--surface);border-bottom:1.5px solid var(--border);box-shadow:0 1px 4px rgba(0,0,0,.05);padding:16px 40px;display:flex;align-items:center;justify-content:space-between;}
+.k21-brand{display:flex;align-items:center;gap:10px;}.k21-mark{width:34px;height:34px;background:var(--green);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;}.k21-name{font-size:14px;font-weight:700;color:var(--navy);}.k21-name b{color:var(--green-mid);}
+.hdr-pill{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:5px 13px;border-radius:100px;background:var(--navy-light);color:var(--navy);border:1px solid #D0D4E8;}
+.btn-green{display:inline-flex;align-items:center;gap:10px;background:var(--green);color:#fff;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;padding:14px 32px;border-radius:100px;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(141,198,63,.3);transition:background .2s,transform .18s;}.btn-green:hover{background:var(--green-mid);transform:translateY(-2px);}
+.btn-navy{display:inline-flex;align-items:center;gap:8px;background:var(--navy);color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;padding:12px 24px;border-radius:100px;border:none;cursor:pointer;box-shadow:0 3px 12px rgba(26,18,72,.2);transition:background .2s,transform .18s;}.btn-navy:hover{background:var(--navy-mid);transform:translateY(-1px);}
+.btn-ghost{display:inline-flex;align-items:center;gap:7px;background:transparent;color:var(--t2);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:10px 20px;border-radius:100px;border:1.5px solid var(--border);cursor:pointer;transition:border-color .2s,color .2s,background .2s;}.btn-ghost:hover{border-color:var(--navy);color:var(--navy);background:var(--navy-light);}.btn-ghost:disabled{opacity:.38;cursor:not-allowed;}.btn-ghost:disabled:hover{border-color:var(--border);color:var(--t2);background:transparent;}
+.start-body{max-width:780px;margin:0 auto;padding:52px 28px 80px;}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--green-bg);border:1px solid var(--green-border);color:var(--green-dark);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;padding:5px 13px;border-radius:100px;margin-bottom:20px;}
+.eyebrow .dot{width:5px;height:5px;background:var(--green);border-radius:50%;animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+.start-h1{font-size:clamp(26px,4.5vw,46px);font-weight:800;color:var(--navy);line-height:1.12;letter-spacing:-.03em;margin-bottom:14px;}.start-h1 .g{color:var(--green-mid);}
+.start-sub{font-size:16px;color:var(--t2);line-height:1.65;max-width:560px;margin-bottom:40px;}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:40px;}
+.stat-c{background:var(--surface);border:1.5px solid var(--border);border-radius:16px;padding:20px 16px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+.stat-ico{font-size:22px;margin-bottom:8px;}.stat-val{font-size:26px;font-weight:800;color:var(--navy);line-height:1;margin-bottom:3px;}.stat-lbl{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--t3);}
+.section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--t3);margin-bottom:12px;}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:40px;}.chip{display:flex;align-items:center;gap:7px;background:var(--surface);border:1.5px solid var(--border);border-radius:100px;padding:7px 14px;font-size:12px;color:var(--t2);font-weight:500;}.chip-n{width:20px;height:20px;background:var(--navy-light);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:var(--navy-mid);flex-shrink:0;}
+.start-note{font-size:13px;color:var(--t3);margin-top:12px;}
+.quiz-hdr{background:var(--surface);border-bottom:1.5px solid var(--border);box-shadow:0 1px 4px rgba(0,0,0,.05);padding:0 32px;height:62px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:100;flex-shrink:0;}
+.qh-brand{display:flex;align-items:center;gap:7px;flex-shrink:0;}.qh-mark{width:27px;height:27px;background:var(--green);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff;}.qh-name{font-size:12px;font-weight:700;color:var(--navy);}
+.qh-sep{width:1px;height:18px;background:var(--border);flex-shrink:0;}.qh-mod{font-size:12px;font-weight:600;color:var(--t2);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.qh-counter{font-size:12px;font-weight:700;color:var(--t2);flex-shrink:0;}.qh-counter strong{color:var(--navy);}
+.qh-submit{display:inline-flex;align-items:center;gap:6px;background:var(--red-bg);color:var(--red-t);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;padding:7px 15px;border-radius:100px;border:1.5px solid var(--red-border);cursor:pointer;flex-shrink:0;transition:background .2s;}.qh-submit:hover{background:#FEE2E2;}
+.qh-timer{display:flex;align-items:center;gap:5px;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:5px 11px;flex-shrink:0;font-size:12px;font-weight:700;color:var(--t2);font-variant-numeric:tabular-nums;}.tdot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:blink 1s infinite;}
+.prog-wrap{height:3px;background:var(--border);flex-shrink:0;}.prog-fill{height:100%;background:var(--green);transition:width .5s cubic-bezier(.16,1,.3,1);width:0%;}
+.qnav{background:var(--surface);border-bottom:1.5px solid var(--border);padding:9px 32px;display:flex;align-items:center;gap:5px;overflow-x:auto;flex-shrink:0;}.qnav::-webkit-scrollbar{height:0;}
+.qnd{flex-shrink:0;width:27px;height:27px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;cursor:pointer;border:1.5px solid var(--border);background:var(--surface);color:var(--t3);transition:all .15s;font-family:'DM Sans',sans-serif;}.qnd:hover{border-color:var(--navy);color:var(--navy);}.qnd.cur{background:var(--navy);color:#fff;border-color:var(--navy);}.qnd.ok{background:var(--green-bg);color:var(--green-dark);border-color:var(--green);}.qnd.err{background:var(--red-bg);color:var(--red-t);border-color:var(--red-border);}
+.quiz-body{flex:1;padding:32px 24px 60px;}.q-wrap{width:100%;max-width:740px;margin:0 auto;}
+.q-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}.lesson-tag{display:inline-flex;align-items:center;gap:6px;background:var(--navy-light);color:var(--navy);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;padding:5px 12px;border-radius:100px;border:1px solid #D0D4E8;}.q-lbl{font-size:12px;font-weight:600;color:var(--t3);}
+.q-card{background:var(--surface);border:1.5px solid var(--border);border-radius:20px;padding:32px 36px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,.04);}.q-text{font-size:18px;font-weight:700;color:var(--navy);line-height:1.6;margin-bottom:22px;}
+.opts{display:flex;flex-direction:column;gap:10px;}.opt-btn{display:flex;align-items:flex-start;gap:12px;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:14px 18px;cursor:pointer;text-align:left;width:100%;font-family:'DM Sans',sans-serif;transition:border-color .17s,background .17s,transform .17s;}.opt-btn:hover:not(.off){border-color:var(--green);background:var(--green-bg);transform:translateX(3px);}.opt-btn.off{cursor:default;}.opt-btn.ok{background:var(--green-bg);border-color:var(--green);}.opt-btn.err{background:var(--red-bg);border-color:var(--red-border);}
+.opt-lbl{flex-shrink:0;width:28px;height:28px;border-radius:7px;background:var(--bg);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--t2);margin-top:2px;transition:all .17s;}.opt-btn.ok .opt-lbl{background:var(--green);border-color:var(--green);color:#fff;}.opt-btn.err .opt-lbl{background:var(--red);border-color:var(--red);color:#fff;}
+.opt-txt{font-size:14px;font-weight:500;color:var(--t1);line-height:1.55;flex:1;}.opt-btn.ok .opt-txt{color:var(--green-dark);font-weight:600;}.opt-btn.err .opt-txt{color:var(--red-t);}
+.fb{display:none;background:var(--blue-bg);border:1.5px solid var(--blue-b);border-left:4px solid #3B82F6;border-radius:12px;padding:20px 24px;margin-bottom:16px;animation:slideUp .3s ease;}.fb.show{display:block;}
+@keyframes slideUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.fb-hdr{display:flex;align-items:center;gap:9px;margin-bottom:7px;}.fb-ico{width:23px;height:23px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;}.fb-ico.ok{background:var(--green-bg);color:var(--green-mid);}.fb-ico.err{background:var(--red-bg);color:var(--red);}
+.fb-status{font-size:14px;font-weight:700;}.fb-status.ok{color:var(--green-dark);}.fb-status.err{color:var(--red-t);}
+.fb-correct{font-size:12px;font-weight:600;color:#92400E;background:#FEF3C7;border:1px solid #FCD34D;border-radius:7px;padding:6px 11px;margin:6px 0 8px 32px;display:none;}.fb-correct.show{display:block;}
+.fb-exp{font-size:13px;color:var(--t2);line-height:1.65;padding-left:32px;margin-bottom:14px;}
+.fb-next-btn{display:inline-flex;align-items:center;gap:7px;background:var(--navy);color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:10px 22px;border-radius:100px;border:none;cursor:pointer;box-shadow:0 3px 10px rgba(26,18,72,.18);transition:background .2s,transform .2s;margin-left:32px;}.fb-next-btn:hover{background:var(--navy-mid);transform:translateY(-1px);}
+.q-nav{display:flex;align-items:center;justify-content:space-between;margin-top:4px;}
+.last-hint{display:none;background:#FFFBEB;border:1px solid #FCD34D;border-radius:10px;padding:10px 16px;font-size:13px;color:#92400E;text-align:center;margin-top:12px;}.last-hint.show{display:block;}
+.res-body{max-width:800px;margin:0 auto;padding:48px 28px 80px;}.res-top{display:flex;gap:28px;align-items:flex-start;margin-bottom:36px;}
+.score-col{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:14px;}.score-wrap{position:relative;width:150px;height:150px;}.score-wrap svg{transform:rotate(-90deg);}.score-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}.score-num{font-size:32px;font-weight:800;color:var(--navy);line-height:1;}.score-num sub{font-size:16px;font-weight:600;color:var(--t3);}.score-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--t3);margin-top:2px;}
+.score-tally{text-align:center;}.score-tally-v{font-size:20px;font-weight:800;color:var(--navy);}.score-tally-l{font-size:12px;color:var(--t3);}
+.band-card{flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:20px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,.04);}.band-title{font-size:22px;font-weight:800;color:var(--navy);margin-bottom:8px;}.band-msg{font-size:14px;color:var(--t2);line-height:1.65;margin-bottom:20px;}
+.stats-chips{display:flex;gap:10px;flex-wrap:wrap;}.sc{display:flex;align-items:center;gap:6px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:7px 12px;font-size:12px;font-weight:600;color:var(--t2);}.sc strong{font-weight:800;color:var(--navy);}
+.breakdown{background:var(--surface);border:1.5px solid var(--border);border-radius:20px;overflow:hidden;margin-bottom:32px;box-shadow:0 1px 4px rgba(0,0,0,.04);}.bd-heading{padding:18px 24px;border-bottom:1.5px solid var(--border);font-size:14px;font-weight:700;color:var(--navy);}
+.bd-row{display:grid;grid-template-columns:1fr 68px 68px;align-items:center;gap:14px;padding:13px 24px;border-bottom:1px solid rgba(0,0,0,.04);}.bd-row:last-child{border-bottom:none;}
+.bd-lid{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--t3);margin-bottom:2px;}.bd-ltitle{font-size:13px;font-weight:600;color:var(--navy);}.bd-bar{height:5px;background:var(--bg);border-radius:10px;overflow:hidden;margin-top:6px;}.bd-bar-fill{height:100%;border-radius:10px;width:0%;transition:width 1.1s cubic-bezier(.16,1,.3,1);}
+.bd-score{font-size:13px;font-weight:700;color:var(--navy);text-align:right;}.bd-band{font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;text-align:center;justify-self:end;}
+.bs-strong{background:var(--green-bg);color:var(--green-dark);}.bs-good{background:#FEF3C7;color:#92400E;}.bs-review{background:var(--red-bg);color:var(--red-t);}
+.res-actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+.review-topbar{background:var(--surface);border-bottom:1.5px solid var(--border);box-shadow:0 1px 4px rgba(0,0,0,.05);padding:16px 40px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.rv-body{max-width:820px;margin:0 auto;padding:36px 28px 80px;}.rv-page-hdr{text-align:center;margin-bottom:36px;}.rv-page-hdr h2{font-size:clamp(22px,4vw,30px);font-weight:800;color:var(--navy);margin-bottom:6px;}.rv-page-hdr p{font-size:14px;color:var(--t2);}
+.rv-card{background:var(--surface);border:1.5px solid var(--border);border-radius:20px;padding:26px;margin-bottom:18px;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+.rv-card-hdr{display:flex;align-items:center;gap:9px;margin-bottom:14px;flex-wrap:wrap;}.rv-qn{width:29px;height:29px;background:var(--navy);color:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;}
+.rv-badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px;}.rv-badge-skip{background:#FEF3C7;color:#92400E;border:1px solid #FCD34D;}.rv-badge-ok{background:var(--green-bg);color:var(--green-dark);border:1px solid var(--green-border);}.rv-badge-err{background:var(--red-bg);color:var(--red-t);border:1px solid var(--red-border);}
+.rv-lesson{margin-left:auto;font-size:11px;font-weight:600;background:var(--navy-light);color:var(--navy);border-radius:100px;padding:4px 12px;border:1px solid #D0D4E8;}
+.rv-qtxt{font-size:16px;font-weight:700;color:var(--navy);line-height:1.55;margin-bottom:16px;}
+.rv-opts{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}.rv-opt{display:flex;align-items:center;gap:11px;padding:11px 15px;border-radius:10px;border:1.5px solid var(--border);background:var(--surface);}.rv-opt.rv-ok{background:var(--green-bg);border-color:var(--green);}.rv-opt.rv-err{background:var(--red-bg);border-color:var(--red-border);}
+.rv-opt-lbl{flex-shrink:0;width:25px;height:25px;border-radius:6px;background:var(--bg);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--t3);}.rv-opt.rv-ok .rv-opt-lbl{background:var(--green);border-color:var(--green);color:#fff;}.rv-opt.rv-err .rv-opt-lbl{background:var(--red);border-color:var(--red);color:#fff;}
+.rv-opt-txt{font-size:13px;color:var(--t1);line-height:1.45;flex:1;}.rv-opt.rv-ok .rv-opt-txt{color:var(--green-dark);font-weight:600;}.rv-opt.rv-err .rv-opt-txt{color:var(--red-t);}
+.rv-tag{flex-shrink:0;font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px;white-space:nowrap;}.rv-tag-ok{background:var(--green);color:#fff;}.rv-tag-err{background:var(--red);color:#fff;}
+.rv-exp{display:flex;gap:11px;background:var(--blue-bg);border:1.5px solid var(--blue-b);border-left:4px solid #3B82F6;border-radius:10px;padding:15px 16px;}.rv-exp-ico{font-size:15px;flex-shrink:0;margin-top:1px;}.rv-exp-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#2563EB;margin-bottom:4px;}.rv-exp-txt{font-size:13px;color:var(--t2);line-height:1.65;}
+.rv-bottom{display:flex;justify-content:center;gap:12px;margin-top:32px;flex-wrap:wrap;}
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:1000;align-items:center;justify-content:center;backdrop-filter:blur(3px);}.modal-ov.show{display:flex;}
+.modal{background:var(--surface);border-radius:24px;padding:36px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.18);animation:pop .3s cubic-bezier(.16,1,.3,1);}
+@keyframes pop{from{opacity:0;transform:scale(.9);}to{opacity:1;transform:scale(1);}}
+.m-ico{font-size:38px;margin-bottom:16px;}.m-title{font-size:20px;font-weight:800;color:var(--navy);margin-bottom:8px;}.m-msg{font-size:14px;color:var(--t2);line-height:1.6;margin-bottom:6px;}.m-note{font-size:12px;color:var(--t3);margin-bottom:24px;}
+.m-btns{display:flex;gap:12px;justify-content:center;}.m-cancel{display:inline-flex;align-items:center;background:var(--bg);color:var(--t2);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;padding:12px 24px;border-radius:100px;border:1.5px solid var(--border);cursor:pointer;transition:all .2s;}.m-cancel:hover{border-color:var(--navy);color:var(--navy);}.m-submit{display:inline-flex;align-items:center;background:var(--navy);color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;padding:12px 24px;border-radius:100px;border:none;cursor:pointer;transition:background .2s;}.m-submit:hover{background:var(--navy-mid);}
+@media(max-width:640px){.k21-hdr,.quiz-hdr{padding:14px 18px;}.start-body{padding:32px 18px 60px;}.qh-mod{display:none;}.quiz-hdr{gap:10px;}.quiz-body{padding:22px 16px 50px;}.q-card{padding:22px 18px;}.q-text{font-size:15px;}.res-top{flex-direction:column;align-items:center;}.bd-row{grid-template-columns:1fr 56px;}.bd-score{display:none;}.review-topbar{padding:14px 18px;}.rv-body{padding:28px 16px 60px;}}
+</style>
+</head>
+<body>
+
+<!-- START -->
+<div class="screen active" id="startScreen">
+  <div class="k21-hdr">
+    <div class="k21-brand"><div class="k21-mark">K21</div><div class="k21-name">K21 <b>Academy</b></div></div>
+    <div class="hdr-pill">AWS AI/ML Job Focus Program</div>
+  </div>
+  <div class="start-body">
+    <div class="eyebrow"><span class="dot"></span>Module 11 · Practice Test</div>
+    <h1 class="start-h1">Data Ingestion &amp;<br><span class="g">Amazon S3</span></h1>
+    <p class="start-sub">Test your understanding across all 6 lessons in Module 11. Covers S3 storage classes, core S3 features, bucket policies, ACLs, object versioning, and Cross-Region Replication — with full explanations after every answer.</p>
+    <div class="stats-row">
+      <div class="stat-c"><div class="stat-ico">📝</div><div class="stat-val">25</div><div class="stat-lbl">Questions</div></div>
+      <div class="stat-c"><div class="stat-ico">📚</div><div class="stat-val">6</div><div class="stat-lbl">Lessons</div></div>
+      <div class="stat-c"><div class="stat-ico">🔄</div><div class="stat-val">∞</div><div class="stat-lbl">Retries</div></div>
+    </div>
+    <div class="section-label">6 Lessons Covered</div>
+    <div class="chips">
+      <div class="chip"><div class="chip-n">L1</div>Object Storage Options</div>
+      <div class="chip"><div class="chip-n">L2</div>Simple Storage Service</div>
+      <div class="chip"><div class="chip-n">L3</div>S3 Bucket Policy</div>
+      <div class="chip"><div class="chip-n">L4</div>Amazon S3 ACL</div>
+      <div class="chip"><div class="chip-n">L5</div>S3 Object Versioning</div>
+      <div class="chip"><div class="chip-n">L6</div>Cross Region Replication</div>
+    </div>
+    <div>
+      <button class="btn-green" style="font-size:16px;padding:16px 40px;" onclick="startQuiz()">
+        Start Practice Test
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+    <p class="start-note">💡 Options shuffle every attempt · Explanations after every answer · No time pressure</p>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div class="screen" id="quizScreen">
+  <div class="quiz-hdr">
+    <div class="qh-brand"><div class="qh-mark">K21</div><div class="qh-name">Academy</div></div>
+    <div class="qh-sep"></div>
+    <div class="qh-mod">M11: Data Ingestion · Amazon S3</div>
+    <div class="qh-counter">Q <strong id="qNumH">1</strong>&thinsp;/&thinsp;25</div>
+    <button class="qh-submit" onclick="openModal()">📋 Submit Exam</button>
+    <div class="qh-timer"><div class="tdot"></div><span id="timerEl">00:00</span></div>
+  </div>
+  <div class="prog-wrap"><div class="prog-fill" id="progFill"></div></div>
+  <div class="qnav" id="qnav"></div>
+  <div class="quiz-body">
+    <div class="q-wrap">
+      <div class="q-meta"><div class="lesson-tag" id="lessonTag">L1</div><div class="q-lbl" id="qLbl">Question 1 of 25</div></div>
+      <div class="q-card"><div class="q-text" id="qText">Loading…</div><div class="opts" id="optsGrid"></div></div>
+      <div class="fb" id="fbPanel">
+        <div class="fb-hdr"><div class="fb-ico" id="fbIco"></div><div class="fb-status" id="fbStatus"></div></div>
+        <div class="fb-correct" id="fbCorrect"></div>
+        <p class="fb-exp" id="fbExp"></p>
+        <button class="fb-next-btn" onclick="handleFbNext()"><span id="fbNextTxt">Next Question</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      </div>
+      <div class="last-hint" id="lastHint">🎯 Last question — click <strong>Submit Exam</strong> in the header to see your results.</div>
+      <div class="q-nav" style="margin-top:16px;">
+        <button class="btn-ghost" id="prevBtn" onclick="goPrev()">← Previous</button>
+        <button class="btn-ghost" id="nextBtn" onclick="goNext()">Next →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div class="screen" id="resultsScreen">
+  <div class="k21-hdr">
+    <div class="k21-brand"><div class="k21-mark">K21</div><div class="k21-name">K21 <b>Academy</b></div></div>
+    <div class="hdr-pill">Test Complete · AWS AI/ML Job Focus Program</div>
+  </div>
+  <div class="res-body">
+    <div class="res-top">
+      <div class="score-col">
+        <div class="score-wrap">
+          <svg width="150" height="150" viewBox="0 0 150 150">
+            <circle cx="75" cy="75" r="63" fill="none" stroke="#E8EAEE" stroke-width="10"/>
+            <circle id="scoreRing" cx="75" cy="75" r="63" fill="none" stroke="#8DC63F" stroke-width="10" stroke-linecap="round" stroke-dasharray="395.84 395.84" stroke-dashoffset="395.84"/>
+          </svg>
+          <div class="score-inner"><div class="score-num"><span id="sPct">0</span><sub>%</sub></div><div class="score-lbl">Score</div></div>
+        </div>
+        <div class="score-tally"><div class="score-tally-l">Correct Answers</div><div class="score-tally-v"><span id="sCorrect">0</span> / 25</div></div>
+      </div>
+      <div class="band-card">
+        <div class="band-title" id="bandTitle">—</div>
+        <div class="band-msg" id="bandMsg">—</div>
+        <div class="stats-chips">
+          <div class="sc">⏱️ Time: <strong id="sTime">—</strong></div>
+          <div class="sc">✅ Correct: <strong id="sRight">—</strong></div>
+          <div class="sc">❌ Incorrect: <strong id="sWrong">—</strong></div>
+          <div class="sc">⏭️ Skipped: <strong id="sSkip">—</strong></div>
+        </div>
+      </div>
+    </div>
+    <div class="breakdown"><div class="bd-heading">📊 Per-Lesson Breakdown</div><div id="bdTable"></div></div>
+    <div class="res-actions">
+      <button class="btn-green" onclick="showReview()">📋 Review All Questions &amp; Answers</button>
+      <button class="btn-navy" onclick="retake()">🔄 Retake Test</button>
+    </div>
+  </div>
+</div>
+
+<!-- REVIEW -->
+<div class="screen" id="reviewScreen">
+  <div class="review-topbar">
+    <div class="k21-brand"><div class="k21-mark">K21</div><div class="k21-name">K21 <b>Academy</b></div></div>
+    <button class="btn-ghost" onclick="backToResults()">← Back to Results</button>
+  </div>
+  <div class="rv-body">
+    <div class="rv-page-hdr"><h2>Questions &amp; Answers Review</h2><p id="rvSubtitle">All 25 questions with correct answers and explanations</p></div>
+    <div id="reviewList"></div>
+    <div class="rv-bottom">
+      <button class="btn-navy" onclick="backToResults()">← Back to Results</button>
+      <button class="btn-ghost" onclick="retake()">🔄 Retake Test</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-ov" id="submitModal">
+  <div class="modal">
+    <div class="m-ico">📋</div><div class="m-title">Submit Exam?</div>
+    <div class="m-msg" id="mMsg">Are you sure?</div><div class="m-note" id="mNote"></div>
+    <div class="m-btns"><button class="m-cancel" onclick="closeModal()">Continue Quiz</button><button class="m-submit" onclick="confirmSubmit()">Yes, Submit</button></div>
+  </div>
+</div>
+
+<script>
+const QB=[
+
+  // L1: Object Storage Options (4)
+  {l:'L1',lt:'Object Storage Options',
+   q:'Which S3 storage class automatically moves objects between access tiers based on actual usage patterns and charges no retrieval fee?',
+   opts:['S3 Standard-IA — charges a per-GB retrieval fee and requires manual lifecycle rules to change tiers',
+         'S3 One Zone-IA — stores in a single AZ and charges a per-GB retrieval fee on every access',
+         'S3 Glacier — tiers objects based on object age, not access frequency patterns',
+         'S3 Intelligent-Tiering — automatically monitors access and tiers objects with no retrieval fees'],
+   ans:'S3 Intelligent-Tiering — automatically monitors access and tiers objects with no retrieval fees',
+   exp:'S3 Intelligent-Tiering monitors each object\'s access patterns and automatically moves it between Frequent Access and Infrequent Access tiers (and optionally Archive tiers). Unlike Standard-IA or Glacier, there is NO retrieval fee — you pay only a small monthly monitoring fee per object. This makes it ideal for ML datasets with unpredictable access patterns, such as model artifacts accessed during retraining cycles. Standard-IA, One Zone-IA, and Glacier all charge per-GB retrieval fees.'},
+
+  {l:'L1',lt:'Object Storage Options',
+   q:'A deep learning training job needs maximum I/O throughput (sub-millisecond latency) when accessing petabyte-scale training data from multiple GPU instances simultaneously. Which storage option is recommended?',
+   opts:['Amazon EFS — provides NFS shared access across multiple instances but at higher latency than parallel file systems',
+         'Amazon EBS Provisioned IOPS — provides sub-ms block storage but attaches to only one training instance at a time',
+         'Amazon FSx for Lustre — high-performance parallel file system with sub-ms latency and native S3 integration',
+         'Amazon S3 Standard — unlimited scale but lacks the sub-ms local file system latency GPU training requires'],
+   ans:'Amazon FSx for Lustre — high-performance parallel file system with sub-ms latency and native S3 integration',
+   exp:'FSx for Lustre is the high-performance choice for GPU-intensive deep learning. It delivers hundreds of GB/s throughput, sub-millisecond latency, and integrates natively with S3 — transparently exposing S3 objects as a POSIX file system. Multiple training instances mount FSx Lustre simultaneously. First access populates the local cache from S3; subsequent accesses use cached data at full throughput. EFS supports shared access but at higher latency (low ms, not sub-ms). EBS attaches to only one instance. S3 has ms-level API latency, not file-system-level sub-ms latency.'},
+
+  {l:'L1',lt:'Object Storage Options',
+   q:'An ML team needs to archive two-year-old training datasets that may need retrieval within a few hours for compliance audits. Which S3 storage class provides the best cost-retrieval balance?',
+   opts:['S3 Standard-IA — retains data across multiple AZs with per-GB retrieval fees at higher cost than archive tiers',
+         'S3 Glacier — lowest-cost archival with retrieval options ranging from minutes to hours for compliance data',
+         'S3 One Zone-IA — lower cost than Standard-IA but stores in a single AZ risking data loss if that AZ fails',
+         'S3 Intelligent-Tiering — auto-tiers based on access frequency but costs more than Glacier for rarely accessed data'],
+   ans:'S3 Glacier — lowest-cost archival with retrieval options ranging from minutes to hours for compliance data',
+   exp:'S3 Glacier is the right choice for archival data that needs occasional retrieval (hours acceptable). It offers three retrieval speeds: Expedited (1-5 minutes), Standard (3-5 hours), and Bulk (5-12 hours). For compliance audits where a few hours is acceptable, Glacier\'s dramatically lower storage cost vs Standard-IA makes it the economical choice. S3 Glacier Deep Archive (not listed) is even cheaper but with 12-hour retrieval. Standard-IA has retrieval fees but faster access (ms) — use it for data accessed once a month. One Zone-IA risks data loss in AZ failure — not appropriate for compliance data.'},
+
+  {l:'L1',lt:'Object Storage Options',
+   q:'Amazon S3 Transfer Acceleration is most beneficial for which specific scenario?',
+   opts:['Downloading small model artifacts (under 100MB) from S3 to SageMaker training instances in the same region',
+         'Copying large datasets between S3 buckets within the same AWS region using server-side copy',
+         'Reducing S3 API call latency for frequent GetObject requests from EC2 instances within the same region',
+         'Uploading large ML training datasets from geographically distributed global partners to a single S3 bucket'],
+   ans:'Uploading large ML training datasets from geographically distributed global partners to a single S3 bucket',
+   exp:'S3 Transfer Acceleration routes uploads through the nearest AWS CloudFront edge location, then over the optimized AWS backbone network to the destination S3 bucket. This significantly improves upload speed over long geographic distances — e.g., a partner in Japan uploading to a bucket in us-east-1. The benefit is most pronounced for large files (100MB+) uploaded over long distances. It provides no benefit for same-region transfers, small files, or downloads (which already use optimized AWS paths). The cost is a per-GB surcharge over standard S3 transfer pricing.'},
+
+  // L2: Simple Storage Service (5)
+  {l:'L2',lt:'Simple Storage Service',
+   q:'Amazon S3 Standard guarantees which durability and availability specifications for stored objects?',
+   opts:['99.9999999% (9 nines) durability in a single AZ with 99.9% availability and optional multi-AZ replication',
+         '99.999999999% (11 nines) durability across multiple AZs and 99.99% availability in a given year',
+         '99.999999999% (11 nines) durability in a single AZ with 99.999% availability and automatic cross-region failover',
+         '99.9999999% (9 nines) durability across multiple AZs with 99.999% availability and transfer acceleration'],
+   ans:'99.999999999% (11 nines) durability across multiple AZs and 99.99% availability in a given year',
+   exp:'S3 Standard provides: 99.999999999% (eleven 9s) durability — achieved by redundantly storing data across a minimum of three Availability Zones in the region. This means that if you store 10 million objects, you can on average expect to lose one object every 10,000 years. Availability is 99.99% — designed for 52.6 minutes of downtime per year. The 11-nines durability applies across ALL S3 storage classes except One Zone-IA (which is 99.999999999% durable but within a single AZ only, so AZ failure means data loss).'},
+
+  {l:'L2',lt:'Simple Storage Service',
+   q:'A bucket policy includes "aws:SecureTransport": false in a Deny condition. What behavior does this enforce?',
+   opts:['All requests must originate from within a VPC — public internet access without TLS certificates is blocked',
+         'All requests must include a valid AWS KMS encryption key ID — unencrypted PutObject calls are rejected',
+         'All S3 requests must use HTTPS — any HTTP (unencrypted) request to the bucket is denied',
+         'All requests must use IAM role authentication — anonymous requests without credentials are blocked'],
+   ans:'All S3 requests must use HTTPS — any HTTP (unencrypted) request to the bucket is denied',
+   exp:'The condition "aws:SecureTransport" evaluates to true when the request uses HTTPS, and false when it uses HTTP. Adding a Deny statement with "aws:SecureTransport": false means: "Deny any request where HTTPS is NOT being used" — effectively requiring HTTPS for all access. This enforces encryption in transit for all S3 operations. This is a standard security best practice bucket policy: {"Effect":"Deny","Principal":"*","Action":"s3:*","Resource":["arn:aws:s3:::bucket","arn:aws:s3:::bucket/*"],"Condition":{"Bool":{"aws:SecureTransport":"false"}}}'},
+
+  {l:'L2',lt:'Simple Storage Service',
+   q:'Which S3 feature enables an automated pipeline to start a Glue ETL job whenever new training data lands in a specific bucket prefix?',
+   opts:['S3 Transfer Acceleration — speeds up uploads from distributed sources but does not trigger downstream workflows',
+         'S3 Intelligent-Tiering — monitors access patterns and moves objects between tiers, but does not fire event triggers',
+         'S3 Event Notifications — publishes PUT/DELETE events to Lambda, SQS, or SNS to start downstream processing',
+         'S3 Lifecycle Policies — transition objects between storage classes on a schedule, not triggered by object arrivals'],
+   ans:'S3 Event Notifications — publishes PUT/DELETE events to Lambda, SQS, or SNS to start downstream processing',
+   exp:'S3 Event Notifications fire when specific object events occur (s3:ObjectCreated:Put, s3:ObjectCreated:Copy, etc.) on configured prefixes or suffixes. They can notify: AWS Lambda (to directly invoke a function), Amazon SQS (to queue the event for processing), Amazon SNS (to fan-out to multiple subscribers). A typical ML pipeline: new data lands in S3 → PUT event fires → Lambda receives the event → Lambda triggers a Glue ETL job or Step Functions workflow. This enables fully automated, event-driven data pipelines without polling.'},
+
+  {l:'L2',lt:'Simple Storage Service',
+   q:'What is the primary benefit of using S3 Select compared to downloading an entire S3 object before processing?',
+   opts:['S3 Select automatically converts CSV and JSON objects to Parquet format before returning query results',
+         'S3 Select enables parallel multi-threaded reads of a single S3 object simultaneously across multiple processes',
+         'S3 Select adds schema validation to S3, rejecting uploads that do not match a defined column structure',
+         'S3 Select runs SQL-like filtering inside S3 itself — returning only matching rows and reducing data transfer costs'],
+   ans:'S3 Select runs SQL-like filtering inside S3 itself — returning only matching rows and reducing data transfer costs',
+   exp:'S3 Select (and Glacier Select) allows you to execute simple SQL SELECT statements directly against objects in S3 — filtering rows and columns before the data leaves S3. Instead of downloading a 10GB CSV to extract 100MB of relevant records, S3 Select returns only the matching rows. This reduces: data transfer cost (you only pay for bytes returned), transfer latency (smaller payload), and compute cost (less data to process on the client side). Supported formats: CSV, JSON, Parquet. S3 Select does NOT convert formats or provide schema enforcement — those are separate capabilities.'},
+
+  {l:'L2',lt:'Simple Storage Service',
+   q:'An ML team\'s S3 bucket storing sensitive training data must prevent ALL public access, even if someone adds a permissive object ACL or bucket policy. Which setting achieves this?',
+   opts:['A bucket policy with Deny Principal:"*" — this blocks anonymous access but can be overridden by object-level ACLs',
+         'S3 default encryption (SSE-S3) — encrypts all stored data at rest but does not prevent public access to objects',
+         'S3 Object Lock in Compliance mode — prevents deletion and modification but does not restrict public read access',
+         'S3 Block Public Access — overrides all bucket policies and ACLs to prevent any public exposure of bucket contents'],
+   ans:'S3 Block Public Access — overrides all bucket policies and ACLs to prevent any public exposure of bucket contents',
+   exp:'S3 Block Public Access is the authoritative override for public access control. When enabled at the account or bucket level, it blocks: (1) new public ACLs from being set; (2) existing public ACLs from granting access; (3) new bucket policies that allow public access; (4) existing bucket policies that allow public access. Even if an IAM admin accidentally creates a public ACL or a permissive bucket policy, Block Public Access overrides them. This is why AWS recommends enabling Block Public Access on all buckets by default and only relaxing it for intentionally public buckets (static website hosting, public CDN assets).'},
+
+  // L3: S3 Bucket Policy (4)
+  {l:'L3',lt:'S3 Bucket Policy',
+   q:'What is the key difference between an S3 Bucket Policy and an IAM Identity Policy for controlling S3 access?',
+   opts:['Bucket policies apply only at the object level; IAM policies apply only at the bucket level for all objects',
+         'Bucket policies require MFA to modify; IAM policies can be updated without multi-factor authentication',
+         'Bucket policies support only Allow statements; IAM policies can include both Allow and Deny statements',
+         'Bucket policies are resource-based and attached to the S3 bucket — they can grant access to any AWS account including cross-account principals. IAM policies are identity-based and attached to users, roles, or groups within your account.'],
+   ans:'Bucket policies are resource-based and attached to the S3 bucket — they can grant access to any AWS account including cross-account principals. IAM policies are identity-based and attached to users, roles, or groups within your account.',
+   exp:'The fundamental distinction: IAM identity policies are attached to IAM principals (users, groups, roles) and control what those principals can do. They cannot directly grant access to external accounts. S3 Bucket policies are resource-based policies attached to the bucket itself — they can grant access to any AWS principal including: specific IAM users/roles from the same account, entire external AWS accounts, specific external IAM roles, or all AWS authenticated users. For cross-account S3 access, a bucket policy is typically required. Both types of policies support Allow AND Deny statements.'},
+
+  {l:'L3',lt:'S3 Bucket Policy',
+   q:'A bucket policy condition includes "aws:SourceVpc": "vpc-abc123" in a Deny statement. What does this enforce?',
+   opts:['Only objects tagged with the VPC\'s CIDR block as metadata can be stored in the bucket',
+         'Only EC2 instances assigned to the specified VPC security group ID can access the bucket',
+         'Only requests originating from the specified VPC (via a VPC endpoint) can access the bucket — all internet requests are denied',
+         'Only requests from the VPC\'s NAT Gateway public IP address are permitted — all other IPs are blocked'],
+   ans:'Only requests originating from the specified VPC (via a VPC endpoint) can access the bucket — all internet requests are denied',
+   exp:'The aws:SourceVpc condition key evaluates to the VPC ID from which the request originated — this only works when requests come through a VPC endpoint (PrivateLink) for S3. A Deny with NotCondition using aws:SourceVpc effectively says: "Deny access to anyone NOT coming from this VPC." This ensures the bucket can ONLY be accessed privately from within the specified VPC — preventing any internet-based access, even from authenticated IAM users making requests over the public internet. This is a standard pattern for highly sensitive ML training data that must never leave the private network.'},
+
+  {l:'L3',lt:'S3 Bucket Policy',
+   q:'Which IAM condition key in a bucket policy restricts S3 operations to a specific AWS region, enforcing data residency?',
+   opts:['aws:SourceIp — restricts access based on the caller\'s IP address CIDR range, not the target region',
+         'aws:RequestedRegion — restricts which AWS region the S3 API endpoint can be called against',
+         's3:LocationConstraint — refers to the region where the bucket was created, not where operations are directed',
+         'aws:PrincipalOrgID — restricts access to principals within an AWS Organization, not by geographic region'],
+   ans:'aws:RequestedRegion — restricts which AWS region the S3 API endpoint can be called against',
+   exp:'The aws:RequestedRegion condition key evaluates the AWS region of the API endpoint receiving the request. Using it in a bucket policy Deny: {"Condition":{"StringNotEquals":{"aws:RequestedRegion":"eu-west-1"}}} blocks all S3 operations where the request is directed to any region OTHER than eu-west-1. This prevents cross-region copy commands, ensures all access goes through the approved regional endpoint, and is used to enforce GDPR data residency — ensuring data in an EU bucket is only accessed via EU-region API endpoints. aws:SourceIp filters by caller IP; s3:LocationConstraint reflects bucket creation region; aws:PrincipalOrgID filters by AWS Organization membership.'},
+
+  {l:'L3',lt:'S3 Bucket Policy',
+   q:'A bucket policy has an explicit Deny for HTTP access. A developer also has an IAM policy with an explicit Allow for the same S3 actions. What is the effective permission when accessing via HTTP?',
+   opts:['Allow — IAM identity-based policies take precedence over resource-based bucket policies for same-account principals',
+         'Allow — the developer\'s IAM policy satisfies the explicit Allow requirement, overriding the bucket-level Deny',
+         'Deny — only for cross-account access; same-account IAM Allows always override resource-based bucket Denies',
+         'Deny — an explicit Deny in any policy (bucket policy or IAM) always overrides Allow statements from any other policy'],
+   ans:'Deny — an explicit Deny in any policy (bucket policy or IAM) always overrides Allow statements from any other policy',
+   exp:'AWS policy evaluation logic is deterministic: (1) Explicit Deny — any explicit Deny in any applicable policy (SCP, permission boundary, identity policy, resource policy) immediately blocks access regardless of what other policies Allow; (2) Explicit Allow — if no Deny applies and there is an Allow, access is granted; (3) Implicit Deny — if neither Deny nor Allow applies, access is denied by default. An explicit Deny always wins. This is why the aws:SecureTransport Deny pattern is so effective — even an IAM Administrator\'s Allow cannot bypass a bucket policy Deny when accessing via HTTP.'},
+
+  // L4: Amazon S3 ACL (4)
+  {l:'L4',lt:'Amazon S3 ACL',
+   q:'In which scenario does AWS recommend using S3 ACLs instead of bucket policies?',
+   opts:['When granting access to all IAM users within your own AWS account without writing complex bucket policy JSON',
+         'When enforcing MFA Delete for all DELETE operations on sensitive objects in a regulated bucket',
+         'When granting object-level permissions to a specific external AWS account that needs access to individual objects',
+         'When restricting access based on VPC endpoints, IP ranges, or geographic conditions per request'],
+   ans:'When granting object-level permissions to a specific external AWS account that needs access to individual objects',
+   exp:'S3 ACLs operate at the individual object level (or bucket level) and can grant specific permissions (READ, WRITE, FULL_CONTROL) to a specific AWS canonical user ID or predefined group. ACLs are useful when: a cross-account scenario requires object-level grants (e.g., an external account uploading logs to your bucket needs read access only on their own objects); or when objects are uploaded by a different account and you need the uploader to retain access. However, AWS now recommends using bucket policies and disabling ACLs (Object Ownership = Bucket owner enforced) for simplicity and centralized access management in most cases.'},
+
+  {l:'L4',lt:'Amazon S3 ACL',
+   q:'Which S3 canned ACL grants the general public read access to an object while the bucket owner retains full control?',
+   opts:['authenticated-read — grants read access to any authenticated AWS user (any AWS account), not the general public',
+         'bucket-owner-read — grants the bucket owner read access to objects uploaded by other accounts, not public access',
+         'public-read — grants unauthenticated public read access to the object while the owner retains full control',
+         'aws-exec-read — grants read access to specific AWS execution services, not general internet access'],
+   ans:'public-read — grants unauthenticated public read access to the object while the owner retains full control',
+   exp:'S3 canned ACLs are predefined permission sets: private (default — only owner has access); public-read (everyone including anonymous users can read); public-read-write (everyone can read AND write — almost never appropriate); authenticated-read (any authenticated AWS user from any account can read — not anonymous public); bucket-owner-read (bucket owner gets READ permission on objects uploaded by a different account); bucket-owner-full-control (bucket owner gets full control over cross-account uploaded objects). public-read is commonly used for static website assets, public datasets, and CDN-served content where everyone needs read access.'},
+
+  {l:'L4',lt:'Amazon S3 ACL',
+   q:'What is the effect of setting S3 Object Ownership to "Bucket owner enforced" mode?',
+   opts:['Cross-account replication automatically grants the destination bucket owner full control via ACL',
+         'Each object version inherits the bucket\'s Object Ownership setting when versioning is enabled',
+         'Enabling Block Public Access automatically sets Object Ownership to Bucket owner enforced mode',
+         'ACLs are disabled entirely — all objects are owned by the bucket owner regardless of who uploaded them'],
+   ans:'ACLs are disabled entirely — all objects are owned by the bucket owner regardless of who uploaded them',
+   exp:'Bucket owner enforced mode is AWS\'s recommended Object Ownership setting. When enabled: (1) ACLs are permanently disabled — no ACL grants are evaluated or honored; (2) Any object uploaded to the bucket — by the bucket owner, same-account IAM users, or cross-account principals — is automatically owned by the bucket owner; (3) All access control is managed exclusively through bucket policies and IAM policies. This eliminates the complexity of ACL management and cross-account ownership issues where a cross-account uploader owns objects in your bucket. AWS enables this mode by default on new buckets created after April 2023.'},
+
+  {l:'L4',lt:'Amazon S3 ACL',
+   q:'A third-party data vendor uploads objects to your S3 bucket using their own AWS account. What is the DEFAULT object ownership without any ACL configuration?',
+   opts:['The bucket owner automatically receives full control — S3 transfers ownership to the bucket account on upload',
+         'Both accounts share joint ownership — S3 creates a shared ownership record for all cross-account uploads',
+         'AWS owns the object until an explicit ACL grant transfers ownership to either account\'s root user',
+         'The uploading account (the third-party vendor) owns the objects — the bucket owner cannot access them by default'],
+   ans:'The uploading account (the third-party vendor) owns the objects — the bucket owner cannot access them by default',
+   exp:'This is a classic S3 cross-account ownership trap. By default, whoever performs the PUT upload owns the resulting object — regardless of which bucket it lands in. If a third-party uploads to your bucket without granting you an ACL, you own the bucket but the vendor owns the objects inside it. You cannot delete, read, or modify them without the uploader granting you permissions. Solutions: (1) Require vendors to set bucket-owner-full-control ACL on every upload; (2) Enable Object Ownership = Bucket owner enforced mode (which forces all objects to be owned by the bucket account). This is why the default behavior causes operational problems and why AWS recommends Bucket owner enforced for new buckets.'},
+
+  // L5: S3 Object Versioning (4)
+  {l:'L5',lt:'S3 Object Versioning',
+   q:'When versioning is first enabled on an S3 bucket that already contains objects, what happens to those pre-existing objects?',
+   opts:['All existing objects are immediately assigned new version IDs and their prior state is backed up to Glacier',
+         'All existing objects become inaccessible for 24 hours while S3 assigns version IDs across the entire bucket',
+         'Existing objects are permanently deleted and must be re-uploaded to participate in the versioning system',
+         'Existing objects receive a version ID of "null" — their content is unchanged and new uploads get unique version IDs'],
+   ans:'Existing objects receive a version ID of "null" — their content is unchanged and new uploads get unique version IDs',
+   exp:'Enabling versioning on an existing bucket is non-destructive to existing content. S3 assigns a special null version ID to all objects that existed before versioning was enabled — they remain accessible and unchanged. From that point forward, every new PutObject, overwrite, or delete creates objects with real versioning IDs (e.g., "abc123def456"). The null-version objects can be accessed with a standard GetObject (no version ID specified). If you later overwrite a null-version object, the null version becomes a non-current version and the new upload gets a real version ID. Once versioning is enabled, it can be suspended but NOT fully disabled.'},
+
+  {l:'L5',lt:'S3 Object Versioning',
+   q:'In a versioning-enabled S3 bucket, what happens when you delete an object WITHOUT specifying a version ID?',
+   opts:['S3 permanently deletes the most recent version, automatically promoting the previous version as the current one',
+         'S3 deletes all versions of the object simultaneously, permanently removing all historical copies',
+         'S3 inserts a Delete Marker — the object appears deleted to standard requests but all previous versions are preserved',
+         'S3 moves the current version to Glacier storage and inserts a retrieval placeholder in its place'],
+   ans:'S3 inserts a Delete Marker — the object appears deleted to standard requests but all previous versions are preserved',
+   exp:'A Delete Marker is a special zero-byte placeholder that becomes the "current version" of the object. Standard GET requests return a 404 (the object appears deleted). LIST requests do not show the object by default. However, all previous versions are fully preserved and recoverable: list all versions (including delete markers) to see them; GET with a specific version ID retrieves any previous version; DELETE the delete marker itself to restore the object. This is the key protection versioning provides — accidental deletes are recoverable. To permanently delete, you must explicitly DELETE with the specific version ID.'},
+
+  {l:'L5',lt:'S3 Object Versioning',
+   q:'MFA Delete for S3 Object Versioning requires MFA authentication for which specific operations?',
+   opts:['Any GetObject request on a versioned object and all ListObjectVersions API calls to the bucket',
+         'Uploading new object versions and enabling server-side encryption on a versioned bucket',
+         'Permanently deleting a specific object version AND changing the versioning state (enable/suspend)',
+         'Creating lifecycle policies that target non-current versions and enabling S3 Replication on the bucket'],
+   ans:'Permanently deleting a specific object version AND changing the versioning state (enable/suspend)',
+   exp:'MFA Delete adds an extra layer of protection against accidental or malicious permanent data loss. It requires a valid MFA token for exactly two operations: (1) Permanently deleting a specific object version — DELETE with a version ID that would irreversibly remove that version; (2) Changing the bucket versioning state — from Enabled to Suspended (or Disabled). Normal operations like PutObject, GetObject, ListObjectVersions, inserting delete markers, and creating lifecycle rules do NOT require MFA. MFA Delete can only be enabled by the root account user (not IAM users) via the CLI or API — it cannot be enabled from the console.'},
+
+  {l:'L5',lt:'S3 Object Versioning',
+   q:'An S3 lifecycle rule is configured with NoncurrentVersionExpiration of 90 days. What does this delete?',
+   opts:['The current (latest) version of any object that has not been accessed in the past 90 days',
+         'All versions simultaneously — current and non-current — once the oldest version reaches 90 days old',
+         'Delete markers that are older than 90 days and have no remaining non-current versions beneath them',
+         'Non-current (older) object versions that have been superseded for more than 90 days, freeing storage cost'],
+   ans:'Non-current (older) object versions that have been superseded for more than 90 days, freeing storage cost',
+   exp:'S3 lifecycle versioning rules target specific version states: NoncurrentVersionExpiration — permanently deletes older (non-current) versions after N days of being superseded by a newer version. Example: if you upload version V2 today, V1 becomes non-current today. After 90 days (NoncurrentVersionExpiration), V1 is deleted. The current version (V2) is unaffected. Expiration — deletes the current version (or inserts a delete marker for versioned buckets). ExpiredObjectDeleteMarker — removes delete markers with no non-current versions remaining. Managing non-current version lifecycle is critical for controlling storage costs in heavily updated versioned buckets.'},
+
+  // L6: Cross Region Replication (4)
+  {l:'L6',lt:'Cross Region Replication',
+   q:'Which prerequisite MUST be configured on BOTH the source and destination buckets before Cross-Region Replication can be enabled?',
+   opts:['S3 Block Public Access must be enabled on both buckets to secure replicated data from public exposure',
+         'S3 default encryption (SSE-KMS) must be configured on both buckets before creating any replication rules',
+         'S3 Event Notifications must be configured on the source bucket to trigger the replication transfer workflow',
+         'S3 Object Versioning must be enabled on both the source AND destination buckets'],
+   ans:'S3 Object Versioning must be enabled on both the source AND destination buckets',
+   exp:'S3 Cross-Region Replication (CRR) has a hard dependency on versioning. Both the source bucket (where data originates) AND the destination bucket (where data is replicated to) must have versioning enabled before a replication rule can be created. Without versioning, S3 cannot track object versions to determine what has been replicated, handle overwrites, or manage delete markers correctly during replication. If you attempt to create a CRR rule on a bucket without versioning enabled, the console will prompt you to enable it first. Block Public Access, encryption, and Event Notifications are not prerequisites for CRR.'},
+
+  {l:'L6',lt:'Cross Region Replication',
+   q:'Which of the following is NOT automatically replicated by S3 Cross-Region Replication once a replication rule is active?',
+   opts:['New object versions uploaded to the source bucket after the replication rule was created',
+         'Object tags set on source objects — these are replicated alongside the object data',
+         'Objects encrypted with SSE-S3 — these replicate as long as the replication IAM role has correct permissions',
+         'Objects that existed in the source bucket BEFORE the replication rule was enabled'],
+   ans:'Objects that existed in the source bucket BEFORE the replication rule was enabled',
+   exp:'CRR is prospective — it only replicates objects uploaded AFTER the replication rule is created and active. Pre-existing objects are NOT automatically replicated. If you need to replicate historical objects, you must use S3 Batch Operations (with the "Replicate" operation) to trigger replication for existing objects separately. This is important to understand for exam scenarios: enabling CRR on a bucket with 10 million existing objects does NOT move those objects to the destination — only new writes after that point are replicated. Tags, object metadata, ACLs (if configured), and encryption settings ARE replicated along with new object writes.'},
+
+  {l:'L6',lt:'Cross Region Replication',
+   q:'A company needs ML training data replicated to a secondary region within 15 minutes (SLA-backed) for disaster recovery. Which S3 feature provides this guarantee?',
+   opts:['S3 Transfer Acceleration — accelerates cross-region data movement from global sources but provides no time SLA',
+         'Standard S3 CRR (without RTC) — replicates asynchronously but with no guaranteed replication time bound',
+         'S3 Lifecycle Policy with cross-region transition — moves objects between classes on a schedule, not in real-time',
+         'S3 Replication Time Control (RTC) — provides a 15-minute SLA for replicating 99.99% of objects'],
+   ans:'S3 Replication Time Control (RTC) — provides a 15-minute SLA for replicating 99.99% of objects',
+   exp:'S3 Replication Time Control (RTC) is an optional feature that adds a guaranteed Service Level Agreement to CRR or SRR. With RTC enabled, AWS guarantees that 99.99% of objects are replicated within 15 minutes of being uploaded to the source bucket. It also provides CloudWatch metrics showing replication latency and the number of bytes and objects pending replication. RTC adds a cost over standard replication pricing. Without RTC, standard CRR completes within minutes for most objects but provides no contractual time guarantee. RTC is the answer whenever an exam question mentions "guaranteed" or "SLA-backed" replication time.'},
+
+  {l:'L6',lt:'Cross Region Replication',
+   q:'What is the difference between Cross-Region Replication (CRR) and Same-Region Replication (SRR)?',
+   opts:['CRR requires two separate AWS accounts; SRR can only replicate between buckets in the same AWS account',
+         'CRR replicates all object versions; SRR only replicates the most recent version of each object',
+         'CRR copies objects to a bucket in a DIFFERENT region; SRR copies to a bucket in the SAME region — both use identical replication rule configuration',
+         'CRR is configured via ACLs at the object level; SRR is configured via bucket policies at the bucket level'],
+   ans:'CRR copies objects to a bucket in a DIFFERENT region; SRR copies to a bucket in the SAME region — both use identical replication rule configuration',
+   exp:'CRR and SRR are configured identically — both use replication rules in the source bucket\'s Replication configuration. The only difference is whether the destination bucket is in a different region (CRR) or the same region (SRR). Both support: same-account or cross-account replication; versioning requirement on both buckets; object filter by prefix or tag; optional RTC for time-guaranteed replication; encryption config propagation. SRR use cases: aggregate logs from multiple buckets in the same region; maintain a copy in a different account for backup or compliance; testing replication configuration before enabling CRR. Both can replicate across AWS accounts.'}
+];
+
+const LESSONS=[
+  {id:'L1',title:'Object Storage Options'},
+  {id:'L2',title:'Simple Storage Service'},
+  {id:'L3',title:'S3 Bucket Policy'},
+  {id:'L4',title:'Amazon S3 ACL'},
+  {id:'L5',title:'S3 Object Versioning'},
+  {id:'L6',title:'Cross Region Replication'}
+];
+const TOTAL=25;
+
+let shuffled=[],qa=[],curIdx=0,elapsed=0,timerInt=null,finalScore=0,finalTime=0,hasResults=false;
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function fmtTime(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');}
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+
+function startQuiz(){
+  shuffled=shuffle(QB).map(q=>({...q,dispOpts:shuffle(q.opts)}));
+  qa=new Array(TOTAL).fill(null);curIdx=0;elapsed=0;finalScore=0;finalTime=0;hasResults=false;
+  clearInterval(timerInt);timerInt=setInterval(()=>{elapsed++;document.getElementById('timerEl').textContent=fmtTime(elapsed);},1000);
+  buildDots();showScreen('quizScreen');renderQ(0);
+}
+function buildDots(){document.getElementById('qnav').innerHTML=shuffled.map((_,i)=>`<button class="qnd" id="nd${i}" onclick="goTo(${i})">${i+1}</button>`).join('');}
+function refreshDots(){shuffled.forEach((_,i)=>{const d=document.getElementById(`nd${i}`);if(!d)return;d.className='qnd';if(i===curIdx)d.classList.add('cur');else if(qa[i])d.classList.add(qa[i].ok?'ok':'err');});const cur=document.getElementById(`nd${curIdx}`);if(cur)cur.scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'});}
+
+function renderQ(i){
+  curIdx=i;const q=shuffled[i],a=qa[i],L=['A','B','C','D'];
+  document.getElementById('qNumH').textContent=i+1;
+  document.getElementById('progFill').style.width=`${((i+1)/TOTAL)*100}%`;
+  document.getElementById('lessonTag').textContent=`${q.l} · ${q.lt}`;
+  document.getElementById('qLbl').textContent=`Question ${i+1} of ${TOTAL}`;
+  document.getElementById('qText').textContent=q.q;
+  const grid=document.getElementById('optsGrid'),fb=document.getElementById('fbPanel');
+  if(a){
+    grid.innerHTML=q.dispOpts.map((o,j)=>{const isCor=o===q.ans,isWrong=o===a.selected&&!isCor;return`<div class="opt-btn off ${isCor?'ok':isWrong?'err':''}"><div class="opt-lbl">${isCor?'✓':isWrong?'✗':L[j]}</div><div class="opt-txt">${o}</div></div>`;}).join('');
+    document.getElementById('fbIco').textContent=a.ok?'✓':'✗';document.getElementById('fbIco').className=`fb-ico ${a.ok?'ok':'err'}`;
+    document.getElementById('fbStatus').textContent=a.ok?'Correct!':'Not quite — here\'s why:';document.getElementById('fbStatus').className=`fb-status ${a.ok?'ok':'err'}`;
+    const ca=document.getElementById('fbCorrect');if(!a.ok){ca.textContent=`✦ Correct answer: ${q.ans}`;ca.classList.add('show');}else ca.classList.remove('show');
+    document.getElementById('fbExp').textContent=q.exp;document.getElementById('fbNextTxt').textContent=i===TOTAL-1?'You\'re on the last question':'Next Question';fb.classList.add('show');
+  }else{grid.innerHTML=q.dispOpts.map((o,j)=>`<button class="opt-btn" onclick="pick(${j})"><div class="opt-lbl">${L[j]}</div><div class="opt-txt">${o}</div></button>`).join('');fb.classList.remove('show');}
+  document.getElementById('prevBtn').disabled=i===0;document.getElementById('nextBtn').disabled=i===TOTAL-1;document.getElementById('nextBtn').textContent=i===TOTAL-1?'Last ↓':'Next →';
+  document.getElementById('lastHint').classList.toggle('show',i===TOTAL-1);refreshDots();
+}
+
+function pick(si){if(qa[curIdx])return;const q=shuffled[curIdx],sel=q.dispOpts[si];qa[curIdx]={selected:sel,ok:sel===q.ans};renderQ(curIdx);}
+function goTo(i){renderQ(i);}function goPrev(){if(curIdx>0)renderQ(curIdx-1);}function goNext(){if(curIdx<TOTAL-1)renderQ(curIdx+1);}
+function handleFbNext(){if(curIdx<TOTAL-1)renderQ(curIdx+1);else openModal();}
+function openModal(){const answered=qa.filter(a=>a!==null).length,left=TOTAL-answered;document.getElementById('mMsg').textContent=left===0?`All ${TOTAL} questions answered. Ready to submit?`:`Answered ${answered} of ${TOTAL}. ${left} question${left>1?'s are':' is'} still unanswered.`;document.getElementById('mNote').textContent=left>0?'Unanswered questions will be counted as incorrect.':'';document.getElementById('submitModal').classList.add('show');}
+function closeModal(){document.getElementById('submitModal').classList.remove('show');}
+function confirmSubmit(){closeModal();clearInterval(timerInt);finalTime=elapsed;finalScore=qa.filter(a=>a&&a.ok).length;hasResults=true;showResults();}
+
+function showResults(){
+  const pct=Math.round((finalScore/TOTAL)*100),wrong=qa.filter(a=>a&&!a.ok).length,skipped=qa.filter(a=>a===null).length;
+  showScreen('resultsScreen');
+  let title,msg;
+  if(pct>=80){title='🟢 Strong Performance';msg=`Excellent! You scored ${pct}% across all 6 lessons. Solid command of S3 storage classes, bucket policies, ACLs, versioning, and cross-region replication — ready to advance.`;}
+  else if(pct>=60){title='🟡 Good Progress';msg=`You scored ${pct}%. Review the weaker lessons below, then retake. Focus on the nuances: S3 Block Public Access vs bucket policy Deny, CRR pre-existing objects, and the cross-account ownership trap.`;}
+  else{title='🔴 Needs Review';msg=`You scored ${pct}%. Revisit the Module 11 lessons — pay attention to the differences between storage classes, when to use ACLs vs policies, and CRR prerequisites.`;}
+  document.getElementById('bandTitle').textContent=title;document.getElementById('bandMsg').textContent=msg;
+  document.getElementById('sTime').textContent=fmtTime(finalTime);document.getElementById('sRight').textContent=finalScore;document.getElementById('sWrong').textContent=wrong;document.getElementById('sSkip').textContent=skipped;document.getElementById('sCorrect').textContent=finalScore;
+  const CIRC=395.84,ring=document.getElementById('scoreRing');ring.setAttribute('stroke',pct>=80?'#8DC63F':pct>=60?'#F59E0B':'#EF4444');
+  setTimeout(()=>{ring.style.transition='stroke-dashoffset 1.5s cubic-bezier(.25,.46,.45,.94)';ring.style.strokeDashoffset=CIRC*(1-pct/100);},200);
+  let c=0;const pEl=document.getElementById('sPct'),step=pct/60;const cnt=setInterval(()=>{c=Math.min(c+step,pct);pEl.textContent=Math.round(c);if(c>=pct)clearInterval(cnt);},25);
+  document.getElementById('bdTable').innerHTML=LESSONS.map(l=>{
+    const la=qa.map((a,i)=>({a,q:shuffled[i]})).filter(({q})=>q.l===l.id);
+    const lc=la.filter(({a})=>a&&a.ok).length,lt=la.length,lp=lt>0?Math.round((lc/lt)*100):0;
+    const col=lp>=80?'#8DC63F':lp>=60?'#F59E0B':'#EF4444';const cls=lp>=80?'bs-strong':lp>=60?'bs-good':'bs-review';const lbl=lp>=80?'Strong':lp>=60?'Good':'Review';
+    return`<div class="bd-row"><div><div class="bd-lid">${l.id}</div><div class="bd-ltitle">${l.title}</div><div class="bd-bar"><div class="bd-bar-fill" data-w="${lp}" style="background:${col}"></div></div></div><div class="bd-score">${lc}/${lt}</div><div class="bd-band ${cls}">${lbl}</div></div>`;
+  }).join('');
+  setTimeout(()=>{document.querySelectorAll('.bd-bar-fill').forEach(b=>{b.style.transition='width 1.1s cubic-bezier(.16,1,.3,1)';b.style.width=b.dataset.w+'%';});},450);
+}
+
+function showReview(){
+  showScreen('reviewScreen');const L=['A','B','C','D'];
+  document.getElementById('rvSubtitle').textContent=`All 25 questions · Your score: ${finalScore}/25`;
+  document.getElementById('reviewList').innerHTML=shuffled.map((q,i)=>{
+    const a=qa[i],answered=a!==null,correct=answered&&a.ok;
+    let badge=!answered?'<span class="rv-badge rv-badge-skip">Not Answered</span>':correct?'<span class="rv-badge rv-badge-ok">✓ Correct</span>':'<span class="rv-badge rv-badge-err">✗ Incorrect</span>';
+    const opts=q.dispOpts.map((o,j)=>{const isCor=o===q.ans,isUserWrong=answered&&o===a.selected&&!isCor;let cls='',tag='',lbl=L[j];if(isCor){cls='rv-ok';lbl='✓';tag='<span class="rv-tag rv-tag-ok">Correct Answer</span>';}else if(isUserWrong){cls='rv-err';lbl='✗';tag='<span class="rv-tag rv-tag-err">Your Answer</span>';}return`<div class="rv-opt ${cls}"><div class="rv-opt-lbl">${lbl}</div><div class="rv-opt-txt">${o}</div>${tag}</div>`;}).join('');
+    return`<div class="rv-card"><div class="rv-card-hdr"><div class="rv-qn">${i+1}</div>${badge}<div class="rv-lesson">${q.l} · ${q.lt}</div></div><div class="rv-qtxt">${q.q}</div><div class="rv-opts">${opts}</div><div class="rv-exp"><div class="rv-exp-ico">📖</div><div><div class="rv-exp-lbl">Explanation</div><div class="rv-exp-txt">${q.exp}</div></div></div></div>`;
+  }).join('');
+}
+function backToResults(){hasResults?showScreen('resultsScreen'):showScreen('startScreen');}
+function retake(){startQuiz();}
+</script>
+</body>
+</html>

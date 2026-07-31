@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M12 Practice Test · AWS AI/ML · K21 Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--bg:#F7F8FA;--surface:#FFFFFF;--border:#E8EAEE;--t1:#111827;--t2:#4B5563;--t3:#9CA3AF;--green:#8DC63F;--green-mid:#79B030;--green-bg:#F1F8E8;--green-border:#C8E89A;--green-dark:#3D6B15;--navy:#1A1248;--navy-mid:#2E2080;--navy-light:#EEF0F9;--red:#EF4444;--red-bg:#FEF2F2;--red-border:#FECACA;--red-t:#DC2626;--blue-bg:#EFF6FF;--blue-b:#93C5FD;}
+body{font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased;background:var(--bg);color:var(--t1);min-height:100vh;}
+.screen{display:none;}.screen.active{display:block;min-height:100vh;}#quizScreen.active{display:flex;flex-direction:column;min-height:100vh;}
+.k21-hdr{background:var(--surface);border-bottom:1.5px solid var(--border);box-shadow:0 1px 4px rgba(0,0,0,.05);padding:16px 40px;display:flex;align-items:center;justify-content:space-between;}
+.k21-brand{display:flex;align-items:center;gap:10px;}.k21-mark{width:34px;height:34px;background:var(--green);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;}.k21-name{font-size:14px;font-weight:700;color:var(--navy);}.k21-name b{color:var(--green-mid);}
+.hdr-pill{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:5px 13px;border-radius:100px;background:var(--navy-light);color:var(--navy);border:1px solid #D0D4E8;}
+.btn-green{display:inline-flex;align-items:center;gap:10px;background:var(--green);color:#fff;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;padding:14px 32px;border-radius:100px;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(141,198,63,.3);transition:background .2s,transform .18s;}.btn-green:hover{background:var(--green-mid);transform:translateY(-2px);}
+.btn-navy{display:inline-flex;align-items:center;gap:8px;background:var(--navy);color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;padding:12px 24px;border-radius:100px;border:none;cursor:pointer;box-shadow:0 3px 12px rgba(26,18,72,.2);transition:background .2s,transform .18s;}.btn-navy:hover{background:var(--navy-mid);transform:translateY(-1px);}
+.btn-ghost{display:inline-flex;align-items:center;gap:7px;background:transparent;color:var(--t2);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:10px 20px;border-radius:100px;border:1.5px solid var(--border);cursor:pointer;transition:border-color .2s,color .2s,background .2s;}.btn-ghost:hover{border-color:var(--navy);color:var(--navy);background:var(--navy-light);}.btn-ghost:disabled{opacity:.38;cursor:not-allowed;}.btn-ghost:disabled:hover{border-color:var(--border);color:var(--t2);background:transparent;}
+.start-body{max-width:780px;margin:0 auto;padding:52px 28px 80px;}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--green-bg);border:1px solid var(--green-border);color:var(--green-dark);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;padding:5px 13px;border-radius:100px;margin-bottom:20px;}
+.eyebrow .dot{width:5px;height:5px;background:var(--green);border-radius:50%;animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+.start-h1{font-size:clamp(24px,4.5vw,44px);font-weight:800;color:var(--navy);line-height:1.12;letter-spacing:-.03em;margin-bottom:14px;}.start-h1 .g{color:var(--green-mid);}
+.start-sub{font-size:16px;color:var(--t2);line-height:1.65;max-width:560px;margin-bottom:40px;}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:40px;}
+.stat-c{background:var(--surface);border:1.5px solid var(--border);border-radius:16px;padding:20px 16px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+.stat-ico{font-size:22px;margin-bottom:8px;}.stat-val{font-size:26px;font-weight:800;color:var(--navy);line-height:1;margin-bottom:3px;}.stat-lbl{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--t3);}
+.section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--t3);margin-bottom:12px;}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:40px;}.chip{display:flex;align-items:center;gap:7px;background:var(--surface);border:1.5px solid var(--border);border-radius:100px;padding:7px 14px;font-size:12px;color:var(--t2);font-weight:500;}.chip-n{width:20px;height:20px;background:var(--navy-light);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:var(--navy-mid);flex-shrink:0;}
+.start-note{font-size:13px;color:var(--t3);margin-top:12px;}
+.quiz-hdr{background:var(--surface);border-bottom:1.5px solid var(--border);box-shadow:0 1px 4px rgba(0,0,0,.05);padding:0 32px;height:62px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:100;flex-shrink:0;}
+.qh-brand{display:flex;align-items:center;gap:7px;flex-shrink:0;}.qh-mark{width:27px;height:27px;background:var(--green);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff;}.qh-name{font-size:12px;font-weight:700;color:var(--navy);}
+.qh-sep{width:1px;height:18px;background:var(--border);flex-shrink:0;}.qh-mod{font-size:12px;font-weight:600;color:var(--t2);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.qh-counter{font-size:12px;font-weight:700;color:var(--t2);flex-shrink:0;}.qh-counter strong{color:var(--navy);}
+.qh-submit{display:inline-flex;align-items:center;gap:6px;background:var(--red-bg);color:var(--red-t);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;padding:7px 15px;border-radius:100px;border:1.5px solid var(--red-border);cursor:pointer;flex-shrink:0;transition:background .2s;}.qh-submit:hover{background:#FEE2E2;}
+.qh-timer{display:flex;align-items:center;gap:5px;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:5px 11px;flex-shrink:0;font-size:12px;font-weight:700;color:var(--t2);font-variant-numeric:tabular-nums;}.tdot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:blink 1s infinite;}
+.prog-wrap{height:3px;background:var(--border);flex-shrink:0;}.prog-fill{height:100%;background:var(--green);transition:width .5s cubic-bezier(.16,1,.3,1);width:0%;}
+.qnav{background:var(--surface);border-bottom:1.5px solid var(--border);padding:9px 32px;display:flex;align-items:center;gap:5px;overflow-x:auto;flex-shrink:0;}.qnav::-webkit-scrollbar{height:0;}
+.qnd{flex-shrink:0;width:27px;height:27px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;cursor:pointer;border:1.5px solid var(--border);background:var(--surface);color:var(--t3);transition:all .15s;font-family:'DM Sans',sans-serif;}.qnd:hover{border-color:var(--navy);color:var(--navy);}.qnd.cur{background:var(--navy);color:#fff;border-color:var(--navy);}.qnd.ok{background:var(--green-bg);color:var(--green-dark);border-color:var(--green);}.qnd.err{background:var(--red-bg);color:var(--red-t);border-color:var(--red-border);}
+.quiz-body{flex:1;padding:32px 24px 60px;}.q-wrap{width:100%;max-width:740px;margin:0 auto;}
+.q-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}.lesson-tag{display:inline-flex;align-items:center;gap:6px;background:var(--navy-light);color:var(--navy);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;padding:5px 12px;border-radius:100px;border:1px solid #D0D4E8;}.q-lbl{font-size:12px;font-weight:600;color:var(--t3);}
+.q-card{background:var(--surface);border:1.5px solid var(--border);border-radius:20px;padding:32px 36px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,.04);}.q-text{font-size:18px;font-weight:700;color:var(--navy);line-height:1.6;margin-bottom:22px;}
+.opts{display:flex;flex-direction:column;gap:10px;}.opt-btn{display:flex;align-items:flex-start;gap:12px;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:14px 18px;cursor:pointer;text-align:left;width:100%;font-family:'DM Sans',sans-serif;transition:border-color .17s,background .17s,transform .17s;}.opt-btn:hover:not(.off){border-color:var(--green);background:var(--green-bg);transform:translateX(3px);}.opt-btn.off{cursor:default;}.opt-btn.ok{background:var(--green-bg);border-color:var(--green);}.opt-btn.err{background:var(--red-bg);border-color:var(--red-border);}
+.opt-lbl{flex-shrink:0;width:28px;height:28px;border-radius:7px;background:var(--bg);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--t2);margin-top:2px;transition:all .17s;}.opt-btn.ok .opt-lbl{background:var(--green);border-color:var(--green);color:#fff;}.opt-btn.err .opt-lbl{background:var(--red);border-color:var(--red);color:#fff;}
+.opt-txt{font-size:14px;font-weight:500;color:var(--t1);line-height:1.55;flex:1;}.opt-btn.ok .opt-txt{color:var(--green-dark);font-weight:600;}.opt-btn.err .opt-txt{color:var(--red-t);}
+.fb{display:none;background:var(--blue-bg);border:1.5px solid var(--blue-b);border-left:4px solid #3B82F6;border-radius:12px;padding:20px 24px;margin-bottom:16px;animation:slideUp .3s ease;}.fb.show{display:block;}
+@keyframes slideUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.fb-hdr{display:flex;align-items:center;gap:9px;margin-bottom:7px;}.fb-ico{width:23px;height:23px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;}.fb-ico.ok{background:var(--green-bg);color:var(--green-mid);}.fb-ico.err{background:var(--red-bg);color:var(--red);}
+.fb-status{font-size:14px;font-weight:700;}.fb-status.ok{color:var(--green-dark);}.fb-status.err{color:var(--red-t);}
+.fb-correct{font-size:12px;font-weight:600;color:#92400E;background:#FEF3C7;border:1px solid #FCD34D;border-radius:7px;padding:6px 11px;margin:6px 0 8px 32px;display:none;}.fb-correct.show{display:block;}
+.fb-exp{font-size:13px;color:var(--t2);line-height:1.65;padding-left:32px;margin-bottom:14px;}
+.fb-next-btn{display:inline-flex;align-items:center;gap:7px;background:var(--navy);color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:10px 22px;border-radius:100px;border:none;cursor:pointer;box-shadow:0 3px 10px rgba(26,18,72,.18);transition:background .2s,transform .2s;margin-left:32px;}.fb-next-btn:hover{background:var(--navy-mid);transform:translateY(-1px);}
+.q-nav{display:flex;align-items:center;justify-content:space-between;margin-top:4px;}
+.last-hint{display:none;background:#FFFBEB;border:1px solid #FCD34D;border-radius:10px;padding:10px 16px;font-size:13px;color:#92400E;text-align:center;margin-top:12px;}.last-hint.show{display:block;}
+.res-body{max-width:800px;margin:0 auto;padding:48px 28px 80px;}.res-top{display:flex;gap:28px;align-items:flex-start;margin-bottom:36px;}
+.score-col{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:14px;}.score-wrap{position:relative;width:150px;height:150px;}.score-wrap svg{transform:rotate(-90deg);}.score-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}.score-num{font-size:32px;font-weight:800;color:var(--navy);line-height:1;}.score-num sub{font-size:16px;font-weight:600;color:var(--t3);}.score-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--t3);margin-top:2px;}
+.score-tally{text-align:center;}.score-tally-v{font-size:20px;font-weight:800;color:var(--navy);}.score-tally-l{font-size:12px;color:var(--t3);}
+.band-card{flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:20px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,.04);}.band-title{font-size:22px;font-weight:800;color:var(--navy);margin-bottom:8px;}.band-msg{font-size:14px;color:var(--t2);line-height:1.65;margin-bottom:20px;}
+.stats-chips{display:flex;gap:10px;flex-wrap:wrap;}.sc{display:flex;align-items:center;gap:6px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:7px 12px;font-size:12px;font-weight:600;color:var(--t2);}.sc strong{font-weight:800;color:var(--navy);}
+.breakdown{background:var(--surface);border:1.5px solid var(--border);border-radius:20px;overflow:hidden;margin-bottom:32px;box-shadow:0 1px 4px rgba(0,0,0,.04);}.bd-heading{padding:18px 24px;border-bottom:1.5px solid var(--border);font-size:14px;font-weight:700;color:var(--navy);}
+.bd-row{display:grid;grid-template-columns:1fr 68px 68px;align-items:center;gap:14px;padding:13px 24px;border-bottom:1px solid rgba(0,0,0,.04);}.bd-row:last-child{border-bottom:none;}
+.bd-lid{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--t3);margin-bottom:2px;}.bd-ltitle{font-size:13px;font-weight:600;color:var(--navy);}.bd-bar{height:5px;background:var(--bg);border-radius:10px;overflow:hidden;margin-top:6px;}.bd-bar-fill{height:100%;border-radius:10px;width:0%;}
+.bd-score{font-size:13px;font-weight:700;color:var(--navy);text-align:right;}.bd-band{font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;text-align:center;justify-self:end;}
+.bs-strong{background:var(--green-bg);color:var(--green-dark);}.bs-good{background:#FEF3C7;color:#92400E;}.bs-review{background:var(--red-bg);color:var(--red-t);}
+.res-actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+.review-topbar{background:var(--surface);border-bottom:1.5px solid var(--border);box-shadow:0 1px 4px rgba(0,0,0,.05);padding:16px 40px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.rv-body{max-width:820px;margin:0 auto;padding:36px 28px 80px;}.rv-page-hdr{text-align:center;margin-bottom:36px;}.rv-page-hdr h2{font-size:clamp(22px,4vw,30px);font-weight:800;color:var(--navy);margin-bottom:6px;}.rv-page-hdr p{font-size:14px;color:var(--t2);}
+.rv-card{background:var(--surface);border:1.5px solid var(--border);border-radius:20px;padding:26px;margin-bottom:18px;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+.rv-card-hdr{display:flex;align-items:center;gap:9px;margin-bottom:14px;flex-wrap:wrap;}.rv-qn{width:29px;height:29px;background:var(--navy);color:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;}
+.rv-badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px;}.rv-badge-skip{background:#FEF3C7;color:#92400E;border:1px solid #FCD34D;}.rv-badge-ok{background:var(--green-bg);color:var(--green-dark);border:1px solid var(--green-border);}.rv-badge-err{background:var(--red-bg);color:var(--red-t);border:1px solid var(--red-border);}
+.rv-lesson{margin-left:auto;font-size:11px;font-weight:600;background:var(--navy-light);color:var(--navy);border-radius:100px;padding:4px 12px;border:1px solid #D0D4E8;}
+.rv-qtxt{font-size:16px;font-weight:700;color:var(--navy);line-height:1.55;margin-bottom:16px;}
+.rv-opts{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}.rv-opt{display:flex;align-items:center;gap:11px;padding:11px 15px;border-radius:10px;border:1.5px solid var(--border);background:var(--surface);}.rv-opt.rv-ok{background:var(--green-bg);border-color:var(--green);}.rv-opt.rv-err{background:var(--red-bg);border-color:var(--red-border);}
+.rv-opt-lbl{flex-shrink:0;width:25px;height:25px;border-radius:6px;background:var(--bg);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--t3);}.rv-opt.rv-ok .rv-opt-lbl{background:var(--green);border-color:var(--green);color:#fff;}.rv-opt.rv-err .rv-opt-lbl{background:var(--red);border-color:var(--red);color:#fff;}
+.rv-opt-txt{font-size:13px;color:var(--t1);line-height:1.45;flex:1;}.rv-opt.rv-ok .rv-opt-txt{color:var(--green-dark);font-weight:600;}.rv-opt.rv-err .rv-opt-txt{color:var(--red-t);}
+.rv-tag{flex-shrink:0;font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px;white-space:nowrap;}.rv-tag-ok{background:var(--green);color:#fff;}.rv-tag-err{background:var(--red);color:#fff;}
+.rv-exp{display:flex;gap:11px;background:var(--blue-bg);border:1.5px solid var(--blue-b);border-left:4px solid #3B82F6;border-radius:10px;padding:15px 16px;}.rv-exp-ico{font-size:15px;flex-shrink:0;margin-top:1px;}.rv-exp-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#2563EB;margin-bottom:4px;}.rv-exp-txt{font-size:13px;color:var(--t2);line-height:1.65;}
+.rv-bottom{display:flex;justify-content:center;gap:12px;margin-top:32px;flex-wrap:wrap;}
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:1000;align-items:center;justify-content:center;backdrop-filter:blur(3px);}.modal-ov.show{display:flex;}
+.modal{background:var(--surface);border-radius:24px;padding:36px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.18);animation:pop .3s cubic-bezier(.16,1,.3,1);}
+@keyframes pop{from{opacity:0;transform:scale(.9);}to{opacity:1;transform:scale(1);}}
+.m-ico{font-size:38px;margin-bottom:16px;}.m-title{font-size:20px;font-weight:800;color:var(--navy);margin-bottom:8px;}.m-msg{font-size:14px;color:var(--t2);line-height:1.6;margin-bottom:6px;}.m-note{font-size:12px;color:var(--t3);margin-bottom:24px;}
+.m-btns{display:flex;gap:12px;justify-content:center;}.m-cancel{display:inline-flex;align-items:center;background:var(--bg);color:var(--t2);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;padding:12px 24px;border-radius:100px;border:1.5px solid var(--border);cursor:pointer;transition:all .2s;}.m-cancel:hover{border-color:var(--navy);color:var(--navy);}.m-submit{display:inline-flex;align-items:center;background:var(--navy);color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;padding:12px 24px;border-radius:100px;border:none;cursor:pointer;transition:background .2s;}.m-submit:hover{background:var(--navy-mid);}
+@media(max-width:640px){.k21-hdr,.quiz-hdr{padding:14px 18px;}.start-body{padding:32px 18px 60px;}.qh-mod{display:none;}.quiz-hdr{gap:10px;}.quiz-body{padding:22px 16px 50px;}.q-card{padding:22px 18px;}.q-text{font-size:15px;}.res-top{flex-direction:column;align-items:center;}.bd-row{grid-template-columns:1fr 56px;}.bd-score{display:none;}.review-topbar{padding:14px 18px;}.rv-body{padding:28px 16px 60px;}}
+</style>
+</head>
+<body>
+
+<!-- START -->
+<div class="screen active" id="startScreen">
+  <div class="k21-hdr">
+    <div class="k21-brand"><div class="k21-mark">K21</div><div class="k21-name">K21 <b>Academy</b></div></div>
+    <div class="hdr-pill">AWS AI/ML Job Focus Program</div>
+  </div>
+  <div class="start-body">
+    <div class="eyebrow"><span class="dot"></span>Module 12 · Practice Test</div>
+    <h1 class="start-h1">Data Integrity,<br>Transformation &amp; <span class="g">Feature Engineering</span></h1>
+    <p class="start-sub">Test your understanding across all 4 lessons in Module 12. Covers data transformation techniques, AWS Glue, SageMaker Feature Store, and SageMaker Data Wrangler — with full explanations after every answer.</p>
+    <div class="stats-row">
+      <div class="stat-c"><div class="stat-ico">📝</div><div class="stat-val">20</div><div class="stat-lbl">Questions</div></div>
+      <div class="stat-c"><div class="stat-ico">📚</div><div class="stat-val">4</div><div class="stat-lbl">Lessons</div></div>
+      <div class="stat-c"><div class="stat-ico">🔄</div><div class="stat-val">∞</div><div class="stat-lbl">Retries</div></div>
+    </div>
+    <div class="section-label">4 Lessons Covered</div>
+    <div class="chips">
+      <div class="chip"><div class="chip-n">L1</div>Data Transformation</div>
+      <div class="chip"><div class="chip-n">L2</div>AWS Glue</div>
+      <div class="chip"><div class="chip-n">L3</div>SageMaker Feature Store</div>
+      <div class="chip"><div class="chip-n">L4</div>SageMaker Data Wrangler</div>
+    </div>
+    <div>
+      <button class="btn-green" style="font-size:16px;padding:16px 40px;" onclick="startQuiz()">
+        Start Practice Test
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+    <p class="start-note">💡 Options shuffle every attempt · Explanations after every answer · No time pressure</p>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div class="screen" id="quizScreen">
+  <div class="quiz-hdr">
+    <div class="qh-brand"><div class="qh-mark">K21</div><div class="qh-name">Academy</div></div>
+    <div class="qh-sep"></div>
+    <div class="qh-mod">M12: Data Integrity, Transformation &amp; Feature Engineering</div>
+    <div class="qh-counter">Q <strong id="qNumH">1</strong>&thinsp;/&thinsp;20</div>
+    <button class="qh-submit" onclick="openModal()">📋 Submit Exam</button>
+    <div class="qh-timer"><div class="tdot"></div><span id="timerEl">00:00</span></div>
+  </div>
+  <div class="prog-wrap"><div class="prog-fill" id="progFill"></div></div>
+  <div class="qnav" id="qnav"></div>
+  <div class="quiz-body">
+    <div class="q-wrap">
+      <div class="q-meta"><div class="lesson-tag" id="lessonTag">L1</div><div class="q-lbl" id="qLbl">Question 1 of 20</div></div>
+      <div class="q-card"><div class="q-text" id="qText">Loading…</div><div class="opts" id="optsGrid"></div></div>
+      <div class="fb" id="fbPanel">
+        <div class="fb-hdr"><div class="fb-ico" id="fbIco"></div><div class="fb-status" id="fbStatus"></div></div>
+        <div class="fb-correct" id="fbCorrect"></div>
+        <p class="fb-exp" id="fbExp"></p>
+        <button class="fb-next-btn" onclick="handleFbNext()"><span id="fbNextTxt">Next Question</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      </div>
+      <div class="last-hint" id="lastHint">🎯 Last question — click <strong>Submit Exam</strong> in the header to see your results.</div>
+      <div class="q-nav" style="margin-top:16px;">
+        <button class="btn-ghost" id="prevBtn" onclick="goPrev()">← Previous</button>
+        <button class="btn-ghost" id="nextBtn" onclick="goNext()">Next →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div class="screen" id="resultsScreen">
+  <div class="k21-hdr">
+    <div class="k21-brand"><div class="k21-mark">K21</div><div class="k21-name">K21 <b>Academy</b></div></div>
+    <div class="hdr-pill">Test Complete · AWS AI/ML Job Focus Program</div>
+  </div>
+  <div class="res-body">
+    <div class="res-top">
+      <div class="score-col">
+        <div class="score-wrap">
+          <svg width="150" height="150" viewBox="0 0 150 150">
+            <circle cx="75" cy="75" r="63" fill="none" stroke="#E8EAEE" stroke-width="10"/>
+            <circle id="scoreRing" cx="75" cy="75" r="63" fill="none" stroke="#8DC63F" stroke-width="10" stroke-linecap="round" stroke-dasharray="395.84 395.84" stroke-dashoffset="395.84"/>
+          </svg>
+          <div class="score-inner"><div class="score-num"><span id="sPct">0</span><sub>%</sub></div><div class="score-lbl">Score</div></div>
+        </div>
+        <div class="score-tally"><div class="score-tally-l">Correct Answers</div><div class="score-tally-v"><span id="sCorrect">0</span> / 20</div></div>
+      </div>
+      <div class="band-card">
+        <div class="band-title" id="bandTitle">—</div>
+        <div class="band-msg" id="bandMsg">—</div>
+        <div class="stats-chips">
+          <div class="sc">⏱️ Time: <strong id="sTime">—</strong></div>
+          <div class="sc">✅ Correct: <strong id="sRight">—</strong></div>
+          <div class="sc">❌ Incorrect: <strong id="sWrong">—</strong></div>
+          <div class="sc">⏭️ Skipped: <strong id="sSkip">—</strong></div>
+        </div>
+      </div>
+    </div>
+    <div class="breakdown"><div class="bd-heading">📊 Per-Lesson Breakdown</div><div id="bdTable"></div></div>
+    <div class="res-actions">
+      <button class="btn-green" onclick="showReview()">📋 Review All Questions &amp; Answers</button>
+      <button class="btn-navy" onclick="retake()">🔄 Retake Test</button>
+    </div>
+  </div>
+</div>
+
+<!-- REVIEW -->
+<div class="screen" id="reviewScreen">
+  <div class="review-topbar">
+    <div class="k21-brand"><div class="k21-mark">K21</div><div class="k21-name">K21 <b>Academy</b></div></div>
+    <button class="btn-ghost" onclick="backToResults()">← Back to Results</button>
+  </div>
+  <div class="rv-body">
+    <div class="rv-page-hdr"><h2>Questions &amp; Answers Review</h2><p id="rvSubtitle">All 20 questions with correct answers and explanations</p></div>
+    <div id="reviewList"></div>
+    <div class="rv-bottom">
+      <button class="btn-navy" onclick="backToResults()">← Back to Results</button>
+      <button class="btn-ghost" onclick="retake()">🔄 Retake Test</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-ov" id="submitModal">
+  <div class="modal">
+    <div class="m-ico">📋</div><div class="m-title">Submit Exam?</div>
+    <div class="m-msg" id="mMsg">Are you sure?</div><div class="m-note" id="mNote"></div>
+    <div class="m-btns"><button class="m-cancel" onclick="closeModal()">Continue Quiz</button><button class="m-submit" onclick="confirmSubmit()">Yes, Submit</button></div>
+  </div>
+</div>
+
+<script>
+const QB=[
+
+  // L1: Data Transformation (5)
+  {l:'L1',lt:'Data Transformation',
+   q:'Which data format is specifically preferred for ML datasets stored in S3 data lakes, and why?',
+   opts:['CSV — universal text format that is human-readable and supported by all SageMaker built-in algorithms natively',
+         'Apache Avro — row-based format with JSON schema that is optimized for write-heavy streaming pipelines',
+         'JSON Lines — semi-structured format preferred for SageMaker endpoints and Kinesis streaming ingestion',
+         'Apache Parquet — columnar binary format with embedded schema, high compression, and optimal analytical query performance for Athena, Glue, and SageMaker'],
+   ans:'Apache Parquet — columnar binary format with embedded schema, high compression, and optimal analytical query performance for Athena, Glue, and SageMaker',
+   exp:'Apache Parquet is the preferred format for ML data lakes for three reasons: (1) Columnar storage — only the columns needed for a query are read, reducing I/O dramatically; (2) Compression — columnar grouping achieves 4-10x better compression than CSV; (3) Schema-embedded — no need for a separate schema definition; metadata is in the file. Parquet is natively supported by Athena (pay per byte scanned — Parquet cuts cost 10x), AWS Glue ETL, Spark on EMR, and SageMaker Training jobs. CSV is human-readable but inefficient at scale. Avro is for streaming write workloads (Kafka, Kinesis). RecordIO is for SageMaker Pipe mode specifically.'},
+
+  {l:'L1',lt:'Data Transformation',
+   q:'An ML engineer uses the Z-score method to detect outliers. Which values are flagged?',
+   opts:['Values outside Q1 minus 1.5 times the IQR and Q3 plus 1.5 times the IQR boundary — the IQR method',
+         'Values in the bottom 1% or top 1% of the feature distribution by absolute frequency count',
+         'Values more than 3 standard deviations from the mean of the feature distribution',
+         'Values where the difference from the median exceeds twice the standard deviation of the feature'],
+   ans:'Values more than 3 standard deviations from the mean of the feature distribution',
+   exp:'Z-score outlier detection computes z = (x - mean) / std for each value. Values where |z| > 3 (more than 3 standard deviations from the mean) are flagged as outliers. Under a normal distribution, 99.73% of values fall within ±3σ — so z > 3 is genuinely rare. The IQR method (Q1 - 1.5×IQR to Q3 + 1.5×IQR) is described in option A — that\'s a different technique that is more robust to non-normal distributions. Both are valid outlier methods; Z-score works best when data is approximately normally distributed. SageMaker Data Wrangler supports both methods as built-in transforms.'},
+
+  {l:'L1',lt:'Data Transformation',
+   q:'Why is Label Encoding risky for nominal (unordered) categorical features when used with linear or distance-based ML models?',
+   opts:['Label encoding creates too many new columns for high-cardinality features, causing the curse of dimensionality',
+         'Label encoding implies a false ordinal relationship (e.g., Red=0 < Green=1 < Blue=2) that misleads linear and distance-based algorithms',
+         'Label encoding is incompatible with XGBoost and Random Forest since tree models cannot split on integer-encoded values',
+         'Label encoding permanently modifies the original feature and cannot be reversed in production deployment pipelines'],
+   ans:'Label encoding implies a false ordinal relationship (e.g., Red=0 < Green=1 < Blue=2) that misleads linear and distance-based algorithms',
+   exp:'Label encoding assigns integers to categories: Red=0, Green=1, Blue=2. For tree-based models (XGBoost, Random Forest), this works because trees split on value thresholds and don\'t assume numeric ordering means anything. But for linear models (Logistic Regression, Linear SVM) and distance-based models (KNN, K-Means), the encoding implies Blue (2) is "twice" Green (1), and Green is "between" Red and Blue — mathematically incorrect for nominal categories. This false ordinality corrupts the model\'s learned weights. Use one-hot encoding for nominal categories with linear/distance-based models; label encoding is safe only for truly ordinal data (Low=0, Medium=1, High=2) or tree-based models.'},
+
+  {l:'L1',lt:'Data Transformation',
+   q:'SMOTE (Synthetic Minority Over-sampling Technique) addresses class imbalance by doing what?',
+   opts:['Randomly removing majority-class examples from the training set until both classes have equal sample counts',
+         'Assigning higher loss penalties to minority-class misclassifications during model training to increase recall',
+         'Lowering the classification decision threshold from 0.5 to improve recall for the minority class post-training',
+         'Generating synthetic minority-class examples by interpolating between existing minority samples in feature space'],
+   ans:'Generating synthetic minority-class examples by interpolating between existing minority samples in feature space',
+   exp:'SMOTE creates synthetic examples rather than copying existing ones. For each minority-class sample: (1) find its k nearest minority-class neighbors; (2) randomly select one neighbor; (3) generate a new synthetic sample along the line segment between the two samples in feature space: synthetic = sample + λ × (neighbor - sample), where λ is random between 0 and 1. This avoids overfitting to specific minority examples (which plain duplication causes) and creates more decision-boundary coverage. The wrong options describe: Undersampling (option 1), Class Weights (option 2), and Threshold Adjustment (option 3) — all valid but different techniques for class imbalance.'},
+
+  {l:'L1',lt:'Data Transformation',
+   q:'SageMaker Pipe mode requires data in which specific format, and what is its primary benefit over File mode?',
+   opts:['Parquet format — enables columnar filtering inside S3 before data reaches the training instance, reducing transfer volume',
+         'CSV format — streams rows from S3 directly and is compatible with all SageMaker built-in and custom algorithms',
+         'JSON Lines format — streams records from S3 using a POSIX file interface with first-byte latency under 100ms',
+         'RecordIO format — streams data directly from S3 to the training algorithm without downloading to local disk, reducing startup time and EBS cost'],
+   ans:'RecordIO format — streams data directly from S3 to the training algorithm without downloading to local disk, reducing startup time and EBS cost',
+   exp:'SageMaker training input modes: File Mode — downloads the entire training dataset from S3 to the instance\'s local EBS volume before training starts. Simple but adds download time (minutes for large datasets) and EBS storage cost. Pipe Mode — requires RecordIO binary format. Data streams directly from S3 into the training algorithm via a named FIFO pipe — no download, no local copy. Benefits: zero download wait time, lower EBS cost, supports training datasets larger than local disk. FastFile Mode (third option) provides POSIX file interface with fast first-byte access, but it\'s for custom containers and does NOT require RecordIO format — that\'s specific to Pipe Mode.'},
+
+  // L2: AWS Glue (5)
+  {l:'L2',lt:'AWS Glue',
+   q:'What does an AWS Glue Crawler produce when run against an S3 data source?',
+   opts:['It transforms data from CSV to Parquet format using built-in conversion rules and writes output to a new S3 prefix',
+         'It monitors S3 for new file arrivals and triggers downstream Glue ETL jobs automatically on schema detection',
+         'It applies DQDL data quality rules to S3 objects and quarantines records that fail completeness checks',
+         'It scans S3 data, auto-infers schemas and partition structures, and populates Glue Data Catalog table definitions'],
+   ans:'It scans S3 data, auto-infers schemas and partition structures, and populates Glue Data Catalog table definitions',
+   exp:'A Glue Crawler reads sample data from S3 (or RDS, DynamoDB, JDBC sources), infers the schema (column names, data types), detects partitions (e.g., year=2024/month=01/day=15 folder structures), and creates or updates table definitions in the Glue Data Catalog. You can run Crawlers on-demand or on a schedule. After the Crawler runs, the table is immediately queryable by Athena, Redshift Spectrum, EMR, and SageMaker without any additional configuration. Crawlers do NOT transform data (that\'s ETL jobs), do NOT monitor for events (that\'s S3 Event Notifications), and do NOT apply quality rules (that\'s Glue Data Quality).'},
+
+  {l:'L2',lt:'AWS Glue',
+   q:'The Glue Data Catalog is Hive Metastore-compatible. What practical benefit does this provide to ML teams?',
+   opts:['Tables can be automatically versioned and rolled back to any prior schema definition on demand',
+         'The Hive compatibility enables real-time streaming queries from Kinesis and MSK through the catalog',
+         'Glue ETL jobs can be written in HiveQL syntax instead of PySpark or Scala for simpler development',
+         'Tables defined in the Glue Data Catalog are queryable directly by Athena, EMR, Redshift Spectrum, and SageMaker without extra configuration'],
+   ans:'Tables defined in the Glue Data Catalog are queryable directly by Athena, EMR, Redshift Spectrum, and SageMaker without extra configuration',
+   exp:'The Glue Data Catalog is AWS\'s managed implementation of the Apache Hive Metastore — the standard metadata repository for big data tools. Because Athena, EMR (Spark, Hive, Presto), and Redshift Spectrum all natively support the Hive Metastore interface, they can connect to the Glue Data Catalog without any additional configuration. An ML team defines a table once (via a Crawler or manually) and that same table definition is immediately usable across all these services. This single source of schema truth eliminates schema duplication and inconsistency across the data lake. It does NOT automatically version schemas or enable streaming queries — those are separate capabilities.'},
+
+  {l:'L2',lt:'AWS Glue',
+   q:'AWS Glue FindMatches is best described as:',
+   opts:['A DQDL rule type that flags records with null values or schema mismatches in Glue Data Quality pipelines',
+         'A Glue connector that identifies schema differences between source and target tables before ETL jobs run',
+         'A DataBrew transform that deduplicates records using exact-match key hashing on specified columns',
+         'An ML-powered Glue ETL transform that identifies duplicate and fuzzy-matching records using labeled training examples — no custom code required'],
+   ans:'An ML-powered Glue ETL transform that identifies duplicate and fuzzy-matching records using labeled training examples — no custom code required',
+   exp:'Glue FindMatches is unique in the Glue family — it is the only ML-powered transform. You provide: (1) a sample of your data; (2) labeled pairs indicating which records are matches and which are not; (3) Glue trains an ML model on your labels and applies it to the full dataset, finding records that are "similar enough" to be duplicates even when they differ in spelling, formatting, or abbreviation. This handles fuzzy deduplication (John Smith vs. J. Smith vs. John D. Smith) that exact-match hashing cannot catch. The other options describe Glue Data Quality (DQDL rules), a generic connector (not a specific feature), and DataBrew exact-match dedup.'},
+
+  {l:'L2',lt:'AWS Glue',
+   q:'What distinguishes Glue Streaming ETL from a standard batch Glue ETL job?',
+   opts:['Glue Streaming ETL runs on an always-on EMR cluster instead of serverless Glue Workers for cost efficiency',
+         'Glue Streaming ETL automatically converts incoming JSON records to Parquet without any PySpark code',
+         'Glue Streaming ETL only supports Amazon Kinesis Data Streams as input — not Kafka, Firehose, or S3',
+         'Glue Streaming ETL processes records from Kinesis, Firehose, and Apache Kafka topics in near real-time using Spark Structured Streaming — without waiting for a batch to accumulate'],
+   ans:'Glue Streaming ETL processes records from Kinesis, Firehose, and Apache Kafka topics in near real-time using Spark Structured Streaming — without waiting for a batch to accumulate',
+   exp:'Standard Glue ETL jobs process static datasets (files in S3) in batch — they start, process all data, and stop. Glue Streaming ETL runs continuously using Apache Spark Structured Streaming, consuming records as they arrive from: Amazon Kinesis Data Streams, Amazon Kinesis Data Firehose, and Amazon MSK (managed Kafka). It applies the same Spark transforms (filter, join, aggregate, convert format) in near real-time and writes enriched records to S3, Redshift, or other targets. This enables near-real-time ML feature pipelines — e.g., compute rolling 15-minute clickstream aggregations for online recommendation models. It runs on serverless Glue Workers, not EMR.'},
+
+  {l:'L2',lt:'AWS Glue',
+   q:'How does AWS Glue DataBrew differ from AWS Glue ETL jobs?',
+   opts:['DataBrew processes streaming data in real time; Glue ETL handles only static batch data from S3 sources',
+         'DataBrew requires an always-on EMR cluster; Glue ETL is fully serverless and auto-scales on demand',
+         'DataBrew outputs exclusively to Amazon DynamoDB; Glue ETL supports S3, Redshift, and RDS as targets',
+         'DataBrew provides a visual no-code interface with 250+ prebuilt recipes for analysts; Glue ETL uses PySpark or Scala scripts for developer-written large-scale transforms'],
+   ans:'DataBrew provides a visual no-code interface with 250+ prebuilt recipes for analysts; Glue ETL uses PySpark or Scala scripts for developer-written large-scale transforms',
+   exp:'The Glue family has two distinct data preparation tools for different personas: Glue DataBrew — point-and-click visual interface requiring zero code. Business analysts and data scientists apply 250+ prebuilt transforms (missing value handling, outlier removal, format standardization, encoding) by selecting from menus. Outputs reusable "recipes" that can be scheduled. Best for EDA and common data cleaning tasks. Glue ETL (with PySpark/Scala) — developer tool for writing custom distributed data processing logic. Full flexibility, handles complex transforms (multi-dataset joins, custom Python functions, DynamicFrames schema manipulation). Both run on serverless Glue Workers (not EMR) and can write to S3, Redshift, RDS, and other targets.'},
+
+  // L3: SageMaker Feature Store (5)
+  {l:'L3',lt:'SageMaker Feature Store',
+   q:'What core problem does SageMaker Feature Store solve that a regular S3 data lake does not address?',
+   opts:['Storage cost — Feature Store automatically compresses feature data using Parquet encoding, reducing S3 cost',
+         'Access control — Feature Store applies row-level and column-level security on features unlike plain S3 buckets',
+         'Schema management — Feature Store validates feature data types on write, preventing schema drift unlike S3',
+         'Training-serving skew — Feature Store ensures features are computed once and consumed identically by both training and real-time inference, eliminating inconsistency between the two pipelines'],
+   ans:'Training-serving skew — Feature Store ensures features are computed once and consumed identically by both training and real-time inference, eliminating inconsistency between the two pipelines',
+   exp:'Training-serving skew is a major cause of ML model degradation in production. Without Feature Store: a data science team computes features one way in training (pandas DataFrame operations in a Jupyter notebook); an engineering team re-implements the same feature logic differently for production inference (e.g., Python Lambda function). Subtle differences in computation, rounding, or NULL handling lead to the model receiving different feature values in production than it was trained on — causing unexplained performance drops. Feature Store solves this by defining features ONCE: the same Feature Group definition is used to write features that are stored in both the Offline Store (for training) and Online Store (for real-time inference), guaranteeing identical feature values in both pipelines.'},
+
+  {l:'L3',lt:'SageMaker Feature Store',
+   q:'The Online Store in SageMaker Feature Store delivers what guarantee for feature retrieval at inference time?',
+   opts:['Amazon ElastiCache (Redis) backing delivering sub-1ms latency with LRU eviction for hot features',
+         'Amazon S3 with Transfer Acceleration delivering millisecond range latency with unlimited read concurrency',
+         'Amazon RDS read replicas delivering single-digit millisecond SQL query latency for feature lookups',
+         'DynamoDB-backed in-memory storage delivering sub-10ms GetRecord API latency for real-time inference'],
+   ans:'DynamoDB-backed in-memory storage delivering sub-10ms GetRecord API latency for real-time inference',
+   exp:'The SageMaker Feature Store Online Store is backed by a DynamoDB-like managed in-memory store optimized for low-latency point lookups. The GetRecord API retrieves the latest feature values for a given RecordIdentifier (e.g., user_id, product_id) in under 10 milliseconds — suitable for real-time inference use cases where the model needs fresh features per request. This is critical for fraud detection (get latest transaction features for incoming payment), personalization (get latest user preference features for recommendation request), and dynamic pricing (get real-time market features). The Offline Store (separate component) is S3-backed for batch training queries via Athena.'},
+
+  {l:'L3',lt:'SageMaker Feature Store',
+   q:'Which SageMaker Feature Store API retrieves multiple feature records simultaneously for offline model training?',
+   opts:['GetRecord — retrieves a single feature record by RecordID for real-time inference from the Online Store',
+         'PutRecord — writes new feature values simultaneously to both the Online and Offline stores on each call',
+         'QueryRecord — runs SQL queries against the Offline Store using embedded Athena integration',
+         'BatchGetRecord — retrieves multiple feature records simultaneously from the Offline Store for training dataset creation'],
+   ans:'BatchGetRecord — retrieves multiple feature records simultaneously from the Offline Store for training dataset creation',
+   exp:'Feature Store provides two read APIs for different use cases: GetRecord (Online Store) — retrieve a SINGLE record by RecordIdentifier with sub-10ms latency; used during real-time inference for one user/item at a time. BatchGetRecord (Offline Store) — retrieve MULTIPLE records in a single API call; used during model training when you need feature values for thousands or millions of training examples. For large training datasets, you typically use Athena SQL queries against the Offline Store\'s S3-backed data, which is more efficient than BatchGetRecord at very large scale. PutRecord writes to both stores simultaneously. QueryRecord is not a real Feature Store API.'},
+
+  {l:'L3',lt:'SageMaker Feature Store',
+   q:'What does "point-in-time correctness" mean in the context of the SageMaker Feature Store Offline Store?',
+   opts:['All feature values for a record are committed atomically at exactly the same timestamp on each PutRecord call',
+         'The Offline Store guarantees query completion within a specified time bound regardless of dataset volume',
+         'Feature records are immutable once written — no updates or overwrites are permitted after initial PutRecord',
+         'Training datasets can query feature values as they existed at any historical timestamp — preventing future data from leaking into past training windows'],
+   ans:'Training datasets can query feature values as they existed at any historical timestamp — preventing future data from leaking into past training windows',
+   exp:'Point-in-time correctness prevents data leakage — a critical ML training data issue. Scenario: you\'re training a model to predict customer churn at time T. Without point-in-time correctness, you might accidentally include feature values that were only updated AFTER time T (e.g., a "plan_cancelled" feature updated at T+3 days). The model learns from information that wasn\'t available at prediction time — inflating training accuracy and degrading production performance. Feature Store\'s Offline Store stores each feature value with an event_time timestamp. Athena queries can retrieve feature values as of any historical timestamp, ensuring training examples only use features that were available before the label event time. This enables correct temporal dataset construction.'},
+
+  {l:'L3',lt:'SageMaker Feature Store',
+   q:'A fraud detection system must score an incoming payment transaction in under 20ms using the latest customer features. Which Feature Store component is used for this?',
+   opts:['Offline Store — S3-backed historical store queried via Athena SQL, optimized for large batch scoring jobs',
+         'Feature Group — the logical schema container defining feature names and types, not a retrieval endpoint',
+         'Ingestion Pipeline — the write path that pushes records to the store, not the read path for live inference',
+         'Online Store — sub-10ms GetRecord retrieval of the most recent feature values for real-time model scoring'],
+   ans:'Online Store — sub-10ms GetRecord retrieval of the most recent feature values for real-time model scoring',
+   exp:'The two Feature Store components serve different latency requirements: Online Store — designed for real-time inference. GetRecord API returns the LATEST feature values for a given identifier in under 10ms. In the fraud scenario: incoming payment arrives → retrieve customer\'s features (avg_transaction_amount_30d, transaction_count_7d, device_risk_score) via GetRecord → pass to fraud model → score in real time. Offline Store — designed for training. Uses Athena SQL against S3 to retrieve historical feature values for creating training datasets, with query times of seconds to minutes (acceptable for batch jobs, not for real-time inference). The 20ms latency requirement mandates the Online Store.'},
+
+  // L4: SageMaker Data Wrangler (5)
+  {l:'L4',lt:'SageMaker Data Wrangler',
+   q:'SageMaker Data Wrangler can import data from which sources directly within SageMaker Studio?',
+   opts:['S3 and Redshift only — all other sources require a separate Glue ETL job to stage data in S3 first',
+         'S3, Kinesis, and DynamoDB only — Data Wrangler is optimized for AWS-native sources, not third-party SaaS',
+         'Any JDBC-compatible database — Data Wrangler uses a universal JDBC connector for all external data sources',
+         'S3, Athena, Redshift, EMR, Snowflake, Databricks, Salesforce, and SAP — without leaving SageMaker Studio'],
+   ans:'S3, Athena, Redshift, EMR, Snowflake, Databricks, Salesforce, and SAP — without leaving SageMaker Studio',
+   exp:'SageMaker Data Wrangler provides pre-built connectors for a wide range of data sources, accessible directly within the Studio interface: AWS-native sources (Amazon S3, Amazon Athena, Amazon Redshift, Amazon EMR with Spark) and third-party SaaS sources (Snowflake, Databricks, Salesforce, SAP, and others). This eliminates the need to write custom data extraction code or run separate Glue jobs just to get data into the feature engineering environment. The connection handles authentication, data preview, and import — you can see sample data immediately and apply transforms. This broad connector support is a key differentiator from basic Jupyter notebook workflows.'},
+
+  {l:'L4',lt:'SageMaker Data Wrangler',
+   q:'What does the Data Wrangler "Data Quality & Insights Report" automatically generate before any model training?',
+   opts:['A trained XGBoost model that scores each row\'s probability of being a data quality issue in the dataset',
+         'A DQDL rule file deployable in AWS Glue Data Quality pipelines for production data validation',
+         'A CloudWatch dashboard tracking data quality metrics across all current SageMaker training jobs',
+         'Feature statistics, missing value percentages, class imbalance scores, duplicate detection, outlier counts, and data leakage warnings'],
+   ans:'Feature statistics, missing value percentages, class imbalance scores, duplicate detection, outlier counts, and data leakage warnings',
+   exp:'The Data Quality & Insights Report is automatically generated when you import data into Data Wrangler. It provides: (1) Feature statistics — mean, median, std, min/max, unique value counts per column; (2) Missing value % — which columns have nulls and how many; (3) Class imbalance score — for classification targets, how imbalanced is the label distribution; (4) Duplicate detection — rows that are exact duplicates; (5) Outlier analysis — features with extreme values; (6) Target leakage warnings — features that are suspiciously correlated with the target, potentially representing future data. This report helps ML engineers identify data issues BEFORE investing compute time in model training.'},
+
+  {l:'L4',lt:'SageMaker Data Wrangler',
+   q:'Data Wrangler\'s "Feature Importance Analysis" ranks features using which automated mechanism?',
+   opts:['SHAP values computed by SageMaker Clarify on the full training dataset for regulatory-grade explanations',
+         'Pearson correlation coefficients computed between each feature and the target variable statistically',
+         'A Lasso (L1) regression model that drives irrelevant feature coefficients toward zero for ranking',
+         'A quick XGBoost model trained on the dataset that produces feature importance scores to identify which features to drop'],
+   ans:'A quick XGBoost model trained on the dataset that produces feature importance scores to identify which features to drop',
+   exp:'Data Wrangler\'s Feature Importance Analysis trains a lightweight XGBoost model on your dataset and uses the model\'s built-in feature importance metric (based on how often each feature is used to split nodes in the trees) to rank all input features by predictive value. Features with near-zero importance are candidates to drop before running the full training job — reducing dimensionality, training time, and potential overfitting. This is a quick exploratory analysis (not production-grade explainability). SageMaker Clarify (option 1) computes SHAP values on an already-trained model for explainability — a separate, more rigorous process. Pearson correlation (option 2) is a simpler statistical approach but doesn\'t capture non-linear relationships.'},
+
+  {l:'L4',lt:'SageMaker Data Wrangler',
+   q:'After completing feature engineering in Data Wrangler, where can the processed data or pipeline be exported?',
+   opts:['Amazon Redshift or RDS only — Data Wrangler requires a database destination for structured feature storage',
+         'S3 only in CSV format — Parquet export requires a separate Glue DataBrew recipe step downstream',
+         'SageMaker Feature Store only — Data Wrangler is purpose-built as the managed ingestion path for Feature Store',
+         'S3 (as Parquet), SageMaker Feature Store, a SageMaker Training Job, or a SageMaker Pipeline — with auto-generated Python code'],
+   ans:'S3 (as Parquet), SageMaker Feature Store, a SageMaker Training Job, or a SageMaker Pipeline — with auto-generated Python code',
+   exp:'Data Wrangler\'s export options make it a flexible bridge between data sources and ML consumption: (1) Export to S3 as Parquet — for downstream consumption by any Athena query, EMR job, or training script; (2) Export to SageMaker Feature Store — writes engineered features to both Online and Offline stores automatically; (3) Export to SageMaker Training Job — immediately launch model training using the processed data; (4) Export to SageMaker Pipelines — integrate the preprocessing flow as a step in an automated CI/CD ML pipeline. A critical bonus: Data Wrangler auto-generates the full Python preprocessing code for each export option, so you own the code and can run it outside Data Wrangler without re-building the transforms.'},
+
+  {l:'L4',lt:'SageMaker Data Wrangler',
+   q:'What is the key difference between SageMaker Data Wrangler and AWS Glue DataBrew?',
+   opts:['Data Wrangler runs on EMR clusters for scale; DataBrew is serverless on Glue Workers for cost efficiency',
+         'Data Wrangler handles only tabular data; DataBrew also handles images, audio, and unstructured text files',
+         'Data Wrangler supports only S3 imports; DataBrew supports 40+ data sources including streaming services',
+         'Data Wrangler is ML-specific inside SageMaker Studio with Feature Store and training job exports; DataBrew is a general analyst tool that is standalone with batch-focused 250+ recipe transforms'],
+   ans:'Data Wrangler is ML-specific inside SageMaker Studio with Feature Store and training job exports; DataBrew is a general analyst tool that is standalone with batch-focused 250+ recipe transforms',
+   exp:'The K21 framework differentiator: Data Wrangler = ML-specific. Lives inside SageMaker Studio. Designed for ML engineers and data scientists. Provides ML-specific outputs (Feature Store, Training Job, Pipelines). Has ML-specific reports (feature importance, target leakage, class imbalance). 300+ transforms including ML-specific ones (text featurization, time-series transforms, embedding generation). DataBrew = General analyst tool. Standalone service (does not require SageMaker Studio). Designed for business analysts and data engineers. Batch-focused with 250+ prebuilt recipes for common data cleaning. Outputs to S3 as CSV/Parquet. Does not connect to Feature Store or Training Jobs. Rule of thumb: if the end goal is ML model training, use Data Wrangler. If the goal is general data cleaning for any downstream use, DataBrew is appropriate.'}
+];
+
+const LESSONS=[
+  {id:'L1',title:'Data Transformation'},
+  {id:'L2',title:'AWS Glue'},
+  {id:'L3',title:'SageMaker Feature Store'},
+  {id:'L4',title:'SageMaker Data Wrangler'}
+];
+const TOTAL=20;
+
+let shuffled=[],qa=[],curIdx=0,elapsed=0,timerInt=null,finalScore=0,finalTime=0,hasResults=false;
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function fmtTime(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');}
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+
+function startQuiz(){
+  shuffled=shuffle(QB).map(q=>({...q,dispOpts:shuffle(q.opts)}));
+  qa=new Array(TOTAL).fill(null);curIdx=0;elapsed=0;finalScore=0;finalTime=0;hasResults=false;
+  clearInterval(timerInt);timerInt=setInterval(()=>{elapsed++;document.getElementById('timerEl').textContent=fmtTime(elapsed);},1000);
+  buildDots();showScreen('quizScreen');renderQ(0);
+}
+function buildDots(){document.getElementById('qnav').innerHTML=shuffled.map((_,i)=>`<button class="qnd" id="nd${i}" onclick="goTo(${i})">${i+1}</button>`).join('');}
+function refreshDots(){shuffled.forEach((_,i)=>{const d=document.getElementById(`nd${i}`);if(!d)return;d.className='qnd';if(i===curIdx)d.classList.add('cur');else if(qa[i])d.classList.add(qa[i].ok?'ok':'err');});const cur=document.getElementById(`nd${curIdx}`);if(cur)cur.scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'});}
+
+function renderQ(i){
+  curIdx=i;const q=shuffled[i],a=qa[i],L=['A','B','C','D'];
+  document.getElementById('qNumH').textContent=i+1;
+  document.getElementById('progFill').style.width=`${((i+1)/TOTAL)*100}%`;
+  document.getElementById('lessonTag').textContent=`${q.l} · ${q.lt}`;
+  document.getElementById('qLbl').textContent=`Question ${i+1} of ${TOTAL}`;
+  document.getElementById('qText').textContent=q.q;
+  const grid=document.getElementById('optsGrid'),fb=document.getElementById('fbPanel');
+  if(a){
+    grid.innerHTML=q.dispOpts.map((o,j)=>{const isCor=o===q.ans,isWrong=o===a.selected&&!isCor;return`<div class="opt-btn off ${isCor?'ok':isWrong?'err':''}"><div class="opt-lbl">${isCor?'✓':isWrong?'✗':L[j]}</div><div class="opt-txt">${o}</div></div>`;}).join('');
+    document.getElementById('fbIco').textContent=a.ok?'✓':'✗';document.getElementById('fbIco').className=`fb-ico ${a.ok?'ok':'err'}`;
+    document.getElementById('fbStatus').textContent=a.ok?'Correct!':'Not quite — here\'s why:';document.getElementById('fbStatus').className=`fb-status ${a.ok?'ok':'err'}`;
+    const ca=document.getElementById('fbCorrect');if(!a.ok){ca.textContent=`✦ Correct answer: ${q.ans}`;ca.classList.add('show');}else ca.classList.remove('show');
+    document.getElementById('fbExp').textContent=q.exp;document.getElementById('fbNextTxt').textContent=i===TOTAL-1?'You\'re on the last question':'Next Question';fb.classList.add('show');
+  }else{grid.innerHTML=q.dispOpts.map((o,j)=>`<button class="opt-btn" onclick="pick(${j})"><div class="opt-lbl">${L[j]}</div><div class="opt-txt">${o}</div></button>`).join('');fb.classList.remove('show');}
+  document.getElementById('prevBtn').disabled=i===0;document.getElementById('nextBtn').disabled=i===TOTAL-1;document.getElementById('nextBtn').textContent=i===TOTAL-1?'Last ↓':'Next →';
+  document.getElementById('lastHint').classList.toggle('show',i===TOTAL-1);refreshDots();
+}
+
+function pick(si){if(qa[curIdx])return;const q=shuffled[curIdx],sel=q.dispOpts[si];qa[curIdx]={selected:sel,ok:sel===q.ans};renderQ(curIdx);}
+function goTo(i){renderQ(i);}function goPrev(){if(curIdx>0)renderQ(curIdx-1);}function goNext(){if(curIdx<TOTAL-1)renderQ(curIdx+1);}
+function handleFbNext(){if(curIdx<TOTAL-1)renderQ(curIdx+1);else openModal();}
+function openModal(){const answered=qa.filter(a=>a!==null).length,left=TOTAL-answered;document.getElementById('mMsg').textContent=left===0?`All ${TOTAL} questions answered. Ready to submit?`:`Answered ${answered} of ${TOTAL}. ${left} question${left>1?'s are':' is'} still unanswered.`;document.getElementById('mNote').textContent=left>0?'Unanswered questions will be counted as incorrect.':'';document.getElementById('submitModal').classList.add('show');}
+function closeModal(){document.getElementById('submitModal').classList.remove('show');}
+function confirmSubmit(){closeModal();clearInterval(timerInt);finalTime=elapsed;finalScore=qa.filter(a=>a&&a.ok).length;hasResults=true;showResults();}
+
+function showResults(){
+  const pct=Math.round((finalScore/TOTAL)*100),wrong=qa.filter(a=>a&&!a.ok).length,skipped=qa.filter(a=>a===null).length;
+  showScreen('resultsScreen');
+  let title,msg;
+  if(pct>=80){title='🟢 Strong Performance';msg=`Excellent! You scored ${pct}% across all 4 lessons. Solid command of data transformation, AWS Glue, Feature Store, and Data Wrangler — ready to advance.`;}
+  else if(pct>=60){title='🟡 Good Progress';msg=`You scored ${pct}%. Review weaker lessons below. Focus on the distinctions: Glue FindMatches vs DataBrew dedup, Online vs Offline Store use cases, and Data Wrangler vs DataBrew.`;}
+  else{title='🔴 Needs Review';msg=`You scored ${pct}%. Revisit Module 12 lessons — pay attention to when to use each encoding type, Glue's component roles, and the Feature Store training-serving skew problem.`;}
+  document.getElementById('bandTitle').textContent=title;document.getElementById('bandMsg').textContent=msg;
+  document.getElementById('sTime').textContent=fmtTime(finalTime);document.getElementById('sRight').textContent=finalScore;document.getElementById('sWrong').textContent=wrong;document.getElementById('sSkip').textContent=skipped;document.getElementById('sCorrect').textContent=finalScore;
+  const CIRC=395.84,ring=document.getElementById('scoreRing');ring.setAttribute('stroke',pct>=80?'#8DC63F':pct>=60?'#F59E0B':'#EF4444');
+  setTimeout(()=>{ring.style.transition='stroke-dashoffset 1.5s cubic-bezier(.25,.46,.45,.94)';ring.style.strokeDashoffset=CIRC*(1-pct/100);},200);
+  let c=0;const pEl=document.getElementById('sPct'),step=pct/60;const cnt=setInterval(()=>{c=Math.min(c+step,pct);pEl.textContent=Math.round(c);if(c>=pct)clearInterval(cnt);},25);
+  document.getElementById('bdTable').innerHTML=LESSONS.map(l=>{
+    const la=qa.map((a,i)=>({a,q:shuffled[i]})).filter(({q})=>q.l===l.id);
+    const lc=la.filter(({a})=>a&&a.ok).length,lt=la.length,lp=lt>0?Math.round((lc/lt)*100):0;
+    const col=lp>=80?'#8DC63F':lp>=60?'#F59E0B':'#EF4444';const cls=lp>=80?'bs-strong':lp>=60?'bs-good':'bs-review';const lbl=lp>=80?'Strong':lp>=60?'Good':'Review';
+    return`<div class="bd-row"><div><div class="bd-lid">${l.id}</div><div class="bd-ltitle">${l.title}</div><div class="bd-bar"><div class="bd-bar-fill" data-w="${lp}" style="background:${col};transition:width 1.1s cubic-bezier(.16,1,.3,1)"></div></div></div><div class="bd-score">${lc}/${lt}</div><div class="bd-band ${cls}">${lbl}</div></div>`;
+  }).join('');
+  setTimeout(()=>{document.querySelectorAll('.bd-bar-fill').forEach(b=>{b.style.width=b.dataset.w+'%';});},450);
+}
+
+function showReview(){
+  showScreen('reviewScreen');const L=['A','B','C','D'];
+  document.getElementById('rvSubtitle').textContent=`All 20 questions · Your score: ${finalScore}/20`;
+  document.getElementById('reviewList').innerHTML=shuffled.map((q,i)=>{
+    const a=qa[i],answered=a!==null,correct=answered&&a.ok;
+    let badge=!answered?'<span class="rv-badge rv-badge-skip">Not Answered</span>':correct?'<span class="rv-badge rv-badge-ok">✓ Correct</span>':'<span class="rv-badge rv-badge-err">✗ Incorrect</span>';
+    const opts=q.dispOpts.map((o,j)=>{const isCor=o===q.ans,isUserWrong=answered&&o===a.selected&&!isCor;let cls='',tag='',lbl=L[j];if(isCor){cls='rv-ok';lbl='✓';tag='<span class="rv-tag rv-tag-ok">Correct Answer</span>';}else if(isUserWrong){cls='rv-err';lbl='✗';tag='<span class="rv-tag rv-tag-err">Your Answer</span>';}return`<div class="rv-opt ${cls}"><div class="rv-opt-lbl">${lbl}</div><div class="rv-opt-txt">${o}</div>${tag}</div>`;}).join('');
+    return`<div class="rv-card"><div class="rv-card-hdr"><div class="rv-qn">${i+1}</div>${badge}<div class="rv-lesson">${q.l} · ${q.lt}</div></div><div class="rv-qtxt">${q.q}</div><div class="rv-opts">${opts}</div><div class="rv-exp"><div class="rv-exp-ico">📖</div><div><div class="rv-exp-lbl">Explanation</div><div class="rv-exp-txt">${q.exp}</div></div></div></div>`;
+  }).join('');
+}
+function backToResults(){hasResults?showScreen('resultsScreen'):showScreen('startScreen');}
+function retake(){startQuiz();}
+</script>
+</body>
+</html>

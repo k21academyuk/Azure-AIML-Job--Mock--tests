@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M14 Practice Test · AWS AI/ML · K21 Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--bg:#F7F8FA;--surface:#FFFFFF;--border:#E8EAEE;--t1:#111827;--t2:#4B5563;--t3:#9CA3AF;--green:#8DC63F;--green-mid:#79B030;--green-bg:#F1F8E8;--green-border:#C8E89A;--green-dark:#3D6B15;--navy:#1A1248;--navy-mid:#2E2080;--navy-light:#EEF0F9;--red:#EF4444;--red-bg:#FEF2F2;--red-border:#FECACA;--red-t:#DC2626;--blue-bg:#EFF6FF;--blue-b:#93C5FD;}
+body{font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased;background:var(--bg);color:var(--t1);min-height:100vh;}
+.screen{display:none;}.screen.active{display:block;min-height:100vh;}#quizScreen.active{display:flex;flex-direction:column;min-height:100vh;}
+.k21-hdr{background:var(--surface);border-bottom:1.5px solid var(--border);box-shadow:0 1px 4px rgba(0,0,0,.05);padding:16px 40px;display:flex;align-items:center;justify-content:space-between;}
+.k21-brand{display:flex;align-items:center;gap:10px;}.k21-mark{width:34px;height:34px;background:var(--green);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;}.k21-name{font-size:14px;font-weight:700;color:var(--navy);}.k21-name b{color:var(--green-mid);}
+.hdr-pill{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:5px 13px;border-radius:100px;background:var(--navy-light);color:var(--navy);border:1px solid #D0D4E8;}
+.btn-green{display:inline-flex;align-items:center;gap:10px;background:var(--green);color:#fff;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;padding:14px 32px;border-radius:100px;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(141,198,63,.3);transition:background .2s,transform .18s;}.btn-green:hover{background:var(--green-mid);transform:translateY(-2px);}
+.btn-navy{display:inline-flex;align-items:center;gap:8px;background:var(--navy);color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;padding:12px 24px;border-radius:100px;border:none;cursor:pointer;box-shadow:0 3px 12px rgba(26,18,72,.2);transition:background .2s,transform .18s;}.btn-navy:hover{background:var(--navy-mid);transform:translateY(-1px);}
+.btn-ghost{display:inline-flex;align-items:center;gap:7px;background:transparent;color:var(--t2);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:10px 20px;border-radius:100px;border:1.5px solid var(--border);cursor:pointer;transition:border-color .2s,color .2s,background .2s;}.btn-ghost:hover{border-color:var(--navy);color:var(--navy);background:var(--navy-light);}.btn-ghost:disabled{opacity:.38;cursor:not-allowed;}.btn-ghost:disabled:hover{border-color:var(--border);color:var(--t2);background:transparent;}
+.start-body{max-width:780px;margin:0 auto;padding:52px 28px 80px;}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--green-bg);border:1px solid var(--green-border);color:var(--green-dark);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;padding:5px 13px;border-radius:100px;margin-bottom:20px;}
+.eyebrow .dot{width:5px;height:5px;background:var(--green);border-radius:50%;animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+.start-h1{font-size:clamp(26px,4.5vw,46px);font-weight:800;color:var(--navy);line-height:1.12;letter-spacing:-.03em;margin-bottom:14px;}.start-h1 .g{color:var(--green-mid);}
+.start-sub{font-size:16px;color:var(--t2);line-height:1.65;max-width:560px;margin-bottom:40px;}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:40px;}
+.stat-c{background:var(--surface);border:1.5px solid var(--border);border-radius:16px;padding:20px 16px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+.stat-ico{font-size:22px;margin-bottom:8px;}.stat-val{font-size:26px;font-weight:800;color:var(--navy);line-height:1;margin-bottom:3px;}.stat-lbl{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--t3);}
+.section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--t3);margin-bottom:12px;}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:40px;}.chip{display:flex;align-items:center;gap:7px;background:var(--surface);border:1.5px solid var(--border);border-radius:100px;padding:7px 14px;font-size:12px;color:var(--t2);font-weight:500;}.chip-n{width:20px;height:20px;background:var(--navy-light);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:var(--navy-mid);flex-shrink:0;}
+.start-note{font-size:13px;color:var(--t3);margin-top:12px;}
+.quiz-hdr{background:var(--surface);border-bottom:1.5px solid var(--border);box-shadow:0 1px 4px rgba(0,0,0,.05);padding:0 32px;height:62px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:100;flex-shrink:0;}
+.qh-brand{display:flex;align-items:center;gap:7px;flex-shrink:0;}.qh-mark{width:27px;height:27px;background:var(--green);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff;}.qh-name{font-size:12px;font-weight:700;color:var(--navy);}
+.qh-sep{width:1px;height:18px;background:var(--border);flex-shrink:0;}.qh-mod{font-size:12px;font-weight:600;color:var(--t2);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.qh-counter{font-size:12px;font-weight:700;color:var(--t2);flex-shrink:0;}.qh-counter strong{color:var(--navy);}
+.qh-submit{display:inline-flex;align-items:center;gap:6px;background:var(--red-bg);color:var(--red-t);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;padding:7px 15px;border-radius:100px;border:1.5px solid var(--red-border);cursor:pointer;flex-shrink:0;transition:background .2s;}.qh-submit:hover{background:#FEE2E2;}
+.qh-timer{display:flex;align-items:center;gap:5px;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:5px 11px;flex-shrink:0;font-size:12px;font-weight:700;color:var(--t2);font-variant-numeric:tabular-nums;}.tdot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:blink 1s infinite;}
+.prog-wrap{height:3px;background:var(--border);flex-shrink:0;}.prog-fill{height:100%;background:var(--green);transition:width .5s cubic-bezier(.16,1,.3,1);width:0%;}
+.qnav{background:var(--surface);border-bottom:1.5px solid var(--border);padding:9px 32px;display:flex;align-items:center;gap:5px;overflow-x:auto;flex-shrink:0;}.qnav::-webkit-scrollbar{height:0;}
+.qnd{flex-shrink:0;width:27px;height:27px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;cursor:pointer;border:1.5px solid var(--border);background:var(--surface);color:var(--t3);transition:all .15s;font-family:'DM Sans',sans-serif;}.qnd:hover{border-color:var(--navy);color:var(--navy);}.qnd.cur{background:var(--navy);color:#fff;border-color:var(--navy);}.qnd.ok{background:var(--green-bg);color:var(--green-dark);border-color:var(--green);}.qnd.err{background:var(--red-bg);color:var(--red-t);border-color:var(--red-border);}
+.quiz-body{flex:1;padding:32px 24px 60px;}.q-wrap{width:100%;max-width:740px;margin:0 auto;}
+.q-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}.lesson-tag{display:inline-flex;align-items:center;gap:6px;background:var(--navy-light);color:var(--navy);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;padding:5px 12px;border-radius:100px;border:1px solid #D0D4E8;}.q-lbl{font-size:12px;font-weight:600;color:var(--t3);}
+.q-card{background:var(--surface);border:1.5px solid var(--border);border-radius:20px;padding:32px 36px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,.04);}.q-text{font-size:18px;font-weight:700;color:var(--navy);line-height:1.6;margin-bottom:22px;}
+.opts{display:flex;flex-direction:column;gap:10px;}.opt-btn{display:flex;align-items:flex-start;gap:12px;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:14px 18px;cursor:pointer;text-align:left;width:100%;font-family:'DM Sans',sans-serif;transition:border-color .17s,background .17s,transform .17s;}.opt-btn:hover:not(.off){border-color:var(--green);background:var(--green-bg);transform:translateX(3px);}.opt-btn.off{cursor:default;}.opt-btn.ok{background:var(--green-bg);border-color:var(--green);}.opt-btn.err{background:var(--red-bg);border-color:var(--red-border);}
+.opt-lbl{flex-shrink:0;width:28px;height:28px;border-radius:7px;background:var(--bg);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--t2);margin-top:2px;transition:all .17s;}.opt-btn.ok .opt-lbl{background:var(--green);border-color:var(--green);color:#fff;}.opt-btn.err .opt-lbl{background:var(--red);border-color:var(--red);color:#fff;}
+.opt-txt{font-size:14px;font-weight:500;color:var(--t1);line-height:1.55;flex:1;}.opt-btn.ok .opt-txt{color:var(--green-dark);font-weight:600;}.opt-btn.err .opt-txt{color:var(--red-t);}
+.fb{display:none;background:var(--blue-bg);border:1.5px solid var(--blue-b);border-left:4px solid #3B82F6;border-radius:12px;padding:20px 24px;margin-bottom:16px;animation:slideUp .3s ease;}.fb.show{display:block;}
+@keyframes slideUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.fb-hdr{display:flex;align-items:center;gap:9px;margin-bottom:7px;}.fb-ico{width:23px;height:23px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;}.fb-ico.ok{background:var(--green-bg);color:var(--green-mid);}.fb-ico.err{background:var(--red-bg);color:var(--red);}
+.fb-status{font-size:14px;font-weight:700;}.fb-status.ok{color:var(--green-dark);}.fb-status.err{color:var(--red-t);}
+.fb-correct{font-size:12px;font-weight:600;color:#92400E;background:#FEF3C7;border:1px solid #FCD34D;border-radius:7px;padding:6px 11px;margin:6px 0 8px 32px;display:none;}.fb-correct.show{display:block;}
+.fb-exp{font-size:13px;color:var(--t2);line-height:1.65;padding-left:32px;margin-bottom:14px;}
+.fb-next-btn{display:inline-flex;align-items:center;gap:7px;background:var(--navy);color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:10px 22px;border-radius:100px;border:none;cursor:pointer;box-shadow:0 3px 10px rgba(26,18,72,.18);transition:background .2s,transform .2s;margin-left:32px;}.fb-next-btn:hover{background:var(--navy-mid);transform:translateY(-1px);}
+.q-nav{display:flex;align-items:center;justify-content:space-between;margin-top:4px;}
+.last-hint{display:none;background:#FFFBEB;border:1px solid #FCD34D;border-radius:10px;padding:10px 16px;font-size:13px;color:#92400E;text-align:center;margin-top:12px;}.last-hint.show{display:block;}
+.res-body{max-width:800px;margin:0 auto;padding:48px 28px 80px;}.res-top{display:flex;gap:28px;align-items:flex-start;margin-bottom:36px;}
+.score-col{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:14px;}.score-wrap{position:relative;width:150px;height:150px;}.score-wrap svg{transform:rotate(-90deg);}.score-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}.score-num{font-size:32px;font-weight:800;color:var(--navy);line-height:1;}.score-num sub{font-size:16px;font-weight:600;color:var(--t3);}.score-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--t3);margin-top:2px;}
+.score-tally{text-align:center;}.score-tally-v{font-size:20px;font-weight:800;color:var(--navy);}.score-tally-l{font-size:12px;color:var(--t3);}
+.band-card{flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:20px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,.04);}.band-title{font-size:22px;font-weight:800;color:var(--navy);margin-bottom:8px;}.band-msg{font-size:14px;color:var(--t2);line-height:1.65;margin-bottom:20px;}
+.stats-chips{display:flex;gap:10px;flex-wrap:wrap;}.sc{display:flex;align-items:center;gap:6px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:7px 12px;font-size:12px;font-weight:600;color:var(--t2);}.sc strong{font-weight:800;color:var(--navy);}
+.breakdown{background:var(--surface);border:1.5px solid var(--border);border-radius:20px;overflow:hidden;margin-bottom:32px;box-shadow:0 1px 4px rgba(0,0,0,.04);}.bd-heading{padding:18px 24px;border-bottom:1.5px solid var(--border);font-size:14px;font-weight:700;color:var(--navy);}
+.bd-row{display:grid;grid-template-columns:1fr 68px 68px;align-items:center;gap:14px;padding:13px 24px;border-bottom:1px solid rgba(0,0,0,.04);}.bd-row:last-child{border-bottom:none;}
+.bd-lid{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--t3);margin-bottom:2px;}.bd-ltitle{font-size:13px;font-weight:600;color:var(--navy);}.bd-bar{height:5px;background:var(--bg);border-radius:10px;overflow:hidden;margin-top:6px;}.bd-bar-fill{height:100%;border-radius:10px;width:0%;}
+.bd-score{font-size:13px;font-weight:700;color:var(--navy);text-align:right;}.bd-band{font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;text-align:center;justify-self:end;}
+.bs-strong{background:var(--green-bg);color:var(--green-dark);}.bs-good{background:#FEF3C7;color:#92400E;}.bs-review{background:var(--red-bg);color:var(--red-t);}
+.res-actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+.review-topbar{background:var(--surface);border-bottom:1.5px solid var(--border);box-shadow:0 1px 4px rgba(0,0,0,.05);padding:16px 40px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.rv-body{max-width:820px;margin:0 auto;padding:36px 28px 80px;}.rv-page-hdr{text-align:center;margin-bottom:36px;}.rv-page-hdr h2{font-size:clamp(22px,4vw,30px);font-weight:800;color:var(--navy);margin-bottom:6px;}.rv-page-hdr p{font-size:14px;color:var(--t2);}
+.rv-card{background:var(--surface);border:1.5px solid var(--border);border-radius:20px;padding:26px;margin-bottom:18px;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+.rv-card-hdr{display:flex;align-items:center;gap:9px;margin-bottom:14px;flex-wrap:wrap;}.rv-qn{width:29px;height:29px;background:var(--navy);color:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;}
+.rv-badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px;}.rv-badge-skip{background:#FEF3C7;color:#92400E;border:1px solid #FCD34D;}.rv-badge-ok{background:var(--green-bg);color:var(--green-dark);border:1px solid var(--green-border);}.rv-badge-err{background:var(--red-bg);color:var(--red-t);border:1px solid var(--red-border);}
+.rv-lesson{margin-left:auto;font-size:11px;font-weight:600;background:var(--navy-light);color:var(--navy);border-radius:100px;padding:4px 12px;border:1px solid #D0D4E8;}
+.rv-qtxt{font-size:16px;font-weight:700;color:var(--navy);line-height:1.55;margin-bottom:16px;}
+.rv-opts{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}.rv-opt{display:flex;align-items:center;gap:11px;padding:11px 15px;border-radius:10px;border:1.5px solid var(--border);background:var(--surface);}.rv-opt.rv-ok{background:var(--green-bg);border-color:var(--green);}.rv-opt.rv-err{background:var(--red-bg);border-color:var(--red-border);}
+.rv-opt-lbl{flex-shrink:0;width:25px;height:25px;border-radius:6px;background:var(--bg);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--t3);}.rv-opt.rv-ok .rv-opt-lbl{background:var(--green);border-color:var(--green);color:#fff;}.rv-opt.rv-err .rv-opt-lbl{background:var(--red);border-color:var(--red);color:#fff;}
+.rv-opt-txt{font-size:13px;color:var(--t1);line-height:1.45;flex:1;}.rv-opt.rv-ok .rv-opt-txt{color:var(--green-dark);font-weight:600;}.rv-opt.rv-err .rv-opt-txt{color:var(--red-t);}
+.rv-tag{flex-shrink:0;font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px;white-space:nowrap;}.rv-tag-ok{background:var(--green);color:#fff;}.rv-tag-err{background:var(--red);color:#fff;}
+.rv-exp{display:flex;gap:11px;background:var(--blue-bg);border:1.5px solid var(--blue-b);border-left:4px solid #3B82F6;border-radius:10px;padding:15px 16px;}.rv-exp-ico{font-size:15px;flex-shrink:0;margin-top:1px;}.rv-exp-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#2563EB;margin-bottom:4px;}.rv-exp-txt{font-size:13px;color:var(--t2);line-height:1.65;}
+.rv-bottom{display:flex;justify-content:center;gap:12px;margin-top:32px;flex-wrap:wrap;}
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:1000;align-items:center;justify-content:center;backdrop-filter:blur(3px);}.modal-ov.show{display:flex;}
+.modal{background:var(--surface);border-radius:24px;padding:36px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.18);animation:pop .3s cubic-bezier(.16,1,.3,1);}
+@keyframes pop{from{opacity:0;transform:scale(.9);}to{opacity:1;transform:scale(1);}}
+.m-ico{font-size:38px;margin-bottom:16px;}.m-title{font-size:20px;font-weight:800;color:var(--navy);margin-bottom:8px;}.m-msg{font-size:14px;color:var(--t2);line-height:1.6;margin-bottom:6px;}.m-note{font-size:12px;color:var(--t3);margin-bottom:24px;}
+.m-btns{display:flex;gap:12px;justify-content:center;}.m-cancel{display:inline-flex;align-items:center;background:var(--bg);color:var(--t2);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;padding:12px 24px;border-radius:100px;border:1.5px solid var(--border);cursor:pointer;transition:all .2s;}.m-cancel:hover{border-color:var(--navy);color:var(--navy);}.m-submit{display:inline-flex;align-items:center;background:var(--navy);color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;padding:12px 24px;border-radius:100px;border:none;cursor:pointer;transition:background .2s;}.m-submit:hover{background:var(--navy-mid);}
+@media(max-width:640px){.k21-hdr,.quiz-hdr{padding:14px 18px;}.start-body{padding:32px 18px 60px;}.qh-mod{display:none;}.quiz-hdr{gap:10px;}.quiz-body{padding:22px 16px 50px;}.q-card{padding:22px 18px;}.q-text{font-size:15px;}.res-top{flex-direction:column;align-items:center;}.bd-row{grid-template-columns:1fr 56px;}.bd-score{display:none;}.review-topbar{padding:14px 18px;}.rv-body{padding:28px 16px 60px;}}
+</style>
+</head>
+<body>
+
+<!-- START -->
+<div class="screen active" id="startScreen">
+  <div class="k21-hdr">
+    <div class="k21-brand"><div class="k21-mark">K21</div><div class="k21-name">K21 <b>Academy</b></div></div>
+    <div class="hdr-pill">AWS AI/ML Job Focus Program</div>
+  </div>
+  <div class="start-body">
+    <div class="eyebrow"><span class="dot"></span>Module 14 · Practice Test</div>
+    <h1 class="start-h1">Model Training<br>&amp; <span class="g">Tuning</span></h1>
+    <p class="start-sub">Test your understanding across all 5 lessons in Module 14. Covers algorithm selection, training fundamentals, distributed training, hyperparameter tuning, and SageMaker AMT strategies — with full explanations after every answer.</p>
+    <div class="stats-row">
+      <div class="stat-c"><div class="stat-ico">📝</div><div class="stat-val">25</div><div class="stat-lbl">Questions</div></div>
+      <div class="stat-c"><div class="stat-ico">📚</div><div class="stat-val">5</div><div class="stat-lbl">Lessons</div></div>
+      <div class="stat-c"><div class="stat-ico">🔄</div><div class="stat-val">∞</div><div class="stat-lbl">Retries</div></div>
+    </div>
+    <div class="section-label">5 Lessons Covered</div>
+    <div class="chips">
+      <div class="chip"><div class="chip-n">L1</div>Model Training</div>
+      <div class="chip"><div class="chip-n">L2</div>Deep Dive Into Model Training</div>
+      <div class="chip"><div class="chip-n">L3</div>Distributed Training</div>
+      <div class="chip"><div class="chip-n">L4</div>Hyperparameter For AWS</div>
+      <div class="chip"><div class="chip-n">L5</div>Tuning Job in AWS</div>
+    </div>
+    <div>
+      <button class="btn-green" style="font-size:16px;padding:16px 40px;" onclick="startQuiz()">
+        Start Practice Test
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+    <p class="start-note">💡 Options shuffle every attempt · Explanations after every answer · No time pressure</p>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div class="screen" id="quizScreen">
+  <div class="quiz-hdr">
+    <div class="qh-brand"><div class="qh-mark">K21</div><div class="qh-name">Academy</div></div>
+    <div class="qh-sep"></div>
+    <div class="qh-mod">M14: Model Training &amp; Tuning</div>
+    <div class="qh-counter">Q <strong id="qNumH">1</strong>&thinsp;/&thinsp;25</div>
+    <button class="qh-submit" onclick="openModal()">📋 Submit Exam</button>
+    <div class="qh-timer"><div class="tdot"></div><span id="timerEl">00:00</span></div>
+  </div>
+  <div class="prog-wrap"><div class="prog-fill" id="progFill"></div></div>
+  <div class="qnav" id="qnav"></div>
+  <div class="quiz-body">
+    <div class="q-wrap">
+      <div class="q-meta"><div class="lesson-tag" id="lessonTag">L1</div><div class="q-lbl" id="qLbl">Question 1 of 25</div></div>
+      <div class="q-card"><div class="q-text" id="qText">Loading…</div><div class="opts" id="optsGrid"></div></div>
+      <div class="fb" id="fbPanel">
+        <div class="fb-hdr"><div class="fb-ico" id="fbIco"></div><div class="fb-status" id="fbStatus"></div></div>
+        <div class="fb-correct" id="fbCorrect"></div>
+        <p class="fb-exp" id="fbExp"></p>
+        <button class="fb-next-btn" onclick="handleFbNext()"><span id="fbNextTxt">Next Question</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      </div>
+      <div class="last-hint" id="lastHint">🎯 Last question — click <strong>Submit Exam</strong> in the header to see your results.</div>
+      <div class="q-nav" style="margin-top:16px;">
+        <button class="btn-ghost" id="prevBtn" onclick="goPrev()">← Previous</button>
+        <button class="btn-ghost" id="nextBtn" onclick="goNext()">Next →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div class="screen" id="resultsScreen">
+  <div class="k21-hdr">
+    <div class="k21-brand"><div class="k21-mark">K21</div><div class="k21-name">K21 <b>Academy</b></div></div>
+    <div class="hdr-pill">Test Complete · AWS AI/ML Job Focus Program</div>
+  </div>
+  <div class="res-body">
+    <div class="res-top">
+      <div class="score-col">
+        <div class="score-wrap">
+          <svg width="150" height="150" viewBox="0 0 150 150">
+            <circle cx="75" cy="75" r="63" fill="none" stroke="#E8EAEE" stroke-width="10"/>
+            <circle id="scoreRing" cx="75" cy="75" r="63" fill="none" stroke="#8DC63F" stroke-width="10" stroke-linecap="round" stroke-dasharray="395.84 395.84" stroke-dashoffset="395.84"/>
+          </svg>
+          <div class="score-inner"><div class="score-num"><span id="sPct">0</span><sub>%</sub></div><div class="score-lbl">Score</div></div>
+        </div>
+        <div class="score-tally"><div class="score-tally-l">Correct Answers</div><div class="score-tally-v"><span id="sCorrect">0</span> / 25</div></div>
+      </div>
+      <div class="band-card">
+        <div class="band-title" id="bandTitle">—</div>
+        <div class="band-msg" id="bandMsg">—</div>
+        <div class="stats-chips">
+          <div class="sc">⏱️ Time: <strong id="sTime">—</strong></div>
+          <div class="sc">✅ Correct: <strong id="sRight">—</strong></div>
+          <div class="sc">❌ Incorrect: <strong id="sWrong">—</strong></div>
+          <div class="sc">⏭️ Skipped: <strong id="sSkip">—</strong></div>
+        </div>
+      </div>
+    </div>
+    <div class="breakdown"><div class="bd-heading">📊 Per-Lesson Breakdown</div><div id="bdTable"></div></div>
+    <div class="res-actions">
+      <button class="btn-green" onclick="showReview()">📋 Review All Questions &amp; Answers</button>
+      <button class="btn-navy" onclick="retake()">🔄 Retake Test</button>
+    </div>
+  </div>
+</div>
+
+<!-- REVIEW -->
+<div class="screen" id="reviewScreen">
+  <div class="review-topbar">
+    <div class="k21-brand"><div class="k21-mark">K21</div><div class="k21-name">K21 <b>Academy</b></div></div>
+    <button class="btn-ghost" onclick="backToResults()">← Back to Results</button>
+  </div>
+  <div class="rv-body">
+    <div class="rv-page-hdr"><h2>Questions &amp; Answers Review</h2><p id="rvSubtitle">All 25 questions with correct answers and explanations</p></div>
+    <div id="reviewList"></div>
+    <div class="rv-bottom">
+      <button class="btn-navy" onclick="backToResults()">← Back to Results</button>
+      <button class="btn-ghost" onclick="retake()">🔄 Retake Test</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-ov" id="submitModal">
+  <div class="modal">
+    <div class="m-ico">📋</div><div class="m-title">Submit Exam?</div>
+    <div class="m-msg" id="mMsg">Are you sure?</div><div class="m-note" id="mNote"></div>
+    <div class="m-btns"><button class="m-cancel" onclick="closeModal()">Continue Quiz</button><button class="m-submit" onclick="confirmSubmit()">Yes, Submit</button></div>
+  </div>
+</div>
+
+<script>
+const QB=[
+
+  // L1: Model Training (5)
+  {l:'L1',lt:'Model Training',
+   q:'An ML team needs to detect anomalous sensor readings from industrial equipment without any labeled fault examples. Which SageMaker built-in algorithm is most appropriate?',
+   opts:['XGBoost — a supervised gradient boosting algorithm that requires labeled positive and negative training examples',
+         'K-Means — an unsupervised clustering algorithm that groups similar records into segments, not anomaly scoring',
+         'DeepAR+ — an RNN-based time-series forecasting algorithm, not designed for anomaly detection without labels',
+         'Random Cut Forest (RCF) — unsupervised anomaly detection that scores each point without requiring any labeled data'],
+   ans:'Random Cut Forest (RCF) — unsupervised anomaly detection that scores each point without requiring any labeled data',
+   exp:'RCF is the right choice whenever the problem is anomaly detection AND labeled examples are unavailable. It works by building random trees that isolate data points — anomalies are isolated in fewer cuts (they are far from dense clusters of normal data). It returns an anomaly score per record: high score = likely anomaly. XGBoost needs labeled classes. K-Means segments but doesn\'t score anomalies directly. DeepAR+ forecasts future time series values (and can detect deviations, but it\'s a forecasting algorithm). RCF also powers QuickSight\'s ML Insights anomaly detection.'},
+
+  {l:'L1',lt:'Model Training',
+   q:'What is the key operational difference between SageMaker JumpStart and Amazon Bedrock for foundation model inference?',
+   opts:['JumpStart supports only image-generation models; Bedrock handles all text-based foundation model inference',
+         'JumpStart is for batch inference only; Bedrock handles real-time inference for all GenAI use cases',
+         'JumpStart deploys models to SageMaker endpoints you manage (instance type, VPC, IAM); Bedrock is a managed API with no infrastructure to configure',
+         'JumpStart requires uploading training data first; Bedrock uses pre-uploaded datasets stored in S3 automatically'],
+   ans:'JumpStart deploys models to SageMaker endpoints you manage (instance type, VPC, IAM); Bedrock is a managed API with no infrastructure to configure',
+   exp:'The fundamental difference is infrastructure ownership. JumpStart: you get full control — choose instance type (ml.g5.48xlarge for large LLMs), configure VPC/IAM, support LoRA/QLoRA parameter-efficient fine-tuning, customize the deployment. Bedrock: managed API — call Claude/Titan/Llama/Mistral with an API call, AWS manages all infrastructure, includes Guardrails (content filtering, PII, topics), Knowledge Bases (RAG), and Model Evaluation. Decision rule: need GPU control, custom fine-tuning, or your own model containers → JumpStart. Need GenAI apps, chatbots, summarization, Q&A with no GPU setup → Bedrock.'},
+
+  {l:'L1',lt:'Model Training',
+   q:'In SageMaker Script Mode (BYOS), what do you provide and what does AWS manage?',
+   opts:['You build a custom Docker container and push it to ECR; AWS runs it and implements /ping and /invocations endpoints',
+         'You provide a DQDL configuration defining training data quality rules; AWS validates data before the job starts',
+         'You write a Python training script (entry_point) run inside AWS-managed framework containers (TensorFlow, PyTorch, HuggingFace)',
+         'You upload a CloudFormation template specifying compute resources; AWS provisions and runs the cluster automatically'],
+   ans:'You write a Python training script (entry_point) run inside AWS-managed framework containers (TensorFlow, PyTorch, HuggingFace)',
+   exp:'Script Mode (BYOS = Bring Your Own Script) is the sweet spot between built-in algorithms and full custom containers. You write a standard Python training script using your preferred framework (TensorFlow, PyTorch, HuggingFace Transformers, scikit-learn). You specify the entry_point (script filename) and framework version. AWS provides managed Deep Learning Containers (DLC) with the framework pre-installed, handles GPU drivers, CUDA, and distributed training libraries. You don\'t need to build Docker images or implement REST endpoints. BYOC (Bring Your Own Container) is the option where you build a custom Docker image from scratch and implement /ping and /invocations.'},
+
+  {l:'L1',lt:'Model Training',
+   q:'What is the key difference between L1 (Lasso) and L2 (Ridge) regularization in terms of their effect on feature weights?',
+   opts:['L1 applies to neural networks only via dropout; L2 applies only to tree-based models like XGBoost during training',
+         'L1 prevents overfitting by stopping training early when validation loss plateaus; L2 by reducing neuron outputs randomly',
+         'L1 adds model capacity to capture minority class patterns; L2 reduces the learning rate proportionally per update',
+         'L1 drives irrelevant feature weights to exactly zero (automatic feature selection); L2 shrinks all weights toward zero but never to exactly zero'],
+   ans:'L1 drives irrelevant feature weights to exactly zero (automatic feature selection); L2 shrinks all weights toward zero but never to exactly zero',
+   exp:'The mathematical difference creates very different behavior: L1 (Lasso) adds a penalty of λ×Σ|wᵢ| — the absolute value creates a geometric property that pushes coefficients exactly to zero for irrelevant features. Features with zero weight are effectively removed — automatic feature selection. In XGBoost this is the "alpha" parameter. L2 (Ridge) adds λ×Σwᵢ² — the squared penalty smoothly shrinks all coefficients proportionally toward zero but never to exactly zero (every feature retains some weight). In XGBoost this is the "lambda" parameter. When feature selection is desired → L1. When you want to keep all features but reduce their magnitude → L2.'},
+
+  {l:'L1',lt:'Model Training',
+   q:'A neural network shows high training accuracy but poor validation accuracy. Which regularization technique prevents this specifically by randomly deactivating neurons during each training step?',
+   opts:['L1 regularization — adds an absolute value penalty to the loss that drives irrelevant weights to exactly zero',
+         'Early stopping — monitors validation loss and halts training when it stops improving for N consecutive epochs',
+         'L2 regularization — adds a squared weight penalty to the loss function, shrinking all weights proportionally',
+         'Dropout — randomly zeros a fraction (0.2-0.5) of neuron outputs during each training step, disabled at inference'],
+   ans:'Dropout — randomly zeros a fraction (0.2-0.5) of neuron outputs during each training step, disabled at inference',
+   exp:'Dropout is specifically a neural network regularization technique. During each training step, a random fraction of neuron outputs is set to zero — different neurons are dropped each step. This forces the network to learn redundant representations (multiple pathways to the same conclusion), preventing over-reliance on any single neuron. At inference time, all neurons are active (dropout off) and their outputs are scaled by the keep probability. Dropout rate of 0.2-0.5 is common for hidden layers; 0.1-0.2 for output layers. L1/L2 are weight penalties (work for trees too). Early stopping stops training based on val loss timing. Dropout is the only technique that explicitly randomizes neuron activation.'},
+
+  // L2: Deep Dive Into Model Training (5)
+  {l:'L2',lt:'Deep Dive Into Model Training',
+   q:'A model achieves 97% training accuracy but only 61% validation accuracy. Which condition does this describe, and what is the primary fix?',
+   opts:['Underfitting (high bias) — the model is too simple. Fix: increase model complexity with more layers and additional epochs',
+         'Data leakage — validation features include future information. Fix: apply strict temporal splitting to the dataset',
+         'Catastrophic forgetting — fine-tuning erased prior knowledge. Fix: apply LoRA adapters and freeze base model weights',
+         'Overfitting (high variance) — the model memorizes training data. Fix: add L1/L2 regularization, more data, or reduce model complexity'],
+   ans:'Overfitting (high variance) — the model memorizes training data. Fix: add L1/L2 regularization, more data, or reduce model complexity',
+   exp:'Overfitting signature: high training accuracy (model has memorized training examples) + low validation accuracy (fails to generalize to unseen data). The model has learned the noise and specific patterns of training data rather than general patterns. The gap between training and validation accuracy is the diagnostic signal. Fixes: L1/L2 regularization (penalize weight complexity); Dropout (neural networks); Early stopping (stop before memorization sets in); More training data (harder to memorize with more variety); Data augmentation (synthetically expand variety); Reduce model size (fewer parameters = less capacity to memorize). Underfitting shows low accuracy on BOTH train AND validation.'},
+
+  {l:'L2',lt:'Deep Dive Into Model Training',
+   q:'What is "catastrophic forgetting" in fine-tuning, and which technique best prevents it while minimizing compute cost?',
+   opts:['Gradient explosion during fine-tuning due to too-high learning rate — prevented by warm-up LR scheduling from epoch 1',
+         'GPU out-of-memory crash when the model is too large for the selected instance — prevented by gradient checkpointing',
+         'Memorization of fine-tuning examples causing loss of generalization — prevented by adding 0.5 dropout to all layers',
+         'Fine-tuning on new domain data causes the model to forget prior knowledge — LoRA freezes most weights and trains only small adapter matrices'],
+   ans:'Fine-tuning on new domain data causes the model to forget prior knowledge — LoRA freezes most weights and trains only small adapter matrices',
+   exp:'Catastrophic forgetting: when an LLM is fine-tuned on a new domain (medical records, legal documents), gradient updates to the base weights overwrite previously learned general knowledge. The model becomes an expert on the new domain but degrades on everything else. LoRA (Low-Rank Adaptation) prevents this by freezing all original model weights (they never change) and injecting small trainable adapter matrices (rank r=4, 8, 16) into the attention layers. Only the adapters are trained — a fraction of 0.1-1% of total parameters. The original knowledge is preserved in the frozen weights; the new domain knowledge lives in the adapters. This also dramatically reduces GPU memory and training cost — a key reason LoRA is the standard for LLM fine-tuning.'},
+
+  {l:'L2',lt:'Deep Dive Into Model Training',
+   q:'A cancer screening model\'s false negatives (missed cancers) are far more costly than false positives (unnecessary follow-ups). Which metric should be prioritized during evaluation?',
+   opts:['Precision — TP/(TP+FP) — maximizes the fraction of predicted positives that are correct, minimizing false alarms',
+         'Accuracy — correct/total — provides a balanced view of both false positive and false negative errors across all cases',
+         'AUC-ROC — threshold-independent metric best used for comparing and ranking candidate models at development time',
+         'Recall (Sensitivity) — TP/(TP+FN) — maximizes the fraction of actual positives caught, directly minimizing missed cancer cases'],
+   ans:'Recall (Sensitivity) — TP/(TP+FN) — maximizes the fraction of actual positives caught, directly minimizing missed cancer cases',
+   exp:'The metric to optimize depends on the COST of each error type: Recall (Sensitivity) = TP/(TP+FN) — the proportion of ACTUAL positives correctly identified. Maximizing recall minimizes False Negatives (missed cases). This is the right metric when missing a positive is catastrophic (cancer screening, fraud detection in financial crime, safety defect detection). Precision = TP/(TP+FP) — minimizes False Positives. Right when FP is costly (spam filter: avoid blocking legitimate emails). Accuracy is misleading for imbalanced classes and doesn\'t distinguish FP vs FN costs. AUC-ROC is used for model COMPARISON across all thresholds, not for tuning a deployed model toward a specific error cost.'},
+
+  {l:'L2',lt:'Deep Dive Into Model Training',
+   q:'Bagging (Random Forest) and Boosting (XGBoost) both ensemble multiple models. Which statistical problem does each primarily solve?',
+   opts:['Bagging reduces bias by training models on diverse subsets; Boosting reduces variance by running models in parallel with averaged predictions',
+         'Both reduce variance equally — Bagging via data sampling, Boosting via L1/L2 regularization penalties on each tree',
+         'Bagging reduces variance by averaging models trained on random data subsets; Boosting reduces bias by sequentially correcting each model\'s errors',
+         'Bagging eliminates overfitting through random feature sampling; Boosting eliminates underfitting through increased model depth'],
+   ans:'Bagging reduces variance by averaging models trained on random data subsets; Boosting reduces bias by sequentially correcting each model\'s errors',
+   exp:'The bias-variance decomposition is key to understanding ensemble methods: Bagging (Bootstrap Aggregating) — trains multiple independent models on random subsets of training data, then averages their predictions. Each model has high variance (overfit to its random subset) but averaging cancels out the individual errors. Result: lower variance (less overfit) without changing bias. Random Forest is canonical bagging. Boosting (XGBoost, AdaBoost, Gradient Boosting) — trains models SEQUENTIALLY, where each new model focuses on correcting the residual errors of all previous models. Each model is intentionally weak (high bias/shallow tree) but the sequence progressively reduces the overall bias. The K21 rule: Bagging ↓ variance; Boosting ↓ bias.'},
+
+  {l:'L2',lt:'Deep Dive Into Model Training',
+   q:'SageMaker Debugger Profiler shows GPU utilization at 38% during a PyTorch training job. What is the most likely cause and fix?',
+   opts:['The model has too few parameters — GPU utilization below 50% means the model is underparameterized for the instance',
+         'L2 regularization is too aggressive — weight penalties prevent frequent GPU parameter updates during training',
+         'The learning rate is too low — the optimizer makes tiny gradient steps, leaving most GPU CUDA cores underutilized',
+         'A data loading bottleneck — the GPU is idle waiting for data. Fix: switch from File Mode to Pipe Mode or FastFile Mode'],
+   ans:'A data loading bottleneck — the GPU is idle waiting for data. Fix: switch from File Mode to Pipe Mode or FastFile Mode',
+   exp:'GPU underutilization in training almost always means the GPU is idle waiting for data — not computing. In File Mode, SageMaker downloads the entire training dataset from S3 to local EBS storage before training begins. If training batches are processed faster than new batches are loaded and preprocessed, the GPU sits idle. The diagnostic: Profiler shows low GPU % with high I/O wait. Fixes: Switch to Pipe Mode (streams RecordIO data directly to algorithm — no download wait) or FastFile Mode (POSIX S3 interface with <100ms first-byte latency, no format conversion); Use more DataLoader workers to parallelize CPU preprocessing; Use EFS or FSx for Lustre for maximum I/O throughput. Model complexity and regularization don\'t cause GPU idle time.'},
+
+  // L3: Distributed Training (5)
+  {l:'L3',lt:'Distributed Training',
+   q:'When should SageMaker Data Parallelism (SMDDP) be chosen over Model Parallelism (SMP)?',
+   opts:['When the model is too large for a single GPU — SMDDP partitions model layers across multiple GPUs in stages',
+         'When gradient synchronization between GPUs must be minimized — SMDDP avoids all inter-GPU AllReduce communication',
+         'When pipeline parallelism is needed — SMDDP sends micro-batches through model stages on different GPUs',
+         'When the full model fits on one GPU but the dataset is too large — each GPU holds a complete model copy and processes different data batches'],
+   ans:'When the full model fits on one GPU but the dataset is too large — each GPU holds a complete model copy and processes different data batches',
+   exp:'The decision rule from the K21 framework: Data Parallelism (SMDDP) — use when the model FIT in a single GPU\'s VRAM. Each GPU gets a full copy of the model. The training dataset is split across GPUs — each GPU processes different mini-batches. After each batch, gradients are synchronized via AllReduce (all GPUs average their gradients). Result: ~linear speedup — 4 GPUs ≈ 4× faster training. Implemented with smddprun in TensorFlow and PyTorch. Model Parallelism (SMP) — use when the model does NOT fit in a single GPU. The model itself is partitioned: GPU 1 holds layers 1-10, GPU 2 holds layers 11-20, etc. Required for 70B+ parameter LLMs that need 140GB+ VRAM.'},
+
+  {l:'L3',lt:'Distributed Training',
+   q:'SageMaker Model Parallelism (SMP) uses "pipeline parallelism." What does this specifically mean?',
+   opts:['Multiple full training pipelines run in parallel, each training a different model version on the same dataset simultaneously',
+         'Data is split into micro-batches with each GPU independently processing a full batch without any model partitioning',
+         'Gradient updates are batched across multiple AllReduce communication rounds to reduce inter-GPU network overhead',
+         'The model is split into stages across GPUs, and micro-batches flow through so different GPUs process different micro-batches simultaneously'],
+   ans:'The model is split into stages across GPUs, and micro-batches flow through so different GPUs process different micro-batches simultaneously',
+   exp:'Pipeline parallelism solves the "bubble" problem in model parallelism. Naive model parallelism: GPU 1 processes a batch through layers 1-10, passes activations to GPU 2, which processes layers 11-20, etc. GPU 1 sits idle while GPU 2 is working. Pipeline parallelism: the training mini-batch is split into micro-batches. While GPU 2 is processing micro-batch 1 through its layers, GPU 1 is already processing micro-batch 2 through its layers. Different stages work on different micro-batches simultaneously — filling the pipeline and dramatically reducing idle time. This is how SMP achieves high GPU utilization when model parallelism is required for very large models like 70B LLMs.'},
+
+  {l:'L3',lt:'Distributed Training',
+   q:'A 70B parameter LLM training job fails with an out-of-memory error on the training instance. Which strategy is specifically required?',
+   opts:['Data Parallelism (SMDDP) — each GPU holds the full 70B model but processes a smaller fraction of the training data',
+         'Gradient checkpointing alone — trades compute for memory by recomputing activations, fitting the 70B model on fewer GPUs',
+         'Quantization alone — converting from FP32 to FP16 halves the 70B model VRAM requirement to ~70GB on one GPU',
+         'Model Parallelism (SMP) — partitions the 70B model layers across multiple GPUs so each GPU holds only a portion of the model'],
+   ans:'Model Parallelism (SMP) — partitions the 70B model layers across multiple GPUs so each GPU holds only a portion of the model',
+   exp:'A 70B parameter model in FP16 requires ~140GB VRAM. No single GPU in AWS training instances has 140GB VRAM (A100 has 80GB, H100 has 80GB). The ONLY solution when the model exceeds single-GPU VRAM is Model Parallelism: partition the model across multiple GPUs. Data Parallelism (option 1) gives EACH GPU a full model copy — it doesn\'t solve OOM for a model that can\'t fit on one GPU. Gradient checkpointing (option 2) reduces activation memory but the model weights alone won\'t fit. Quantization (option 3) helps but INT8 quantization of 70B still requires ~70GB — still too large for a single A100 at 80GB (and you need headspace for activations, gradients, optimizer state). SMP + quantization is often the combined approach.'},
+
+  {l:'L3',lt:'Distributed Training',
+   q:'SageMaker Spot Instances for training offer 90% cost savings. How are Spot interruptions handled without losing training progress?',
+   opts:['SageMaker terminates the job and starts a fresh training run from epoch 0 when Spot capacity is restored',
+         'SageMaker immediately moves the workload to an On-Demand instance when the Spot interruption begins',
+         'SageMaker pauses the job in GPU memory and resumes within 30 seconds when the same Spot capacity returns',
+         'SageMaker automatically saves checkpoints to S3 and resumes training from the last checkpoint when Spot capacity is restored'],
+   ans:'SageMaker automatically saves checkpoints to S3 and resumes training from the last checkpoint when Spot capacity is restored',
+   exp:'SageMaker Managed Spot Training works in conjunction with checkpointing. Configuration: enable use_spot_instances=True and specify a checkpoint_s3_uri. During training, you save model checkpoints periodically (e.g., every epoch). When AWS reclaims the Spot Instance, SageMaker waits for new Spot capacity, launches a replacement instance, and automatically loads the latest checkpoint from S3 to resume training from where it stopped — not from scratch. The max_wait_time parameter controls how long SageMaker waits for new Spot capacity before failing. Best for: fault-tolerant training jobs (most DL training is inherently checkpointable). Not suitable for jobs that cannot be interrupted mid-training.'},
+
+  {l:'L3',lt:'Distributed Training',
+   q:'Which SageMaker instance type is purpose-built for lowest-cost deep learning MODEL TRAINING?',
+   opts:['ml.g4dn (NVIDIA T4 GPU) — optimized primarily for inference workloads, not large-scale DL training',
+         'ml.c5 (Intel Xeon CPU) — cost-efficient for tabular ML but provides insufficient compute for DL training',
+         'ml.inf1 (AWS Inferentia) — a purpose-built chip for model inference acceleration, not available for training jobs',
+         'ml.trn1 (AWS Trainium) — purpose-built for deep learning training at lower cost than equivalent GPU (ml.p3/p4) instances'],
+   ans:'ml.trn1 (AWS Trainium) — purpose-built for deep learning training at lower cost than equivalent GPU (ml.p3/p4) instances',
+   exp:'AWS has purpose-built silicon for ML: Trainium (trn1 instances) — the training chip. Provides high-throughput tensor computation optimized for DL training. Delivers better price-performance than equivalent NVIDIA GPU instances (ml.p3/p4) for DL training workloads. Use with Neuron SDK for TensorFlow/PyTorch. Best for: cost-sensitive large-scale DL training. Inferentia (inf1/inf2 instances) — the inference chip. Optimized for high-throughput, low-latency model serving. NOT for training. ml.g4dn (T4) — good for inference and small model training. ml.p3 (V100) / ml.p4 (A100) — high-performance GPU for training but more expensive than Trainium. ml.c5 (CPU) — for tabular ML (XGBoost, scikit-learn), not DL.'},
+
+  // L4: Hyperparameter For AWS (5)
+  {l:'L4',lt:'Hyperparameter For AWS',
+   q:'In XGBoost, which hyperparameter controls L1 regularization, and what is its primary effect on the trained model?',
+   opts:['lambda — adds L2 (squared) regularization that shrinks all tree leaf weights proportionally toward zero',
+         'gamma — sets the minimum loss reduction required to split a tree node, controlling tree pruning complexity',
+         'eta — the learning rate that controls the step size of each gradient boosting iteration during training',
+         'alpha — adds L1 (absolute value) regularization that drives low-importance leaf weights to exactly zero'],
+   ans:'alpha — adds L1 (absolute value) regularization that drives low-importance leaf weights to exactly zero',
+   exp:'XGBoost regularization parameters: alpha — L1 regularization. Adds |w| penalty for leaf weights. Drives weights to exactly zero → sparse trees → implicit feature selection. Useful when you have many irrelevant features. lambda — L2 regularization. Adds w² penalty. Shrinks weights proportionally but never to exactly zero → smoother models. Default lambda=1 in XGBoost. gamma — Minimum loss reduction for a node split. A split only happens if it reduces loss by more than gamma. Controls tree complexity (pruning). eta — Learning rate (shrinkage). Scales the contribution of each tree to prevent overfitting. Range: 0.01-0.3 typically. max_depth — Controls tree depth (default 6). The classic L1=alpha, L2=lambda naming from the XGBoost documentation is the exam convention.'},
+
+  {l:'L4',lt:'Hyperparameter For AWS',
+   q:'A neural network model shows high validation loss from the very first epoch, never improving. Which hyperparameter issue is the most likely cause?',
+   opts:['Batch size too small — noisy gradients from small batches cause slow learning but not immediate failure from epoch 1',
+         'Too many epochs configured — overfitting appears gradually after many epochs, not from the very first epoch',
+         'Max depth too large — excessive tree depth causes overfitting in XGBoost but not gradient divergence in neural networks',
+         'Learning rate too high — the optimizer overshoots the loss minimum on every step, causing divergence from the very start'],
+   ans:'Learning rate too high — the optimizer overshoots the loss minimum on every step, causing divergence from the very start',
+   exp:'Learning rate is the most critical hyperparameter in deep learning. Too high: the gradient step is so large that the optimizer "jumps over" the loss minimum every update — validation loss explodes from epoch 1, training loss also fails to decrease, or oscillates wildly. The loss may even show NaN values (numerical overflow). This is the clear diagnostic: high val loss from epoch 1, no improvement pattern. Fixes: reduce learning rate by 10× or 100×; use learning rate warm-up (start very small, ramp up over first N steps); use adaptive optimizers like Adam which adjust per-parameter learning rates. Batch size effects (noisy gradients) appear as slow convergence, not immediate divergence. Overfitting from too many epochs appears as a diverging val loss only AFTER training loss is already low.'},
+
+  {l:'L4',lt:'Hyperparameter For AWS',
+   q:'SageMaker Clarify\'s post-training bias metric "DPPL" specifically measures what?',
+   opts:['Data Proportion of Pre-training Labels — the raw class imbalance in the training dataset before model training',
+         'Difference in Pre-training Prediction Likelihood — baseline prediction rate before fine-tuning on domain data',
+         'Disparate Prediction Probability Level — the average model confidence difference between majority and minority groups',
+         'Difference in Positive Predicted Labels — whether the model predicts positive outcomes at different rates across demographic groups'],
+   ans:'Difference in Positive Predicted Labels — whether the model predicts positive outcomes at different rates across demographic groups',
+   exp:'Clarify provides different bias metrics at different stages: Pre-training metrics (on raw data before training): CI (Class Imbalance) — imbalance in label distribution; DPL (Difference in Proportions of Labels) — label disparity across demographic groups; KL/JS Divergence — distributional difference between groups. Post-training metrics (on model predictions): DPPL (Difference in Positive Predicted Labels) — the KEY post-training fairness metric. Measures: for group A, what % got a positive prediction? For group B, what %? If these rates differ significantly, the model discriminates. Disparate Impact — ratio of positive prediction rates between groups (should be close to 1.0). Post-training metrics catch unfair MODEL BEHAVIOR that wasn\'t obvious in the training data.'},
+
+  {l:'L4',lt:'Hyperparameter For AWS',
+   q:'SageMaker Debugger automatically triggers a CloudWatch alarm when it detects which type of training issue?',
+   opts:['When the training job exceeds its configured maximum runtime limit in the job specification parameters',
+         'When GPU utilization drops below 50% — indicating a data loading bottleneck requiring input mode change',
+         'When validation accuracy fails to improve for more than 3 consecutive epochs during the training run',
+         'When built-in rules detect vanishing/exploding gradients, dead ReLU neurons, or overfitting — without any manual instrumentation'],
+   ans:'When built-in rules detect vanishing/exploding gradients, dead ReLU neurons, or overfitting — without any manual instrumentation',
+   exp:'SageMaker Debugger has 40+ built-in rules that automatically monitor training job internals and fire CloudWatch alarms when triggered: VanishingGradient — gradients become too small for weight updates (common in deep networks without BatchNorm/residual connections); ExplodingGradient — gradients grow uncontrollably (causes NaN loss); DeadRelu — ReLU neurons always output 0 (stuck neurons never activate); Overfit — growing gap between training and validation metrics; OverTraining — metrics stop improving but training continues; ClassImbalance — class distribution mismatch in mini-batches. No instrumentation is required — Debugger automatically attaches to TensorFlow and PyTorch training jobs and saves tensor data via hooks. When a rule fires, CloudWatch alarm triggers and can stop the job via EventBridge.'},
+
+  {l:'L4',lt:'Hyperparameter For AWS',
+   q:'SageMaker Experiments tracks which types of information across training runs to support reproducibility?',
+   opts:['Source code diffs between training runs and the Git commit hash that produced each registered model version',
+         'Customer cost breakdown per training job and estimated vs actual Spot Instance savings per experiment',
+         'Auto-generated SHAP feature importance plots and per-feature bias scores calculated during each training job',
+         'Hyperparameters, evaluation metrics, and model artifacts — enabling comparison and lineage from data to endpoint'],
+   ans:'Hyperparameters, evaluation metrics, and model artifacts — enabling comparison and lineage from data to endpoint',
+   exp:'SageMaker Experiments provides a systematic way to track and compare ML experiments. For each training run (trial), it automatically logs: Hyperparameters (learning rate, batch size, all algorithm parameters); Metrics (training loss, validation accuracy, F1 per epoch); Artifacts (model checkpoints, evaluation outputs, S3 URIs). In SageMaker Studio, you can compare multiple trials side-by-side in a table, visualize metric curves, and identify which configuration produced the best result. Full lineage is recorded: which dataset → which training job → which model → which endpoint. This enables reproducibility (exact parameters that produced a model) and audit (full history of what was tried and why certain models were selected for production).'},
+
+  // L5: Tuning Job in AWS (5)
+  {l:'L5',lt:'Tuning Job in AWS',
+   q:'SageMaker AMT Bayesian Optimization is described as the "best default" for expensive training jobs. What makes it superior to Random Search?',
+   opts:['Bayesian runs all jobs fully in parallel, achieving higher throughput than sequential Bayesian methods per hour',
+         'Bayesian applies gradient descent to the hyperparameter space, finding the optimum in fewer mathematical steps',
+         'Bayesian eliminates the need to define hyperparameter ranges — it auto-discovers the search space boundaries',
+         'Bayesian uses a Gaussian Process to learn from previous job results and predict the best next hyperparameter values — requiring fewer total jobs'],
+   ans:'Bayesian uses a Gaussian Process to learn from previous job results and predict the best next hyperparameter values — requiring fewer total jobs',
+   exp:'Random Search: each job samples hyperparameters independently at random from defined ranges — fully parallel but "dumb." It doesn\'t use what it learned from previous jobs. Bayesian Optimization: builds a probabilistic surrogate model (Gaussian Process) of the relationship between hyperparameters and the objective metric. After each completed job, it updates the GP with the new (hyperparameters, metric) data point and uses an acquisition function (Expected Improvement) to predict which configuration is most promising to try next. Result: it intelligently focuses the search on the promising region, typically finding better hyperparameters in 3-5× fewer jobs than Random Search. Tradeoff: lower parallelism (each new job depends on previous results) — but for expensive multi-hour training jobs, the compute saving is enormous.'},
+
+  {l:'L5',lt:'Tuning Job in AWS',
+   q:'SageMaker AMT Hyperband is specifically most effective for which training scenario?',
+   opts:['Wide hyperparameter search spaces with many categorical choices — Hyperband efficiently handles discrete parameter grids',
+         'Small datasets where full training jobs complete in under 5 minutes — Hyperband\'s early stopping shines at this scale',
+         'Initial exploration with no prior knowledge of good hyperparameter ranges — Hyperband is the best cold-start strategy',
+         'Deep learning training jobs taking hours each — Hyperband starts many configurations at low resource, early-stops poor ones, promoting only promising configurations to full training'],
+   ans:'Deep learning training jobs taking hours each — Hyperband starts many configurations at low resource, few epochs, early-stops poor ones, promoting only promising configurations to full training',
+   exp:'Hyperband is a multi-fidelity hyperparameter optimization method. It works by: (1) Starting a large number of configurations with a low budget (e.g., 5 epochs out of 100 total); (2) Evaluating preliminary performance at this low resource level; (3) Early-stopping the bottom fraction (e.g., worst 75%) of configurations; (4) Allocating more resources (more epochs) to the surviving configurations; (5) Repeat. This "successive halving" approach is extremely efficient when: (a) Training jobs are long (hours per full run) — Hyperband avoids spending hours on bad configurations; (b) Early performance correlates with final performance — promising configs show up early. Hyperband can explore 5-10× more configurations than Bayesian in the same compute budget for DL jobs, because it eliminates bad configs early rather than running them to completion.'},
+
+  {l:'L5',lt:'Tuning Job in AWS',
+   q:'What does SageMaker AMT "Warm Start" provide that a fresh tuning job does not?',
+   opts:['Pre-warming GPU instances before the first training job to eliminate cold-start latency for the initial batch',
+         'Resuming a training job from the last S3 checkpoint after a Spot Instance interruption during a tuning job run',
+         'Auto-initializing all hyperparameters to K21 Academy-recommended defaults based on the algorithm selected',
+         'Initializing a new AMT tuning run using results from a previous run — extending search range or adding more jobs without starting from scratch'],
+   ans:'Initializing a new AMT tuning run using results from a previous run — extending search range or adding more jobs without starting from scratch',
+   exp:'SageMaker AMT Warm Start allows iterative hyperparameter search. Use cases: (1) Resume an incomplete search — if your tuning job exhausted its max_jobs budget but hasn\'t converged, create a new job with Warm Start pointing at the original job; (2) Extend search range — discovered the optimum is near the edge of your range? Warm Start a new job with an extended range; (3) Add more jobs — want to refine with 20 more trials after an initial 50-job run. The Warm Start job initializes its Gaussian Process (for Bayesian) with ALL results from the parent job — it immediately benefits from all prior learning rather than starting blind. This makes iterative hyperparameter optimization much more efficient and avoids re-running configurations already explored.'},
+
+  {l:'L5',lt:'Tuning Job in AWS',
+   q:'How does SageMaker "Shadow Variant" testing differ from standard A/B testing on an endpoint?',
+   opts:['Shadow testing routes 50/50 traffic between old and new; A/B testing uses a smaller 5-10% split for the new variant',
+         'Shadow testing is used only for batch inference comparisons; A/B testing is limited to real-time endpoint evaluation',
+         'Shadow testing requires user consent to participate in the experiment; A/B testing applies to all traffic automatically',
+         'Shadow testing mirrors live traffic to the new model without exposing its responses to users; A/B testing routes a percentage of real traffic to the new model and returns its responses to users'],
+   ans:'Shadow testing mirrors live traffic to the new model without exposing its responses to users; A/B testing routes a percentage of real traffic to the new model and returns its responses to users',
+   exp:'Two deployment validation strategies with different risk profiles: Shadow Testing (Shadow Variant) — 100% of production traffic is also sent (mirrored) to the new model. The production model\'s response is returned to users. The shadow model\'s response is logged and compared internally — users NEVER see the shadow model\'s output. Zero user impact. Use to validate quality, latency, and cost before any real exposure. A/B Testing (Multi-Variant Endpoint) — a configurable percentage (5%, 10%, 20%) of actual user traffic is routed to the new model and RECEIVES ITS RESPONSES. Real users experience the new model. Used to measure actual business impact (click-through, conversion, engagement). Higher risk but provides real behavioral signals. K21 rule: Shadow first → validate quality; A/B next → validate business impact.'},
+
+  {l:'L5',lt:'Tuning Job in AWS',
+   q:'In the SageMaker Model Registry approval workflow, which state must a model reach before it can be deployed to a production endpoint?',
+   opts:['Registered — models are automatically deployable immediately after being registered in a Model Package Group',
+         'Validated — a separate SageMaker validation job must complete successfully before the registry accepts the artifact',
+         'Published — the model must be published to the AWS Marketplace catalog before production endpoint deployment',
+         'Approved — models start as PendingManualApproval, move to Approved (human or automated CI/CD check), then become deployable'],
+   ans:'Approved — models start as PendingManualApproval, move to Approved (human or automated CI/CD check), then become deployable',
+   exp:'The SageMaker Model Registry enforces a governance gate. Workflow: (1) Register — a training job (or SageMaker Pipelines) registers the model artifact with metrics in a Model Package Group; (2) Status = PendingManualApproval — the model exists in the registry but cannot be deployed; (3) Approval step — a human reviewer (data scientist, ML engineer, compliance officer) reviews model metrics, bias reports, and evaluation results in SageMaker Studio and clicks "Approve." OR an automated Lambda function (CI/CD) checks metrics against thresholds and approves programmatically; (4) Status = Approved — the model can now be deployed to a SageMaker endpoint via SageMaker Pipelines or directly. Rejected models are archived but auditable. This approval gate ensures no untested model reaches production automatically.'}
+];
+
+const LESSONS=[
+  {id:'L1',title:'Model Training'},
+  {id:'L2',title:'Deep Dive Into Model Training'},
+  {id:'L3',title:'Distributed Training'},
+  {id:'L4',title:'Hyperparameter For AWS'},
+  {id:'L5',title:'Tuning Job in AWS'}
+];
+const TOTAL=25;
+
+let shuffled=[],qa=[],curIdx=0,elapsed=0,timerInt=null,finalScore=0,finalTime=0,hasResults=false;
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function fmtTime(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');}
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+
+function startQuiz(){
+  shuffled=shuffle(QB).map(q=>({...q,dispOpts:shuffle(q.opts)}));
+  qa=new Array(TOTAL).fill(null);curIdx=0;elapsed=0;finalScore=0;finalTime=0;hasResults=false;
+  clearInterval(timerInt);timerInt=setInterval(()=>{elapsed++;document.getElementById('timerEl').textContent=fmtTime(elapsed);},1000);
+  buildDots();showScreen('quizScreen');renderQ(0);
+}
+function buildDots(){document.getElementById('qnav').innerHTML=shuffled.map((_,i)=>`<button class="qnd" id="nd${i}" onclick="goTo(${i})">${i+1}</button>`).join('');}
+function refreshDots(){shuffled.forEach((_,i)=>{const d=document.getElementById(`nd${i}`);if(!d)return;d.className='qnd';if(i===curIdx)d.classList.add('cur');else if(qa[i])d.classList.add(qa[i].ok?'ok':'err');});const cur=document.getElementById(`nd${curIdx}`);if(cur)cur.scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'});}
+
+function renderQ(i){
+  curIdx=i;const q=shuffled[i],a=qa[i],L=['A','B','C','D'];
+  document.getElementById('qNumH').textContent=i+1;
+  document.getElementById('progFill').style.width=`${((i+1)/TOTAL)*100}%`;
+  document.getElementById('lessonTag').textContent=`${q.l} · ${q.lt}`;
+  document.getElementById('qLbl').textContent=`Question ${i+1} of ${TOTAL}`;
+  document.getElementById('qText').textContent=q.q;
+  const grid=document.getElementById('optsGrid'),fb=document.getElementById('fbPanel');
+  if(a){
+    grid.innerHTML=q.dispOpts.map((o,j)=>{const isCor=o===q.ans,isWrong=o===a.selected&&!isCor;return`<div class="opt-btn off ${isCor?'ok':isWrong?'err':''}"><div class="opt-lbl">${isCor?'✓':isWrong?'✗':L[j]}</div><div class="opt-txt">${o}</div></div>`;}).join('');
+    document.getElementById('fbIco').textContent=a.ok?'✓':'✗';document.getElementById('fbIco').className=`fb-ico ${a.ok?'ok':'err'}`;
+    document.getElementById('fbStatus').textContent=a.ok?'Correct!':'Not quite — here\'s why:';document.getElementById('fbStatus').className=`fb-status ${a.ok?'ok':'err'}`;
+    const ca=document.getElementById('fbCorrect');if(!a.ok){ca.textContent=`✦ Correct answer: ${q.ans}`;ca.classList.add('show');}else ca.classList.remove('show');
+    document.getElementById('fbExp').textContent=q.exp;document.getElementById('fbNextTxt').textContent=i===TOTAL-1?'You\'re on the last question':'Next Question';fb.classList.add('show');
+  }else{grid.innerHTML=q.dispOpts.map((o,j)=>`<button class="opt-btn" onclick="pick(${j})"><div class="opt-lbl">${L[j]}</div><div class="opt-txt">${o}</div></button>`).join('');fb.classList.remove('show');}
+  document.getElementById('prevBtn').disabled=i===0;document.getElementById('nextBtn').disabled=i===TOTAL-1;document.getElementById('nextBtn').textContent=i===TOTAL-1?'Last ↓':'Next →';
+  document.getElementById('lastHint').classList.toggle('show',i===TOTAL-1);refreshDots();
+}
+
+function pick(si){if(qa[curIdx])return;const q=shuffled[curIdx],sel=q.dispOpts[si];qa[curIdx]={selected:sel,ok:sel===q.ans};renderQ(curIdx);}
+function goTo(i){renderQ(i);}function goPrev(){if(curIdx>0)renderQ(curIdx-1);}function goNext(){if(curIdx<TOTAL-1)renderQ(curIdx+1);}
+function handleFbNext(){if(curIdx<TOTAL-1)renderQ(curIdx+1);else openModal();}
+function openModal(){const answered=qa.filter(a=>a!==null).length,left=TOTAL-answered;document.getElementById('mMsg').textContent=left===0?`All ${TOTAL} questions answered. Ready to submit?`:`Answered ${answered} of ${TOTAL}. ${left} question${left>1?'s are':' is'} still unanswered.`;document.getElementById('mNote').textContent=left>0?'Unanswered questions will be counted as incorrect.':'';document.getElementById('submitModal').classList.add('show');}
+function closeModal(){document.getElementById('submitModal').classList.remove('show');}
+function confirmSubmit(){closeModal();clearInterval(timerInt);finalTime=elapsed;finalScore=qa.filter(a=>a&&a.ok).length;hasResults=true;showResults();}
+
+function showResults(){
+  const pct=Math.round((finalScore/TOTAL)*100),wrong=qa.filter(a=>a&&!a.ok).length,skipped=qa.filter(a=>a===null).length;
+  showScreen('resultsScreen');
+  let title,msg;
+  if(pct>=80){title='🟢 Strong Performance';msg=`Excellent! You scored ${pct}% across all 5 lessons. Solid command of model training, distributed strategies, and SageMaker AMT — ready to advance.`;}
+  else if(pct>=60){title='🟡 Good Progress';msg=`You scored ${pct}%. Review weaker lessons below. Focus on: SMDDP vs SMP (when to use each), Bayesian vs Hyperband vs Random Search, and Shadow Testing vs A/B Testing.`;}
+  else{title='🔴 Needs Review';msg=`You scored ${pct}%. Revisit the Module 14 lessons — pay close attention to regularization types (L1/L2/Dropout), overfitting vs underfitting signals, and the AMT strategy comparisons.`;}
+  document.getElementById('bandTitle').textContent=title;document.getElementById('bandMsg').textContent=msg;
+  document.getElementById('sTime').textContent=fmtTime(finalTime);document.getElementById('sRight').textContent=finalScore;document.getElementById('sWrong').textContent=wrong;document.getElementById('sSkip').textContent=skipped;document.getElementById('sCorrect').textContent=finalScore;
+  const CIRC=395.84,ring=document.getElementById('scoreRing');ring.setAttribute('stroke',pct>=80?'#8DC63F':pct>=60?'#F59E0B':'#EF4444');
+  setTimeout(()=>{ring.style.transition='stroke-dashoffset 1.5s cubic-bezier(.25,.46,.45,.94)';ring.style.strokeDashoffset=CIRC*(1-pct/100);},200);
+  let c=0;const pEl=document.getElementById('sPct'),step=pct/60;const cnt=setInterval(()=>{c=Math.min(c+step,pct);pEl.textContent=Math.round(c);if(c>=pct)clearInterval(cnt);},25);
+  document.getElementById('bdTable').innerHTML=LESSONS.map(l=>{
+    const la=qa.map((a,i)=>({a,q:shuffled[i]})).filter(({q})=>q.l===l.id);
+    const lc=la.filter(({a})=>a&&a.ok).length,lt=la.length,lp=lt>0?Math.round((lc/lt)*100):0;
+    const col=lp>=80?'#8DC63F':lp>=60?'#F59E0B':'#EF4444';const cls=lp>=80?'bs-strong':lp>=60?'bs-good':'bs-review';const lbl=lp>=80?'Strong':lp>=60?'Good':'Review';
+    return`<div class="bd-row"><div><div class="bd-lid">${l.id}</div><div class="bd-ltitle">${l.title}</div><div class="bd-bar"><div class="bd-bar-fill" data-w="${lp}" style="background:${col};transition:width 1.1s cubic-bezier(.16,1,.3,1)"></div></div></div><div class="bd-score">${lc}/${lt}</div><div class="bd-band ${cls}">${lbl}</div></div>`;
+  }).join('');
+  setTimeout(()=>{document.querySelectorAll('.bd-bar-fill').forEach(b=>{b.style.width=b.dataset.w+'%';});},450);
+}
+
+function showReview(){
+  showScreen('reviewScreen');const L=['A','B','C','D'];
+  document.getElementById('rvSubtitle').textContent=`All 25 questions · Your score: ${finalScore}/25`;
+  document.getElementById('reviewList').innerHTML=shuffled.map((q,i)=>{
+    const a=qa[i],answered=a!==null,correct=answered&&a.ok;
+    let badge=!answered?'<span class="rv-badge rv-badge-skip">Not Answered</span>':correct?'<span class="rv-badge rv-badge-ok">✓ Correct</span>':'<span class="rv-badge rv-badge-err">✗ Incorrect</span>';
+    const opts=q.dispOpts.map((o,j)=>{const isCor=o===q.ans,isUserWrong=answered&&o===a.selected&&!isCor;let cls='',tag='',lbl=L[j];if(isCor){cls='rv-ok';lbl='✓';tag='<span class="rv-tag rv-tag-ok">Correct Answer</span>';}else if(isUserWrong){cls='rv-err';lbl='✗';tag='<span class="rv-tag rv-tag-err">Your Answer</span>';}return`<div class="rv-opt ${cls}"><div class="rv-opt-lbl">${lbl}</div><div class="rv-opt-txt">${o}</div>${tag}</div>`;}).join('');
+    return`<div class="rv-card"><div class="rv-card-hdr"><div class="rv-qn">${i+1}</div>${badge}<div class="rv-lesson">${q.l} · ${q.lt}</div></div><div class="rv-qtxt">${q.q}</div><div class="rv-opts">${opts}</div><div class="rv-exp"><div class="rv-exp-ico">📖</div><div><div class="rv-exp-lbl">Explanation</div><div class="rv-exp-txt">${q.exp}</div></div></div></div>`;
+  }).join('');
+}
+function backToResults(){hasResults?showScreen('resultsScreen'):showScreen('startScreen');}
+function retake(){startQuiz();}
+</script>
+</body>
+</html>

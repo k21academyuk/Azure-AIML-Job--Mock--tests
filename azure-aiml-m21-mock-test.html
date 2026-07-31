@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Module 21: AI Governance & Compliance — Practice Test | Azure AI/ML/GenAI Job Oriented Program</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#F7F8FA; --surface:#FFFFFF; --border:#E8EAEE;
+  --text-1:#111827; --text-2:#4B5563; --text-3:#9CA3AF;
+  --green:#8DC63F; --green-mid:#79B030; --green-bg:#F1F8E8; --green-dark:#4A7A1B;
+  --navy:#1A1248; --navy-mid:#2E2080; --blue:#1B9BD9;
+  --amber:#F5A623; --amber-bg:#FFF6E5; --amber-dark:#8A5A00;
+  --red:#E5484D; --red-bg:#FDECEC; --red-dark:#A9231F;
+  --radius:16px; --radius-lg:24px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text-1);-webkit-font-smoothing:antialiased;min-height:100vh;}
+.screen{display:none;}
+.screen.active{display:block;}
+
+/* ---------- Top bar ---------- */
+.topbar{
+  background:var(--navy); color:#fff; padding:14px 28px;
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;
+}
+.topbar .brand{display:flex; align-items:center; gap:10px; font-weight:800; font-size:15px;}
+.topbar .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--green);}
+.topbar .program{font-size:12px; color:#C9C4E8; font-weight:500;}
+
+/* ---------- Start screen ---------- */
+.start-wrap{max-width:820px; margin:0 auto; padding:48px 20px 70px;}
+.eyebrow{
+  display:inline-flex; align-items:center; gap:7px; background:var(--green-bg);
+  border:1px solid #C8E89A; color:var(--green-dark); font-size:11px; font-weight:700;
+  letter-spacing:.08em; text-transform:uppercase; padding:5px 13px; border-radius:100px; margin-bottom:16px;
+}
+.eyebrow i{width:5px;height:5px;background:var(--green);border-radius:50%;display:inline-block;font-style:normal;}
+.start-title{font-size:clamp(26px,4vw,36px); font-weight:800; letter-spacing:-.025em; line-height:1.2; margin-bottom:10px;}
+.start-title .accent{color:var(--green-mid);}
+.start-sub{color:var(--text-2); font-size:15.5px; line-height:1.6; margin-bottom:28px; max-width:640px;}
+
+.info-cards{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:28px;}
+.info-card{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); padding:22px 18px; text-align:center;}
+.info-card .v{font-size:32px; font-weight:800; color:var(--navy); line-height:1;}
+.info-card .k{font-size:12.5px; font-weight:700; color:var(--text-2); margin-top:8px;}
+
+.lesson-table{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); overflow:hidden; margin-bottom:28px;}
+.lesson-table .lt-head{background:var(--navy); color:#fff; padding:14px 20px; font-weight:700; font-size:14px; display:flex; justify-content:space-between;}
+.lesson-row{display:flex; justify-content:space-between; align-items:center; padding:12px 20px; border-top:1px solid var(--border); font-size:14px;}
+.lesson-row:first-of-type{border-top:none;}
+.lesson-row .ln{color:var(--text-1); font-weight:600;}
+.lesson-row .lc{color:var(--text-3); font-weight:500;}
+.lesson-row .badge{background:var(--green-bg); color:var(--green-dark); font-size:12px; font-weight:700; padding:3px 10px; border-radius:100px;}
+
+.band-legend{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); padding:20px; margin-bottom:32px;}
+.band-legend .bl-title{font-size:13px; font-weight:700; color:var(--text-1); margin-bottom:12px;}
+.band-row{display:flex; align-items:center; gap:12px; padding:8px 0;}
+.band-dot{width:11px;height:11px;border-radius:50%; flex-shrink:0;}
+.band-row .bt{font-weight:700; font-size:13.5px; min-width:150px;}
+.band-row .bd{font-size:13px; color:var(--text-2);}
+
+.notice{
+  display:flex; gap:10px; align-items:flex-start; background:var(--green-bg); border:1px solid #C8E89A;
+  border-radius:12px; padding:14px 16px; font-size:13.5px; color:var(--green-dark); margin-bottom:28px; line-height:1.5;
+}
+
+.btn-primary{
+  display:inline-flex; align-items:center; gap:10px; background:var(--navy); color:#fff;
+  font-family:'DM Sans',sans-serif; font-size:15px; font-weight:700; padding:15px 32px;
+  border-radius:100px; border:none; cursor:pointer; box-shadow:0 4px 20px rgba(26,18,72,.22);
+  transition:background .2s, transform .18s, box-shadow .2s;
+}
+.btn-primary:hover{background:var(--navy-mid); transform:translateY(-2px); box-shadow:0 8px 28px rgba(26,18,72,.3);}
+.btn-green{
+  display:inline-flex; align-items:center; gap:10px; background:var(--green); color:#fff;
+  font-family:'DM Sans',sans-serif; font-size:15px; font-weight:700; padding:15px 32px;
+  border-radius:100px; border:none; cursor:pointer; box-shadow:0 4px 16px rgba(141,198,63,.35);
+  transition:background .2s, transform .18s, box-shadow .2s;
+}
+.btn-green:hover{background:var(--green-mid); transform:translateY(-2px); box-shadow:0 8px 28px rgba(141,198,63,.45);}
+.btn-outline{
+  display:inline-flex; align-items:center; gap:8px; background:#fff; color:var(--navy);
+  font-family:'DM Sans',sans-serif; font-size:14px; font-weight:700; padding:12px 24px;
+  border-radius:100px; border:1.5px solid var(--navy); cursor:pointer; transition:all .18s;
+}
+.btn-outline:hover{background:var(--navy); color:#fff;}
+
+/* ---------- Exam screen ---------- */
+.exam-header{
+  background:var(--navy); color:#fff; padding:14px 24px; display:flex; align-items:center;
+  justify-content:space-between; flex-wrap:wrap; gap:12px; position:sticky; top:0; z-index:50;
+}
+.exam-title{font-weight:700; font-size:14.5px;}
+.exam-title span{color:#B9E27A;}
+.exam-meta{display:flex; align-items:center; gap:18px; font-size:13px;}
+.timer-pill{
+  display:flex; align-items:center; gap:7px; background:rgba(255,255,255,.1); padding:7px 14px;
+  border-radius:100px; font-weight:700; font-variant-numeric:tabular-nums;
+}
+.timer-pill .lbl{font-weight:500; color:#C9C4E8; font-size:11px; text-transform:uppercase; letter-spacing:.05em;}
+.progress-pill{background:rgba(255,255,255,.1); padding:7px 14px; border-radius:100px; font-weight:700;}
+
+.exam-body{display:grid; grid-template-columns:1fr 300px; gap:22px; max-width:1200px; margin:0 auto; padding:24px 20px 80px;}
+@media (max-width:880px){.exam-body{grid-template-columns:1fr;}}
+
+.q-card{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius-lg); padding:28px;}
+.q-top{display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:16px;}
+.q-num{font-size:12px; font-weight:700; color:var(--text-3); text-transform:uppercase; letter-spacing:.06em;}
+.lesson-tag{
+  display:inline-block; background:var(--green-bg); color:var(--green-dark); font-size:11.5px;
+  font-weight:700; padding:4px 11px; border-radius:100px; margin-top:6px;
+}
+.flag-btn{
+  display:flex; align-items:center; gap:6px; background:#fff; border:1.5px solid var(--border);
+  color:var(--text-2); font-family:'DM Sans',sans-serif; font-weight:700; font-size:13px;
+  padding:8px 16px; border-radius:100px; cursor:pointer; transition:all .18s; flex-shrink:0;
+}
+.flag-btn.flagged{background:var(--amber-bg); border-color:#F0C77C; color:var(--amber-dark);}
+.flag-btn:hover{border-color:var(--amber);}
+
+.q-text{font-size:17px; font-weight:600; line-height:1.55; color:var(--text-1); margin-bottom:22px;}
+
+.option{
+  display:flex; align-items:flex-start; gap:13px; padding:14px 16px; border:1.5px solid var(--border);
+  border-radius:12px; margin-bottom:10px; cursor:pointer; transition:all .15s; background:#fff;
+}
+.option:hover{border-color:var(--green); background:var(--green-bg);}
+.option.selected{border-color:var(--navy); background:#EEEBFA;}
+.option .opt-key{
+  width:26px; height:26px; border-radius:50%; border:1.5px solid var(--border); flex-shrink:0;
+  display:flex; align-items:center; justify-content:center; font-weight:700; font-size:12.5px; color:var(--text-2);
+}
+.option.selected .opt-key{background:var(--navy); border-color:var(--navy); color:#fff;}
+.option .opt-text{font-size:14.5px; line-height:1.5; color:var(--text-1); padding-top:3px;}
+
+.q-nav-btns{display:flex; justify-content:space-between; margin-top:22px; gap:10px;}
+
+/* Sidebar navigator */
+.sidebar{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius-lg); padding:20px; align-self:start; position:sticky; top:88px;}
+.sb-title{font-size:13px; font-weight:700; color:var(--text-1); margin-bottom:14px;}
+.nav-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:8px; margin-bottom:18px;}
+.nav-cell{
+  aspect-ratio:1; border-radius:8px; border:1.5px solid var(--border); background:#fff;
+  display:flex; align-items:center; justify-content:center; font-size:12.5px; font-weight:700;
+  color:var(--text-2); cursor:pointer; transition:all .15s; position:relative;
+}
+.nav-cell:hover{border-color:var(--navy);}
+.nav-cell.current{border-color:var(--navy); border-width:2px;}
+.nav-cell.answered{background:var(--green-bg); border-color:#C8E89A; color:var(--green-dark);}
+.nav-cell.flagged::after{
+  content:''; position:absolute; top:-3px; right:-3px; width:9px; height:9px; border-radius:50%; background:var(--amber);
+}
+.legend{display:flex; flex-direction:column; gap:8px; font-size:12px; color:var(--text-2); margin-bottom:18px;}
+.legend .lg-row{display:flex; align-items:center; gap:8px;}
+.legend .sw{width:13px; height:13px; border-radius:4px; border:1.5px solid var(--border);}
+.legend .sw.answered{background:var(--green-bg); border-color:#C8E89A;}
+.legend .sw.flagged{background:#fff; position:relative;}
+.legend .sw.flagged::after{content:'';position:absolute;top:-3px;right:-3px;width:8px;height:8px;border-radius:50%;background:var(--amber);}
+
+/* ---------- Results screen ---------- */
+.results-wrap{max-width:820px; margin:0 auto; padding:48px 20px 80px;}
+.band-hero{border-radius:var(--radius-lg); padding:36px; text-align:center; margin-bottom:28px;}
+.band-hero.strong{background:var(--green-bg); border:1.5px solid #C8E89A;}
+.band-hero.good{background:var(--amber-bg); border:1.5px solid #F0C77C;}
+.band-hero.needs{background:var(--red-bg); border:1.5px solid #F3B4B6;}
+.band-emoji{font-size:44px; margin-bottom:10px;}
+.band-label{font-size:24px; font-weight:800; margin-bottom:6px;}
+.band-hero.strong .band-label{color:var(--green-dark);}
+.band-hero.good .band-label{color:var(--amber-dark);}
+.band-hero.needs .band-label{color:var(--red-dark);}
+.band-msg{font-size:15px; color:var(--text-2); margin-bottom:18px;}
+.score-big{font-size:46px; font-weight:800; color:var(--navy);}
+.score-sub{font-size:13.5px; color:var(--text-3); font-weight:600;}
+
+.stat-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:28px;}
+.stat-card{background:var(--surface); border:1.5px solid var(--border); border-radius:12px; padding:16px; text-align:center;}
+.stat-card .sv{font-size:22px; font-weight:800; color:var(--navy);}
+.stat-card .sl{font-size:11.5px; color:var(--text-3); font-weight:700; text-transform:uppercase; letter-spacing:.04em; margin-top:3px;}
+
+.lesson-breakdown{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); padding:22px; margin-bottom:28px;}
+.lb-title{font-size:15px; font-weight:700; margin-bottom:16px;}
+.lb-row{margin-bottom:14px;}
+.lb-top{display:flex; justify-content:space-between; font-size:13px; font-weight:600; margin-bottom:6px;}
+.lb-top .lb-name{color:var(--text-1);}
+.lb-top .lb-score{color:var(--text-2);}
+.lb-bar-bg{background:#F0F1F4; border-radius:100px; height:9px; overflow:hidden;}
+.lb-bar-fill{height:100%; border-radius:100px; background:var(--green);}
+.lb-bar-fill.mid{background:var(--amber);}
+.lb-bar-fill.low{background:var(--red);}
+
+.action-row{display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:8px;}
+
+/* ---------- Review screen ---------- */
+.review-wrap{max-width:820px; margin:0 auto; padding:32px 20px 80px;}
+.review-filters{display:flex; gap:8px; margin-bottom:22px; flex-wrap:wrap;}
+.rf-btn{
+  background:#fff; border:1.5px solid var(--border); color:var(--text-2); font-family:'DM Sans',sans-serif;
+  font-weight:700; font-size:13px; padding:8px 16px; border-radius:100px; cursor:pointer; transition:all .15s;
+}
+.rf-btn.active{background:var(--navy); border-color:var(--navy); color:#fff;}
+.review-q{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); padding:22px; margin-bottom:16px;}
+.review-q .rq-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;}
+.result-tag{font-size:11.5px; font-weight:700; padding:3px 11px; border-radius:100px;}
+.result-tag.correct{background:var(--green-bg); color:var(--green-dark);}
+.result-tag.incorrect{background:var(--red-bg); color:var(--red-dark);}
+.result-tag.skipped{background:#F0F1F4; color:var(--text-2);}
+.review-q .rq-text{font-size:15px; font-weight:600; margin-bottom:14px; line-height:1.5;}
+.rq-opt{padding:10px 14px; border-radius:10px; margin-bottom:7px; font-size:13.5px; border:1.5px solid var(--border); display:flex; gap:10px;}
+.rq-opt.correct-answer{background:var(--green-bg); border-color:#C8E89A; color:var(--green-dark); font-weight:600;}
+.rq-opt.wrong-answer{background:var(--red-bg); border-color:#F3B4B6; color:var(--red-dark); font-weight:600;}
+.rq-explain{background:#F7F8FA; border-radius:10px; padding:13px 15px; font-size:13px; color:var(--text-2); line-height:1.55; margin-top:10px;}
+.rq-explain b{color:var(--text-1);}
+
+footer.k21-footer{text-align:center; padding:22px; font-size:12px; color:var(--text-3);}
+</style>
+</head>
+<body>
+
+<!-- ============ START SCREEN ============ -->
+<div id="screen-start" class="screen active">
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span> K21 Academy</div>
+    <div class="program">Azure AI/ML/GenAI Job Oriented Program</div>
+  </div>
+  <div class="start-wrap">
+    <div class="eyebrow"><i></i>Module Practice Test</div>
+    <div class="start-title">Module 21: <span class="accent">AI Governance & Compliance</span></div>
+    <p class="start-sub">A quick knowledge check across all 4 lessons in this module. This is practice, not an exam — take your time, review explanations, and retry as many times as you like.</p>
+
+    <div class="info-cards">
+      <div class="info-card"><div class="v">20</div><div class="k">Questions</div></div>
+      <div class="info-card"><div class="v">4</div><div class="k">Lessons</div></div>
+      <div class="info-card"><div class="v">∞</div><div class="k">Retries</div></div>
+    </div>
+
+    <div class="lesson-table">
+      <div class="lt-head"><span>Lessons Covered</span><span>Questions</span></div>
+      <div id="lesson-coverage"></div>
+    </div>
+
+    <div class="band-legend">
+      <div class="bl-title">How your score is shown</div>
+      <div class="band-row"><span class="band-dot" style="background:var(--green);"></span><span class="bt" style="color:var(--green-dark);">🟢 80–100% Strong</span><span class="bd">Ready to move to the next module</span></div>
+      <div class="band-row"><span class="band-dot" style="background:var(--amber);"></span><span class="bt" style="color:var(--amber-dark);">🟡 60–79% Good Progress</span><span class="bd">Review 1–2 lessons and retry</span></div>
+      <div class="band-row"><span class="band-dot" style="background:var(--red);"></span><span class="bt" style="color:var(--red-dark);">🔴 Below 60% Needs Review</span><span class="bd">Revisit the module before moving on</span></div>
+    </div>
+
+    <div class="notice">💡 There's no countdown and no fail state — this is here to help you find gaps, not to pressure you. Flag anything you're unsure of and revisit it in review mode afterward.</div>
+
+    <button class="btn-primary" onclick="startExam()">Start Practice →</button>
+  </div>
+  <footer class="k21-footer">K21 Academy · Azure AI/ML/GenAI Job Oriented Program · Module 21 Practice Test</footer>
+</div>
+
+<!-- ============ EXAM SCREEN ============ -->
+<div id="screen-exam" class="screen">
+  <div class="exam-header">
+    <div class="exam-title">Module 21 · <span>AI Governance & Compliance</span></div>
+    <div class="exam-meta">
+      <div class="timer-pill"><span class="lbl">Time</span><span id="timer-display">0:00</span></div>
+      <div class="progress-pill"><span id="progress-display">Q1 / 20</span></div>
+    </div>
+  </div>
+  <div class="exam-body">
+    <div class="q-card">
+      <div class="q-top">
+        <div>
+          <div class="q-num" id="q-num-label">Question 1 of 20</div>
+          <div class="lesson-tag" id="q-lesson-tag">Lesson 1</div>
+        </div>
+        <button class="flag-btn" id="flag-btn" onclick="toggleFlag()">🚩 Flag for review</button>
+      </div>
+      <div class="q-text" id="q-text"></div>
+      <div id="options-container"></div>
+      <div class="q-nav-btns">
+        <button class="btn-outline" id="prev-btn" onclick="prevQuestion()">← Previous</button>
+        <button class="btn-outline" id="next-btn" onclick="nextQuestion()">Next →</button>
+      </div>
+    </div>
+    <div class="sidebar">
+      <div class="sb-title">Question Navigator</div>
+      <div class="nav-grid" id="nav-grid"></div>
+      <div class="legend">
+        <div class="lg-row"><span class="sw answered"></span> Answered</div>
+        <div class="lg-row"><span class="sw"></span> Unanswered</div>
+        <div class="lg-row"><span class="sw flagged"></span> Flagged</div>
+      </div>
+      <button class="btn-green" style="width:100%; justify-content:center;" onclick="confirmSubmit()">Submit Practice Test</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ RESULTS SCREEN ============ -->
+<div id="screen-results" class="screen">
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span> K21 Academy</div>
+    <div class="program">Azure AI/ML/GenAI Job Oriented Program</div>
+  </div>
+  <div class="results-wrap">
+    <div class="band-hero" id="band-hero">
+      <div class="band-emoji" id="band-emoji">🟢</div>
+      <div class="band-label" id="band-label">Strong</div>
+      <div class="band-msg" id="band-msg">Ready to move to the next module</div>
+      <div class="score-big" id="score-big">0%</div>
+      <div class="score-sub" id="score-sub">0 of 30 correct</div>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-card"><div class="sv" id="stat-correct">0</div><div class="sl">Correct</div></div>
+      <div class="stat-card"><div class="sv" id="stat-incorrect">0</div><div class="sl">Incorrect</div></div>
+      <div class="stat-card"><div class="sv" id="stat-skipped">0</div><div class="sl">Skipped</div></div>
+      <div class="stat-card"><div class="sv" id="stat-time">0:00</div><div class="sl">Time Taken</div></div>
+    </div>
+
+    <div class="lesson-breakdown">
+      <div class="lb-title">Lesson-wise Breakdown</div>
+      <div id="lesson-breakdown-body"></div>
+    </div>
+
+    <div class="action-row">
+      <button class="btn-primary" onclick="showReview()">📋 Review Answers</button>
+      <button class="btn-green" onclick="location.reload()">🔄 Retry Practice Test</button>
+    </div>
+  </div>
+  <footer class="k21-footer">K21 Academy · Azure AI/ML/GenAI Job Oriented Program · Module 21 Practice Test</footer>
+</div>
+
+<!-- ============ REVIEW SCREEN ============ -->
+<div id="screen-review" class="screen">
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span> K21 Academy</div>
+    <div class="program">Review Mode · Module 21</div>
+  </div>
+  <div class="review-wrap">
+    <div class="review-filters">
+      <button class="rf-btn active" data-filter="all" onclick="setReviewFilter('all')">All (20)</button>
+      <button class="rf-btn" data-filter="correct" onclick="setReviewFilter('correct')">✅ Correct</button>
+      <button class="rf-btn" data-filter="incorrect" onclick="setReviewFilter('incorrect')">❌ Incorrect</button>
+      <button class="rf-btn" data-filter="skipped" onclick="setReviewFilter('skipped')">⬜ Skipped</button>
+      <button class="rf-btn" data-filter="flagged" onclick="setReviewFilter('flagged')">🚩 Flagged</button>
+    </div>
+    <div id="review-list"></div>
+    <div class="action-row">
+      <button class="btn-primary" onclick="backToResults()">← Back to Results</button>
+      <button class="btn-green" onclick="location.reload()">🔄 Retry Practice Test</button>
+    </div>
+  </div>
+  <footer class="k21-footer">K21 Academy · Azure AI/ML/GenAI Job Oriented Program · Module 21 Practice Test</footer>
+</div>
+
+<!-- ============ SUBMIT CONFIRM MODAL ============ -->
+<div id="submit-modal" style="display:none; position:fixed; inset:0; background:rgba(17,24,39,.55); z-index:100; align-items:center; justify-content:center;">
+  <div style="background:#fff; border-radius:20px; padding:28px; max-width:380px; width:90%; text-align:center;">
+    <div style="font-size:17px; font-weight:800; margin-bottom:10px;">Submit practice test?</div>
+    <div id="modal-unanswered-msg" style="font-size:13.5px; color:var(--text-2); margin-bottom:20px; line-height:1.5;"></div>
+    <div style="display:flex; gap:10px; justify-content:center;">
+      <button class="btn-outline" onclick="closeSubmitModal()">Keep working</button>
+      <button class="btn-green" onclick="submitExam()">Submit</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const QUESTIONS = [
+  {
+    id: 1,
+    lesson: 1,
+    lessonName: "Risk Of GenAI",
+    question: "What is the risk of 'bias amplification' in generative AI systems?",
+    options: [
+      { key: "A", text: "Bias amplification refers exclusively to a model running slower than expected on certain hardware" },
+      { key: "B", text: "This risk only applies to models that have never been trained on any data whatsoever" },
+      { key: "C", text: "A model trained on data containing existing societal or historical biases can learn and reproduce, or even exaggerate, those biases in its generated output" },
+      { key: "D", text: "Bias amplification means a model will always treat every input identically with no possible variation" }
+    ],
+    correct: "C",
+    explanation: "Bias amplification refers to the risk that a model trained on data containing existing societal or historical biases can learn and reproduce, or in some cases exaggerate, those biases in its generated output, potentially disadvantaging certain groups."
+  },
+  {
+    id: 2,
+    lesson: 1,
+    lessonName: "Risk Of GenAI",
+    question: "What intellectual property (IP) risk is commonly associated with generative AI systems that produce text, images, or code?",
+    options: [
+      { key: "A", text: "Generated output might closely resemble copyrighted material from the training data, raising questions about ownership, licensing, and potential infringement" },
+      { key: "B", text: "Intellectual property risk has no relevance whatsoever to any content produced by a generative AI system" },
+      { key: "C", text: "IP risk only applies to generative AI systems that produce audio content, never text or images" },
+      { key: "D", text: "Generative AI systems are always guaranteed to produce entirely original content with zero relationship to their training data" }
+    ],
+    correct: "A",
+    explanation: "A commonly cited IP risk with generative AI is that generated output might closely resemble copyrighted material present in the training data, raising questions about ownership, appropriate licensing, and potential infringement that organizations need to consider before using such content."
+  },
+  {
+    id: 3,
+    lesson: 1,
+    lessonName: "Risk Of GenAI",
+    question: "What is the risk of sensitive information 'leakage' through a generative AI application's prompts or outputs?",
+    options: [
+      { key: "A", text: "Leakage risk only applies to generative AI systems that have never processed any user input at all" },
+      { key: "B", text: "Sensitive information leakage is impossible in any generative AI system, regardless of its configuration" },
+      { key: "C", text: "This risk refers exclusively to a physical water leak occurring within a datacenter" },
+      { key: "D", text: "Confidential or personal information included in a user's prompt, or inadvertently reflected in a model's response, could be exposed to unintended parties or improperly retained" }
+    ],
+    correct: "D",
+    explanation: "Sensitive information leakage risk refers to the possibility that confidential or personal information included in a user's prompt, or inadvertently reflected in a model's generated response, could be exposed to unintended parties or improperly retained, which is an important consideration for enterprise deployments."
+  },
+  {
+    id: 4,
+    lesson: 1,
+    lessonName: "Risk Of GenAI",
+    question: "Why is the potential for generative AI to be misused for creating convincing disinformation or malicious content considered a significant risk?",
+    options: [
+      { key: "A", text: "This risk only applies to generative AI systems that exclusively produce numeric spreadsheet data" },
+      { key: "B", text: "Because generative models can produce fluent, realistic-sounding content at scale, they can be misused to create convincing false narratives, phishing content, or other malicious material more easily than before" },
+      { key: "C", text: "Disinformation risk has no relationship to how fluent or realistic a generative model's output appears" },
+      { key: "D", text: "Malicious misuse of generative AI is impossible because every model automatically refuses every single request" }
+    ],
+    correct: "B",
+    explanation: "Because generative models can produce fluent, realistic-sounding content at scale, they can be misused to create convincing false narratives, phishing content, or other malicious material more easily and cheaply than through manual effort, making this a significant risk to consider."
+  },
+  {
+    id: 5,
+    lesson: 1,
+    lessonName: "Risk Of GenAI",
+    question: "Why is 'overreliance' on generative AI output considered a risk for organizations adopting these systems?",
+    options: [
+      { key: "A", text: "Users may place excessive trust in AI-generated content without adequate verification, leading to errors or poor decisions if the output happens to be inaccurate or ungrounded" },
+      { key: "B", text: "Overreliance risk means that generative AI systems will always immediately stop functioning after their first use" },
+      { key: "C", text: "Overreliance guarantees that a generative AI system's output will always be perfectly accurate with no possible errors" },
+      { key: "D", text: "This risk only applies to organizations that have never adopted any form of generative AI" }
+    ],
+    correct: "A",
+    explanation: "Overreliance risk arises when users place excessive trust in AI-generated content without adequate verification, which can lead to errors or poor decisions if the underlying output happens to be inaccurate, incomplete, or ungrounded in fact."
+  },
+  {
+    id: 6,
+    lesson: 2,
+    lessonName: "Core Dimension of Responsible AI",
+    question: "What does the 'fairness' dimension of responsible AI generally aim to ensure?",
+    options: [
+      { key: "A", text: "Fairness only relates to how quickly a model can generate a response, with no connection to how it treats different groups" },
+      { key: "B", text: "That every AI system charges exactly the same subscription price to every customer" },
+      { key: "C", text: "That an AI system treats different groups of people equitably, avoiding outcomes that unfairly favor or disadvantage individuals based on characteristics like gender or ethnicity" },
+      { key: "D", text: "That an AI system always produces the exact same output regardless of the input it receives" }
+    ],
+    correct: "C",
+    explanation: "The fairness dimension of responsible AI aims to ensure that an AI system treats different groups of people equitably, working to avoid outcomes that unfairly favor or disadvantage individuals based on characteristics such as gender, ethnicity, or age."
+  },
+  {
+    id: 7,
+    lesson: 2,
+    lessonName: "Core Dimension of Responsible AI",
+    question: "What does the 'reliability and safety' dimension of responsible AI focus on?",
+    options: [
+      { key: "A", text: "Reliability and safety only apply to AI systems that have never been tested in any way" },
+      { key: "B", text: "Ensuring an AI system performs consistently as intended under expected conditions and handles unexpected situations without causing harm" },
+      { key: "C", text: "This dimension focuses exclusively on the physical color and design of the server hardware running the AI system" },
+      { key: "D", text: "Ensuring an AI system always produces the maximum possible number of tokens in every single response" }
+    ],
+    correct: "B",
+    explanation: "The reliability and safety dimension focuses on ensuring an AI system performs consistently as intended under expected operating conditions, and handles unexpected or edge-case situations gracefully, without causing harm to users or others."
+  },
+  {
+    id: 8,
+    lesson: 2,
+    lessonName: "Core Dimension of Responsible AI",
+    question: "What does the 'privacy and security' dimension of responsible AI emphasize?",
+    options: [
+      { key: "A", text: "This dimension is concerned exclusively with the visual branding used on an AI product's marketing website" },
+      { key: "B", text: "Ensuring an AI system's source code is always published publicly with no restrictions whatsoever" },
+      { key: "C", text: "Privacy and security only matter for AI systems that process no data of any kind" },
+      { key: "D", text: "Protecting personal and sensitive data used by or generated through an AI system, and safeguarding the system itself against unauthorized access or misuse" }
+    ],
+    correct: "D",
+    explanation: "The privacy and security dimension emphasizes protecting personal and sensitive data used by or generated through an AI system, as well as safeguarding the system itself against unauthorized access, misuse, or compromise."
+  },
+  {
+    id: 9,
+    lesson: 2,
+    lessonName: "Core Dimension of Responsible AI",
+    question: "What does the 'inclusiveness' dimension of responsible AI aim to achieve?",
+    options: [
+      { key: "A", text: "Inclusiveness means an AI system must be trained using the exact same single dataset as every other AI system ever built" },
+      { key: "B", text: "This dimension has no relationship to how usable an AI system is for people with different abilities or backgrounds" },
+      { key: "C", text: "Ensuring an AI system's user interface is only ever available in one single language" },
+      { key: "D", text: "Designing AI systems to be usable by and beneficial for people with a wide range of abilities, backgrounds, and circumstances, rather than serving only a narrow segment of users" }
+    ],
+    correct: "D",
+    explanation: "The inclusiveness dimension of responsible AI aims to design systems that are usable by and beneficial for people with a wide range of abilities, backgrounds, and circumstances, rather than serving well only a narrow segment of potential users."
+  },
+  {
+    id: 10,
+    lesson: 2,
+    lessonName: "Core Dimension of Responsible AI",
+    question: "How do the 'transparency' and 'accountability' dimensions of responsible AI generally relate to each other?",
+    options: [
+      { key: "A", text: "Accountability means no individual or organization is ever responsible for an AI system's behavior or outcomes" },
+      { key: "B", text: "Transparency involves clearly communicating how an AI system works and its limitations, while accountability involves ensuring people and organizations remain answerable for the system's outcomes and impacts" },
+      { key: "C", text: "Transparency and accountability are two identical names for the exact same single dimension with no distinction between them" },
+      { key: "D", text: "Transparency refers only to the color scheme of a user interface, with no connection to accountability whatsoever" }
+    ],
+    correct: "B",
+    explanation: "Transparency involves clearly communicating how an AI system works, its capabilities, and its limitations to those who use or are affected by it, while accountability involves ensuring that people and organizations remain answerable for the system's outcomes and impacts, and the two dimensions work together to support responsible use."
+  },
+  {
+    id: 11,
+    lesson: 3,
+    lessonName: "Implement Responsible Generative AI",
+    question: "What is the purpose of the 'Map' stage in a structured approach to implementing responsible generative AI?",
+    options: [
+      { key: "A", text: "Identifying the potential risks and harms that could arise from a specific generative AI use case, given its intended purpose and the context in which it will be used" },
+      { key: "B", text: "The Map stage only applies after a generative AI system has already been permanently shut down" },
+      { key: "C", text: "Physically drawing a geographic map of where an organization's servers are located" },
+      { key: "D", text: "Mapping refers exclusively to converting a model's weights into a different file format" }
+    ],
+    correct: "A",
+    explanation: "The Map stage involves identifying the potential risks and harms that could arise from a specific generative AI use case, considering its intended purpose, the audience, and the context in which it will be deployed, as a foundational first step before addressing those risks."
+  },
+  {
+    id: 12,
+    lesson: 3,
+    lessonName: "Implement Responsible Generative AI",
+    question: "What does the 'Measure' stage of implementing responsible generative AI generally involve?",
+    options: [
+      { key: "A", text: "This stage is only relevant after a generative AI system has been permanently deleted" },
+      { key: "B", text: "The Measure stage only involves counting the number of employees in an organization's marketing department" },
+      { key: "C", text: "Systematically testing and quantifying how often identified risks, such as harmful or ungrounded output, actually occur in practice, often using structured test sets or metrics" },
+      { key: "D", text: "Measuring refers exclusively to recording the physical dimensions of a server rack" }
+    ],
+    correct: "C",
+    explanation: "The Measure stage generally involves systematically testing and quantifying how often previously identified risks, such as harmful or ungrounded output, actually occur in practice, often using structured test sets, red-teaming exercises, or defined metrics to assess the scope of the issue."
+  },
+  {
+    id: 13,
+    lesson: 3,
+    lessonName: "Implement Responsible Generative AI",
+    question: "Which of the following is a realistic example of a 'Mitigate' step when implementing responsible generative AI?",
+    options: [
+      { key: "A", text: "Ignoring any previously identified risks entirely, with no changes made to the system" },
+      { key: "B", text: "Adding content filters, refining the system message, and grounding responses in trusted data sources to reduce the likelihood of harmful or inaccurate output" },
+      { key: "C", text: "Deleting the entire codebase of the application with no further action taken" },
+      { key: "D", text: "Mitigation refers exclusively to increasing the physical size of a datacenter" }
+    ],
+    correct: "B",
+    explanation: "A realistic mitigation step includes adding content filters, refining the system message to better guide model behavior, and grounding responses in trusted data sources, all aimed at reducing the likelihood of harmful, inaccurate, or otherwise problematic output."
+  },
+  {
+    id: 14,
+    lesson: 3,
+    lessonName: "Implement Responsible Generative AI",
+    question: "What is the focus of the 'Operate' stage in a responsible generative AI implementation lifecycle?",
+    options: [
+      { key: "A", text: "This stage has no connection to monitoring or maintaining a system after it has been deployed" },
+      { key: "B", text: "Operating refers exclusively to physically relocating a server to a different building" },
+      { key: "C", text: "The Operate stage only involves the very first day a generative AI system is designed, before any other work occurs" },
+      { key: "D", text: "Ongoing monitoring, incident response, and continuous improvement of the deployed system once it's in production, ensuring risks continue to be managed over time" }
+    ],
+    correct: "D",
+    explanation: "The Operate stage focuses on ongoing monitoring, incident response, and continuous improvement of the deployed system once it's in production, ensuring that previously identified and mitigated risks continue to be managed effectively as real-world usage evolves over time."
+  },
+  {
+    id: 15,
+    lesson: 3,
+    lessonName: "Implement Responsible Generative AI",
+    question: "Why is implementing responsible generative AI generally treated as an iterative, ongoing process, rather than a single one-time checklist completed before launch?",
+    options: [
+      { key: "A", text: "Responsible AI implementation only needs to be considered once, immediately before a system's very first release, and never again afterward" },
+      { key: "B", text: "Treating it as an iterative process guarantees that no further risk will ever emerge once the initial checklist is completed" },
+      { key: "C", text: "New risks or edge cases can emerge as real-world usage evolves, so continuously mapping, measuring, mitigating, and monitoring helps catch and address issues that weren't apparent before deployment" },
+      { key: "D", text: "Iterative implementation has no relationship to catching new or previously unnoticed risks over time" }
+    ],
+    correct: "C",
+    explanation: "Because new risks or edge cases can emerge as real-world usage evolves, treating responsible AI implementation as an iterative, ongoing process, continuously mapping, measuring, mitigating, and monitoring, helps catch and address issues that weren't apparent before the initial deployment."
+  },
+  {
+    id: 16,
+    lesson: 4,
+    lessonName: "Security compliance and governance",
+    question: "What does 'data residency' refer to in the context of enterprise AI governance?",
+    options: [
+      { key: "A", text: "The specific geographic location or region where an organization's data is physically stored and processed, which may be subject to regulatory or contractual requirements" },
+      { key: "B", text: "Data residency means an organization's data can only ever be stored on a single physical hard drive" },
+      { key: "C", text: "Data residency refers exclusively to how long an employee has worked at a particular office location" },
+      { key: "D", text: "This term only applies to data that has never been stored in any cloud service" }
+    ],
+    correct: "A",
+    explanation: "Data residency refers to the specific geographic location or region where an organization's data is physically stored and processed, which can be an important consideration for meeting regulatory requirements, contractual obligations, or data sovereignty laws in certain jurisdictions."
+  },
+  {
+    id: 17,
+    lesson: 4,
+    lessonName: "Security compliance and governance",
+    question: "What does the 'shared responsibility model' describe in the context of using cloud-based AI services?",
+    options: [
+      { key: "A", text: "The shared responsibility model means every customer of a cloud provider must physically share the same server hardware with no separation" },
+      { key: "B", text: "This concept refers exclusively to how a company splits its marketing budget across departments" },
+      { key: "C", text: "The division of security and compliance responsibilities between the cloud provider, who secures the underlying infrastructure, and the customer, who is responsible for securing their own data, access, and configurations" },
+      { key: "D", text: "A model where the cloud provider takes on absolutely no responsibility of any kind for any aspect of the service" }
+    ],
+    correct: "C",
+    explanation: "The shared responsibility model describes how security and compliance responsibilities are divided between a cloud provider, who is responsible for securing the underlying infrastructure, and the customer, who remains responsible for securing their own data, access controls, and configurations within that infrastructure."
+  },
+  {
+    id: 18,
+    lesson: 4,
+    lessonName: "Security compliance and governance",
+    question: "Why do independent compliance certifications, such as ISO 27001 or SOC 2, matter when evaluating a cloud AI provider for enterprise use?",
+    options: [
+      { key: "A", text: "They provide independently verified evidence that a provider follows recognized security and operational standards, helping organizations assess trustworthiness without having to audit every detail themselves" },
+      { key: "B", text: "Independent certifications guarantee that a cloud provider's services will always be completely free of charge" },
+      { key: "C", text: "Compliance certifications have no relevance whatsoever to evaluating a cloud provider's trustworthiness" },
+      { key: "D", text: "These certifications only apply to companies that have never stored any customer data" }
+    ],
+    correct: "A",
+    explanation: "Independent compliance certifications, such as ISO 27001 or SOC 2, provide independently verified evidence that a provider follows recognized security and operational standards, helping organizations assess a cloud AI provider's trustworthiness without needing to independently audit every underlying detail themselves."
+  },
+  {
+    id: 19,
+    lesson: 4,
+    lessonName: "Security compliance and governance",
+    question: "Why is comprehensive audit logging important for governance of an enterprise AI system?",
+    options: [
+      { key: "A", text: "Comprehensive audit logging guarantees that a system will never experience any security incident of any kind" },
+      { key: "B", text: "Audit logs have no relationship to investigating an incident or demonstrating compliance" },
+      { key: "C", text: "Audit logging is only useful for tracking the number of times an application's icon has been changed" },
+      { key: "D", text: "It creates a traceable record of who accessed or changed a system and its data, supporting accountability, incident investigation, and compliance with regulatory requirements" }
+    ],
+    correct: "D",
+    explanation: "Comprehensive audit logging creates a traceable record of who accessed or changed a system and its data, which supports accountability, aids incident investigation when something goes wrong, and helps demonstrate compliance with relevant regulatory requirements."
+  },
+  {
+    id: 20,
+    lesson: 4,
+    lessonName: "Security compliance and governance",
+    question: "How do data protection regulations, such as those granting individuals a 'right to erasure' of their personal data, affect the governance of an AI system trained on or processing personal information?",
+    options: [
+      { key: "A", text: "Data protection regulations only apply to organizations that have never processed any personal data at all" },
+      { key: "B", text: "Organizations need governance processes capable of identifying and appropriately handling personal data upon a valid deletion request, which can be more complex when that data has influenced a trained model" },
+      { key: "C", text: "Such regulations have no bearing whatsoever on how an AI system manages personal data" },
+      { key: "D", text: "A right to erasure means an organization must permanently delete its entire AI system the moment any single user makes any request" }
+    ],
+    correct: "B",
+    explanation: "Regulations granting individuals a right to erasure require organizations to have governance processes capable of identifying and appropriately handling personal data upon a valid deletion request, which can be more complex for AI systems since data that has already influenced a trained model isn't always straightforward to fully remove."
+  }
+];
+
+</script>
+<script>
+// ==========================================================
+// STATE
+// ==========================================================
+const TOTAL_Q = QUESTIONS.length;
+let current = 0;
+let answers = new Array(TOTAL_Q).fill(null);   // selected key or null
+let flagged = new Array(TOTAL_Q).fill(false);
+let startTime = null;
+let timerInterval = null;
+let elapsedSeconds = 0;
+let reviewFilter = 'all';
+
+// ==========================================================
+// LESSON COVERAGE (built on start screen)
+// ==========================================================
+function buildLessonCoverage() {
+  const counts = {};
+  const order = [];
+  QUESTIONS.forEach(q => {
+    if (!(q.lesson in counts)) { counts[q.lesson] = { name: q.lessonName, n: 0 }; order.push(q.lesson); }
+    counts[q.lesson].n++;
+  });
+  const container = document.getElementById('lesson-coverage');
+  order.sort((a,b) => a-b).forEach(l => {
+    const row = document.createElement('div');
+    row.className = 'lesson-row';
+    row.innerHTML = `<span class="ln">Lesson ${l}: ${counts[l].name}</span><span class="badge">${counts[l].n} Qs</span>`;
+    container.appendChild(row);
+  });
+}
+buildLessonCoverage();
+
+// ==========================================================
+// START
+// ==========================================================
+function startExam() {
+  document.getElementById('screen-start').classList.remove('active');
+  document.getElementById('screen-exam').classList.add('active');
+  startTime = Date.now();
+  timerInterval = setInterval(updateTimer, 1000);
+  buildNavGrid();
+  renderQuestion();
+}
+
+function updateTimer() {
+  elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
+  const m = Math.floor(elapsedSeconds / 60);
+  const s = elapsedSeconds % 60;
+  document.getElementById('timer-display').textContent = `${m}:${s.toString().padStart(2,'0')}`;
+}
+
+// ==========================================================
+// RENDER QUESTION
+// ==========================================================
+function renderQuestion() {
+  const q = QUESTIONS[current];
+  document.getElementById('q-num-label').textContent = `Question ${current + 1} of ${TOTAL_Q}`;
+  document.getElementById('q-lesson-tag').textContent = `Lesson ${q.lesson}: ${q.lessonName}`;
+  document.getElementById('q-text').textContent = q.question;
+  document.getElementById('progress-display').textContent = `Q${current + 1} / ${TOTAL_Q}`;
+
+  const flagBtn = document.getElementById('flag-btn');
+  flagBtn.classList.toggle('flagged', flagged[current]);
+  flagBtn.innerHTML = flagged[current] ? '🚩 Flagged' : '🚩 Flag for review';
+
+  const optContainer = document.getElementById('options-container');
+  optContainer.innerHTML = '';
+  q.options.forEach(opt => {
+    const div = document.createElement('div');
+    div.className = 'option' + (answers[current] === opt.key ? ' selected' : '');
+    div.onclick = () => selectAnswer(opt.key);
+    div.innerHTML = `<span class="opt-key">${opt.key}</span><span class="opt-text">${opt.text}</span>`;
+    optContainer.appendChild(div);
+  });
+
+  document.getElementById('prev-btn').disabled = current === 0;
+  document.getElementById('prev-btn').style.opacity = current === 0 ? '0.4' : '1';
+  document.getElementById('next-btn').textContent = current === TOTAL_Q - 1 ? 'Finish →' : 'Next →';
+
+  updateNavGrid();
+}
+
+function selectAnswer(key) {
+  answers[current] = key;
+  renderQuestion();
+}
+
+function toggleFlag() {
+  flagged[current] = !flagged[current];
+  renderQuestion();
+}
+
+function nextQuestion() {
+  if (current < TOTAL_Q - 1) { current++; renderQuestion(); }
+  else { confirmSubmit(); }
+}
+function prevQuestion() {
+  if (current > 0) { current--; renderQuestion(); }
+}
+
+// ==========================================================
+// NAVIGATOR
+// ==========================================================
+function buildNavGrid() {
+  const grid = document.getElementById('nav-grid');
+  grid.innerHTML = '';
+  for (let i = 0; i < TOTAL_Q; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'nav-cell';
+    cell.id = `nav-cell-${i}`;
+    cell.textContent = i + 1;
+    cell.onclick = () => { current = i; renderQuestion(); };
+    grid.appendChild(cell);
+  }
+}
+function updateNavGrid() {
+  for (let i = 0; i < TOTAL_Q; i++) {
+    const cell = document.getElementById(`nav-cell-${i}`);
+    cell.classList.toggle('current', i === current);
+    cell.classList.toggle('answered', answers[i] !== null);
+    cell.classList.toggle('flagged', flagged[i]);
+  }
+}
+
+// ==========================================================
+// SUBMIT
+// ==========================================================
+function confirmSubmit() {
+  const unanswered = answers.filter(a => a === null).length;
+  const msg = unanswered === 0
+    ? "You've answered all 30 questions. Ready to see your results?"
+    : `You have ${unanswered} unanswered question${unanswered > 1 ? 's' : ''}. You can still submit — unanswered questions count as skipped, not wrong.`;
+  document.getElementById('modal-unanswered-msg').textContent = msg;
+  document.getElementById('submit-modal').style.display = 'flex';
+}
+function closeSubmitModal() {
+  document.getElementById('submit-modal').style.display = 'none';
+}
+
+function submitExam() {
+  clearInterval(timerInterval);
+  document.getElementById('submit-modal').style.display = 'none';
+  document.getElementById('screen-exam').classList.remove('active');
+  document.getElementById('screen-results').classList.add('active');
+  renderResults();
+}
+
+// ==========================================================
+// RESULTS
+// ==========================================================
+function renderResults() {
+  let correct = 0, incorrect = 0, skipped = 0;
+  answers.forEach((a, i) => {
+    if (a === null) skipped++;
+    else if (a === QUESTIONS[i].correct) correct++;
+    else incorrect++;
+  });
+  const pct = Math.round((correct / TOTAL_Q) * 100);
+
+  document.getElementById('stat-correct').textContent = correct;
+  document.getElementById('stat-incorrect').textContent = incorrect;
+  document.getElementById('stat-skipped').textContent = skipped;
+  const m = Math.floor(elapsedSeconds / 60), s = elapsedSeconds % 60;
+  document.getElementById('stat-time').textContent = `${m}:${s.toString().padStart(2,'0')}`;
+
+  document.getElementById('score-big').textContent = `${pct}%`;
+  document.getElementById('score-sub').textContent = `${correct} of ${TOTAL_Q} correct`;
+
+  const hero = document.getElementById('band-hero');
+  const emoji = document.getElementById('band-emoji');
+  const label = document.getElementById('band-label');
+  const msg = document.getElementById('band-msg');
+
+  if (pct >= 80) {
+    hero.className = 'band-hero strong';
+    emoji.textContent = '🟢'; label.textContent = 'Strong';
+    msg.textContent = "Ready to move to the next module.";
+  } else if (pct >= 60) {
+    hero.className = 'band-hero good';
+    emoji.textContent = '🟡'; label.textContent = 'Good Progress';
+    msg.textContent = "Review 1–2 lessons and retry.";
+  } else {
+    hero.className = 'band-hero needs';
+    emoji.textContent = '🔴'; label.textContent = 'Needs Review';
+    msg.textContent = "Revisit the module before moving on.";
+  }
+
+  renderLessonBreakdown();
+}
+
+function renderLessonBreakdown() {
+  const lessonStats = {};
+  const order = [];
+  QUESTIONS.forEach((q, i) => {
+    if (!(q.lesson in lessonStats)) {
+      lessonStats[q.lesson] = { name: q.lessonName, total: 0, correct: 0 };
+      order.push(q.lesson);
+    }
+    lessonStats[q.lesson].total++;
+    if (answers[i] === q.correct) lessonStats[q.lesson].correct++;
+  });
+  order.sort((a,b) => a-b);
+  const body = document.getElementById('lesson-breakdown-body');
+  body.innerHTML = '';
+  order.forEach(l => {
+    const st = lessonStats[l];
+    const pct = Math.round((st.correct / st.total) * 100);
+    const barClass = pct >= 80 ? '' : pct >= 60 ? 'mid' : 'low';
+    const row = document.createElement('div');
+    row.className = 'lb-row';
+    row.innerHTML = `
+      <div class="lb-top"><span class="lb-name">Lesson ${l}: ${st.name}</span><span class="lb-score">${st.correct}/${st.total}</span></div>
+      <div class="lb-bar-bg"><div class="lb-bar-fill ${barClass}" style="width:${pct}%;"></div></div>
+    `;
+    body.appendChild(row);
+  });
+}
+
+// ==========================================================
+// REVIEW MODE
+// ==========================================================
+function showReview() {
+  document.getElementById('screen-results').classList.remove('active');
+  document.getElementById('screen-review').classList.add('active');
+  renderReviewList();
+}
+function backToResults() {
+  document.getElementById('screen-review').classList.remove('active');
+  document.getElementById('screen-results').classList.add('active');
+}
+function setReviewFilter(f) {
+  reviewFilter = f;
+  document.querySelectorAll('.rf-btn').forEach(b => b.classList.toggle('active', b.dataset.filter === f));
+  renderReviewList();
+}
+function renderReviewList() {
+  const list = document.getElementById('review-list');
+  list.innerHTML = '';
+  QUESTIONS.forEach((q, i) => {
+    const a = answers[i];
+    const status = a === null ? 'skipped' : (a === q.correct ? 'correct' : 'incorrect');
+    if (reviewFilter === 'correct' && status !== 'correct') return;
+    if (reviewFilter === 'incorrect' && status !== 'incorrect') return;
+    if (reviewFilter === 'skipped' && status !== 'skipped') return;
+    if (reviewFilter === 'flagged' && !flagged[i]) return;
+
+    const card = document.createElement('div');
+    card.className = 'review-q';
+    let tagHtml = status === 'correct'
+      ? '<span class="result-tag correct">✅ Correct</span>'
+      : status === 'incorrect'
+        ? '<span class="result-tag incorrect">❌ Incorrect</span>'
+        : '<span class="result-tag skipped">⬜ Skipped</span>';
+    if (flagged[i]) tagHtml += ' <span class="result-tag" style="background:var(--amber-bg); color:var(--amber-dark);">🚩 Flagged</span>';
+
+    let optsHtml = '';
+    q.options.forEach(opt => {
+      let cls = '';
+      if (opt.key === q.correct) cls = 'correct-answer';
+      else if (opt.key === a && a !== q.correct) cls = 'wrong-answer';
+      optsHtml += `<div class="rq-opt ${cls}"><span>${opt.key}</span><span>${opt.text}</span></div>`;
+    });
+
+    card.innerHTML = `
+      <div class="rq-top"><span class="lesson-tag">Lesson ${q.lesson}: ${q.lessonName}</span>${tagHtml}</div>
+      <div class="rq-text">Q${i + 1}. ${q.question}</div>
+      ${optsHtml}
+      <div class="rq-explain"><b>Explanation:</b> ${q.explanation}</div>
+    `;
+    list.appendChild(card);
+  });
+
+  if (list.innerHTML === '') {
+    list.innerHTML = '<div style="text-align:center; color:var(--text-3); padding:40px 0;">No questions match this filter.</div>';
+  }
+}
+
+</script>
+</body>
+</html>
