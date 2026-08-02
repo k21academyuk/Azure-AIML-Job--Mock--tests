@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Module 3: Get Started with AI Applications on Azure — Practice Test | Azure AI/ML/GenAI Job Oriented Program</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#F7F8FA; --surface:#FFFFFF; --border:#E8EAEE;
+  --text-1:#111827; --text-2:#4B5563; --text-3:#9CA3AF;
+  --green:#8DC63F; --green-mid:#79B030; --green-bg:#F1F8E8; --green-dark:#4A7A1B;
+  --navy:#1A1248; --navy-mid:#2E2080; --blue:#1B9BD9;
+  --amber:#F5A623; --amber-bg:#FFF6E5; --amber-dark:#8A5A00;
+  --red:#E5484D; --red-bg:#FDECEC; --red-dark:#A9231F;
+  --radius:16px; --radius-lg:24px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text-1);-webkit-font-smoothing:antialiased;min-height:100vh;}
+.screen{display:none;}
+.screen.active{display:block;}
+
+/* ---------- Top bar ---------- */
+.topbar{
+  background:var(--navy); color:#fff; padding:14px 28px;
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;
+}
+.topbar .brand{display:flex; align-items:center; gap:10px; font-weight:800; font-size:15px;}
+.topbar .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--green);}
+.topbar .program{font-size:12px; color:#C9C4E8; font-weight:500;}
+
+/* ---------- Start screen ---------- */
+.start-wrap{max-width:820px; margin:0 auto; padding:48px 20px 70px;}
+.eyebrow{
+  display:inline-flex; align-items:center; gap:7px; background:var(--green-bg);
+  border:1px solid #C8E89A; color:var(--green-dark); font-size:11px; font-weight:700;
+  letter-spacing:.08em; text-transform:uppercase; padding:5px 13px; border-radius:100px; margin-bottom:16px;
+}
+.eyebrow i{width:5px;height:5px;background:var(--green);border-radius:50%;display:inline-block;font-style:normal;}
+.start-title{font-size:clamp(26px,4vw,36px); font-weight:800; letter-spacing:-.025em; line-height:1.2; margin-bottom:10px;}
+.start-title .accent{color:var(--green-mid);}
+.start-sub{color:var(--text-2); font-size:15.5px; line-height:1.6; margin-bottom:28px; max-width:640px;}
+
+.info-cards{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:28px;}
+.info-card{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); padding:22px 18px; text-align:center;}
+.info-card .v{font-size:32px; font-weight:800; color:var(--navy); line-height:1;}
+.info-card .k{font-size:12.5px; font-weight:700; color:var(--text-2); margin-top:8px;}
+
+.lesson-table{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); overflow:hidden; margin-bottom:28px;}
+.lesson-table .lt-head{background:var(--navy); color:#fff; padding:14px 20px; font-weight:700; font-size:14px; display:flex; justify-content:space-between;}
+.lesson-row{display:flex; justify-content:space-between; align-items:center; padding:12px 20px; border-top:1px solid var(--border); font-size:14px;}
+.lesson-row:first-of-type{border-top:none;}
+.lesson-row .ln{color:var(--text-1); font-weight:600;}
+.lesson-row .lc{color:var(--text-3); font-weight:500;}
+.lesson-row .badge{background:var(--green-bg); color:var(--green-dark); font-size:12px; font-weight:700; padding:3px 10px; border-radius:100px;}
+
+.band-legend{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); padding:20px; margin-bottom:32px;}
+.band-legend .bl-title{font-size:13px; font-weight:700; color:var(--text-1); margin-bottom:12px;}
+.band-row{display:flex; align-items:center; gap:12px; padding:8px 0;}
+.band-dot{width:11px;height:11px;border-radius:50%; flex-shrink:0;}
+.band-row .bt{font-weight:700; font-size:13.5px; min-width:150px;}
+.band-row .bd{font-size:13px; color:var(--text-2);}
+
+.notice{
+  display:flex; gap:10px; align-items:flex-start; background:var(--green-bg); border:1px solid #C8E89A;
+  border-radius:12px; padding:14px 16px; font-size:13.5px; color:var(--green-dark); margin-bottom:28px; line-height:1.5;
+}
+
+.btn-primary{
+  display:inline-flex; align-items:center; gap:10px; background:var(--navy); color:#fff;
+  font-family:'DM Sans',sans-serif; font-size:15px; font-weight:700; padding:15px 32px;
+  border-radius:100px; border:none; cursor:pointer; box-shadow:0 4px 20px rgba(26,18,72,.22);
+  transition:background .2s, transform .18s, box-shadow .2s;
+}
+.btn-primary:hover{background:var(--navy-mid); transform:translateY(-2px); box-shadow:0 8px 28px rgba(26,18,72,.3);}
+.btn-green{
+  display:inline-flex; align-items:center; gap:10px; background:var(--green); color:#fff;
+  font-family:'DM Sans',sans-serif; font-size:15px; font-weight:700; padding:15px 32px;
+  border-radius:100px; border:none; cursor:pointer; box-shadow:0 4px 16px rgba(141,198,63,.35);
+  transition:background .2s, transform .18s, box-shadow .2s;
+}
+.btn-green:hover{background:var(--green-mid); transform:translateY(-2px); box-shadow:0 8px 28px rgba(141,198,63,.45);}
+.btn-outline{
+  display:inline-flex; align-items:center; gap:8px; background:#fff; color:var(--navy);
+  font-family:'DM Sans',sans-serif; font-size:14px; font-weight:700; padding:12px 24px;
+  border-radius:100px; border:1.5px solid var(--navy); cursor:pointer; transition:all .18s;
+}
+.btn-outline:hover{background:var(--navy); color:#fff;}
+
+/* ---------- Exam screen ---------- */
+.exam-header{
+  background:var(--navy); color:#fff; padding:14px 24px; display:flex; align-items:center;
+  justify-content:space-between; flex-wrap:wrap; gap:12px; position:sticky; top:0; z-index:50;
+}
+.exam-title{font-weight:700; font-size:14.5px;}
+.exam-title span{color:#B9E27A;}
+.exam-meta{display:flex; align-items:center; gap:18px; font-size:13px;}
+.timer-pill{
+  display:flex; align-items:center; gap:7px; background:rgba(255,255,255,.1); padding:7px 14px;
+  border-radius:100px; font-weight:700; font-variant-numeric:tabular-nums;
+}
+.timer-pill .lbl{font-weight:500; color:#C9C4E8; font-size:11px; text-transform:uppercase; letter-spacing:.05em;}
+.progress-pill{background:rgba(255,255,255,.1); padding:7px 14px; border-radius:100px; font-weight:700;}
+
+.exam-body{display:grid; grid-template-columns:1fr 300px; gap:22px; max-width:1200px; margin:0 auto; padding:24px 20px 80px;}
+@media (max-width:880px){.exam-body{grid-template-columns:1fr;}}
+
+.q-card{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius-lg); padding:28px;}
+.q-top{display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:16px;}
+.q-num{font-size:12px; font-weight:700; color:var(--text-3); text-transform:uppercase; letter-spacing:.06em;}
+.lesson-tag{
+  display:inline-block; background:var(--green-bg); color:var(--green-dark); font-size:11.5px;
+  font-weight:700; padding:4px 11px; border-radius:100px; margin-top:6px;
+}
+.flag-btn{
+  display:flex; align-items:center; gap:6px; background:#fff; border:1.5px solid var(--border);
+  color:var(--text-2); font-family:'DM Sans',sans-serif; font-weight:700; font-size:13px;
+  padding:8px 16px; border-radius:100px; cursor:pointer; transition:all .18s; flex-shrink:0;
+}
+.flag-btn.flagged{background:var(--amber-bg); border-color:#F0C77C; color:var(--amber-dark);}
+.flag-btn:hover{border-color:var(--amber);}
+
+.q-text{font-size:17px; font-weight:600; line-height:1.55; color:var(--text-1); margin-bottom:22px;}
+
+.option{
+  display:flex; align-items:flex-start; gap:13px; padding:14px 16px; border:1.5px solid var(--border);
+  border-radius:12px; margin-bottom:10px; cursor:pointer; transition:all .15s; background:#fff;
+}
+.option:hover{border-color:var(--green); background:var(--green-bg);}
+.option.selected{border-color:var(--navy); background:#EEEBFA;}
+.option .opt-key{
+  width:26px; height:26px; border-radius:50%; border:1.5px solid var(--border); flex-shrink:0;
+  display:flex; align-items:center; justify-content:center; font-weight:700; font-size:12.5px; color:var(--text-2);
+}
+.option.selected .opt-key{background:var(--navy); border-color:var(--navy); color:#fff;}
+.option .opt-text{font-size:14.5px; line-height:1.5; color:var(--text-1); padding-top:3px;}
+
+.q-nav-btns{display:flex; justify-content:space-between; margin-top:22px; gap:10px;}
+
+/* Sidebar navigator */
+.sidebar{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius-lg); padding:20px; align-self:start; position:sticky; top:88px;}
+.sb-title{font-size:13px; font-weight:700; color:var(--text-1); margin-bottom:14px;}
+.nav-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:8px; margin-bottom:18px;}
+.nav-cell{
+  aspect-ratio:1; border-radius:8px; border:1.5px solid var(--border); background:#fff;
+  display:flex; align-items:center; justify-content:center; font-size:12.5px; font-weight:700;
+  color:var(--text-2); cursor:pointer; transition:all .15s; position:relative;
+}
+.nav-cell:hover{border-color:var(--navy);}
+.nav-cell.current{border-color:var(--navy); border-width:2px;}
+.nav-cell.answered{background:var(--green-bg); border-color:#C8E89A; color:var(--green-dark);}
+.nav-cell.flagged::after{
+  content:''; position:absolute; top:-3px; right:-3px; width:9px; height:9px; border-radius:50%; background:var(--amber);
+}
+.legend{display:flex; flex-direction:column; gap:8px; font-size:12px; color:var(--text-2); margin-bottom:18px;}
+.legend .lg-row{display:flex; align-items:center; gap:8px;}
+.legend .sw{width:13px; height:13px; border-radius:4px; border:1.5px solid var(--border);}
+.legend .sw.answered{background:var(--green-bg); border-color:#C8E89A;}
+.legend .sw.flagged{background:#fff; position:relative;}
+.legend .sw.flagged::after{content:'';position:absolute;top:-3px;right:-3px;width:8px;height:8px;border-radius:50%;background:var(--amber);}
+
+/* ---------- Results screen ---------- */
+.results-wrap{max-width:820px; margin:0 auto; padding:48px 20px 80px;}
+.band-hero{border-radius:var(--radius-lg); padding:36px; text-align:center; margin-bottom:28px;}
+.band-hero.strong{background:var(--green-bg); border:1.5px solid #C8E89A;}
+.band-hero.good{background:var(--amber-bg); border:1.5px solid #F0C77C;}
+.band-hero.needs{background:var(--red-bg); border:1.5px solid #F3B4B6;}
+.band-emoji{font-size:44px; margin-bottom:10px;}
+.band-label{font-size:24px; font-weight:800; margin-bottom:6px;}
+.band-hero.strong .band-label{color:var(--green-dark);}
+.band-hero.good .band-label{color:var(--amber-dark);}
+.band-hero.needs .band-label{color:var(--red-dark);}
+.band-msg{font-size:15px; color:var(--text-2); margin-bottom:18px;}
+.score-big{font-size:46px; font-weight:800; color:var(--navy);}
+.score-sub{font-size:13.5px; color:var(--text-3); font-weight:600;}
+
+.stat-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:28px;}
+.stat-card{background:var(--surface); border:1.5px solid var(--border); border-radius:12px; padding:16px; text-align:center;}
+.stat-card .sv{font-size:22px; font-weight:800; color:var(--navy);}
+.stat-card .sl{font-size:11.5px; color:var(--text-3); font-weight:700; text-transform:uppercase; letter-spacing:.04em; margin-top:3px;}
+
+.lesson-breakdown{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); padding:22px; margin-bottom:28px;}
+.lb-title{font-size:15px; font-weight:700; margin-bottom:16px;}
+.lb-row{margin-bottom:14px;}
+.lb-top{display:flex; justify-content:space-between; font-size:13px; font-weight:600; margin-bottom:6px;}
+.lb-top .lb-name{color:var(--text-1);}
+.lb-top .lb-score{color:var(--text-2);}
+.lb-bar-bg{background:#F0F1F4; border-radius:100px; height:9px; overflow:hidden;}
+.lb-bar-fill{height:100%; border-radius:100px; background:var(--green);}
+.lb-bar-fill.mid{background:var(--amber);}
+.lb-bar-fill.low{background:var(--red);}
+
+.action-row{display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:8px;}
+
+/* ---------- Review screen ---------- */
+.review-wrap{max-width:820px; margin:0 auto; padding:32px 20px 80px;}
+.review-filters{display:flex; gap:8px; margin-bottom:22px; flex-wrap:wrap;}
+.rf-btn{
+  background:#fff; border:1.5px solid var(--border); color:var(--text-2); font-family:'DM Sans',sans-serif;
+  font-weight:700; font-size:13px; padding:8px 16px; border-radius:100px; cursor:pointer; transition:all .15s;
+}
+.rf-btn.active{background:var(--navy); border-color:var(--navy); color:#fff;}
+.review-q{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); padding:22px; margin-bottom:16px;}
+.review-q .rq-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;}
+.result-tag{font-size:11.5px; font-weight:700; padding:3px 11px; border-radius:100px;}
+.result-tag.correct{background:var(--green-bg); color:var(--green-dark);}
+.result-tag.incorrect{background:var(--red-bg); color:var(--red-dark);}
+.result-tag.skipped{background:#F0F1F4; color:var(--text-2);}
+.review-q .rq-text{font-size:15px; font-weight:600; margin-bottom:14px; line-height:1.5;}
+.rq-opt{padding:10px 14px; border-radius:10px; margin-bottom:7px; font-size:13.5px; border:1.5px solid var(--border); display:flex; gap:10px;}
+.rq-opt.correct-answer{background:var(--green-bg); border-color:#C8E89A; color:var(--green-dark); font-weight:600;}
+.rq-opt.wrong-answer{background:var(--red-bg); border-color:#F3B4B6; color:var(--red-dark); font-weight:600;}
+.rq-explain{background:#F7F8FA; border-radius:10px; padding:13px 15px; font-size:13px; color:var(--text-2); line-height:1.55; margin-top:10px;}
+.rq-explain b{color:var(--text-1);}
+
+footer.k21-footer{text-align:center; padding:22px; font-size:12px; color:var(--text-3);}
+</style>
+</head>
+<body>
+
+<!-- ============ START SCREEN ============ -->
+<div id="screen-start" class="screen active">
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span> K21 Academy</div>
+    <div class="program">Azure AI/ML/GenAI Job Oriented Program</div>
+  </div>
+  <div class="start-wrap">
+    <div class="eyebrow"><i></i>Module Practice Test</div>
+    <div class="start-title">Module 3: <span class="accent">Get Started with AI Applications on Azure</span></div>
+    <p class="start-sub">A quick knowledge check across all 6 lessons in this module. This is practice, not an exam — take your time, review explanations, and retry as many times as you like.</p>
+
+    <div class="info-cards">
+      <div class="info-card"><div class="v">24</div><div class="k">Questions</div></div>
+      <div class="info-card"><div class="v">6</div><div class="k">Lessons</div></div>
+      <div class="info-card"><div class="v">∞</div><div class="k">Retries</div></div>
+    </div>
+
+    <div class="lesson-table">
+      <div class="lt-head"><span>Lessons Covered</span><span>Questions</span></div>
+      <div id="lesson-coverage"></div>
+    </div>
+
+    <div class="band-legend">
+      <div class="bl-title">How your score is shown</div>
+      <div class="band-row"><span class="band-dot" style="background:var(--green);"></span><span class="bt" style="color:var(--green-dark);">🟢 80–100% Strong</span><span class="bd">Ready to move to the next module</span></div>
+      <div class="band-row"><span class="band-dot" style="background:var(--amber);"></span><span class="bt" style="color:var(--amber-dark);">🟡 60–79% Good Progress</span><span class="bd">Review 1–2 lessons and retry</span></div>
+      <div class="band-row"><span class="band-dot" style="background:var(--red);"></span><span class="bt" style="color:var(--red-dark);">🔴 Below 60% Needs Review</span><span class="bd">Revisit the module before moving on</span></div>
+    </div>
+
+    <div class="notice">💡 There's no countdown and no fail state — this is here to help you find gaps, not to pressure you. Flag anything you're unsure of and revisit it in review mode afterward.</div>
+
+    <button class="btn-primary" onclick="startExam()">Start Practice →</button>
+  </div>
+  <footer class="k21-footer">K21 Academy · Azure AI/ML/GenAI Job Oriented Program · Module 3 Practice Test</footer>
+</div>
+
+<!-- ============ EXAM SCREEN ============ -->
+<div id="screen-exam" class="screen">
+  <div class="exam-header">
+    <div class="exam-title">Module 3 · <span>Get Started with AI Applications on Azure</span></div>
+    <div class="exam-meta">
+      <div class="timer-pill"><span class="lbl">Time</span><span id="timer-display">0:00</span></div>
+      <div class="progress-pill"><span id="progress-display">Q1 / 24</span></div>
+    </div>
+  </div>
+  <div class="exam-body">
+    <div class="q-card">
+      <div class="q-top">
+        <div>
+          <div class="q-num" id="q-num-label">Question 1 of 24</div>
+          <div class="lesson-tag" id="q-lesson-tag">Lesson 1</div>
+        </div>
+        <button class="flag-btn" id="flag-btn" onclick="toggleFlag()">🚩 Flag for review</button>
+      </div>
+      <div class="q-text" id="q-text"></div>
+      <div id="options-container"></div>
+      <div class="q-nav-btns">
+        <button class="btn-outline" id="prev-btn" onclick="prevQuestion()">← Previous</button>
+        <button class="btn-outline" id="next-btn" onclick="nextQuestion()">Next →</button>
+      </div>
+    </div>
+    <div class="sidebar">
+      <div class="sb-title">Question Navigator</div>
+      <div class="nav-grid" id="nav-grid"></div>
+      <div class="legend">
+        <div class="lg-row"><span class="sw answered"></span> Answered</div>
+        <div class="lg-row"><span class="sw"></span> Unanswered</div>
+        <div class="lg-row"><span class="sw flagged"></span> Flagged</div>
+      </div>
+      <button class="btn-green" style="width:100%; justify-content:center;" onclick="confirmSubmit()">Submit Practice Test</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ RESULTS SCREEN ============ -->
+<div id="screen-results" class="screen">
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span> K21 Academy</div>
+    <div class="program">Azure AI/ML/GenAI Job Oriented Program</div>
+  </div>
+  <div class="results-wrap">
+    <div class="band-hero" id="band-hero">
+      <div class="band-emoji" id="band-emoji">🟢</div>
+      <div class="band-label" id="band-label">Strong</div>
+      <div class="band-msg" id="band-msg">Ready to move to the next module</div>
+      <div class="score-big" id="score-big">0%</div>
+      <div class="score-sub" id="score-sub">0 of 30 correct</div>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-card"><div class="sv" id="stat-correct">0</div><div class="sl">Correct</div></div>
+      <div class="stat-card"><div class="sv" id="stat-incorrect">0</div><div class="sl">Incorrect</div></div>
+      <div class="stat-card"><div class="sv" id="stat-skipped">0</div><div class="sl">Skipped</div></div>
+      <div class="stat-card"><div class="sv" id="stat-time">0:00</div><div class="sl">Time Taken</div></div>
+    </div>
+
+    <div class="lesson-breakdown">
+      <div class="lb-title">Lesson-wise Breakdown</div>
+      <div id="lesson-breakdown-body"></div>
+    </div>
+
+    <div class="action-row">
+      <button class="btn-primary" onclick="showReview()">📋 Review Answers</button>
+      <button class="btn-green" onclick="location.reload()">🔄 Retry Practice Test</button>
+    </div>
+  </div>
+  <footer class="k21-footer">K21 Academy · Azure AI/ML/GenAI Job Oriented Program · Module 3 Practice Test</footer>
+</div>
+
+<!-- ============ REVIEW SCREEN ============ -->
+<div id="screen-review" class="screen">
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span> K21 Academy</div>
+    <div class="program">Review Mode · Module 3</div>
+  </div>
+  <div class="review-wrap">
+    <div class="review-filters">
+      <button class="rf-btn active" data-filter="all" onclick="setReviewFilter('all')">All (24)</button>
+      <button class="rf-btn" data-filter="correct" onclick="setReviewFilter('correct')">✅ Correct</button>
+      <button class="rf-btn" data-filter="incorrect" onclick="setReviewFilter('incorrect')">❌ Incorrect</button>
+      <button class="rf-btn" data-filter="skipped" onclick="setReviewFilter('skipped')">⬜ Skipped</button>
+      <button class="rf-btn" data-filter="flagged" onclick="setReviewFilter('flagged')">🚩 Flagged</button>
+    </div>
+    <div id="review-list"></div>
+    <div class="action-row">
+      <button class="btn-primary" onclick="backToResults()">← Back to Results</button>
+      <button class="btn-green" onclick="location.reload()">🔄 Retry Practice Test</button>
+    </div>
+  </div>
+  <footer class="k21-footer">K21 Academy · Azure AI/ML/GenAI Job Oriented Program · Module 3 Practice Test</footer>
+</div>
+
+<!-- ============ SUBMIT CONFIRM MODAL ============ -->
+<div id="submit-modal" style="display:none; position:fixed; inset:0; background:rgba(17,24,39,.55); z-index:100; align-items:center; justify-content:center;">
+  <div style="background:#fff; border-radius:20px; padding:28px; max-width:380px; width:90%; text-align:center;">
+    <div style="font-size:17px; font-weight:800; margin-bottom:10px;">Submit practice test?</div>
+    <div id="modal-unanswered-msg" style="font-size:13.5px; color:var(--text-2); margin-bottom:20px; line-height:1.5;"></div>
+    <div style="display:flex; gap:10px; justify-content:center;">
+      <button class="btn-outline" onclick="closeSubmitModal()">Keep working</button>
+      <button class="btn-green" onclick="submitExam()">Submit</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const QUESTIONS = [
+  {
+    id: 1,
+    lesson: 0,
+    lessonName: "Fundamentals of Generative AI",
+    question: "What best defines 'Generative AI' as a category of artificial intelligence?",
+    options: [
+      { key: "A", text: "AI systems limited to controlling robotic hardware" },
+      { key: "B", text: "AI systems that exclusively perform numeric forecasting on structured data" },
+      { key: "C", text: "AI models that generate new, original content such as text, images, or audio, based on patterns learned from training data" },
+      { key: "D", text: "AI models that can only classify existing content into predefined categories" }
+    ],
+    correct: "C",
+    explanation: "Generative AI refers to models that create new content \u2014 text, images, audio, code, and more \u2014 by learning the underlying patterns and structure of large training datasets, rather than simply classifying or predicting on existing data."
+  },
+  {
+    id: 2,
+    lesson: 0,
+    lessonName: "Fundamentals of Generative AI",
+    question: "What is a 'foundation model' in the context of Generative AI?",
+    options: [
+      { key: "A", text: "A large-scale model pretrained on broad data that can be adapted to many different downstream tasks" },
+      { key: "B", text: "A model that only works with numeric tabular data" },
+      { key: "C", text: "A small model trained from scratch for a single narrow task with no reuse potential" },
+      { key: "D", text: "A hardware component used to accelerate model training" }
+    ],
+    correct: "A",
+    explanation: "Foundation models are large models pretrained on massive, diverse datasets, giving them broad general capabilities that can then be adapted, fine-tuned, or prompted for many different downstream tasks."
+  },
+  {
+    id: 3,
+    lesson: 0,
+    lessonName: "Fundamentals of Generative AI",
+    question: "Which of the following is an example of a generative AI use case, as opposed to a traditional discriminative AI use case?",
+    options: [
+      { key: "A", text: "Detecting fraudulent transactions in a payments dataset" },
+      { key: "B", text: "Predicting whether a customer will churn based on account features" },
+      { key: "C", text: "Classifying an email as spam or not spam" },
+      { key: "D", text: "Drafting an original marketing email from a short brief" }
+    ],
+    correct: "D",
+    explanation: "Drafting original content, such as a marketing email, is a generative task since it creates new output. Classifying spam, predicting churn, and detecting fraud are all discriminative tasks that assign existing inputs to categories or scores."
+  },
+  {
+    id: 4,
+    lesson: 0,
+    lessonName: "Fundamentals of Generative AI",
+    question: "Why do generative AI models sometimes produce 'hallucinations' \u2014 confident but factually incorrect output?",
+    options: [
+      { key: "A", text: "Because hallucinations only occur when a model is given too little input text" },
+      { key: "B", text: "Because the model generates output by predicting statistically plausible patterns from training data, which can produce fluent but inaccurate content when it lacks grounded knowledge" },
+      { key: "C", text: "Because the model deliberately tries to deceive the user" },
+      { key: "D", text: "Because the model's underlying hardware has a memory fault" }
+    ],
+    correct: "B",
+    explanation: "Hallucinations happen because generative models predict the next most statistically plausible token based on learned patterns rather than verifying facts against a trusted source, which can result in fluent but inaccurate or fabricated content."
+  },
+  {
+    id: 5,
+    lesson: 1,
+    lessonName: "Introduction to Generative AI & Large Language Models",
+    question: "What neural network architecture underlies most modern large language models (LLMs)?",
+    options: [
+      { key: "A", text: "The convolutional neural network (CNN) architecture" },
+      { key: "B", text: "The k-nearest neighbors architecture" },
+      { key: "C", text: "The Transformer architecture" },
+      { key: "D", text: "The decision tree ensemble architecture" }
+    ],
+    correct: "C",
+    explanation: "The Transformer architecture, introduced in 2017, uses self-attention mechanisms to process input sequences and is the foundation for most modern large language models."
+  },
+  {
+    id: 6,
+    lesson: 1,
+    lessonName: "Introduction to Generative AI & Large Language Models",
+    question: "In the context of LLMs, what is a 'token'?",
+    options: [
+      { key: "A", text: "A synonym for the model's entire vocabulary" },
+      { key: "B", text: "A security credential used to authenticate API calls" },
+      { key: "C", text: "A unit of GPU memory allocated during training" },
+      { key: "D", text: "A unit of text, such as a word or part of a word, that the model processes as its basic building block" }
+    ],
+    correct: "D",
+    explanation: "Tokens are the basic units of text that an LLM processes, which can be whole words, parts of words, or punctuation, and both input prompts and generated output are measured and billed in tokens."
+  },
+  {
+    id: 7,
+    lesson: 1,
+    lessonName: "Introduction to Generative AI & Large Language Models",
+    question: "What is the purpose of the 'self-attention' mechanism in a Transformer-based LLM?",
+    options: [
+      { key: "A", text: "It allows the model to weigh the relevance of different tokens in the input relative to one another when generating output" },
+      { key: "B", text: "It compresses the model's weights to reduce file size" },
+      { key: "C", text: "It automatically translates the input into English before processing" },
+      { key: "D", text: "It restricts the model to only look at the very first word of the input" }
+    ],
+    correct: "A",
+    explanation: "Self-attention lets the model determine how much each token in a sequence should influence the representation of every other token, capturing contextual relationships regardless of their distance in the text."
+  },
+  {
+    id: 8,
+    lesson: 1,
+    lessonName: "Introduction to Generative AI & Large Language Models",
+    question: "What does the term 'prompt engineering' refer to?",
+    options: [
+      { key: "A", text: "A method for compressing model weights after training" },
+      { key: "B", text: "The practice of designing and refining input instructions to guide an LLM toward producing the desired output" },
+      { key: "C", text: "Physically engineering the servers that host an LLM" },
+      { key: "D", text: "The process of labeling training data for supervised fine-tuning" }
+    ],
+    correct: "B",
+    explanation: "Prompt engineering is the practice of crafting clear, well-structured input instructions and examples so that an LLM produces output that is more accurate, relevant, and aligned with the user's intent."
+  },
+  {
+    id: 9,
+    lesson: 2,
+    lessonName: "Get started with Azure OpenAI Service",
+    question: "What is Azure OpenAI Service?",
+    options: [
+      { key: "A", text: "A service exclusively for training brand-new models from scratch" },
+      { key: "B", text: "A service limited to only image classification tasks" },
+      { key: "C", text: "A free, unmanaged open-source repository of language models with no support" },
+      { key: "D", text: "A fully managed Azure service that provides REST API access to OpenAI's language models with enterprise security, compliance, and regional availability" }
+    ],
+    correct: "D",
+    explanation: "Azure OpenAI Service gives organizations REST API access to OpenAI's models through Azure, combined with Azure's enterprise-grade security, compliance certifications, private networking, and regional data residency options."
+  },
+  {
+    id: 10,
+    lesson: 2,
+    lessonName: "Get started with Azure OpenAI Service",
+    question: "Which of the following is a key benefit of using Azure OpenAI Service instead of calling the OpenAI public API directly?",
+    options: [
+      { key: "A", text: "It removes the need for any API key or authentication" },
+      { key: "B", text: "It guarantees zero cost for all API usage" },
+      { key: "C", text: "Integration with Azure's enterprise security, role-based access control, virtual networks, and compliance offerings" },
+      { key: "D", text: "It is the only way to access any GPT-5 family model anywhere" }
+    ],
+    correct: "C",
+    explanation: "A primary advantage of Azure OpenAI Service is that it wraps access to OpenAI's models with Azure's enterprise capabilities, including Azure Active Directory authentication, private networking, regional deployment, and compliance certifications relevant to regulated industries."
+  },
+  {
+    id: 11,
+    lesson: 2,
+    lessonName: "Get started with Azure OpenAI Service",
+    question: "Which of these is a common use case supported by Azure OpenAI Service?",
+    options: [
+      { key: "A", text: "Generating conversational responses, summarizing documents, and drafting content using models like the GPT-5 family" },
+      { key: "B", text: "Managing virtual machine network security groups" },
+      { key: "C", text: "Performing relational database schema migrations" },
+      { key: "D", text: "Rendering 3D video game graphics in real time" }
+    ],
+    correct: "A",
+    explanation: "Azure OpenAI Service is commonly used for natural-language tasks such as conversational chat, document summarization, content generation, and code assistance, powered by models in the GPT-5 family among others."
+  },
+  {
+    id: 12,
+    lesson: 2,
+    lessonName: "Get started with Azure OpenAI Service",
+    question: "What must an organization typically do before it can start using Azure OpenAI Service in a new subscription?",
+    options: [
+      { key: "A", text: "Nothing \u2014 the service is enabled by default on every Azure subscription with no request needed" },
+      { key: "B", text: "Request and be granted access, then create an Azure OpenAI resource within their Azure subscription" },
+      { key: "C", text: "Purchase a separate, unrelated third-party license from OpenAI directly" },
+      { key: "D", text: "Migrate their entire infrastructure to a different cloud provider first" }
+    ],
+    correct: "B",
+    explanation: "Access to Azure OpenAI Service has historically required an access request and approval, after which an organization creates an Azure OpenAI resource within their subscription to begin deploying and using models."
+  },
+  {
+    id: 13,
+    lesson: 3,
+    lessonName: "Provision an Azure OpenAI resource",
+    question: "When provisioning an Azure OpenAI resource, which factor can affect which models are available for deployment?",
+    options: [
+      { key: "A", text: "The number of resource groups in the subscription" },
+      { key: "B", text: "The Azure region selected during resource creation, since model availability varies by region" },
+      { key: "C", text: "The color theme chosen for the Azure portal" },
+      { key: "D", text: "The time zone configured on the user's local computer" }
+    ],
+    correct: "B",
+    explanation: "Model availability in Azure OpenAI Service varies by Azure region, so the region selected when provisioning the resource determines which models can subsequently be deployed."
+  },
+  {
+    id: 14,
+    lesson: 3,
+    lessonName: "Provision an Azure OpenAI resource",
+    question: "After creating an Azure OpenAI resource, what additional step is required before you can send inference requests to a specific model?",
+    options: [
+      { key: "A", text: "Manually compiling the model's source code" },
+      { key: "B", text: "Purchasing a physical GPU and installing it on-premises" },
+      { key: "C", text: "Disabling all authentication on the resource" },
+      { key: "D", text: "Deploying the desired model to create a named model deployment within that resource" }
+    ],
+    correct: "D",
+    explanation: "Creating the Azure OpenAI resource alone isn't enough; you must also create a model deployment, which assigns a deployment name to a specific model version, and API calls are then made against that deployment."
+  },
+  {
+    id: 15,
+    lesson: 3,
+    lessonName: "Provision an Azure OpenAI resource",
+    question: "Which Azure tool provides a graphical interface for creating and managing an Azure OpenAI resource, alongside the CLI and REST API options?",
+    options: [
+      { key: "A", text: "Azure Site Recovery" },
+      { key: "B", text: "Azure DevTest Labs" },
+      { key: "C", text: "Azure Portal" },
+      { key: "D", text: "Azure Traffic Manager" }
+    ],
+    correct: "C",
+    explanation: "The Azure Portal provides a web-based graphical interface for creating, configuring, and managing Azure OpenAI resources, in addition to programmatic options like the Azure CLI, PowerShell, and ARM/Bicep templates."
+  },
+  {
+    id: 16,
+    lesson: 3,
+    lessonName: "Provision an Azure OpenAI resource",
+    question: "What is the purpose of assigning role-based access control (RBAC) roles, such as 'Cognitive Services OpenAI User,' on an Azure OpenAI resource?",
+    options: [
+      { key: "A", text: "To control which users or applications are authorized to access and perform specific actions on the resource" },
+      { key: "B", text: "To automatically translate all API responses" },
+      { key: "C", text: "To determine the physical datacenter location of the resource" },
+      { key: "D", text: "To set the maximum token limit for every model deployment" }
+    ],
+    correct: "A",
+    explanation: "RBAC roles like 'Cognitive Services OpenAI User' govern which identities, whether users or applications, are permitted to call the resource and what actions they can perform, supporting the principle of least privilege."
+  },
+  {
+    id: 17,
+    lesson: 4,
+    lessonName: "Large language model",
+    question: "What does the 'context window' of a large language model refer to?",
+    options: [
+      { key: "A", text: "The time period during which the model was originally trained" },
+      { key: "B", text: "The physical size of the server rack hosting the model" },
+      { key: "C", text: "The number of languages a model was trained to support" },
+      { key: "D", text: "The maximum amount of input and output text, measured in tokens, that the model can process in a single request" }
+    ],
+    correct: "D",
+    explanation: "The context window defines the maximum combined number of tokens, spanning the prompt and the generated response, that a model can take into account within a single request."
+  },
+  {
+    id: 18,
+    lesson: 4,
+    lessonName: "Large language model",
+    question: "Which of the following best describes 'fine-tuning' a large language model?",
+    options: [
+      { key: "A", text: "Changing the model's programming language from Python to another language" },
+      { key: "B", text: "Further training an already pretrained model on a smaller, task-specific or domain-specific dataset to specialize its behavior" },
+      { key: "C", text: "Running the model on a faster GPU with no changes to its weights" },
+      { key: "D", text: "Deleting parts of the model to reduce its file size" }
+    ],
+    correct: "B",
+    explanation: "Fine-tuning takes a pretrained foundation model and continues training it on a smaller, curated dataset relevant to a specific task or domain, adjusting its weights to specialize its behavior beyond general-purpose prompting."
+  },
+  {
+    id: 19,
+    lesson: 4,
+    lessonName: "Large language model",
+    question: "What is the difference between the GPT-5 family's larger, more capable variants and its smaller, faster variants like GPT-5-mini?",
+    options: [
+      { key: "A", text: "Larger variants generally offer stronger reasoning and broader capability at higher cost and latency, while smaller variants trade some capability for speed and lower cost" },
+      { key: "B", text: "Smaller variants can only process images, while larger variants can only process text" },
+      { key: "C", text: "There is no capability difference; the names are purely cosmetic" },
+      { key: "D", text: "Smaller variants require manual retraining before every single request" }
+    ],
+    correct: "A",
+    explanation: "Within a model family, larger variants typically provide stronger reasoning and broader capability at a higher computational cost and latency, while smaller, distilled variants like GPT-5-mini offer faster, more economical responses for simpler tasks."
+  },
+  {
+    id: 20,
+    lesson: 4,
+    lessonName: "Large language model",
+    question: "What does the 'temperature' parameter control when generating text from a large language model?",
+    options: [
+      { key: "A", text: "The language the model responds in" },
+      { key: "B", text: "The number of tokens billed per request" },
+      { key: "C", text: "The randomness or creativity of the output \u2014 a lower value produces more deterministic, focused responses, while a higher value produces more varied, creative responses" },
+      { key: "D", text: "The physical operating temperature of the GPU running the model" }
+    ],
+    correct: "C",
+    explanation: "Temperature controls the randomness of token selection during generation; lower values make output more focused and deterministic, while higher values increase variability and creativity in the response."
+  },
+  {
+    id: 21,
+    lesson: 5,
+    lessonName: "Azure OpenAI Studio",
+    question: "What is the primary purpose of Azure OpenAI Studio (Azure AI Foundry)?",
+    options: [
+      { key: "A", text: "A web-based interface for exploring, testing, deploying, and managing Azure OpenAI models without writing code for initial experimentation" },
+      { key: "B", text: "A tool exclusively for managing billing invoices" },
+      { key: "C", text: "A service for provisioning virtual machines unrelated to AI workloads" },
+      { key: "D", text: "A code editor for writing native mobile applications" }
+    ],
+    correct: "A",
+    explanation: "Azure OpenAI Studio provides a web-based interface where users can explore available models, experiment in playgrounds, deploy models, and manage configurations without needing to write code for initial testing."
+  },
+  {
+    id: 22,
+    lesson: 5,
+    lessonName: "Azure OpenAI Studio",
+    question: "What is the purpose of the 'Chat playground' within Azure OpenAI Studio?",
+    options: [
+      { key: "A", text: "To automatically generate billing reports for the resource" },
+      { key: "B", text: "To permanently store all conversation transcripts for legal archiving only" },
+      { key: "C", text: "To let users interactively test conversational prompts against a deployed model and adjust parameters like temperature or system messages before integrating it into an application" },
+      { key: "D", text: "To provision new Azure subscriptions" }
+    ],
+    correct: "C",
+    explanation: "The Chat playground allows users to interactively experiment with a deployed model, adjusting parameters such as temperature, system messages, and few-shot examples, to refine prompt behavior before building it into an application."
+  },
+  {
+    id: 23,
+    lesson: 5,
+    lessonName: "Azure OpenAI Studio",
+    question: "What is the role of content filters configured in Azure OpenAI Studio?",
+    options: [
+      { key: "A", text: "They compress the model's response to save on token costs" },
+      { key: "B", text: "They screen both input prompts and generated output for categories of potentially harmful content, and can block or flag content that exceeds configured severity thresholds" },
+      { key: "C", text: "They automatically translate all input prompts into English" },
+      { key: "D", text: "They determine the pricing tier of the resource" }
+    ],
+    correct: "B",
+    explanation: "Content filters in Azure OpenAI Studio evaluate prompts and completions for categories such as violence, hate, sexual content, and self-harm, and can block or flag content based on configurable severity thresholds to support responsible AI use."
+  },
+  {
+    id: 24,
+    lesson: 5,
+    lessonName: "Azure OpenAI Studio",
+    question: "Which of the following tasks can be performed directly within Azure OpenAI Studio?",
+    options: [
+      { key: "A", text: "Changing the programming language the model was originally trained in" },
+      { key: "B", text: "Manually rewriting the model's transformer architecture from scratch" },
+      { key: "C", text: "Editing the physical hardware specifications of the underlying GPU cluster" },
+      { key: "D", text: "Deploying a model, testing prompts in a playground, and reviewing usage and deployment details" }
+    ],
+    correct: "D",
+    explanation: "Azure OpenAI Studio supports end-to-end workflows including deploying models, testing and refining prompts in playgrounds, and reviewing deployment and usage details, all through its web interface."
+  }
+];
+
+</script>
+<script>
+// ==========================================================
+// STATE
+// ==========================================================
+const TOTAL_Q = QUESTIONS.length;
+let current = 0;
+let answers = new Array(TOTAL_Q).fill(null);   // selected key or null
+let flagged = new Array(TOTAL_Q).fill(false);
+let startTime = null;
+let timerInterval = null;
+let elapsedSeconds = 0;
+let reviewFilter = 'all';
+
+// ==========================================================
+// LESSON COVERAGE (built on start screen)
+// ==========================================================
+function buildLessonCoverage() {
+  const counts = {};
+  const order = [];
+  QUESTIONS.forEach(q => {
+    if (!(q.lesson in counts)) { counts[q.lesson] = { name: q.lessonName, n: 0 }; order.push(q.lesson); }
+    counts[q.lesson].n++;
+  });
+  const container = document.getElementById('lesson-coverage');
+  order.sort((a,b) => a-b).forEach(l => {
+    const row = document.createElement('div');
+    row.className = 'lesson-row';
+    row.innerHTML = `<span class="ln">Lesson ${l}: ${counts[l].name}</span><span class="badge">${counts[l].n} Qs</span>`;
+    container.appendChild(row);
+  });
+}
+buildLessonCoverage();
+
+// ==========================================================
+// START
+// ==========================================================
+function startExam() {
+  document.getElementById('screen-start').classList.remove('active');
+  document.getElementById('screen-exam').classList.add('active');
+  startTime = Date.now();
+  timerInterval = setInterval(updateTimer, 1000);
+  buildNavGrid();
+  renderQuestion();
+}
+
+function updateTimer() {
+  elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
+  const m = Math.floor(elapsedSeconds / 60);
+  const s = elapsedSeconds % 60;
+  document.getElementById('timer-display').textContent = `${m}:${s.toString().padStart(2,'0')}`;
+}
+
+// ==========================================================
+// RENDER QUESTION
+// ==========================================================
+function renderQuestion() {
+  const q = QUESTIONS[current];
+  document.getElementById('q-num-label').textContent = `Question ${current + 1} of ${TOTAL_Q}`;
+  document.getElementById('q-lesson-tag').textContent = `Lesson ${q.lesson}: ${q.lessonName}`;
+  document.getElementById('q-text').textContent = q.question;
+  document.getElementById('progress-display').textContent = `Q${current + 1} / ${TOTAL_Q}`;
+
+  const flagBtn = document.getElementById('flag-btn');
+  flagBtn.classList.toggle('flagged', flagged[current]);
+  flagBtn.innerHTML = flagged[current] ? '🚩 Flagged' : '🚩 Flag for review';
+
+  const optContainer = document.getElementById('options-container');
+  optContainer.innerHTML = '';
+  q.options.forEach(opt => {
+    const div = document.createElement('div');
+    div.className = 'option' + (answers[current] === opt.key ? ' selected' : '');
+    div.onclick = () => selectAnswer(opt.key);
+    div.innerHTML = `<span class="opt-key">${opt.key}</span><span class="opt-text">${opt.text}</span>`;
+    optContainer.appendChild(div);
+  });
+
+  document.getElementById('prev-btn').disabled = current === 0;
+  document.getElementById('prev-btn').style.opacity = current === 0 ? '0.4' : '1';
+  document.getElementById('next-btn').textContent = current === TOTAL_Q - 1 ? 'Finish →' : 'Next →';
+
+  updateNavGrid();
+}
+
+function selectAnswer(key) {
+  answers[current] = key;
+  renderQuestion();
+}
+
+function toggleFlag() {
+  flagged[current] = !flagged[current];
+  renderQuestion();
+}
+
+function nextQuestion() {
+  if (current < TOTAL_Q - 1) { current++; renderQuestion(); }
+  else { confirmSubmit(); }
+}
+function prevQuestion() {
+  if (current > 0) { current--; renderQuestion(); }
+}
+
+// ==========================================================
+// NAVIGATOR
+// ==========================================================
+function buildNavGrid() {
+  const grid = document.getElementById('nav-grid');
+  grid.innerHTML = '';
+  for (let i = 0; i < TOTAL_Q; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'nav-cell';
+    cell.id = `nav-cell-${i}`;
+    cell.textContent = i + 1;
+    cell.onclick = () => { current = i; renderQuestion(); };
+    grid.appendChild(cell);
+  }
+}
+function updateNavGrid() {
+  for (let i = 0; i < TOTAL_Q; i++) {
+    const cell = document.getElementById(`nav-cell-${i}`);
+    cell.classList.toggle('current', i === current);
+    cell.classList.toggle('answered', answers[i] !== null);
+    cell.classList.toggle('flagged', flagged[i]);
+  }
+}
+
+// ==========================================================
+// SUBMIT
+// ==========================================================
+function confirmSubmit() {
+  const unanswered = answers.filter(a => a === null).length;
+  const msg = unanswered === 0
+    ? "You've answered all 30 questions. Ready to see your results?"
+    : `You have ${unanswered} unanswered question${unanswered > 1 ? 's' : ''}. You can still submit — unanswered questions count as skipped, not wrong.`;
+  document.getElementById('modal-unanswered-msg').textContent = msg;
+  document.getElementById('submit-modal').style.display = 'flex';
+}
+function closeSubmitModal() {
+  document.getElementById('submit-modal').style.display = 'none';
+}
+
+function submitExam() {
+  clearInterval(timerInterval);
+  document.getElementById('submit-modal').style.display = 'none';
+  document.getElementById('screen-exam').classList.remove('active');
+  document.getElementById('screen-results').classList.add('active');
+  renderResults();
+}
+
+// ==========================================================
+// RESULTS
+// ==========================================================
+function renderResults() {
+  let correct = 0, incorrect = 0, skipped = 0;
+  answers.forEach((a, i) => {
+    if (a === null) skipped++;
+    else if (a === QUESTIONS[i].correct) correct++;
+    else incorrect++;
+  });
+  const pct = Math.round((correct / TOTAL_Q) * 100);
+
+  document.getElementById('stat-correct').textContent = correct;
+  document.getElementById('stat-incorrect').textContent = incorrect;
+  document.getElementById('stat-skipped').textContent = skipped;
+  const m = Math.floor(elapsedSeconds / 60), s = elapsedSeconds % 60;
+  document.getElementById('stat-time').textContent = `${m}:${s.toString().padStart(2,'0')}`;
+
+  document.getElementById('score-big').textContent = `${pct}%`;
+  document.getElementById('score-sub').textContent = `${correct} of ${TOTAL_Q} correct`;
+
+  const hero = document.getElementById('band-hero');
+  const emoji = document.getElementById('band-emoji');
+  const label = document.getElementById('band-label');
+  const msg = document.getElementById('band-msg');
+
+  if (pct >= 80) {
+    hero.className = 'band-hero strong';
+    emoji.textContent = '🟢'; label.textContent = 'Strong';
+    msg.textContent = "Ready to move to the next module.";
+  } else if (pct >= 60) {
+    hero.className = 'band-hero good';
+    emoji.textContent = '🟡'; label.textContent = 'Good Progress';
+    msg.textContent = "Review 1–2 lessons and retry.";
+  } else {
+    hero.className = 'band-hero needs';
+    emoji.textContent = '🔴'; label.textContent = 'Needs Review';
+    msg.textContent = "Revisit the module before moving on.";
+  }
+
+  renderLessonBreakdown();
+}
+
+function renderLessonBreakdown() {
+  const lessonStats = {};
+  const order = [];
+  QUESTIONS.forEach((q, i) => {
+    if (!(q.lesson in lessonStats)) {
+      lessonStats[q.lesson] = { name: q.lessonName, total: 0, correct: 0 };
+      order.push(q.lesson);
+    }
+    lessonStats[q.lesson].total++;
+    if (answers[i] === q.correct) lessonStats[q.lesson].correct++;
+  });
+  order.sort((a,b) => a-b);
+  const body = document.getElementById('lesson-breakdown-body');
+  body.innerHTML = '';
+  order.forEach(l => {
+    const st = lessonStats[l];
+    const pct = Math.round((st.correct / st.total) * 100);
+    const barClass = pct >= 80 ? '' : pct >= 60 ? 'mid' : 'low';
+    const row = document.createElement('div');
+    row.className = 'lb-row';
+    row.innerHTML = `
+      <div class="lb-top"><span class="lb-name">Lesson ${l}: ${st.name}</span><span class="lb-score">${st.correct}/${st.total}</span></div>
+      <div class="lb-bar-bg"><div class="lb-bar-fill ${barClass}" style="width:${pct}%;"></div></div>
+    `;
+    body.appendChild(row);
+  });
+}
+
+// ==========================================================
+// REVIEW MODE
+// ==========================================================
+function showReview() {
+  document.getElementById('screen-results').classList.remove('active');
+  document.getElementById('screen-review').classList.add('active');
+  renderReviewList();
+}
+function backToResults() {
+  document.getElementById('screen-review').classList.remove('active');
+  document.getElementById('screen-results').classList.add('active');
+}
+function setReviewFilter(f) {
+  reviewFilter = f;
+  document.querySelectorAll('.rf-btn').forEach(b => b.classList.toggle('active', b.dataset.filter === f));
+  renderReviewList();
+}
+function renderReviewList() {
+  const list = document.getElementById('review-list');
+  list.innerHTML = '';
+  QUESTIONS.forEach((q, i) => {
+    const a = answers[i];
+    const status = a === null ? 'skipped' : (a === q.correct ? 'correct' : 'incorrect');
+    if (reviewFilter === 'correct' && status !== 'correct') return;
+    if (reviewFilter === 'incorrect' && status !== 'incorrect') return;
+    if (reviewFilter === 'skipped' && status !== 'skipped') return;
+    if (reviewFilter === 'flagged' && !flagged[i]) return;
+
+    const card = document.createElement('div');
+    card.className = 'review-q';
+    let tagHtml = status === 'correct'
+      ? '<span class="result-tag correct">✅ Correct</span>'
+      : status === 'incorrect'
+        ? '<span class="result-tag incorrect">❌ Incorrect</span>'
+        : '<span class="result-tag skipped">⬜ Skipped</span>';
+    if (flagged[i]) tagHtml += ' <span class="result-tag" style="background:var(--amber-bg); color:var(--amber-dark);">🚩 Flagged</span>';
+
+    let optsHtml = '';
+    q.options.forEach(opt => {
+      let cls = '';
+      if (opt.key === q.correct) cls = 'correct-answer';
+      else if (opt.key === a && a !== q.correct) cls = 'wrong-answer';
+      optsHtml += `<div class="rq-opt ${cls}"><span>${opt.key}</span><span>${opt.text}</span></div>`;
+    });
+
+    card.innerHTML = `
+      <div class="rq-top"><span class="lesson-tag">Lesson ${q.lesson}: ${q.lessonName}</span>${tagHtml}</div>
+      <div class="rq-text">Q${i + 1}. ${q.question}</div>
+      ${optsHtml}
+      <div class="rq-explain"><b>Explanation:</b> ${q.explanation}</div>
+    `;
+    list.appendChild(card);
+  });
+
+  if (list.innerHTML === '') {
+    list.innerHTML = '<div style="text-align:center; color:var(--text-3); padding:40px 0;">No questions match this filter.</div>';
+  }
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Module 6: Optimize GenAI & Text Analysis with Azure — Practice Test | Azure AI/ML/GenAI Job Oriented Program</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#F7F8FA; --surface:#FFFFFF; --border:#E8EAEE;
+  --text-1:#111827; --text-2:#4B5563; --text-3:#9CA3AF;
+  --green:#8DC63F; --green-mid:#79B030; --green-bg:#F1F8E8; --green-dark:#4A7A1B;
+  --navy:#1A1248; --navy-mid:#2E2080; --blue:#1B9BD9;
+  --amber:#F5A623; --amber-bg:#FFF6E5; --amber-dark:#8A5A00;
+  --red:#E5484D; --red-bg:#FDECEC; --red-dark:#A9231F;
+  --radius:16px; --radius-lg:24px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text-1);-webkit-font-smoothing:antialiased;min-height:100vh;}
+.screen{display:none;}
+.screen.active{display:block;}
+
+/* ---------- Top bar ---------- */
+.topbar{
+  background:var(--navy); color:#fff; padding:14px 28px;
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;
+}
+.topbar .brand{display:flex; align-items:center; gap:10px; font-weight:800; font-size:15px;}
+.topbar .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--green);}
+.topbar .program{font-size:12px; color:#C9C4E8; font-weight:500;}
+
+/* ---------- Start screen ---------- */
+.start-wrap{max-width:820px; margin:0 auto; padding:48px 20px 70px;}
+.eyebrow{
+  display:inline-flex; align-items:center; gap:7px; background:var(--green-bg);
+  border:1px solid #C8E89A; color:var(--green-dark); font-size:11px; font-weight:700;
+  letter-spacing:.08em; text-transform:uppercase; padding:5px 13px; border-radius:100px; margin-bottom:16px;
+}
+.eyebrow i{width:5px;height:5px;background:var(--green);border-radius:50%;display:inline-block;font-style:normal;}
+.start-title{font-size:clamp(26px,4vw,36px); font-weight:800; letter-spacing:-.025em; line-height:1.2; margin-bottom:10px;}
+.start-title .accent{color:var(--green-mid);}
+.start-sub{color:var(--text-2); font-size:15.5px; line-height:1.6; margin-bottom:28px; max-width:640px;}
+
+.info-cards{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:28px;}
+.info-card{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); padding:22px 18px; text-align:center;}
+.info-card .v{font-size:32px; font-weight:800; color:var(--navy); line-height:1;}
+.info-card .k{font-size:12.5px; font-weight:700; color:var(--text-2); margin-top:8px;}
+
+.lesson-table{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); overflow:hidden; margin-bottom:28px;}
+.lesson-table .lt-head{background:var(--navy); color:#fff; padding:14px 20px; font-weight:700; font-size:14px; display:flex; justify-content:space-between;}
+.lesson-row{display:flex; justify-content:space-between; align-items:center; padding:12px 20px; border-top:1px solid var(--border); font-size:14px;}
+.lesson-row:first-of-type{border-top:none;}
+.lesson-row .ln{color:var(--text-1); font-weight:600;}
+.lesson-row .lc{color:var(--text-3); font-weight:500;}
+.lesson-row .badge{background:var(--green-bg); color:var(--green-dark); font-size:12px; font-weight:700; padding:3px 10px; border-radius:100px;}
+
+.band-legend{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); padding:20px; margin-bottom:32px;}
+.band-legend .bl-title{font-size:13px; font-weight:700; color:var(--text-1); margin-bottom:12px;}
+.band-row{display:flex; align-items:center; gap:12px; padding:8px 0;}
+.band-dot{width:11px;height:11px;border-radius:50%; flex-shrink:0;}
+.band-row .bt{font-weight:700; font-size:13.5px; min-width:150px;}
+.band-row .bd{font-size:13px; color:var(--text-2);}
+
+.notice{
+  display:flex; gap:10px; align-items:flex-start; background:var(--green-bg); border:1px solid #C8E89A;
+  border-radius:12px; padding:14px 16px; font-size:13.5px; color:var(--green-dark); margin-bottom:28px; line-height:1.5;
+}
+
+.btn-primary{
+  display:inline-flex; align-items:center; gap:10px; background:var(--navy); color:#fff;
+  font-family:'DM Sans',sans-serif; font-size:15px; font-weight:700; padding:15px 32px;
+  border-radius:100px; border:none; cursor:pointer; box-shadow:0 4px 20px rgba(26,18,72,.22);
+  transition:background .2s, transform .18s, box-shadow .2s;
+}
+.btn-primary:hover{background:var(--navy-mid); transform:translateY(-2px); box-shadow:0 8px 28px rgba(26,18,72,.3);}
+.btn-green{
+  display:inline-flex; align-items:center; gap:10px; background:var(--green); color:#fff;
+  font-family:'DM Sans',sans-serif; font-size:15px; font-weight:700; padding:15px 32px;
+  border-radius:100px; border:none; cursor:pointer; box-shadow:0 4px 16px rgba(141,198,63,.35);
+  transition:background .2s, transform .18s, box-shadow .2s;
+}
+.btn-green:hover{background:var(--green-mid); transform:translateY(-2px); box-shadow:0 8px 28px rgba(141,198,63,.45);}
+.btn-outline{
+  display:inline-flex; align-items:center; gap:8px; background:#fff; color:var(--navy);
+  font-family:'DM Sans',sans-serif; font-size:14px; font-weight:700; padding:12px 24px;
+  border-radius:100px; border:1.5px solid var(--navy); cursor:pointer; transition:all .18s;
+}
+.btn-outline:hover{background:var(--navy); color:#fff;}
+
+/* ---------- Exam screen ---------- */
+.exam-header{
+  background:var(--navy); color:#fff; padding:14px 24px; display:flex; align-items:center;
+  justify-content:space-between; flex-wrap:wrap; gap:12px; position:sticky; top:0; z-index:50;
+}
+.exam-title{font-weight:700; font-size:14.5px;}
+.exam-title span{color:#B9E27A;}
+.exam-meta{display:flex; align-items:center; gap:18px; font-size:13px;}
+.timer-pill{
+  display:flex; align-items:center; gap:7px; background:rgba(255,255,255,.1); padding:7px 14px;
+  border-radius:100px; font-weight:700; font-variant-numeric:tabular-nums;
+}
+.timer-pill .lbl{font-weight:500; color:#C9C4E8; font-size:11px; text-transform:uppercase; letter-spacing:.05em;}
+.progress-pill{background:rgba(255,255,255,.1); padding:7px 14px; border-radius:100px; font-weight:700;}
+
+.exam-body{display:grid; grid-template-columns:1fr 300px; gap:22px; max-width:1200px; margin:0 auto; padding:24px 20px 80px;}
+@media (max-width:880px){.exam-body{grid-template-columns:1fr;}}
+
+.q-card{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius-lg); padding:28px;}
+.q-top{display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:16px;}
+.q-num{font-size:12px; font-weight:700; color:var(--text-3); text-transform:uppercase; letter-spacing:.06em;}
+.lesson-tag{
+  display:inline-block; background:var(--green-bg); color:var(--green-dark); font-size:11.5px;
+  font-weight:700; padding:4px 11px; border-radius:100px; margin-top:6px;
+}
+.flag-btn{
+  display:flex; align-items:center; gap:6px; background:#fff; border:1.5px solid var(--border);
+  color:var(--text-2); font-family:'DM Sans',sans-serif; font-weight:700; font-size:13px;
+  padding:8px 16px; border-radius:100px; cursor:pointer; transition:all .18s; flex-shrink:0;
+}
+.flag-btn.flagged{background:var(--amber-bg); border-color:#F0C77C; color:var(--amber-dark);}
+.flag-btn:hover{border-color:var(--amber);}
+
+.q-text{font-size:17px; font-weight:600; line-height:1.55; color:var(--text-1); margin-bottom:22px;}
+
+.option{
+  display:flex; align-items:flex-start; gap:13px; padding:14px 16px; border:1.5px solid var(--border);
+  border-radius:12px; margin-bottom:10px; cursor:pointer; transition:all .15s; background:#fff;
+}
+.option:hover{border-color:var(--green); background:var(--green-bg);}
+.option.selected{border-color:var(--navy); background:#EEEBFA;}
+.option .opt-key{
+  width:26px; height:26px; border-radius:50%; border:1.5px solid var(--border); flex-shrink:0;
+  display:flex; align-items:center; justify-content:center; font-weight:700; font-size:12.5px; color:var(--text-2);
+}
+.option.selected .opt-key{background:var(--navy); border-color:var(--navy); color:#fff;}
+.option .opt-text{font-size:14.5px; line-height:1.5; color:var(--text-1); padding-top:3px;}
+
+.q-nav-btns{display:flex; justify-content:space-between; margin-top:22px; gap:10px;}
+
+/* Sidebar navigator */
+.sidebar{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius-lg); padding:20px; align-self:start; position:sticky; top:88px;}
+.sb-title{font-size:13px; font-weight:700; color:var(--text-1); margin-bottom:14px;}
+.nav-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:8px; margin-bottom:18px;}
+.nav-cell{
+  aspect-ratio:1; border-radius:8px; border:1.5px solid var(--border); background:#fff;
+  display:flex; align-items:center; justify-content:center; font-size:12.5px; font-weight:700;
+  color:var(--text-2); cursor:pointer; transition:all .15s; position:relative;
+}
+.nav-cell:hover{border-color:var(--navy);}
+.nav-cell.current{border-color:var(--navy); border-width:2px;}
+.nav-cell.answered{background:var(--green-bg); border-color:#C8E89A; color:var(--green-dark);}
+.nav-cell.flagged::after{
+  content:''; position:absolute; top:-3px; right:-3px; width:9px; height:9px; border-radius:50%; background:var(--amber);
+}
+.legend{display:flex; flex-direction:column; gap:8px; font-size:12px; color:var(--text-2); margin-bottom:18px;}
+.legend .lg-row{display:flex; align-items:center; gap:8px;}
+.legend .sw{width:13px; height:13px; border-radius:4px; border:1.5px solid var(--border);}
+.legend .sw.answered{background:var(--green-bg); border-color:#C8E89A;}
+.legend .sw.flagged{background:#fff; position:relative;}
+.legend .sw.flagged::after{content:'';position:absolute;top:-3px;right:-3px;width:8px;height:8px;border-radius:50%;background:var(--amber);}
+
+/* ---------- Results screen ---------- */
+.results-wrap{max-width:820px; margin:0 auto; padding:48px 20px 80px;}
+.band-hero{border-radius:var(--radius-lg); padding:36px; text-align:center; margin-bottom:28px;}
+.band-hero.strong{background:var(--green-bg); border:1.5px solid #C8E89A;}
+.band-hero.good{background:var(--amber-bg); border:1.5px solid #F0C77C;}
+.band-hero.needs{background:var(--red-bg); border:1.5px solid #F3B4B6;}
+.band-emoji{font-size:44px; margin-bottom:10px;}
+.band-label{font-size:24px; font-weight:800; margin-bottom:6px;}
+.band-hero.strong .band-label{color:var(--green-dark);}
+.band-hero.good .band-label{color:var(--amber-dark);}
+.band-hero.needs .band-label{color:var(--red-dark);}
+.band-msg{font-size:15px; color:var(--text-2); margin-bottom:18px;}
+.score-big{font-size:46px; font-weight:800; color:var(--navy);}
+.score-sub{font-size:13.5px; color:var(--text-3); font-weight:600;}
+
+.stat-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:28px;}
+.stat-card{background:var(--surface); border:1.5px solid var(--border); border-radius:12px; padding:16px; text-align:center;}
+.stat-card .sv{font-size:22px; font-weight:800; color:var(--navy);}
+.stat-card .sl{font-size:11.5px; color:var(--text-3); font-weight:700; text-transform:uppercase; letter-spacing:.04em; margin-top:3px;}
+
+.lesson-breakdown{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); padding:22px; margin-bottom:28px;}
+.lb-title{font-size:15px; font-weight:700; margin-bottom:16px;}
+.lb-row{margin-bottom:14px;}
+.lb-top{display:flex; justify-content:space-between; font-size:13px; font-weight:600; margin-bottom:6px;}
+.lb-top .lb-name{color:var(--text-1);}
+.lb-top .lb-score{color:var(--text-2);}
+.lb-bar-bg{background:#F0F1F4; border-radius:100px; height:9px; overflow:hidden;}
+.lb-bar-fill{height:100%; border-radius:100px; background:var(--green);}
+.lb-bar-fill.mid{background:var(--amber);}
+.lb-bar-fill.low{background:var(--red);}
+
+.action-row{display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:8px;}
+
+/* ---------- Review screen ---------- */
+.review-wrap{max-width:820px; margin:0 auto; padding:32px 20px 80px;}
+.review-filters{display:flex; gap:8px; margin-bottom:22px; flex-wrap:wrap;}
+.rf-btn{
+  background:#fff; border:1.5px solid var(--border); color:var(--text-2); font-family:'DM Sans',sans-serif;
+  font-weight:700; font-size:13px; padding:8px 16px; border-radius:100px; cursor:pointer; transition:all .15s;
+}
+.rf-btn.active{background:var(--navy); border-color:var(--navy); color:#fff;}
+.review-q{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); padding:22px; margin-bottom:16px;}
+.review-q .rq-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;}
+.result-tag{font-size:11.5px; font-weight:700; padding:3px 11px; border-radius:100px;}
+.result-tag.correct{background:var(--green-bg); color:var(--green-dark);}
+.result-tag.incorrect{background:var(--red-bg); color:var(--red-dark);}
+.result-tag.skipped{background:#F0F1F4; color:var(--text-2);}
+.review-q .rq-text{font-size:15px; font-weight:600; margin-bottom:14px; line-height:1.5;}
+.rq-opt{padding:10px 14px; border-radius:10px; margin-bottom:7px; font-size:13.5px; border:1.5px solid var(--border); display:flex; gap:10px;}
+.rq-opt.correct-answer{background:var(--green-bg); border-color:#C8E89A; color:var(--green-dark); font-weight:600;}
+.rq-opt.wrong-answer{background:var(--red-bg); border-color:#F3B4B6; color:var(--red-dark); font-weight:600;}
+.rq-explain{background:#F7F8FA; border-radius:10px; padding:13px 15px; font-size:13px; color:var(--text-2); line-height:1.55; margin-top:10px;}
+.rq-explain b{color:var(--text-1);}
+
+footer.k21-footer{text-align:center; padding:22px; font-size:12px; color:var(--text-3);}
+</style>
+</head>
+<body>
+
+<!-- ============ START SCREEN ============ -->
+<div id="screen-start" class="screen active">
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span> K21 Academy</div>
+    <div class="program">Azure AI/ML/GenAI Job Oriented Program</div>
+  </div>
+  <div class="start-wrap">
+    <div class="eyebrow"><i></i>Module Practice Test</div>
+    <div class="start-title">Module 6: <span class="accent">Optimize GenAI & Text Analysis with Azure</span></div>
+    <p class="start-sub">A quick knowledge check across both lessons in this module. This is practice, not an exam — take your time, review explanations, and retry as many times as you like.</p>
+
+    <div class="info-cards">
+      <div class="info-card"><div class="v">12</div><div class="k">Questions</div></div>
+      <div class="info-card"><div class="v">2</div><div class="k">Lessons</div></div>
+      <div class="info-card"><div class="v">∞</div><div class="k">Retries</div></div>
+    </div>
+
+    <div class="lesson-table">
+      <div class="lt-head"><span>Lessons Covered</span><span>Questions</span></div>
+      <div id="lesson-coverage"></div>
+    </div>
+
+    <div class="band-legend">
+      <div class="bl-title">How your score is shown</div>
+      <div class="band-row"><span class="band-dot" style="background:var(--green);"></span><span class="bt" style="color:var(--green-dark);">🟢 80–100% Strong</span><span class="bd">Ready to move to the next module</span></div>
+      <div class="band-row"><span class="band-dot" style="background:var(--amber);"></span><span class="bt" style="color:var(--amber-dark);">🟡 60–79% Good Progress</span><span class="bd">Review 1–2 lessons and retry</span></div>
+      <div class="band-row"><span class="band-dot" style="background:var(--red);"></span><span class="bt" style="color:var(--red-dark);">🔴 Below 60% Needs Review</span><span class="bd">Revisit the module before moving on</span></div>
+    </div>
+
+    <div class="notice">💡 There's no countdown and no fail state — this is here to help you find gaps, not to pressure you. Flag anything you're unsure of and revisit it in review mode afterward.</div>
+
+    <button class="btn-primary" onclick="startExam()">Start Practice →</button>
+  </div>
+  <footer class="k21-footer">K21 Academy · Azure AI/ML/GenAI Job Oriented Program · Module 6 Practice Test</footer>
+</div>
+
+<!-- ============ EXAM SCREEN ============ -->
+<div id="screen-exam" class="screen">
+  <div class="exam-header">
+    <div class="exam-title">Module 6 · <span>Optimize GenAI & Text Analysis with Azure</span></div>
+    <div class="exam-meta">
+      <div class="timer-pill"><span class="lbl">Time</span><span id="timer-display">0:00</span></div>
+      <div class="progress-pill"><span id="progress-display">Q1 / 12</span></div>
+    </div>
+  </div>
+  <div class="exam-body">
+    <div class="q-card">
+      <div class="q-top">
+        <div>
+          <div class="q-num" id="q-num-label">Question 1 of 12</div>
+          <div class="lesson-tag" id="q-lesson-tag">Lesson 1</div>
+        </div>
+        <button class="flag-btn" id="flag-btn" onclick="toggleFlag()">🚩 Flag for review</button>
+      </div>
+      <div class="q-text" id="q-text"></div>
+      <div id="options-container"></div>
+      <div class="q-nav-btns">
+        <button class="btn-outline" id="prev-btn" onclick="prevQuestion()">← Previous</button>
+        <button class="btn-outline" id="next-btn" onclick="nextQuestion()">Next →</button>
+      </div>
+    </div>
+    <div class="sidebar">
+      <div class="sb-title">Question Navigator</div>
+      <div class="nav-grid" id="nav-grid"></div>
+      <div class="legend">
+        <div class="lg-row"><span class="sw answered"></span> Answered</div>
+        <div class="lg-row"><span class="sw"></span> Unanswered</div>
+        <div class="lg-row"><span class="sw flagged"></span> Flagged</div>
+      </div>
+      <button class="btn-green" style="width:100%; justify-content:center;" onclick="confirmSubmit()">Submit Practice Test</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ RESULTS SCREEN ============ -->
+<div id="screen-results" class="screen">
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span> K21 Academy</div>
+    <div class="program">Azure AI/ML/GenAI Job Oriented Program</div>
+  </div>
+  <div class="results-wrap">
+    <div class="band-hero" id="band-hero">
+      <div class="band-emoji" id="band-emoji">🟢</div>
+      <div class="band-label" id="band-label">Strong</div>
+      <div class="band-msg" id="band-msg">Ready to move to the next module</div>
+      <div class="score-big" id="score-big">0%</div>
+      <div class="score-sub" id="score-sub">0 of 30 correct</div>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-card"><div class="sv" id="stat-correct">0</div><div class="sl">Correct</div></div>
+      <div class="stat-card"><div class="sv" id="stat-incorrect">0</div><div class="sl">Incorrect</div></div>
+      <div class="stat-card"><div class="sv" id="stat-skipped">0</div><div class="sl">Skipped</div></div>
+      <div class="stat-card"><div class="sv" id="stat-time">0:00</div><div class="sl">Time Taken</div></div>
+    </div>
+
+    <div class="lesson-breakdown">
+      <div class="lb-title">Lesson-wise Breakdown</div>
+      <div id="lesson-breakdown-body"></div>
+    </div>
+
+    <div class="action-row">
+      <button class="btn-primary" onclick="showReview()">📋 Review Answers</button>
+      <button class="btn-green" onclick="location.reload()">🔄 Retry Practice Test</button>
+    </div>
+  </div>
+  <footer class="k21-footer">K21 Academy · Azure AI/ML/GenAI Job Oriented Program · Module 6 Practice Test</footer>
+</div>
+
+<!-- ============ REVIEW SCREEN ============ -->
+<div id="screen-review" class="screen">
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span> K21 Academy</div>
+    <div class="program">Review Mode · Module 6</div>
+  </div>
+  <div class="review-wrap">
+    <div class="review-filters">
+      <button class="rf-btn active" data-filter="all" onclick="setReviewFilter('all')">All (12)</button>
+      <button class="rf-btn" data-filter="correct" onclick="setReviewFilter('correct')">✅ Correct</button>
+      <button class="rf-btn" data-filter="incorrect" onclick="setReviewFilter('incorrect')">❌ Incorrect</button>
+      <button class="rf-btn" data-filter="skipped" onclick="setReviewFilter('skipped')">⬜ Skipped</button>
+      <button class="rf-btn" data-filter="flagged" onclick="setReviewFilter('flagged')">🚩 Flagged</button>
+    </div>
+    <div id="review-list"></div>
+    <div class="action-row">
+      <button class="btn-primary" onclick="backToResults()">← Back to Results</button>
+      <button class="btn-green" onclick="location.reload()">🔄 Retry Practice Test</button>
+    </div>
+  </div>
+  <footer class="k21-footer">K21 Academy · Azure AI/ML/GenAI Job Oriented Program · Module 6 Practice Test</footer>
+</div>
+
+<!-- ============ SUBMIT CONFIRM MODAL ============ -->
+<div id="submit-modal" style="display:none; position:fixed; inset:0; background:rgba(17,24,39,.55); z-index:100; align-items:center; justify-content:center;">
+  <div style="background:#fff; border-radius:20px; padding:28px; max-width:380px; width:90%; text-align:center;">
+    <div style="font-size:17px; font-weight:800; margin-bottom:10px;">Submit practice test?</div>
+    <div id="modal-unanswered-msg" style="font-size:13.5px; color:var(--text-2); margin-bottom:20px; line-height:1.5;"></div>
+    <div style="display:flex; gap:10px; justify-content:center;">
+      <button class="btn-outline" onclick="closeSubmitModal()">Keep working</button>
+      <button class="btn-green" onclick="submitExam()">Submit</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const QUESTIONS = [
+  {
+    id: 1,
+    lesson: 1,
+    lessonName: "Retrieval Augmented Generation",
+    question: "What core limitation of large language models does Retrieval Augmented Generation (RAG) primarily address?",
+    options: [
+      { key: "A", text: "LLMs are physically unable to process any text longer than one sentence without RAG" },
+      { key: "B", text: "An LLM's knowledge is frozen at its training cutoff and may lack access to private or newly changed information; RAG lets it retrieve current, relevant content at query time" },
+      { key: "C", text: "RAG removes the need for the model to have been trained on any language data at all" },
+      { key: "D", text: "RAG solves the problem of models running too quickly by intentionally slowing down inference" }
+    ],
+    correct: "B",
+    explanation: "Because an LLM's knowledge reflects only the data available up to its training cutoff, it can be outdated or missing private, organization-specific information; RAG addresses this by retrieving relevant, current content from an external source at query time and feeding it into the prompt."
+  },
+  {
+    id: 2,
+    lesson: 1,
+    lessonName: "Retrieval Augmented Generation",
+    question: "In a RAG pipeline, what role do 'embeddings' play in finding relevant content for a given query?",
+    options: [
+      { key: "A", text: "Embeddings determine the billing tier of the Azure OpenAI resource" },
+      { key: "B", text: "Embeddings are used only to compress audio files before transcription" },
+      { key: "C", text: "Embeddings encrypt the retrieved documents so they cannot be read by the language model" },
+      { key: "D", text: "Embeddings convert text into numeric vectors that capture semantic meaning, allowing the system to find content that is conceptually similar to the query rather than relying only on exact keyword matches" }
+    ],
+    correct: "D",
+    explanation: "Embeddings represent text as numeric vectors capturing semantic meaning, so a retrieval system can compare the embedding of a query against embeddings of stored content and surface conceptually similar matches, even when the exact wording differs."
+  },
+  {
+    id: 3,
+    lesson: 1,
+    lessonName: "Retrieval Augmented Generation",
+    question: "Why are source documents typically split into smaller 'chunks' before being indexed for a RAG solution?",
+    options: [
+      { key: "A", text: "Smaller chunks make retrieval more precise and help ensure the retrieved content fits within the model's context window alongside the query and instructions" },
+      { key: "B", text: "Chunking removes the need for the documents to ever be indexed at all" },
+      { key: "C", text: "Chunking automatically translates the documents into other languages" },
+      { key: "D", text: "Chunking is required only to satisfy file storage naming conventions" }
+    ],
+    correct: "A",
+    explanation: "Splitting documents into smaller, focused chunks improves retrieval precision by allowing the system to match a query to the most relevant passage rather than an entire document, and it also helps ensure retrieved content fits within the model's context window."
+  },
+  {
+    id: 4,
+    lesson: 1,
+    lessonName: "Retrieval Augmented Generation",
+    question: "What are the typical high-level stages of a RAG architecture, in order?",
+    options: [
+      { key: "A", text: "Generate a response first, then retrieve documents afterward to justify it, then delete the index" },
+      { key: "B", text: "Translate the query, encrypt it, then discard it without any retrieval step" },
+      { key: "C", text: "Index the source content, retrieve the most relevant chunks for a given query, augment the prompt with that retrieved content, then generate a response using the LLM" },
+      { key: "D", text: "Fine-tune the entire model on every single document before any query can be answered" }
+    ],
+    correct: "C",
+    explanation: "A typical RAG pipeline first indexes source content (often as embeddings), retrieves the most relevant pieces for an incoming query, augments the prompt sent to the LLM with that retrieved context, and then the LLM generates a response grounded in that content."
+  },
+  {
+    id: 5,
+    lesson: 1,
+    lessonName: "Retrieval Augmented Generation",
+    question: "When would RAG generally be preferred over fine-tuning to give an LLM access to organization-specific knowledge?",
+    options: [
+      { key: "A", text: "RAG and fine-tuning are always functionally identical, so the choice never matters" },
+      { key: "B", text: "When there is no external data source available at all" },
+      { key: "C", text: "When the goal is purely to change the model's writing style or tone rather than its factual knowledge" },
+      { key: "D", text: "When the underlying information changes frequently or needs to stay current, since RAG retrieves live data at query time rather than baking a snapshot of knowledge into the model's weights" }
+    ],
+    correct: "D",
+    explanation: "RAG is generally preferred when the underlying knowledge changes often, since it retrieves current data at query time, whereas fine-tuning bakes a static snapshot of information or behavior into the model's weights and would need to be repeated to reflect ongoing changes."
+  },
+  {
+    id: 6,
+    lesson: 1,
+    lessonName: "Retrieval Augmented Generation",
+    question: "What is a key benefit of RAG-based responses including 'citations' back to the retrieved source documents?",
+    options: [
+      { key: "A", text: "Citations are purely decorative and have no effect on trust or verifiability" },
+      { key: "B", text: "It lets users verify and trust the answer by tracing it back to the specific source content the model used, improving transparency" },
+      { key: "C", text: "Citations automatically fix any factual errors in the retrieved documents" },
+      { key: "D", text: "Citations replace the need for the model to generate any answer text at all" }
+    ],
+    correct: "B",
+    explanation: "Including citations that point back to the specific retrieved source content allows users to verify where an answer came from, increasing transparency and trust in the response compared to an answer with no traceable source."
+  },
+  {
+    id: 7,
+    lesson: 2,
+    lessonName: "Use your own data with Azure OpenAI",
+    question: "What is the primary purpose of the 'Azure OpenAI On Your Data' feature?",
+    options: [
+      { key: "A", text: "It is used only to change the visual theme of the Azure OpenAI Studio interface" },
+      { key: "B", text: "It permanently deletes all of an organization's existing data once connected" },
+      { key: "C", text: "It lets you connect an Azure OpenAI model to your own data sources so responses can be grounded in that content, without having to build a custom retrieval pipeline from scratch" },
+      { key: "D", text: "It replaces the need for an Azure subscription entirely" }
+    ],
+    correct: "C",
+    explanation: "The 'On Your Data' feature in Azure OpenAI lets you connect a model to your own content sources so it can generate grounded, contextual responses, without requiring you to build and maintain a custom retrieval pipeline yourself."
+  },
+  {
+    id: 8,
+    lesson: 2,
+    lessonName: "Use your own data with Azure OpenAI",
+    question: "Which of the following is a supported data source type when configuring 'Azure OpenAI On Your Data'?",
+    options: [
+      { key: "A", text: "An Azure AI Search index or documents uploaded from Azure Blob Storage" },
+      { key: "B", text: "A local spreadsheet stored only on an individual's personal laptop with no cloud connection" },
+      { key: "C", text: "A handwritten note that has not been digitized" },
+      { key: "D", text: "A printed physical document with no digital version" }
+    ],
+    correct: "A",
+    explanation: "Azure OpenAI's 'On Your Data' feature supports connecting to data sources such as an existing Azure AI Search index or documents uploaded to Azure Blob Storage, which are then indexed and made available for grounded responses."
+  },
+  {
+    id: 9,
+    lesson: 2,
+    lessonName: "Use your own data with Azure OpenAI",
+    question: "When you connect a new set of documents through 'Azure OpenAI On Your Data,' what typically happens automatically as part of the ingestion process?",
+    options: [
+      { key: "A", text: "The documents are automatically chunked and indexed so they can be efficiently searched and retrieved at query time" },
+      { key: "B", text: "The documents are translated into every supported language regardless of the original language" },
+      { key: "C", text: "The documents are removed from Azure storage as soon as ingestion completes" },
+      { key: "D", text: "The documents are permanently converted into a different file format that cannot be reversed" }
+    ],
+    correct: "A",
+    explanation: "As part of the ingestion process, 'On Your Data' automatically chunks and indexes the connected documents, preparing them for efficient retrieval so relevant passages can be surfaced when a user asks a related question."
+  },
+  {
+    id: 10,
+    lesson: 2,
+    lessonName: "Use your own data with Azure OpenAI",
+    question: "Why do responses generated through 'Azure OpenAI On Your Data' typically include citations to the source documents?",
+    options: [
+      { key: "A", text: "Citations are only shown when the feature fails to find any matching content" },
+      { key: "B", text: "Citations are a mandatory legal disclaimer with no connection to the retrieved content" },
+      { key: "C", text: "So users can trace an answer back to the specific document and section it was grounded in, supporting transparency and verification" },
+      { key: "D", text: "Citations replace the model's generated answer entirely with just a list of links" }
+    ],
+    correct: "C",
+    explanation: "Including citations lets users trace a generated answer back to the specific source document and section that informed it, which supports transparency and allows users to verify the grounded response against the original content."
+  },
+  {
+    id: 11,
+    lesson: 2,
+    lessonName: "Use your own data with Azure OpenAI",
+    question: "In Azure AI Foundry (Azure OpenAI Studio), what does the 'Add your data' wizard help you accomplish?",
+    options: [
+      { key: "A", text: "It only allows changing the model's temperature and maximum token settings" },
+      { key: "B", text: "It walks through selecting or creating a data source, configuring indexing settings, and connecting that data to a deployed model, all without writing custom retrieval code" },
+      { key: "C", text: "It requires manually writing a full custom RAG pipeline in code before it can be used" },
+      { key: "D", text: "It is used exclusively to delete existing Azure OpenAI deployments" }
+    ],
+    correct: "B",
+    explanation: "The 'Add your data' wizard guides users through selecting or creating a data source, configuring how it should be indexed, and connecting it to a deployed model, enabling a grounded chat experience without needing to hand-build a custom retrieval pipeline."
+  },
+  {
+    id: 12,
+    lesson: 2,
+    lessonName: "Use your own data with Azure OpenAI",
+    question: "When configuring 'Azure OpenAI On Your Data,' what is the effect of restricting the model to answer only from the connected data source, rather than blending in its general pretrained knowledge?",
+    options: [
+      { key: "A", text: "This setting permanently deletes the model's general pretrained knowledge from its weights" },
+      { key: "B", text: "This setting has no effect on the model's behavior whatsoever" },
+      { key: "C", text: "This setting can only be applied to image-generation models, not chat models" },
+      { key: "D", text: "The model's responses are limited to information found in the connected data, which helps reduce the risk of the model introducing ungrounded or unrelated information" }
+    ],
+    correct: "D",
+    explanation: "Restricting the model to answer only using the connected data source constrains its responses to the grounded content, reducing the likelihood that it introduces unrelated or ungrounded information from its broader pretrained knowledge."
+  }
+];
+
+</script>
+<script>
+// ==========================================================
+// STATE
+// ==========================================================
+const TOTAL_Q = QUESTIONS.length;
+let current = 0;
+let answers = new Array(TOTAL_Q).fill(null);   // selected key or null
+let flagged = new Array(TOTAL_Q).fill(false);
+let startTime = null;
+let timerInterval = null;
+let elapsedSeconds = 0;
+let reviewFilter = 'all';
+
+// ==========================================================
+// LESSON COVERAGE (built on start screen)
+// ==========================================================
+function buildLessonCoverage() {
+  const counts = {};
+  const order = [];
+  QUESTIONS.forEach(q => {
+    if (!(q.lesson in counts)) { counts[q.lesson] = { name: q.lessonName, n: 0 }; order.push(q.lesson); }
+    counts[q.lesson].n++;
+  });
+  const container = document.getElementById('lesson-coverage');
+  order.sort((a,b) => a-b).forEach(l => {
+    const row = document.createElement('div');
+    row.className = 'lesson-row';
+    row.innerHTML = `<span class="ln">Lesson ${l}: ${counts[l].name}</span><span class="badge">${counts[l].n} Qs</span>`;
+    container.appendChild(row);
+  });
+}
+buildLessonCoverage();
+
+// ==========================================================
+// START
+// ==========================================================
+function startExam() {
+  document.getElementById('screen-start').classList.remove('active');
+  document.getElementById('screen-exam').classList.add('active');
+  startTime = Date.now();
+  timerInterval = setInterval(updateTimer, 1000);
+  buildNavGrid();
+  renderQuestion();
+}
+
+function updateTimer() {
+  elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
+  const m = Math.floor(elapsedSeconds / 60);
+  const s = elapsedSeconds % 60;
+  document.getElementById('timer-display').textContent = `${m}:${s.toString().padStart(2,'0')}`;
+}
+
+// ==========================================================
+// RENDER QUESTION
+// ==========================================================
+function renderQuestion() {
+  const q = QUESTIONS[current];
+  document.getElementById('q-num-label').textContent = `Question ${current + 1} of ${TOTAL_Q}`;
+  document.getElementById('q-lesson-tag').textContent = `Lesson ${q.lesson}: ${q.lessonName}`;
+  document.getElementById('q-text').textContent = q.question;
+  document.getElementById('progress-display').textContent = `Q${current + 1} / ${TOTAL_Q}`;
+
+  const flagBtn = document.getElementById('flag-btn');
+  flagBtn.classList.toggle('flagged', flagged[current]);
+  flagBtn.innerHTML = flagged[current] ? '🚩 Flagged' : '🚩 Flag for review';
+
+  const optContainer = document.getElementById('options-container');
+  optContainer.innerHTML = '';
+  q.options.forEach(opt => {
+    const div = document.createElement('div');
+    div.className = 'option' + (answers[current] === opt.key ? ' selected' : '');
+    div.onclick = () => selectAnswer(opt.key);
+    div.innerHTML = `<span class="opt-key">${opt.key}</span><span class="opt-text">${opt.text}</span>`;
+    optContainer.appendChild(div);
+  });
+
+  document.getElementById('prev-btn').disabled = current === 0;
+  document.getElementById('prev-btn').style.opacity = current === 0 ? '0.4' : '1';
+  document.getElementById('next-btn').textContent = current === TOTAL_Q - 1 ? 'Finish →' : 'Next →';
+
+  updateNavGrid();
+}
+
+function selectAnswer(key) {
+  answers[current] = key;
+  renderQuestion();
+}
+
+function toggleFlag() {
+  flagged[current] = !flagged[current];
+  renderQuestion();
+}
+
+function nextQuestion() {
+  if (current < TOTAL_Q - 1) { current++; renderQuestion(); }
+  else { confirmSubmit(); }
+}
+function prevQuestion() {
+  if (current > 0) { current--; renderQuestion(); }
+}
+
+// ==========================================================
+// NAVIGATOR
+// ==========================================================
+function buildNavGrid() {
+  const grid = document.getElementById('nav-grid');
+  grid.innerHTML = '';
+  for (let i = 0; i < TOTAL_Q; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'nav-cell';
+    cell.id = `nav-cell-${i}`;
+    cell.textContent = i + 1;
+    cell.onclick = () => { current = i; renderQuestion(); };
+    grid.appendChild(cell);
+  }
+}
+function updateNavGrid() {
+  for (let i = 0; i < TOTAL_Q; i++) {
+    const cell = document.getElementById(`nav-cell-${i}`);
+    cell.classList.toggle('current', i === current);
+    cell.classList.toggle('answered', answers[i] !== null);
+    cell.classList.toggle('flagged', flagged[i]);
+  }
+}
+
+// ==========================================================
+// SUBMIT
+// ==========================================================
+function confirmSubmit() {
+  const unanswered = answers.filter(a => a === null).length;
+  const msg = unanswered === 0
+    ? "You've answered all 30 questions. Ready to see your results?"
+    : `You have ${unanswered} unanswered question${unanswered > 1 ? 's' : ''}. You can still submit — unanswered questions count as skipped, not wrong.`;
+  document.getElementById('modal-unanswered-msg').textContent = msg;
+  document.getElementById('submit-modal').style.display = 'flex';
+}
+function closeSubmitModal() {
+  document.getElementById('submit-modal').style.display = 'none';
+}
+
+function submitExam() {
+  clearInterval(timerInterval);
+  document.getElementById('submit-modal').style.display = 'none';
+  document.getElementById('screen-exam').classList.remove('active');
+  document.getElementById('screen-results').classList.add('active');
+  renderResults();
+}
+
+// ==========================================================
+// RESULTS
+// ==========================================================
+function renderResults() {
+  let correct = 0, incorrect = 0, skipped = 0;
+  answers.forEach((a, i) => {
+    if (a === null) skipped++;
+    else if (a === QUESTIONS[i].correct) correct++;
+    else incorrect++;
+  });
+  const pct = Math.round((correct / TOTAL_Q) * 100);
+
+  document.getElementById('stat-correct').textContent = correct;
+  document.getElementById('stat-incorrect').textContent = incorrect;
+  document.getElementById('stat-skipped').textContent = skipped;
+  const m = Math.floor(elapsedSeconds / 60), s = elapsedSeconds % 60;
+  document.getElementById('stat-time').textContent = `${m}:${s.toString().padStart(2,'0')}`;
+
+  document.getElementById('score-big').textContent = `${pct}%`;
+  document.getElementById('score-sub').textContent = `${correct} of ${TOTAL_Q} correct`;
+
+  const hero = document.getElementById('band-hero');
+  const emoji = document.getElementById('band-emoji');
+  const label = document.getElementById('band-label');
+  const msg = document.getElementById('band-msg');
+
+  if (pct >= 80) {
+    hero.className = 'band-hero strong';
+    emoji.textContent = '🟢'; label.textContent = 'Strong';
+    msg.textContent = "Ready to move to the next module.";
+  } else if (pct >= 60) {
+    hero.className = 'band-hero good';
+    emoji.textContent = '🟡'; label.textContent = 'Good Progress';
+    msg.textContent = "Review 1–2 lessons and retry.";
+  } else {
+    hero.className = 'band-hero needs';
+    emoji.textContent = '🔴'; label.textContent = 'Needs Review';
+    msg.textContent = "Revisit the module before moving on.";
+  }
+
+  renderLessonBreakdown();
+}
+
+function renderLessonBreakdown() {
+  const lessonStats = {};
+  const order = [];
+  QUESTIONS.forEach((q, i) => {
+    if (!(q.lesson in lessonStats)) {
+      lessonStats[q.lesson] = { name: q.lessonName, total: 0, correct: 0 };
+      order.push(q.lesson);
+    }
+    lessonStats[q.lesson].total++;
+    if (answers[i] === q.correct) lessonStats[q.lesson].correct++;
+  });
+  order.sort((a,b) => a-b);
+  const body = document.getElementById('lesson-breakdown-body');
+  body.innerHTML = '';
+  order.forEach(l => {
+    const st = lessonStats[l];
+    const pct = Math.round((st.correct / st.total) * 100);
+    const barClass = pct >= 80 ? '' : pct >= 60 ? 'mid' : 'low';
+    const row = document.createElement('div');
+    row.className = 'lb-row';
+    row.innerHTML = `
+      <div class="lb-top"><span class="lb-name">Lesson ${l}: ${st.name}</span><span class="lb-score">${st.correct}/${st.total}</span></div>
+      <div class="lb-bar-bg"><div class="lb-bar-fill ${barClass}" style="width:${pct}%;"></div></div>
+    `;
+    body.appendChild(row);
+  });
+}
+
+// ==========================================================
+// REVIEW MODE
+// ==========================================================
+function showReview() {
+  document.getElementById('screen-results').classList.remove('active');
+  document.getElementById('screen-review').classList.add('active');
+  renderReviewList();
+}
+function backToResults() {
+  document.getElementById('screen-review').classList.remove('active');
+  document.getElementById('screen-results').classList.add('active');
+}
+function setReviewFilter(f) {
+  reviewFilter = f;
+  document.querySelectorAll('.rf-btn').forEach(b => b.classList.toggle('active', b.dataset.filter === f));
+  renderReviewList();
+}
+function renderReviewList() {
+  const list = document.getElementById('review-list');
+  list.innerHTML = '';
+  QUESTIONS.forEach((q, i) => {
+    const a = answers[i];
+    const status = a === null ? 'skipped' : (a === q.correct ? 'correct' : 'incorrect');
+    if (reviewFilter === 'correct' && status !== 'correct') return;
+    if (reviewFilter === 'incorrect' && status !== 'incorrect') return;
+    if (reviewFilter === 'skipped' && status !== 'skipped') return;
+    if (reviewFilter === 'flagged' && !flagged[i]) return;
+
+    const card = document.createElement('div');
+    card.className = 'review-q';
+    let tagHtml = status === 'correct'
+      ? '<span class="result-tag correct">✅ Correct</span>'
+      : status === 'incorrect'
+        ? '<span class="result-tag incorrect">❌ Incorrect</span>'
+        : '<span class="result-tag skipped">⬜ Skipped</span>';
+    if (flagged[i]) tagHtml += ' <span class="result-tag" style="background:var(--amber-bg); color:var(--amber-dark);">🚩 Flagged</span>';
+
+    let optsHtml = '';
+    q.options.forEach(opt => {
+      let cls = '';
+      if (opt.key === q.correct) cls = 'correct-answer';
+      else if (opt.key === a && a !== q.correct) cls = 'wrong-answer';
+      optsHtml += `<div class="rq-opt ${cls}"><span>${opt.key}</span><span>${opt.text}</span></div>`;
+    });
+
+    card.innerHTML = `
+      <div class="rq-top"><span class="lesson-tag">Lesson ${q.lesson}: ${q.lessonName}</span>${tagHtml}</div>
+      <div class="rq-text">Q${i + 1}. ${q.question}</div>
+      ${optsHtml}
+      <div class="rq-explain"><b>Explanation:</b> ${q.explanation}</div>
+    `;
+    list.appendChild(card);
+  });
+
+  if (list.innerHTML === '') {
+    list.innerHTML = '<div style="text-align:center; color:var(--text-3); padding:40px 0;">No questions match this filter.</div>';
+  }
+}
+
+</script>
+</body>
+</html>

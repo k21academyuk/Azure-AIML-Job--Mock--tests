@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Module 18: MLOps — Feature Dev & Model Deployment — Practice Test | Azure AI/ML/GenAI Job Oriented Program</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#F7F8FA; --surface:#FFFFFF; --border:#E8EAEE;
+  --text-1:#111827; --text-2:#4B5563; --text-3:#9CA3AF;
+  --green:#8DC63F; --green-mid:#79B030; --green-bg:#F1F8E8; --green-dark:#4A7A1B;
+  --navy:#1A1248; --navy-mid:#2E2080; --blue:#1B9BD9;
+  --amber:#F5A623; --amber-bg:#FFF6E5; --amber-dark:#8A5A00;
+  --red:#E5484D; --red-bg:#FDECEC; --red-dark:#A9231F;
+  --radius:16px; --radius-lg:24px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text-1);-webkit-font-smoothing:antialiased;min-height:100vh;}
+.screen{display:none;}
+.screen.active{display:block;}
+
+/* ---------- Top bar ---------- */
+.topbar{
+  background:var(--navy); color:#fff; padding:14px 28px;
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;
+}
+.topbar .brand{display:flex; align-items:center; gap:10px; font-weight:800; font-size:15px;}
+.topbar .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--green);}
+.topbar .program{font-size:12px; color:#C9C4E8; font-weight:500;}
+
+/* ---------- Start screen ---------- */
+.start-wrap{max-width:820px; margin:0 auto; padding:48px 20px 70px;}
+.eyebrow{
+  display:inline-flex; align-items:center; gap:7px; background:var(--green-bg);
+  border:1px solid #C8E89A; color:var(--green-dark); font-size:11px; font-weight:700;
+  letter-spacing:.08em; text-transform:uppercase; padding:5px 13px; border-radius:100px; margin-bottom:16px;
+}
+.eyebrow i{width:5px;height:5px;background:var(--green);border-radius:50%;display:inline-block;font-style:normal;}
+.start-title{font-size:clamp(26px,4vw,36px); font-weight:800; letter-spacing:-.025em; line-height:1.2; margin-bottom:10px;}
+.start-title .accent{color:var(--green-mid);}
+.start-sub{color:var(--text-2); font-size:15.5px; line-height:1.6; margin-bottom:28px; max-width:640px;}
+
+.info-cards{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:28px;}
+.info-card{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); padding:22px 18px; text-align:center;}
+.info-card .v{font-size:32px; font-weight:800; color:var(--navy); line-height:1;}
+.info-card .k{font-size:12.5px; font-weight:700; color:var(--text-2); margin-top:8px;}
+
+.lesson-table{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); overflow:hidden; margin-bottom:28px;}
+.lesson-table .lt-head{background:var(--navy); color:#fff; padding:14px 20px; font-weight:700; font-size:14px; display:flex; justify-content:space-between;}
+.lesson-row{display:flex; justify-content:space-between; align-items:center; padding:12px 20px; border-top:1px solid var(--border); font-size:14px;}
+.lesson-row:first-of-type{border-top:none;}
+.lesson-row .ln{color:var(--text-1); font-weight:600;}
+.lesson-row .lc{color:var(--text-3); font-weight:500;}
+.lesson-row .badge{background:var(--green-bg); color:var(--green-dark); font-size:12px; font-weight:700; padding:3px 10px; border-radius:100px;}
+
+.band-legend{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); padding:20px; margin-bottom:32px;}
+.band-legend .bl-title{font-size:13px; font-weight:700; color:var(--text-1); margin-bottom:12px;}
+.band-row{display:flex; align-items:center; gap:12px; padding:8px 0;}
+.band-dot{width:11px;height:11px;border-radius:50%; flex-shrink:0;}
+.band-row .bt{font-weight:700; font-size:13.5px; min-width:150px;}
+.band-row .bd{font-size:13px; color:var(--text-2);}
+
+.notice{
+  display:flex; gap:10px; align-items:flex-start; background:var(--green-bg); border:1px solid #C8E89A;
+  border-radius:12px; padding:14px 16px; font-size:13.5px; color:var(--green-dark); margin-bottom:28px; line-height:1.5;
+}
+
+.btn-primary{
+  display:inline-flex; align-items:center; gap:10px; background:var(--navy); color:#fff;
+  font-family:'DM Sans',sans-serif; font-size:15px; font-weight:700; padding:15px 32px;
+  border-radius:100px; border:none; cursor:pointer; box-shadow:0 4px 20px rgba(26,18,72,.22);
+  transition:background .2s, transform .18s, box-shadow .2s;
+}
+.btn-primary:hover{background:var(--navy-mid); transform:translateY(-2px); box-shadow:0 8px 28px rgba(26,18,72,.3);}
+.btn-green{
+  display:inline-flex; align-items:center; gap:10px; background:var(--green); color:#fff;
+  font-family:'DM Sans',sans-serif; font-size:15px; font-weight:700; padding:15px 32px;
+  border-radius:100px; border:none; cursor:pointer; box-shadow:0 4px 16px rgba(141,198,63,.35);
+  transition:background .2s, transform .18s, box-shadow .2s;
+}
+.btn-green:hover{background:var(--green-mid); transform:translateY(-2px); box-shadow:0 8px 28px rgba(141,198,63,.45);}
+.btn-outline{
+  display:inline-flex; align-items:center; gap:8px; background:#fff; color:var(--navy);
+  font-family:'DM Sans',sans-serif; font-size:14px; font-weight:700; padding:12px 24px;
+  border-radius:100px; border:1.5px solid var(--navy); cursor:pointer; transition:all .18s;
+}
+.btn-outline:hover{background:var(--navy); color:#fff;}
+
+/* ---------- Exam screen ---------- */
+.exam-header{
+  background:var(--navy); color:#fff; padding:14px 24px; display:flex; align-items:center;
+  justify-content:space-between; flex-wrap:wrap; gap:12px; position:sticky; top:0; z-index:50;
+}
+.exam-title{font-weight:700; font-size:14.5px;}
+.exam-title span{color:#B9E27A;}
+.exam-meta{display:flex; align-items:center; gap:18px; font-size:13px;}
+.timer-pill{
+  display:flex; align-items:center; gap:7px; background:rgba(255,255,255,.1); padding:7px 14px;
+  border-radius:100px; font-weight:700; font-variant-numeric:tabular-nums;
+}
+.timer-pill .lbl{font-weight:500; color:#C9C4E8; font-size:11px; text-transform:uppercase; letter-spacing:.05em;}
+.progress-pill{background:rgba(255,255,255,.1); padding:7px 14px; border-radius:100px; font-weight:700;}
+
+.exam-body{display:grid; grid-template-columns:1fr 300px; gap:22px; max-width:1200px; margin:0 auto; padding:24px 20px 80px;}
+@media (max-width:880px){.exam-body{grid-template-columns:1fr;}}
+
+.q-card{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius-lg); padding:28px;}
+.q-top{display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:16px;}
+.q-num{font-size:12px; font-weight:700; color:var(--text-3); text-transform:uppercase; letter-spacing:.06em;}
+.lesson-tag{
+  display:inline-block; background:var(--green-bg); color:var(--green-dark); font-size:11.5px;
+  font-weight:700; padding:4px 11px; border-radius:100px; margin-top:6px;
+}
+.flag-btn{
+  display:flex; align-items:center; gap:6px; background:#fff; border:1.5px solid var(--border);
+  color:var(--text-2); font-family:'DM Sans',sans-serif; font-weight:700; font-size:13px;
+  padding:8px 16px; border-radius:100px; cursor:pointer; transition:all .18s; flex-shrink:0;
+}
+.flag-btn.flagged{background:var(--amber-bg); border-color:#F0C77C; color:var(--amber-dark);}
+.flag-btn:hover{border-color:var(--amber);}
+
+.q-text{font-size:17px; font-weight:600; line-height:1.55; color:var(--text-1); margin-bottom:22px;}
+
+.option{
+  display:flex; align-items:flex-start; gap:13px; padding:14px 16px; border:1.5px solid var(--border);
+  border-radius:12px; margin-bottom:10px; cursor:pointer; transition:all .15s; background:#fff;
+}
+.option:hover{border-color:var(--green); background:var(--green-bg);}
+.option.selected{border-color:var(--navy); background:#EEEBFA;}
+.option .opt-key{
+  width:26px; height:26px; border-radius:50%; border:1.5px solid var(--border); flex-shrink:0;
+  display:flex; align-items:center; justify-content:center; font-weight:700; font-size:12.5px; color:var(--text-2);
+}
+.option.selected .opt-key{background:var(--navy); border-color:var(--navy); color:#fff;}
+.option .opt-text{font-size:14.5px; line-height:1.5; color:var(--text-1); padding-top:3px;}
+
+.q-nav-btns{display:flex; justify-content:space-between; margin-top:22px; gap:10px;}
+
+/* Sidebar navigator */
+.sidebar{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius-lg); padding:20px; align-self:start; position:sticky; top:88px;}
+.sb-title{font-size:13px; font-weight:700; color:var(--text-1); margin-bottom:14px;}
+.nav-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:8px; margin-bottom:18px;}
+.nav-cell{
+  aspect-ratio:1; border-radius:8px; border:1.5px solid var(--border); background:#fff;
+  display:flex; align-items:center; justify-content:center; font-size:12.5px; font-weight:700;
+  color:var(--text-2); cursor:pointer; transition:all .15s; position:relative;
+}
+.nav-cell:hover{border-color:var(--navy);}
+.nav-cell.current{border-color:var(--navy); border-width:2px;}
+.nav-cell.answered{background:var(--green-bg); border-color:#C8E89A; color:var(--green-dark);}
+.nav-cell.flagged::after{
+  content:''; position:absolute; top:-3px; right:-3px; width:9px; height:9px; border-radius:50%; background:var(--amber);
+}
+.legend{display:flex; flex-direction:column; gap:8px; font-size:12px; color:var(--text-2); margin-bottom:18px;}
+.legend .lg-row{display:flex; align-items:center; gap:8px;}
+.legend .sw{width:13px; height:13px; border-radius:4px; border:1.5px solid var(--border);}
+.legend .sw.answered{background:var(--green-bg); border-color:#C8E89A;}
+.legend .sw.flagged{background:#fff; position:relative;}
+.legend .sw.flagged::after{content:'';position:absolute;top:-3px;right:-3px;width:8px;height:8px;border-radius:50%;background:var(--amber);}
+
+/* ---------- Results screen ---------- */
+.results-wrap{max-width:820px; margin:0 auto; padding:48px 20px 80px;}
+.band-hero{border-radius:var(--radius-lg); padding:36px; text-align:center; margin-bottom:28px;}
+.band-hero.strong{background:var(--green-bg); border:1.5px solid #C8E89A;}
+.band-hero.good{background:var(--amber-bg); border:1.5px solid #F0C77C;}
+.band-hero.needs{background:var(--red-bg); border:1.5px solid #F3B4B6;}
+.band-emoji{font-size:44px; margin-bottom:10px;}
+.band-label{font-size:24px; font-weight:800; margin-bottom:6px;}
+.band-hero.strong .band-label{color:var(--green-dark);}
+.band-hero.good .band-label{color:var(--amber-dark);}
+.band-hero.needs .band-label{color:var(--red-dark);}
+.band-msg{font-size:15px; color:var(--text-2); margin-bottom:18px;}
+.score-big{font-size:46px; font-weight:800; color:var(--navy);}
+.score-sub{font-size:13.5px; color:var(--text-3); font-weight:600;}
+
+.stat-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:28px;}
+.stat-card{background:var(--surface); border:1.5px solid var(--border); border-radius:12px; padding:16px; text-align:center;}
+.stat-card .sv{font-size:22px; font-weight:800; color:var(--navy);}
+.stat-card .sl{font-size:11.5px; color:var(--text-3); font-weight:700; text-transform:uppercase; letter-spacing:.04em; margin-top:3px;}
+
+.lesson-breakdown{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); padding:22px; margin-bottom:28px;}
+.lb-title{font-size:15px; font-weight:700; margin-bottom:16px;}
+.lb-row{margin-bottom:14px;}
+.lb-top{display:flex; justify-content:space-between; font-size:13px; font-weight:600; margin-bottom:6px;}
+.lb-top .lb-name{color:var(--text-1);}
+.lb-top .lb-score{color:var(--text-2);}
+.lb-bar-bg{background:#F0F1F4; border-radius:100px; height:9px; overflow:hidden;}
+.lb-bar-fill{height:100%; border-radius:100px; background:var(--green);}
+.lb-bar-fill.mid{background:var(--amber);}
+.lb-bar-fill.low{background:var(--red);}
+
+.action-row{display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:8px;}
+
+/* ---------- Review screen ---------- */
+.review-wrap{max-width:820px; margin:0 auto; padding:32px 20px 80px;}
+.review-filters{display:flex; gap:8px; margin-bottom:22px; flex-wrap:wrap;}
+.rf-btn{
+  background:#fff; border:1.5px solid var(--border); color:var(--text-2); font-family:'DM Sans',sans-serif;
+  font-weight:700; font-size:13px; padding:8px 16px; border-radius:100px; cursor:pointer; transition:all .15s;
+}
+.rf-btn.active{background:var(--navy); border-color:var(--navy); color:#fff;}
+.review-q{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); padding:22px; margin-bottom:16px;}
+.review-q .rq-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;}
+.result-tag{font-size:11.5px; font-weight:700; padding:3px 11px; border-radius:100px;}
+.result-tag.correct{background:var(--green-bg); color:var(--green-dark);}
+.result-tag.incorrect{background:var(--red-bg); color:var(--red-dark);}
+.result-tag.skipped{background:#F0F1F4; color:var(--text-2);}
+.review-q .rq-text{font-size:15px; font-weight:600; margin-bottom:14px; line-height:1.5;}
+.rq-opt{padding:10px 14px; border-radius:10px; margin-bottom:7px; font-size:13.5px; border:1.5px solid var(--border); display:flex; gap:10px;}
+.rq-opt.correct-answer{background:var(--green-bg); border-color:#C8E89A; color:var(--green-dark); font-weight:600;}
+.rq-opt.wrong-answer{background:var(--red-bg); border-color:#F3B4B6; color:var(--red-dark); font-weight:600;}
+.rq-explain{background:#F7F8FA; border-radius:10px; padding:13px 15px; font-size:13px; color:var(--text-2); line-height:1.55; margin-top:10px;}
+.rq-explain b{color:var(--text-1);}
+
+footer.k21-footer{text-align:center; padding:22px; font-size:12px; color:var(--text-3);}
+</style>
+</head>
+<body>
+
+<!-- ============ START SCREEN ============ -->
+<div id="screen-start" class="screen active">
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span> K21 Academy</div>
+    <div class="program">Azure AI/ML/GenAI Job Oriented Program</div>
+  </div>
+  <div class="start-wrap">
+    <div class="eyebrow"><i></i>Module Practice Test</div>
+    <div class="start-title">Module 18: <span class="accent">MLOps — Feature Dev & Model Deployment</span></div>
+    <p class="start-sub">A quick knowledge check across all 6 lessons in this module. This is practice, not an exam — take your time, review explanations, and retry as many times as you like.</p>
+
+    <div class="info-cards">
+      <div class="info-card"><div class="v">24</div><div class="k">Questions</div></div>
+      <div class="info-card"><div class="v">6</div><div class="k">Lessons</div></div>
+      <div class="info-card"><div class="v">∞</div><div class="k">Retries</div></div>
+    </div>
+
+    <div class="lesson-table">
+      <div class="lt-head"><span>Lessons Covered</span><span>Questions</span></div>
+      <div id="lesson-coverage"></div>
+    </div>
+
+    <div class="band-legend">
+      <div class="bl-title">How your score is shown</div>
+      <div class="band-row"><span class="band-dot" style="background:var(--green);"></span><span class="bt" style="color:var(--green-dark);">🟢 80–100% Strong</span><span class="bd">Ready to move to the next module</span></div>
+      <div class="band-row"><span class="band-dot" style="background:var(--amber);"></span><span class="bt" style="color:var(--amber-dark);">🟡 60–79% Good Progress</span><span class="bd">Review 1–2 lessons and retry</span></div>
+      <div class="band-row"><span class="band-dot" style="background:var(--red);"></span><span class="bt" style="color:var(--red-dark);">🔴 Below 60% Needs Review</span><span class="bd">Revisit the module before moving on</span></div>
+    </div>
+
+    <div class="notice">💡 There's no countdown and no fail state — this is here to help you find gaps, not to pressure you. Flag anything you're unsure of and revisit it in review mode afterward.</div>
+
+    <button class="btn-primary" onclick="startExam()">Start Practice →</button>
+  </div>
+  <footer class="k21-footer">K21 Academy · Azure AI/ML/GenAI Job Oriented Program · Module 18 Practice Test</footer>
+</div>
+
+<!-- ============ EXAM SCREEN ============ -->
+<div id="screen-exam" class="screen">
+  <div class="exam-header">
+    <div class="exam-title">Module 18 · <span>MLOps — Feature Dev & Model Deployment</span></div>
+    <div class="exam-meta">
+      <div class="timer-pill"><span class="lbl">Time</span><span id="timer-display">0:00</span></div>
+      <div class="progress-pill"><span id="progress-display">Q1 / 24</span></div>
+    </div>
+  </div>
+  <div class="exam-body">
+    <div class="q-card">
+      <div class="q-top">
+        <div>
+          <div class="q-num" id="q-num-label">Question 1 of 24</div>
+          <div class="lesson-tag" id="q-lesson-tag">Lesson 1</div>
+        </div>
+        <button class="flag-btn" id="flag-btn" onclick="toggleFlag()">🚩 Flag for review</button>
+      </div>
+      <div class="q-text" id="q-text"></div>
+      <div id="options-container"></div>
+      <div class="q-nav-btns">
+        <button class="btn-outline" id="prev-btn" onclick="prevQuestion()">← Previous</button>
+        <button class="btn-outline" id="next-btn" onclick="nextQuestion()">Next →</button>
+      </div>
+    </div>
+    <div class="sidebar">
+      <div class="sb-title">Question Navigator</div>
+      <div class="nav-grid" id="nav-grid"></div>
+      <div class="legend">
+        <div class="lg-row"><span class="sw answered"></span> Answered</div>
+        <div class="lg-row"><span class="sw"></span> Unanswered</div>
+        <div class="lg-row"><span class="sw flagged"></span> Flagged</div>
+      </div>
+      <button class="btn-green" style="width:100%; justify-content:center;" onclick="confirmSubmit()">Submit Practice Test</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ RESULTS SCREEN ============ -->
+<div id="screen-results" class="screen">
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span> K21 Academy</div>
+    <div class="program">Azure AI/ML/GenAI Job Oriented Program</div>
+  </div>
+  <div class="results-wrap">
+    <div class="band-hero" id="band-hero">
+      <div class="band-emoji" id="band-emoji">🟢</div>
+      <div class="band-label" id="band-label">Strong</div>
+      <div class="band-msg" id="band-msg">Ready to move to the next module</div>
+      <div class="score-big" id="score-big">0%</div>
+      <div class="score-sub" id="score-sub">0 of 30 correct</div>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-card"><div class="sv" id="stat-correct">0</div><div class="sl">Correct</div></div>
+      <div class="stat-card"><div class="sv" id="stat-incorrect">0</div><div class="sl">Incorrect</div></div>
+      <div class="stat-card"><div class="sv" id="stat-skipped">0</div><div class="sl">Skipped</div></div>
+      <div class="stat-card"><div class="sv" id="stat-time">0:00</div><div class="sl">Time Taken</div></div>
+    </div>
+
+    <div class="lesson-breakdown">
+      <div class="lb-title">Lesson-wise Breakdown</div>
+      <div id="lesson-breakdown-body"></div>
+    </div>
+
+    <div class="action-row">
+      <button class="btn-primary" onclick="showReview()">📋 Review Answers</button>
+      <button class="btn-green" onclick="location.reload()">🔄 Retry Practice Test</button>
+    </div>
+  </div>
+  <footer class="k21-footer">K21 Academy · Azure AI/ML/GenAI Job Oriented Program · Module 18 Practice Test</footer>
+</div>
+
+<!-- ============ REVIEW SCREEN ============ -->
+<div id="screen-review" class="screen">
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span> K21 Academy</div>
+    <div class="program">Review Mode · Module 18</div>
+  </div>
+  <div class="review-wrap">
+    <div class="review-filters">
+      <button class="rf-btn active" data-filter="all" onclick="setReviewFilter('all')">All (24)</button>
+      <button class="rf-btn" data-filter="correct" onclick="setReviewFilter('correct')">✅ Correct</button>
+      <button class="rf-btn" data-filter="incorrect" onclick="setReviewFilter('incorrect')">❌ Incorrect</button>
+      <button class="rf-btn" data-filter="skipped" onclick="setReviewFilter('skipped')">⬜ Skipped</button>
+      <button class="rf-btn" data-filter="flagged" onclick="setReviewFilter('flagged')">🚩 Flagged</button>
+    </div>
+    <div id="review-list"></div>
+    <div class="action-row">
+      <button class="btn-primary" onclick="backToResults()">← Back to Results</button>
+      <button class="btn-green" onclick="location.reload()">🔄 Retry Practice Test</button>
+    </div>
+  </div>
+  <footer class="k21-footer">K21 Academy · Azure AI/ML/GenAI Job Oriented Program · Module 18 Practice Test</footer>
+</div>
+
+<!-- ============ SUBMIT CONFIRM MODAL ============ -->
+<div id="submit-modal" style="display:none; position:fixed; inset:0; background:rgba(17,24,39,.55); z-index:100; align-items:center; justify-content:center;">
+  <div style="background:#fff; border-radius:20px; padding:28px; max-width:380px; width:90%; text-align:center;">
+    <div style="font-size:17px; font-weight:800; margin-bottom:10px;">Submit practice test?</div>
+    <div id="modal-unanswered-msg" style="font-size:13.5px; color:var(--text-2); margin-bottom:20px; line-height:1.5;"></div>
+    <div style="display:flex; gap:10px; justify-content:center;">
+      <button class="btn-outline" onclick="closeSubmitModal()">Keep working</button>
+      <button class="btn-green" onclick="submitExam()">Submit</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const QUESTIONS = [
+  {
+    id: 1,
+    lesson: 1,
+    lessonName: "Design a Model Deployment Solution",
+    question: "When designing a model deployment solution, why would a team choose a real-time online endpoint over a batch endpoint?",
+    options: [
+      { key: "A", text: "There is no meaningful difference between a real-time online endpoint and a batch endpoint" },
+      { key: "B", text: "Batch endpoints are always faster than real-time online endpoints for every single type of workload" },
+      { key: "C", text: "A real-time online endpoint is designed for low-latency predictions on individual or small requests as they arrive, whereas a batch endpoint is better suited for processing large volumes of data asynchronously" },
+      { key: "D", text: "A real-time online endpoint can only ever process data once per month, on a fixed schedule" }
+    ],
+    correct: "C",
+    explanation: "A real-time online endpoint is designed for low-latency predictions on individual or small requests as they arrive, making it suitable for scenarios like a live web application, whereas a batch endpoint is better suited for processing large volumes of data asynchronously on a schedule."
+  },
+  {
+    id: 2,
+    lesson: 1,
+    lessonName: "Design a Model Deployment Solution",
+    question: "Which scenario would generally be a better fit for a batch endpoint rather than a real-time online endpoint?",
+    options: [
+      { key: "A", text: "Scoring a large archive of millions of historical customer records overnight, where results aren't needed immediately" },
+      { key: "B", text: "Providing an instant fraud-risk score to a payment application the moment a transaction occurs" },
+      { key: "C", text: "Powering a live chatbot that needs to respond to a user's message within a couple of seconds" },
+      { key: "D", text: "Serving real-time product recommendations as a user browses a website" }
+    ],
+    correct: "A",
+    explanation: "Scoring a large archive of millions of historical records overnight, where results aren't needed immediately, is well suited to a batch endpoint, since it can efficiently process large volumes of data asynchronously rather than requiring the low latency of a real-time endpoint."
+  },
+  {
+    id: 3,
+    lesson: 1,
+    lessonName: "Design a Model Deployment Solution",
+    question: "Why is expected request volume and traffic pattern an important factor to consider when designing a model deployment solution?",
+    options: [
+      { key: "A", text: "Traffic patterns are only relevant for endpoints that will never actually receive any requests" },
+      { key: "B", text: "Every deployment, regardless of expected traffic, should always be provisioned with the exact same fixed amount of compute" },
+      { key: "C", text: "Request volume has no bearing on how much compute capacity a deployed endpoint should have" },
+      { key: "D", text: "Understanding expected volume and traffic patterns helps determine how much compute capacity to provision and whether autoscaling is needed, balancing responsiveness against cost" }
+    ],
+    correct: "D",
+    explanation: "Understanding expected request volume and traffic patterns helps determine how much compute capacity to provision and whether autoscaling is needed, allowing a deployment to balance responsiveness for users against the cost of running that compute capacity."
+  },
+  {
+    id: 4,
+    lesson: 1,
+    lessonName: "Design a Model Deployment Solution",
+    question: "Why might a team deploy a new model version alongside the existing production version using a phased rollout (such as a small percentage of traffic), rather than switching all traffic over immediately?",
+    options: [
+      { key: "A", text: "A phased rollout guarantees the new model will always perform identically to the previous version, so it has no real purpose" },
+      { key: "B", text: "A phased rollout lets the team observe how the new model performs on real traffic at a smaller scale first, reducing the risk of a widespread negative impact if the new version has an unexpected issue" },
+      { key: "C", text: "Switching traffic over immediately always eliminates any risk associated with deploying a new model version" },
+      { key: "D", text: "Phased rollouts are only possible if the deployment solution has exactly one single model version available" }
+    ],
+    correct: "B",
+    explanation: "A phased rollout, directing a small percentage of traffic to the new model version first, lets a team observe how it performs on real traffic at a smaller scale, reducing the risk of a widespread negative impact if the new version turns out to have an unexpected issue."
+  },
+  {
+    id: 5,
+    lesson: 2,
+    lessonName: "Working with Datastores and Datasets",
+    question: "What is the purpose of a 'Datastore' in Azure Machine Learning?",
+    options: [
+      { key: "A", text: "A Datastore physically holds a copy of every dataset ever used in the workspace, with no connection to external storage" },
+      { key: "B", text: "Datastores are used exclusively to change the visual theme of Azure Machine Learning Studio" },
+      { key: "C", text: "A Datastore has no relationship to accessing or referencing any underlying storage service" },
+      { key: "D", text: "It stores connection information to an underlying storage service, such as Azure Blob Storage or Azure Data Lake Storage, so the workspace can securely access data without repeatedly re-entering credentials" }
+    ],
+    correct: "D",
+    explanation: "A Datastore in Azure Machine Learning stores connection information to an underlying storage service, such as Azure Blob Storage or Azure Data Lake Storage, allowing the workspace to securely access data from that service without needing to repeatedly re-enter credentials."
+  },
+  {
+    id: 6,
+    lesson: 2,
+    lessonName: "Working with Datastores and Datasets",
+    question: "How does a 'Dataset' in Azure Machine Learning generally relate to a Datastore?",
+    options: [
+      { key: "A", text: "A Dataset must always exist completely independently, with no relationship to any Datastore whatsoever" },
+      { key: "B", text: "A Datastore can only ever be created after every Dataset that references it has been permanently deleted" },
+      { key: "C", text: "A Dataset references specific data, such as a particular file or folder, within a Datastore, providing a versioned, reusable pointer to that data for use in experiments and pipelines" },
+      { key: "D", text: "A Dataset and a Datastore are exactly the same concept with no distinction between them" }
+    ],
+    correct: "C",
+    explanation: "A Dataset references specific data, such as a particular file or folder, within a Datastore, providing a versioned, reusable pointer to that data that can be consistently used across experiments and pipelines without re-specifying the underlying storage details each time."
+  },
+  {
+    id: 7,
+    lesson: 2,
+    lessonName: "Working with Datastores and Datasets",
+    question: "Why is versioning a Dataset useful when a team's underlying data changes over time?",
+    options: [
+      { key: "A", text: "Versioning lets the team track exactly which version of the data was used for a specific training run, supporting reproducibility and making it easier to compare results across different data versions" },
+      { key: "B", text: "Versioning a Dataset permanently deletes all older versions of the data with no way to access them again" },
+      { key: "C", text: "A Dataset can only ever have exactly one single version for the entire lifetime of a workspace" },
+      { key: "D", text: "Dataset versioning has no relationship to reproducibility or tracking which data was used in a given run" }
+    ],
+    correct: "A",
+    explanation: "Versioning a Dataset lets a team track exactly which version of the data was used for a specific training run, supporting reproducibility and making it easier to compare results across different versions of the data as it evolves over time."
+  },
+  {
+    id: 8,
+    lesson: 2,
+    lessonName: "Working with Datastores and Datasets",
+    question: "What is a key benefit of referencing data through a registered Dataset in a training script, rather than hard-coding a specific file path directly?",
+    options: [
+      { key: "A", text: "Referencing a Dataset always makes a training script run significantly slower than hard-coding a file path" },
+      { key: "B", text: "It decouples the training script from the exact storage location and format details, making the script more portable and easier to reuse if the underlying storage details change" },
+      { key: "C", text: "Using a registered Dataset has no effect on how portable or reusable a training script is" },
+      { key: "D", text: "Hard-coding a file path is always technically impossible in an Azure Machine Learning training script" }
+    ],
+    correct: "B",
+    explanation: "Referencing data through a registered Dataset decouples the training script from the exact storage location and format details, making the script more portable and easier to reuse if the underlying storage location or connection details change in the future."
+  },
+  {
+    id: 9,
+    lesson: 3,
+    lessonName: "Logistic Regression Algorithm",
+    question: "What type of machine learning problem is logistic regression primarily designed to solve?",
+    options: [
+      { key: "A", text: "Clustering problems with no predefined labels or categories of any kind" },
+      { key: "B", text: "Binary (or multi-class) classification problems, where the goal is to predict which discrete category or class an input belongs to" },
+      { key: "C", text: "Problems that require generating entirely new, original text content" },
+      { key: "D", text: "Problems that involve only compressing image files for storage" }
+    ],
+    correct: "B",
+    explanation: "Logistic regression is primarily designed for binary, or extended to multi-class, classification problems, where the goal is to predict which discrete category or class a given input belongs to, such as whether an email is spam or not."
+  },
+  {
+    id: 10,
+    lesson: 3,
+    lessonName: "Logistic Regression Algorithm",
+    question: "What role does the sigmoid function play in logistic regression?",
+    options: [
+      { key: "A", text: "The sigmoid function has no relationship to how logistic regression produces its output" },
+      { key: "B", text: "The sigmoid function is used exclusively to compress image files before training" },
+      { key: "C", text: "It converts categorical text labels into a spoken audio format" },
+      { key: "D", text: "It maps the model's raw output onto a value between 0 and 1, which can be interpreted as the estimated probability of belonging to a particular class" }
+    ],
+    correct: "D",
+    explanation: "The sigmoid function maps logistic regression's raw output onto a value between 0 and 1, which can be interpreted as the estimated probability that a given input belongs to a particular class, forming the basis for the model's classification decision."
+  },
+  {
+    id: 11,
+    lesson: 3,
+    lessonName: "Logistic Regression Algorithm",
+    question: "In logistic regression, how is a final class prediction typically derived from the model's predicted probability?",
+    options: [
+      { key: "A", text: "Logistic regression never produces any probability value, only a raw, unprocessed numeric score" },
+      { key: "B", text: "The predicted probability is always rounded to the nearest whole number of training examples used" },
+      { key: "C", text: "By comparing the predicted probability against a decision threshold, such as 0.5, and assigning the class label based on whether the probability is above or below that threshold" },
+      { key: "D", text: "A final class prediction can only ever be derived by retraining the entire model from scratch for every single new input" }
+    ],
+    correct: "C",
+    explanation: "A final class prediction in logistic regression is typically derived by comparing the predicted probability against a decision threshold, commonly 0.5, and assigning the class label based on whether the probability falls above or below that threshold."
+  },
+  {
+    id: 12,
+    lesson: 3,
+    lessonName: "Logistic Regression Algorithm",
+    question: "Despite its name including 'regression,' why is logistic regression considered a classification algorithm rather than a regression algorithm?",
+    options: [
+      { key: "A", text: "Because its output is used to predict a discrete class label, using a probability derived from the sigmoid function, rather than directly predicting a continuous numeric value" },
+      { key: "B", text: "Because logistic regression can only ever be used to predict continuous numeric values, exactly like linear regression" },
+      { key: "C", text: "Because the name 'logistic regression' has no relationship whatsoever to what the algorithm actually does" },
+      { key: "D", text: "Because logistic regression requires no probability calculation of any kind, unlike classification algorithms" }
+    ],
+    correct: "A",
+    explanation: "Despite its name, logistic regression is considered a classification algorithm because its output, a probability derived using the sigmoid function, is ultimately used to predict a discrete class label rather than directly predicting a continuous numeric value the way linear regression does."
+  },
+  {
+    id: 13,
+    lesson: 4,
+    lessonName: "Confusion Matrix",
+    question: "What does a confusion matrix summarize for a classification model?",
+    options: [
+      { key: "A", text: "The counts of true positives, true negatives, false positives, and false negatives, showing how the model's predictions compare against the actual known labels" },
+      { key: "B", text: "A confusion matrix only ever reports whether a model was trained on a GPU or a CPU" },
+      { key: "C", text: "The total file size of the trained model on disk" },
+      { key: "D", text: "The exact runtime, in seconds, that a model took to complete its training process" }
+    ],
+    correct: "A",
+    explanation: "A confusion matrix summarizes the counts of true positives, true negatives, false positives, and false negatives, showing how a classification model's predictions compare against the actual known labels across a set of test data."
+  },
+  {
+    id: 14,
+    lesson: 4,
+    lessonName: "Confusion Matrix",
+    question: "What does a 'false positive' represent in a confusion matrix for a binary classification model?",
+    options: [
+      { key: "A", text: "A false positive refers to a case where the model was never actually run on any data at all" },
+      { key: "B", text: "A case where the model correctly predicted the negative class and the actual label was also negative" },
+      { key: "C", text: "A case where the model predicted the positive class, but the actual true label was the negative class" },
+      { key: "D", text: "A case where the model's prediction and the actual label are always guaranteed to match" }
+    ],
+    correct: "C",
+    explanation: "A false positive represents a case where the model predicted the positive class, but the actual true label was the negative class, meaning the model incorrectly flagged something as positive when it wasn't."
+  },
+  {
+    id: 15,
+    lesson: 4,
+    lessonName: "Confusion Matrix",
+    question: "How are 'precision' and 'recall' generally derived from the values in a confusion matrix?",
+    options: [
+      { key: "A", text: "Precision measures the model's total training time, while recall measures the size of the training dataset" },
+      { key: "B", text: "Precision measures what proportion of predicted positives were actually correct, while recall measures what proportion of actual positives the model successfully identified" },
+      { key: "C", text: "Precision and recall are two identical names for the exact same calculation with no distinction between them" },
+      { key: "D", text: "Precision and recall can only be calculated for a regression model, never for a classification model" }
+    ],
+    correct: "B",
+    explanation: "Precision measures what proportion of the cases predicted as positive were actually correct, calculated from true positives and false positives, while recall measures what proportion of the actual positive cases the model successfully identified, calculated from true positives and false negatives."
+  },
+  {
+    id: 16,
+    lesson: 4,
+    lessonName: "Confusion Matrix",
+    question: "Why might overall accuracy alone be a misleading metric for a classification model trained on a highly imbalanced dataset, making the confusion matrix's breakdown more informative?",
+    options: [
+      { key: "A", text: "A confusion matrix cannot be constructed at all for any dataset that is imbalanced" },
+      { key: "B", text: "Overall accuracy is always a perfectly reliable metric, regardless of how imbalanced the underlying dataset is" },
+      { key: "C", text: "Imbalanced datasets always make every classification metric, including the confusion matrix, completely meaningless" },
+      { key: "D", text: "A model can achieve high overall accuracy simply by always predicting the majority class, while performing very poorly at identifying the minority class, which the confusion matrix's breakdown would reveal" }
+    ],
+    correct: "D",
+    explanation: "On a highly imbalanced dataset, a model can achieve high overall accuracy simply by always predicting the majority class, while performing very poorly at identifying the minority class; the confusion matrix's breakdown into true/false positives and negatives reveals this kind of poor minority-class performance that overall accuracy alone would hide."
+  },
+  {
+    id: 17,
+    lesson: 5,
+    lessonName: "ROC Curve And Area Under Curve",
+    question: "What does a Receiver Operating Characteristic (ROC) curve plot for a binary classification model?",
+    options: [
+      { key: "A", text: "The total training time of the model against the number of features in the dataset" },
+      { key: "B", text: "The file size of the trained model against the number of training epochs completed" },
+      { key: "C", text: "The true positive rate against the false positive rate at various classification decision thresholds" },
+      { key: "D", text: "The number of GPUs used against the total cost of the training job" }
+    ],
+    correct: "C",
+    explanation: "An ROC curve plots the true positive rate against the false positive rate at various classification decision thresholds, illustrating the tradeoff between correctly identifying positives and incorrectly flagging negatives as the threshold changes."
+  },
+  {
+    id: 18,
+    lesson: 5,
+    lessonName: "ROC Curve And Area Under Curve",
+    question: "What does the 'Area Under the Curve' (AUC) of an ROC curve generally represent about a classification model?",
+    options: [
+      { key: "A", text: "AUC has no relationship to how well a model distinguishes between classes" },
+      { key: "B", text: "A single aggregate measure of how well the model distinguishes between the positive and negative classes across all possible decision thresholds, with a value closer to 1 indicating better separation" },
+      { key: "C", text: "The exact number of features included in the model's training dataset" },
+      { key: "D", text: "AUC represents the total dollar cost incurred to train the model" }
+    ],
+    correct: "B",
+    explanation: "The Area Under the Curve (AUC) of an ROC curve provides a single aggregate measure of how well a model distinguishes between the positive and negative classes across all possible decision thresholds, with a value closer to 1 indicating better separation between the classes."
+  },
+  {
+    id: 19,
+    lesson: 5,
+    lessonName: "ROC Curve And Area Under Curve",
+    question: "What would an AUC value of approximately 0.5 generally suggest about a binary classification model's performance?",
+    options: [
+      { key: "A", text: "The model is achieving perfect, flawless classification performance with absolutely no errors" },
+      { key: "B", text: "An AUC of 0.5 indicates the model can only ever be used for regression tasks, never classification" },
+      { key: "C", text: "An AUC of 0.5 means the model has not been trained on any data whatsoever" },
+      { key: "D", text: "The model is performing roughly no better than random guessing at distinguishing between the positive and negative classes" }
+    ],
+    correct: "D",
+    explanation: "An AUC value of approximately 0.5 suggests the model is performing roughly no better than random guessing at distinguishing between the positive and negative classes, since an AUC of 1.0 represents perfect separation and 0.5 represents no discriminative ability."
+  },
+  {
+    id: 20,
+    lesson: 5,
+    lessonName: "ROC Curve And Area Under Curve",
+    question: "Why might comparing the ROC curves of two different classification models be more informative than comparing a single accuracy value alone?",
+    options: [
+      { key: "A", text: "ROC curves show how each model's true positive rate and false positive rate tradeoff behaves across many different thresholds, providing a fuller picture than a single accuracy number calculated at just one fixed threshold" },
+      { key: "B", text: "ROC curves are exclusively used to compare the training time of two different models, not their classification behavior" },
+      { key: "C", text: "Comparing ROC curves provides no additional information beyond what a single accuracy value already shows" },
+      { key: "D", text: "ROC curves can only ever be generated for models that have already achieved 100% accuracy" }
+    ],
+    correct: "A",
+    explanation: "Comparing ROC curves shows how each model's true positive rate and false positive rate tradeoff behaves across many different decision thresholds, providing a fuller picture of overall discriminative performance than a single accuracy value calculated at just one fixed threshold."
+  },
+  {
+    id: 21,
+    lesson: 6,
+    lessonName: "Normalization",
+    question: "What does min-max normalization typically do to a numeric feature?",
+    options: [
+      { key: "A", text: "It permanently deletes any feature that contains a negative number" },
+      { key: "B", text: "It rescales the feature's values into a fixed range, commonly between 0 and 1, based on the feature's observed minimum and maximum values" },
+      { key: "C", text: "It has no effect on the numeric range of a feature's values" },
+      { key: "D", text: "Min-max normalization converts a numeric feature into a categorical text label" }
+    ],
+    correct: "B",
+    explanation: "Min-max normalization rescales a numeric feature's values into a fixed range, commonly between 0 and 1, based on that feature's observed minimum and maximum values, using a formula like (value - min) / (max - min)."
+  },
+  {
+    id: 22,
+    lesson: 6,
+    lessonName: "Normalization",
+    question: "How does min-max normalization generally differ from standardization (z-score scaling) as a feature scaling technique?",
+    options: [
+      { key: "A", text: "Min-max normalization requires no reference to the feature's minimum or maximum value at all" },
+      { key: "B", text: "Min-max normalization and standardization always produce mathematically identical results for every dataset" },
+      { key: "C", text: "Standardization can only ever be applied to categorical, non-numeric data" },
+      { key: "D", text: "Min-max normalization rescales values into a fixed range, such as 0 to 1, based on the minimum and maximum, while standardization centers values around a mean of 0 with a standard deviation of 1" }
+    ],
+    correct: "D",
+    explanation: "Min-max normalization rescales values into a fixed range, such as 0 to 1, based on the feature's minimum and maximum values, while standardization (z-score scaling) centers values around a mean of 0 with a standard deviation of 1, using the feature's mean and standard deviation instead."
+  },
+  {
+    id: 23,
+    lesson: 6,
+    lessonName: "Normalization",
+    question: "Why can min-max normalization be particularly sensitive to outliers in a dataset?",
+    options: [
+      { key: "A", text: "Because the scaling range is based directly on the observed minimum and maximum values, a single extreme outlier can compress the rest of the normalized values into a very narrow portion of the range" },
+      { key: "B", text: "Min-max normalization completely ignores the minimum and maximum values of a feature, so outliers have no effect on it whatsoever" },
+      { key: "C", text: "Outliers are always automatically and permanently removed as a required first step of min-max normalization" },
+      { key: "D", text: "Min-max normalization can only be applied to datasets that contain absolutely no outliers of any kind" }
+    ],
+    correct: "A",
+    explanation: "Because min-max normalization's scaling range is based directly on the observed minimum and maximum values, a single extreme outlier can compress the rest of the normalized values into a very narrow portion of the overall range, reducing the technique's usefulness when outliers are present."
+  },
+  {
+    id: 24,
+    lesson: 6,
+    lessonName: "Normalization",
+    question: "Why is normalizing numeric features often an important preprocessing step before training a model that relies on distance calculations, such as k-nearest neighbors?",
+    options: [
+      { key: "A", text: "Normalization is only relevant for models that never use any form of distance calculation" },
+      { key: "B", text: "Normalizing features always guarantees a distance-based model will be perfectly accurate on every dataset" },
+      { key: "C", text: "Without normalization, features with larger numeric ranges can dominate distance calculations, causing the model to weigh those features more heavily regardless of their actual relevance" },
+      { key: "D", text: "Distance-based models like k-nearest neighbors are always completely unaffected by the numeric range of input features" }
+    ],
+    correct: "C",
+    explanation: "Without normalization, features with larger numeric ranges can dominate distance calculations in models like k-nearest neighbors, causing the model to weigh those features more heavily regardless of their actual relevance, which is why bringing features onto a comparable scale is often an important preprocessing step."
+  }
+];
+
+</script>
+<script>
+// ==========================================================
+// STATE
+// ==========================================================
+const TOTAL_Q = QUESTIONS.length;
+let current = 0;
+let answers = new Array(TOTAL_Q).fill(null);   // selected key or null
+let flagged = new Array(TOTAL_Q).fill(false);
+let startTime = null;
+let timerInterval = null;
+let elapsedSeconds = 0;
+let reviewFilter = 'all';
+
+// ==========================================================
+// LESSON COVERAGE (built on start screen)
+// ==========================================================
+function buildLessonCoverage() {
+  const counts = {};
+  const order = [];
+  QUESTIONS.forEach(q => {
+    if (!(q.lesson in counts)) { counts[q.lesson] = { name: q.lessonName, n: 0 }; order.push(q.lesson); }
+    counts[q.lesson].n++;
+  });
+  const container = document.getElementById('lesson-coverage');
+  order.sort((a,b) => a-b).forEach(l => {
+    const row = document.createElement('div');
+    row.className = 'lesson-row';
+    row.innerHTML = `<span class="ln">Lesson ${l}: ${counts[l].name}</span><span class="badge">${counts[l].n} Qs</span>`;
+    container.appendChild(row);
+  });
+}
+buildLessonCoverage();
+
+// ==========================================================
+// START
+// ==========================================================
+function startExam() {
+  document.getElementById('screen-start').classList.remove('active');
+  document.getElementById('screen-exam').classList.add('active');
+  startTime = Date.now();
+  timerInterval = setInterval(updateTimer, 1000);
+  buildNavGrid();
+  renderQuestion();
+}
+
+function updateTimer() {
+  elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
+  const m = Math.floor(elapsedSeconds / 60);
+  const s = elapsedSeconds % 60;
+  document.getElementById('timer-display').textContent = `${m}:${s.toString().padStart(2,'0')}`;
+}
+
+// ==========================================================
+// RENDER QUESTION
+// ==========================================================
+function renderQuestion() {
+  const q = QUESTIONS[current];
+  document.getElementById('q-num-label').textContent = `Question ${current + 1} of ${TOTAL_Q}`;
+  document.getElementById('q-lesson-tag').textContent = `Lesson ${q.lesson}: ${q.lessonName}`;
+  document.getElementById('q-text').textContent = q.question;
+  document.getElementById('progress-display').textContent = `Q${current + 1} / ${TOTAL_Q}`;
+
+  const flagBtn = document.getElementById('flag-btn');
+  flagBtn.classList.toggle('flagged', flagged[current]);
+  flagBtn.innerHTML = flagged[current] ? '🚩 Flagged' : '🚩 Flag for review';
+
+  const optContainer = document.getElementById('options-container');
+  optContainer.innerHTML = '';
+  q.options.forEach(opt => {
+    const div = document.createElement('div');
+    div.className = 'option' + (answers[current] === opt.key ? ' selected' : '');
+    div.onclick = () => selectAnswer(opt.key);
+    div.innerHTML = `<span class="opt-key">${opt.key}</span><span class="opt-text">${opt.text}</span>`;
+    optContainer.appendChild(div);
+  });
+
+  document.getElementById('prev-btn').disabled = current === 0;
+  document.getElementById('prev-btn').style.opacity = current === 0 ? '0.4' : '1';
+  document.getElementById('next-btn').textContent = current === TOTAL_Q - 1 ? 'Finish →' : 'Next →';
+
+  updateNavGrid();
+}
+
+function selectAnswer(key) {
+  answers[current] = key;
+  renderQuestion();
+}
+
+function toggleFlag() {
+  flagged[current] = !flagged[current];
+  renderQuestion();
+}
+
+function nextQuestion() {
+  if (current < TOTAL_Q - 1) { current++; renderQuestion(); }
+  else { confirmSubmit(); }
+}
+function prevQuestion() {
+  if (current > 0) { current--; renderQuestion(); }
+}
+
+// ==========================================================
+// NAVIGATOR
+// ==========================================================
+function buildNavGrid() {
+  const grid = document.getElementById('nav-grid');
+  grid.innerHTML = '';
+  for (let i = 0; i < TOTAL_Q; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'nav-cell';
+    cell.id = `nav-cell-${i}`;
+    cell.textContent = i + 1;
+    cell.onclick = () => { current = i; renderQuestion(); };
+    grid.appendChild(cell);
+  }
+}
+function updateNavGrid() {
+  for (let i = 0; i < TOTAL_Q; i++) {
+    const cell = document.getElementById(`nav-cell-${i}`);
+    cell.classList.toggle('current', i === current);
+    cell.classList.toggle('answered', answers[i] !== null);
+    cell.classList.toggle('flagged', flagged[i]);
+  }
+}
+
+// ==========================================================
+// SUBMIT
+// ==========================================================
+function confirmSubmit() {
+  const unanswered = answers.filter(a => a === null).length;
+  const msg = unanswered === 0
+    ? "You've answered all 30 questions. Ready to see your results?"
+    : `You have ${unanswered} unanswered question${unanswered > 1 ? 's' : ''}. You can still submit — unanswered questions count as skipped, not wrong.`;
+  document.getElementById('modal-unanswered-msg').textContent = msg;
+  document.getElementById('submit-modal').style.display = 'flex';
+}
+function closeSubmitModal() {
+  document.getElementById('submit-modal').style.display = 'none';
+}
+
+function submitExam() {
+  clearInterval(timerInterval);
+  document.getElementById('submit-modal').style.display = 'none';
+  document.getElementById('screen-exam').classList.remove('active');
+  document.getElementById('screen-results').classList.add('active');
+  renderResults();
+}
+
+// ==========================================================
+// RESULTS
+// ==========================================================
+function renderResults() {
+  let correct = 0, incorrect = 0, skipped = 0;
+  answers.forEach((a, i) => {
+    if (a === null) skipped++;
+    else if (a === QUESTIONS[i].correct) correct++;
+    else incorrect++;
+  });
+  const pct = Math.round((correct / TOTAL_Q) * 100);
+
+  document.getElementById('stat-correct').textContent = correct;
+  document.getElementById('stat-incorrect').textContent = incorrect;
+  document.getElementById('stat-skipped').textContent = skipped;
+  const m = Math.floor(elapsedSeconds / 60), s = elapsedSeconds % 60;
+  document.getElementById('stat-time').textContent = `${m}:${s.toString().padStart(2,'0')}`;
+
+  document.getElementById('score-big').textContent = `${pct}%`;
+  document.getElementById('score-sub').textContent = `${correct} of ${TOTAL_Q} correct`;
+
+  const hero = document.getElementById('band-hero');
+  const emoji = document.getElementById('band-emoji');
+  const label = document.getElementById('band-label');
+  const msg = document.getElementById('band-msg');
+
+  if (pct >= 80) {
+    hero.className = 'band-hero strong';
+    emoji.textContent = '🟢'; label.textContent = 'Strong';
+    msg.textContent = "Ready to move to the next module.";
+  } else if (pct >= 60) {
+    hero.className = 'band-hero good';
+    emoji.textContent = '🟡'; label.textContent = 'Good Progress';
+    msg.textContent = "Review 1–2 lessons and retry.";
+  } else {
+    hero.className = 'band-hero needs';
+    emoji.textContent = '🔴'; label.textContent = 'Needs Review';
+    msg.textContent = "Revisit the module before moving on.";
+  }
+
+  renderLessonBreakdown();
+}
+
+function renderLessonBreakdown() {
+  const lessonStats = {};
+  const order = [];
+  QUESTIONS.forEach((q, i) => {
+    if (!(q.lesson in lessonStats)) {
+      lessonStats[q.lesson] = { name: q.lessonName, total: 0, correct: 0 };
+      order.push(q.lesson);
+    }
+    lessonStats[q.lesson].total++;
+    if (answers[i] === q.correct) lessonStats[q.lesson].correct++;
+  });
+  order.sort((a,b) => a-b);
+  const body = document.getElementById('lesson-breakdown-body');
+  body.innerHTML = '';
+  order.forEach(l => {
+    const st = lessonStats[l];
+    const pct = Math.round((st.correct / st.total) * 100);
+    const barClass = pct >= 80 ? '' : pct >= 60 ? 'mid' : 'low';
+    const row = document.createElement('div');
+    row.className = 'lb-row';
+    row.innerHTML = `
+      <div class="lb-top"><span class="lb-name">Lesson ${l}: ${st.name}</span><span class="lb-score">${st.correct}/${st.total}</span></div>
+      <div class="lb-bar-bg"><div class="lb-bar-fill ${barClass}" style="width:${pct}%;"></div></div>
+    `;
+    body.appendChild(row);
+  });
+}
+
+// ==========================================================
+// REVIEW MODE
+// ==========================================================
+function showReview() {
+  document.getElementById('screen-results').classList.remove('active');
+  document.getElementById('screen-review').classList.add('active');
+  renderReviewList();
+}
+function backToResults() {
+  document.getElementById('screen-review').classList.remove('active');
+  document.getElementById('screen-results').classList.add('active');
+}
+function setReviewFilter(f) {
+  reviewFilter = f;
+  document.querySelectorAll('.rf-btn').forEach(b => b.classList.toggle('active', b.dataset.filter === f));
+  renderReviewList();
+}
+function renderReviewList() {
+  const list = document.getElementById('review-list');
+  list.innerHTML = '';
+  QUESTIONS.forEach((q, i) => {
+    const a = answers[i];
+    const status = a === null ? 'skipped' : (a === q.correct ? 'correct' : 'incorrect');
+    if (reviewFilter === 'correct' && status !== 'correct') return;
+    if (reviewFilter === 'incorrect' && status !== 'incorrect') return;
+    if (reviewFilter === 'skipped' && status !== 'skipped') return;
+    if (reviewFilter === 'flagged' && !flagged[i]) return;
+
+    const card = document.createElement('div');
+    card.className = 'review-q';
+    let tagHtml = status === 'correct'
+      ? '<span class="result-tag correct">✅ Correct</span>'
+      : status === 'incorrect'
+        ? '<span class="result-tag incorrect">❌ Incorrect</span>'
+        : '<span class="result-tag skipped">⬜ Skipped</span>';
+    if (flagged[i]) tagHtml += ' <span class="result-tag" style="background:var(--amber-bg); color:var(--amber-dark);">🚩 Flagged</span>';
+
+    let optsHtml = '';
+    q.options.forEach(opt => {
+      let cls = '';
+      if (opt.key === q.correct) cls = 'correct-answer';
+      else if (opt.key === a && a !== q.correct) cls = 'wrong-answer';
+      optsHtml += `<div class="rq-opt ${cls}"><span>${opt.key}</span><span>${opt.text}</span></div>`;
+    });
+
+    card.innerHTML = `
+      <div class="rq-top"><span class="lesson-tag">Lesson ${q.lesson}: ${q.lessonName}</span>${tagHtml}</div>
+      <div class="rq-text">Q${i + 1}. ${q.question}</div>
+      ${optsHtml}
+      <div class="rq-explain"><b>Explanation:</b> ${q.explanation}</div>
+    `;
+    list.appendChild(card);
+  });
+
+  if (list.innerHTML === '') {
+    list.innerHTML = '<div style="text-align:center; color:var(--text-3); padding:40px 0;">No questions match this filter.</div>';
+  }
+}
+
+</script>
+</body>
+</html>

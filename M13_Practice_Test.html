@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Module 13: Create Agents in Microsoft Copilot Studio — Practice Test | Azure AI/ML/GenAI Job Oriented Program</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#F7F8FA; --surface:#FFFFFF; --border:#E8EAEE;
+  --text-1:#111827; --text-2:#4B5563; --text-3:#9CA3AF;
+  --green:#8DC63F; --green-mid:#79B030; --green-bg:#F1F8E8; --green-dark:#4A7A1B;
+  --navy:#1A1248; --navy-mid:#2E2080; --blue:#1B9BD9;
+  --amber:#F5A623; --amber-bg:#FFF6E5; --amber-dark:#8A5A00;
+  --red:#E5484D; --red-bg:#FDECEC; --red-dark:#A9231F;
+  --radius:16px; --radius-lg:24px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text-1);-webkit-font-smoothing:antialiased;min-height:100vh;}
+.screen{display:none;}
+.screen.active{display:block;}
+
+/* ---------- Top bar ---------- */
+.topbar{
+  background:var(--navy); color:#fff; padding:14px 28px;
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;
+}
+.topbar .brand{display:flex; align-items:center; gap:10px; font-weight:800; font-size:15px;}
+.topbar .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--green);}
+.topbar .program{font-size:12px; color:#C9C4E8; font-weight:500;}
+
+/* ---------- Start screen ---------- */
+.start-wrap{max-width:820px; margin:0 auto; padding:48px 20px 70px;}
+.eyebrow{
+  display:inline-flex; align-items:center; gap:7px; background:var(--green-bg);
+  border:1px solid #C8E89A; color:var(--green-dark); font-size:11px; font-weight:700;
+  letter-spacing:.08em; text-transform:uppercase; padding:5px 13px; border-radius:100px; margin-bottom:16px;
+}
+.eyebrow i{width:5px;height:5px;background:var(--green);border-radius:50%;display:inline-block;font-style:normal;}
+.start-title{font-size:clamp(26px,4vw,36px); font-weight:800; letter-spacing:-.025em; line-height:1.2; margin-bottom:10px;}
+.start-title .accent{color:var(--green-mid);}
+.start-sub{color:var(--text-2); font-size:15.5px; line-height:1.6; margin-bottom:28px; max-width:640px;}
+
+.info-cards{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:28px;}
+.info-card{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); padding:22px 18px; text-align:center;}
+.info-card .v{font-size:32px; font-weight:800; color:var(--navy); line-height:1;}
+.info-card .k{font-size:12.5px; font-weight:700; color:var(--text-2); margin-top:8px;}
+
+.lesson-table{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); overflow:hidden; margin-bottom:28px;}
+.lesson-table .lt-head{background:var(--navy); color:#fff; padding:14px 20px; font-weight:700; font-size:14px; display:flex; justify-content:space-between;}
+.lesson-row{display:flex; justify-content:space-between; align-items:center; padding:12px 20px; border-top:1px solid var(--border); font-size:14px;}
+.lesson-row:first-of-type{border-top:none;}
+.lesson-row .ln{color:var(--text-1); font-weight:600;}
+.lesson-row .lc{color:var(--text-3); font-weight:500;}
+.lesson-row .badge{background:var(--green-bg); color:var(--green-dark); font-size:12px; font-weight:700; padding:3px 10px; border-radius:100px;}
+
+.band-legend{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); padding:20px; margin-bottom:32px;}
+.band-legend .bl-title{font-size:13px; font-weight:700; color:var(--text-1); margin-bottom:12px;}
+.band-row{display:flex; align-items:center; gap:12px; padding:8px 0;}
+.band-dot{width:11px;height:11px;border-radius:50%; flex-shrink:0;}
+.band-row .bt{font-weight:700; font-size:13.5px; min-width:150px;}
+.band-row .bd{font-size:13px; color:var(--text-2);}
+
+.notice{
+  display:flex; gap:10px; align-items:flex-start; background:var(--green-bg); border:1px solid #C8E89A;
+  border-radius:12px; padding:14px 16px; font-size:13.5px; color:var(--green-dark); margin-bottom:28px; line-height:1.5;
+}
+
+.btn-primary{
+  display:inline-flex; align-items:center; gap:10px; background:var(--navy); color:#fff;
+  font-family:'DM Sans',sans-serif; font-size:15px; font-weight:700; padding:15px 32px;
+  border-radius:100px; border:none; cursor:pointer; box-shadow:0 4px 20px rgba(26,18,72,.22);
+  transition:background .2s, transform .18s, box-shadow .2s;
+}
+.btn-primary:hover{background:var(--navy-mid); transform:translateY(-2px); box-shadow:0 8px 28px rgba(26,18,72,.3);}
+.btn-green{
+  display:inline-flex; align-items:center; gap:10px; background:var(--green); color:#fff;
+  font-family:'DM Sans',sans-serif; font-size:15px; font-weight:700; padding:15px 32px;
+  border-radius:100px; border:none; cursor:pointer; box-shadow:0 4px 16px rgba(141,198,63,.35);
+  transition:background .2s, transform .18s, box-shadow .2s;
+}
+.btn-green:hover{background:var(--green-mid); transform:translateY(-2px); box-shadow:0 8px 28px rgba(141,198,63,.45);}
+.btn-outline{
+  display:inline-flex; align-items:center; gap:8px; background:#fff; color:var(--navy);
+  font-family:'DM Sans',sans-serif; font-size:14px; font-weight:700; padding:12px 24px;
+  border-radius:100px; border:1.5px solid var(--navy); cursor:pointer; transition:all .18s;
+}
+.btn-outline:hover{background:var(--navy); color:#fff;}
+
+/* ---------- Exam screen ---------- */
+.exam-header{
+  background:var(--navy); color:#fff; padding:14px 24px; display:flex; align-items:center;
+  justify-content:space-between; flex-wrap:wrap; gap:12px; position:sticky; top:0; z-index:50;
+}
+.exam-title{font-weight:700; font-size:14.5px;}
+.exam-title span{color:#B9E27A;}
+.exam-meta{display:flex; align-items:center; gap:18px; font-size:13px;}
+.timer-pill{
+  display:flex; align-items:center; gap:7px; background:rgba(255,255,255,.1); padding:7px 14px;
+  border-radius:100px; font-weight:700; font-variant-numeric:tabular-nums;
+}
+.timer-pill .lbl{font-weight:500; color:#C9C4E8; font-size:11px; text-transform:uppercase; letter-spacing:.05em;}
+.progress-pill{background:rgba(255,255,255,.1); padding:7px 14px; border-radius:100px; font-weight:700;}
+
+.exam-body{display:grid; grid-template-columns:1fr 300px; gap:22px; max-width:1200px; margin:0 auto; padding:24px 20px 80px;}
+@media (max-width:880px){.exam-body{grid-template-columns:1fr;}}
+
+.q-card{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius-lg); padding:28px;}
+.q-top{display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:16px;}
+.q-num{font-size:12px; font-weight:700; color:var(--text-3); text-transform:uppercase; letter-spacing:.06em;}
+.lesson-tag{
+  display:inline-block; background:var(--green-bg); color:var(--green-dark); font-size:11.5px;
+  font-weight:700; padding:4px 11px; border-radius:100px; margin-top:6px;
+}
+.flag-btn{
+  display:flex; align-items:center; gap:6px; background:#fff; border:1.5px solid var(--border);
+  color:var(--text-2); font-family:'DM Sans',sans-serif; font-weight:700; font-size:13px;
+  padding:8px 16px; border-radius:100px; cursor:pointer; transition:all .18s; flex-shrink:0;
+}
+.flag-btn.flagged{background:var(--amber-bg); border-color:#F0C77C; color:var(--amber-dark);}
+.flag-btn:hover{border-color:var(--amber);}
+
+.q-text{font-size:17px; font-weight:600; line-height:1.55; color:var(--text-1); margin-bottom:22px;}
+
+.option{
+  display:flex; align-items:flex-start; gap:13px; padding:14px 16px; border:1.5px solid var(--border);
+  border-radius:12px; margin-bottom:10px; cursor:pointer; transition:all .15s; background:#fff;
+}
+.option:hover{border-color:var(--green); background:var(--green-bg);}
+.option.selected{border-color:var(--navy); background:#EEEBFA;}
+.option .opt-key{
+  width:26px; height:26px; border-radius:50%; border:1.5px solid var(--border); flex-shrink:0;
+  display:flex; align-items:center; justify-content:center; font-weight:700; font-size:12.5px; color:var(--text-2);
+}
+.option.selected .opt-key{background:var(--navy); border-color:var(--navy); color:#fff;}
+.option .opt-text{font-size:14.5px; line-height:1.5; color:var(--text-1); padding-top:3px;}
+
+.q-nav-btns{display:flex; justify-content:space-between; margin-top:22px; gap:10px;}
+
+/* Sidebar navigator */
+.sidebar{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius-lg); padding:20px; align-self:start; position:sticky; top:88px;}
+.sb-title{font-size:13px; font-weight:700; color:var(--text-1); margin-bottom:14px;}
+.nav-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:8px; margin-bottom:18px;}
+.nav-cell{
+  aspect-ratio:1; border-radius:8px; border:1.5px solid var(--border); background:#fff;
+  display:flex; align-items:center; justify-content:center; font-size:12.5px; font-weight:700;
+  color:var(--text-2); cursor:pointer; transition:all .15s; position:relative;
+}
+.nav-cell:hover{border-color:var(--navy);}
+.nav-cell.current{border-color:var(--navy); border-width:2px;}
+.nav-cell.answered{background:var(--green-bg); border-color:#C8E89A; color:var(--green-dark);}
+.nav-cell.flagged::after{
+  content:''; position:absolute; top:-3px; right:-3px; width:9px; height:9px; border-radius:50%; background:var(--amber);
+}
+.legend{display:flex; flex-direction:column; gap:8px; font-size:12px; color:var(--text-2); margin-bottom:18px;}
+.legend .lg-row{display:flex; align-items:center; gap:8px;}
+.legend .sw{width:13px; height:13px; border-radius:4px; border:1.5px solid var(--border);}
+.legend .sw.answered{background:var(--green-bg); border-color:#C8E89A;}
+.legend .sw.flagged{background:#fff; position:relative;}
+.legend .sw.flagged::after{content:'';position:absolute;top:-3px;right:-3px;width:8px;height:8px;border-radius:50%;background:var(--amber);}
+
+/* ---------- Results screen ---------- */
+.results-wrap{max-width:820px; margin:0 auto; padding:48px 20px 80px;}
+.band-hero{border-radius:var(--radius-lg); padding:36px; text-align:center; margin-bottom:28px;}
+.band-hero.strong{background:var(--green-bg); border:1.5px solid #C8E89A;}
+.band-hero.good{background:var(--amber-bg); border:1.5px solid #F0C77C;}
+.band-hero.needs{background:var(--red-bg); border:1.5px solid #F3B4B6;}
+.band-emoji{font-size:44px; margin-bottom:10px;}
+.band-label{font-size:24px; font-weight:800; margin-bottom:6px;}
+.band-hero.strong .band-label{color:var(--green-dark);}
+.band-hero.good .band-label{color:var(--amber-dark);}
+.band-hero.needs .band-label{color:var(--red-dark);}
+.band-msg{font-size:15px; color:var(--text-2); margin-bottom:18px;}
+.score-big{font-size:46px; font-weight:800; color:var(--navy);}
+.score-sub{font-size:13.5px; color:var(--text-3); font-weight:600;}
+
+.stat-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:28px;}
+.stat-card{background:var(--surface); border:1.5px solid var(--border); border-radius:12px; padding:16px; text-align:center;}
+.stat-card .sv{font-size:22px; font-weight:800; color:var(--navy);}
+.stat-card .sl{font-size:11.5px; color:var(--text-3); font-weight:700; text-transform:uppercase; letter-spacing:.04em; margin-top:3px;}
+
+.lesson-breakdown{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); padding:22px; margin-bottom:28px;}
+.lb-title{font-size:15px; font-weight:700; margin-bottom:16px;}
+.lb-row{margin-bottom:14px;}
+.lb-top{display:flex; justify-content:space-between; font-size:13px; font-weight:600; margin-bottom:6px;}
+.lb-top .lb-name{color:var(--text-1);}
+.lb-top .lb-score{color:var(--text-2);}
+.lb-bar-bg{background:#F0F1F4; border-radius:100px; height:9px; overflow:hidden;}
+.lb-bar-fill{height:100%; border-radius:100px; background:var(--green);}
+.lb-bar-fill.mid{background:var(--amber);}
+.lb-bar-fill.low{background:var(--red);}
+
+.action-row{display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:8px;}
+
+/* ---------- Review screen ---------- */
+.review-wrap{max-width:820px; margin:0 auto; padding:32px 20px 80px;}
+.review-filters{display:flex; gap:8px; margin-bottom:22px; flex-wrap:wrap;}
+.rf-btn{
+  background:#fff; border:1.5px solid var(--border); color:var(--text-2); font-family:'DM Sans',sans-serif;
+  font-weight:700; font-size:13px; padding:8px 16px; border-radius:100px; cursor:pointer; transition:all .15s;
+}
+.rf-btn.active{background:var(--navy); border-color:var(--navy); color:#fff;}
+.review-q{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); padding:22px; margin-bottom:16px;}
+.review-q .rq-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;}
+.result-tag{font-size:11.5px; font-weight:700; padding:3px 11px; border-radius:100px;}
+.result-tag.correct{background:var(--green-bg); color:var(--green-dark);}
+.result-tag.incorrect{background:var(--red-bg); color:var(--red-dark);}
+.result-tag.skipped{background:#F0F1F4; color:var(--text-2);}
+.review-q .rq-text{font-size:15px; font-weight:600; margin-bottom:14px; line-height:1.5;}
+.rq-opt{padding:10px 14px; border-radius:10px; margin-bottom:7px; font-size:13.5px; border:1.5px solid var(--border); display:flex; gap:10px;}
+.rq-opt.correct-answer{background:var(--green-bg); border-color:#C8E89A; color:var(--green-dark); font-weight:600;}
+.rq-opt.wrong-answer{background:var(--red-bg); border-color:#F3B4B6; color:var(--red-dark); font-weight:600;}
+.rq-explain{background:#F7F8FA; border-radius:10px; padding:13px 15px; font-size:13px; color:var(--text-2); line-height:1.55; margin-top:10px;}
+.rq-explain b{color:var(--text-1);}
+
+footer.k21-footer{text-align:center; padding:22px; font-size:12px; color:var(--text-3);}
+</style>
+</head>
+<body>
+
+<!-- ============ START SCREEN ============ -->
+<div id="screen-start" class="screen active">
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span> K21 Academy</div>
+    <div class="program">Azure AI/ML/GenAI Job Oriented Program</div>
+  </div>
+  <div class="start-wrap">
+    <div class="eyebrow"><i></i>Module Practice Test</div>
+    <div class="start-title">Module 13: <span class="accent">Create Agents in Microsoft Copilot Studio</span></div>
+    <p class="start-sub">A quick knowledge check across all 13 lessons in this module. This is practice, not an exam — take your time, review explanations, and retry as many times as you like.</p>
+
+    <div class="info-cards">
+      <div class="info-card"><div class="v">45</div><div class="k">Questions</div></div>
+      <div class="info-card"><div class="v">13</div><div class="k">Lessons</div></div>
+      <div class="info-card"><div class="v">∞</div><div class="k">Retries</div></div>
+    </div>
+
+    <div class="lesson-table">
+      <div class="lt-head"><span>Lessons Covered</span><span>Questions</span></div>
+      <div id="lesson-coverage"></div>
+    </div>
+
+    <div class="band-legend">
+      <div class="bl-title">How your score is shown</div>
+      <div class="band-row"><span class="band-dot" style="background:var(--green);"></span><span class="bt" style="color:var(--green-dark);">🟢 80–100% Strong</span><span class="bd">Ready to move to the next module</span></div>
+      <div class="band-row"><span class="band-dot" style="background:var(--amber);"></span><span class="bt" style="color:var(--amber-dark);">🟡 60–79% Good Progress</span><span class="bd">Review 1–2 lessons and retry</span></div>
+      <div class="band-row"><span class="band-dot" style="background:var(--red);"></span><span class="bt" style="color:var(--red-dark);">🔴 Below 60% Needs Review</span><span class="bd">Revisit the module before moving on</span></div>
+    </div>
+
+    <div class="notice">💡 There's no countdown and no fail state — this is here to help you find gaps, not to pressure you. Flag anything you're unsure of and revisit it in review mode afterward.</div>
+
+    <button class="btn-primary" onclick="startExam()">Start Practice →</button>
+  </div>
+  <footer class="k21-footer">K21 Academy · Azure AI/ML/GenAI Job Oriented Program · Module 13 Practice Test</footer>
+</div>
+
+<!-- ============ EXAM SCREEN ============ -->
+<div id="screen-exam" class="screen">
+  <div class="exam-header">
+    <div class="exam-title">Module 13 · <span>Create Agents in Microsoft Copilot Studio</span></div>
+    <div class="exam-meta">
+      <div class="timer-pill"><span class="lbl">Time</span><span id="timer-display">0:00</span></div>
+      <div class="progress-pill"><span id="progress-display">Q1 / 45</span></div>
+    </div>
+  </div>
+  <div class="exam-body">
+    <div class="q-card">
+      <div class="q-top">
+        <div>
+          <div class="q-num" id="q-num-label">Question 1 of 45</div>
+          <div class="lesson-tag" id="q-lesson-tag">Lesson 1</div>
+        </div>
+        <button class="flag-btn" id="flag-btn" onclick="toggleFlag()">🚩 Flag for review</button>
+      </div>
+      <div class="q-text" id="q-text"></div>
+      <div id="options-container"></div>
+      <div class="q-nav-btns">
+        <button class="btn-outline" id="prev-btn" onclick="prevQuestion()">← Previous</button>
+        <button class="btn-outline" id="next-btn" onclick="nextQuestion()">Next →</button>
+      </div>
+    </div>
+    <div class="sidebar">
+      <div class="sb-title">Question Navigator</div>
+      <div class="nav-grid" id="nav-grid"></div>
+      <div class="legend">
+        <div class="lg-row"><span class="sw answered"></span> Answered</div>
+        <div class="lg-row"><span class="sw"></span> Unanswered</div>
+        <div class="lg-row"><span class="sw flagged"></span> Flagged</div>
+      </div>
+      <button class="btn-green" style="width:100%; justify-content:center;" onclick="confirmSubmit()">Submit Practice Test</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ RESULTS SCREEN ============ -->
+<div id="screen-results" class="screen">
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span> K21 Academy</div>
+    <div class="program">Azure AI/ML/GenAI Job Oriented Program</div>
+  </div>
+  <div class="results-wrap">
+    <div class="band-hero" id="band-hero">
+      <div class="band-emoji" id="band-emoji">🟢</div>
+      <div class="band-label" id="band-label">Strong</div>
+      <div class="band-msg" id="band-msg">Ready to move to the next module</div>
+      <div class="score-big" id="score-big">0%</div>
+      <div class="score-sub" id="score-sub">0 of 30 correct</div>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-card"><div class="sv" id="stat-correct">0</div><div class="sl">Correct</div></div>
+      <div class="stat-card"><div class="sv" id="stat-incorrect">0</div><div class="sl">Incorrect</div></div>
+      <div class="stat-card"><div class="sv" id="stat-skipped">0</div><div class="sl">Skipped</div></div>
+      <div class="stat-card"><div class="sv" id="stat-time">0:00</div><div class="sl">Time Taken</div></div>
+    </div>
+
+    <div class="lesson-breakdown">
+      <div class="lb-title">Lesson-wise Breakdown</div>
+      <div id="lesson-breakdown-body"></div>
+    </div>
+
+    <div class="action-row">
+      <button class="btn-primary" onclick="showReview()">📋 Review Answers</button>
+      <button class="btn-green" onclick="location.reload()">🔄 Retry Practice Test</button>
+    </div>
+  </div>
+  <footer class="k21-footer">K21 Academy · Azure AI/ML/GenAI Job Oriented Program · Module 13 Practice Test</footer>
+</div>
+
+<!-- ============ REVIEW SCREEN ============ -->
+<div id="screen-review" class="screen">
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span> K21 Academy</div>
+    <div class="program">Review Mode · Module 13</div>
+  </div>
+  <div class="review-wrap">
+    <div class="review-filters">
+      <button class="rf-btn active" data-filter="all" onclick="setReviewFilter('all')">All (45)</button>
+      <button class="rf-btn" data-filter="correct" onclick="setReviewFilter('correct')">✅ Correct</button>
+      <button class="rf-btn" data-filter="incorrect" onclick="setReviewFilter('incorrect')">❌ Incorrect</button>
+      <button class="rf-btn" data-filter="skipped" onclick="setReviewFilter('skipped')">⬜ Skipped</button>
+      <button class="rf-btn" data-filter="flagged" onclick="setReviewFilter('flagged')">🚩 Flagged</button>
+    </div>
+    <div id="review-list"></div>
+    <div class="action-row">
+      <button class="btn-primary" onclick="backToResults()">← Back to Results</button>
+      <button class="btn-green" onclick="location.reload()">🔄 Retry Practice Test</button>
+    </div>
+  </div>
+  <footer class="k21-footer">K21 Academy · Azure AI/ML/GenAI Job Oriented Program · Module 13 Practice Test</footer>
+</div>
+
+<!-- ============ SUBMIT CONFIRM MODAL ============ -->
+<div id="submit-modal" style="display:none; position:fixed; inset:0; background:rgba(17,24,39,.55); z-index:100; align-items:center; justify-content:center;">
+  <div style="background:#fff; border-radius:20px; padding:28px; max-width:380px; width:90%; text-align:center;">
+    <div style="font-size:17px; font-weight:800; margin-bottom:10px;">Submit practice test?</div>
+    <div id="modal-unanswered-msg" style="font-size:13.5px; color:var(--text-2); margin-bottom:20px; line-height:1.5;"></div>
+    <div style="display:flex; gap:10px; justify-content:center;">
+      <button class="btn-outline" onclick="closeSubmitModal()">Keep working</button>
+      <button class="btn-green" onclick="submitExam()">Submit</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const QUESTIONS = [
+  {
+    id: 1,
+    lesson: 1,
+    lessonName: "Microsoft Copilot ecosystem & AI tools",
+    question: "What is Microsoft Copilot Studio's role within the broader Microsoft Copilot ecosystem?",
+    options: [
+      { key: "A", text: "It is a hardware device used to physically connect keyboards to a computer" },
+      { key: "B", text: "It replaces the need for any Microsoft 365 subscription entirely" },
+      { key: "C", text: "It is the tool used to build, customize, and extend conversational copilots, which can then be published across channels like Teams, websites, or a custom app" },
+      { key: "D", text: "It is a billing dashboard unrelated to building any conversational experiences" }
+    ],
+    correct: "C",
+    explanation: "Microsoft Copilot Studio is the tool within the Copilot ecosystem used to build, customize, and extend conversational copilots, which can then be published across channels such as Microsoft Teams, a website, or a custom application."
+  },
+  {
+    id: 2,
+    lesson: 1,
+    lessonName: "Microsoft Copilot ecosystem & AI tools",
+    question: "How does a custom copilot built in Copilot Studio generally differ from Microsoft 365 Copilot as a standalone product?",
+    options: [
+      { key: "A", text: "Copilot Studio lets organizations design and configure their own custom conversational experiences and behaviors, while Microsoft 365 Copilot is a built-in AI assistant integrated directly into Microsoft 365 apps" },
+      { key: "B", text: "Microsoft 365 Copilot can only be used to build brand-new custom copilots from scratch, with no built-in assistant capability" },
+      { key: "C", text: "Copilot Studio and Microsoft 365 Copilot are the exact same product with no distinction whatsoever" },
+      { key: "D", text: "Copilot Studio is limited strictly to editing spreadsheet formulas in Excel" }
+    ],
+    correct: "A",
+    explanation: "Copilot Studio is a tool for designing and configuring custom conversational experiences tailored to an organization's specific needs, while Microsoft 365 Copilot is a built-in AI assistant already integrated directly into Microsoft 365 apps like Word, Excel, and Outlook."
+  },
+  {
+    id: 3,
+    lesson: 1,
+    lessonName: "Microsoft Copilot ecosystem & AI tools",
+    question: "Why might an organization choose to build a custom copilot rather than relying solely on general-purpose AI assistants?",
+    options: [
+      { key: "A", text: "Building a custom copilot removes the need for any underlying language model whatsoever" },
+      { key: "B", text: "Custom copilots can only ever answer questions about the weather" },
+      { key: "C", text: "General-purpose AI assistants are always technically incapable of answering any business question" },
+      { key: "D", text: "A custom copilot can be tailored to an organization's specific processes, data sources, and terminology, and can be deployed on the channels most relevant to its users" }
+    ],
+    correct: "D",
+    explanation: "Building a custom copilot allows an organization to tailor the conversational experience to its own specific processes, data sources, and terminology, and to deploy it on the channels most relevant to its users, rather than relying solely on a general-purpose assistant's default behavior."
+  },
+  {
+    id: 4,
+    lesson: 2,
+    lessonName: "Copilot Studio overview & interface",
+    question: "What is the general workflow a maker follows when starting a new copilot project in Copilot Studio?",
+    options: [
+      { key: "A", text: "Manually compile a neural network from scratch before any copilot can be created" },
+      { key: "B", text: "Create a new copilot, configure its general settings and knowledge sources, design its topics and conversational flow, then test and publish it" },
+      { key: "C", text: "Immediately publish the copilot to production with no configuration or testing steps of any kind" },
+      { key: "D", text: "Only write raw source code with no graphical interface involved at any point" }
+    ],
+    correct: "B",
+    explanation: "The general Copilot Studio workflow involves creating a new copilot, configuring its general settings and knowledge sources, designing its topics and conversational flow, and then testing it in the built-in test pane before publishing it to a chosen channel."
+  },
+  {
+    id: 5,
+    lesson: 2,
+    lessonName: "Copilot Studio overview & interface",
+    question: "What is the purpose of the built-in 'Test' pane available while authoring a copilot in Copilot Studio?",
+    options: [
+      { key: "A", text: "It permanently deletes any topic that produces an incorrect response" },
+      { key: "B", text: "It is only available after a copilot has already been published to end users" },
+      { key: "C", text: "It lets a maker have a live conversation with the in-progress copilot to verify its behavior and troubleshoot topics before publishing" },
+      { key: "D", text: "It is used only to check the copilot's monthly billing cost" }
+    ],
+    correct: "C",
+    explanation: "The Test pane lets a maker have a live conversation with the copilot while it's still being built, allowing them to verify how it responds and troubleshoot topics or configuration issues before the copilot is published for end users."
+  },
+  {
+    id: 6,
+    lesson: 2,
+    lessonName: "Copilot Studio overview & interface",
+    question: "What role does 'generative AI' (as opposed to purely authored topics) play within the Copilot Studio interface?",
+    options: [
+      { key: "A", text: "Generative AI capability removes the need for any knowledge sources whatsoever" },
+      { key: "B", text: "Generative AI only works for translating the copilot's interface into other languages" },
+      { key: "C", text: "Generative AI has no role at all in Copilot Studio and is only relevant to Azure OpenAI Service" },
+      { key: "D", text: "It allows the copilot to generate conversational responses dynamically, often grounded in connected knowledge sources, rather than relying only on explicitly authored, static conversation flows" }
+    ],
+    correct: "D",
+    explanation: "Generative AI in Copilot Studio allows a copilot to produce conversational responses dynamically, often grounded in connected knowledge sources, complementing explicitly authored topics with more flexible, generative answers for questions that fall outside predefined conversation flows."
+  },
+  {
+    id: 7,
+    lesson: 2,
+    lessonName: "Copilot Studio overview & interface",
+    question: "What is the purpose of the copilot's 'general settings' (such as its name, description, and icon) configured early in Copilot Studio?",
+    options: [
+      { key: "A", text: "They define the copilot's identity and basic presentation, helping establish how it introduces itself and appears to users across the channels where it's published" },
+      { key: "B", text: "General settings can only be changed after the copilot has already been permanently deleted" },
+      { key: "C", text: "General settings are only used to configure billing alerts and have no effect on the copilot's identity" },
+      { key: "D", text: "General settings determine the exact wording of every single conversation the copilot will ever have" }
+    ],
+    correct: "A",
+    explanation: "A copilot's general settings, such as its name, description, and icon, establish its basic identity and presentation, helping shape how it introduces itself and appears to users across whichever channels it is ultimately published to."
+  },
+  {
+    id: 8,
+    lesson: 3,
+    lessonName: "Topic management & copilot design",
+    question: "What is a 'topic' in Copilot Studio?",
+    options: [
+      { key: "A", text: "A single word that must appear exactly once in the entire conversation" },
+      { key: "B", text: "A defined conversational unit that recognizes specific trigger phrases or intents and guides the copilot through a corresponding conversation flow to address that particular subject" },
+      { key: "C", text: "A billing category used exclusively to track the copilot's monthly cost" },
+      { key: "D", text: "A setting that controls only the visual color theme of the chat window" }
+    ],
+    correct: "B",
+    explanation: "A topic in Copilot Studio is a defined conversational unit that recognizes specific trigger phrases or intents and guides the copilot through a corresponding conversation flow, letting the maker design how the copilot should handle that particular subject."
+  },
+  {
+    id: 9,
+    lesson: 3,
+    lessonName: "Topic management & copilot design",
+    question: "What are 'trigger phrases' used for when designing a topic in Copilot Studio?",
+    options: [
+      { key: "A", text: "Trigger phrases permanently disable a topic from ever being triggered again" },
+      { key: "B", text: "Trigger phrases are only used to configure the copilot's billing plan" },
+      { key: "C", text: "They provide example user utterances that help the copilot recognize when a user's message is relevant to that particular topic and should activate its conversation flow" },
+      { key: "D", text: "They are phrases the copilot is forbidden from ever using in any response" }
+    ],
+    correct: "C",
+    explanation: "Trigger phrases are example user utterances provided by the maker that help the copilot recognize when an incoming user message is relevant to a particular topic, so it knows to activate that topic's conversation flow."
+  },
+  {
+    id: 10,
+    lesson: 3,
+    lessonName: "Topic management & copilot design",
+    question: "What is the purpose of using conditions (branches) within a topic's conversation flow in Copilot Studio?",
+    options: [
+      { key: "A", text: "Conditions can only be applied after a copilot has been permanently deleted" },
+      { key: "B", text: "Conditions force every conversation to always follow the exact same single path regardless of user input" },
+      { key: "C", text: "Conditions are used exclusively to change the copilot's icon" },
+      { key: "D", text: "They let the conversation flow take different paths depending on factors like a user's response, a variable's value, or other criteria, rather than always following one single fixed path" }
+    ],
+    correct: "D",
+    explanation: "Conditions, or branches, within a topic's conversation flow let the maker design different paths the conversation can take depending on factors such as a user's response or a variable's current value, rather than forcing every conversation down one single fixed path."
+  },
+  {
+    id: 11,
+    lesson: 3,
+    lessonName: "Topic management & copilot design",
+    question: "Why is it good practice to design topics with clear, non-overlapping trigger phrases when building a copilot with many different topics?",
+    options: [
+      { key: "A", text: "Clear, distinct trigger phrases help the copilot correctly match a user's message to the intended topic, reducing confusion or accidentally triggering the wrong conversation flow" },
+      { key: "B", text: "Non-overlapping trigger phrases are only relevant if the copilot has exactly one topic in total" },
+      { key: "C", text: "Trigger phrase design has no effect on which topic gets activated by a given user message" },
+      { key: "D", text: "Overlapping trigger phrases across topics always improve the copilot's accuracy with no downside" }
+    ],
+    correct: "A",
+    explanation: "Designing topics with clear, distinct trigger phrases helps the copilot more reliably match an incoming user message to the intended topic, reducing the risk of ambiguity or the wrong conversation flow being triggered when multiple topics have overlapping language."
+  },
+  {
+    id: 12,
+    lesson: 4,
+    lessonName: "Publishing & testing copilots",
+    question: "What generally happens when a maker 'publishes' a copilot in Copilot Studio?",
+    options: [
+      { key: "A", text: "Publishing permanently deletes the copilot and all of its topics" },
+      { key: "B", text: "The current version of the copilot is made available on its configured channels so end users can start interacting with it" },
+      { key: "C", text: "Publishing only changes the copilot's internal file name with no effect on end users" },
+      { key: "D", text: "Publishing is only possible after the copilot has been unpublished for over a year" }
+    ],
+    correct: "B",
+    explanation: "Publishing a copilot in Copilot Studio makes its current version available on its configured channels, such as a website or Microsoft Teams, so that end users can begin interacting with it in that live environment."
+  },
+  {
+    id: 13,
+    lesson: 4,
+    lessonName: "Publishing & testing copilots",
+    question: "Why is it recommended to thoroughly test a copilot's topics and conversation flows before publishing it to end users?",
+    options: [
+      { key: "A", text: "Testing has no bearing on the quality of the experience end users will have after publishing" },
+      { key: "B", text: "Skipping testing always guarantees a smoother experience for end users" },
+      { key: "C", text: "Testing is only relevant for copilots that will never be published at all" },
+      { key: "D", text: "Testing helps catch incorrect responses, broken conversation paths, or misconfigured topics ahead of time, reducing the chance that end users encounter a poor or confusing experience" }
+    ],
+    correct: "D",
+    explanation: "Thoroughly testing a copilot's topics and conversation flows before publishing helps catch incorrect responses, broken paths, or misconfigurations ahead of time, reducing the likelihood that end users encounter a poor or confusing experience once it goes live."
+  },
+  {
+    id: 14,
+    lesson: 4,
+    lessonName: "Publishing & testing copilots",
+    question: "What is a common reason to maintain and test multiple environments (such as development and production) for a copilot before it reaches end users broadly?",
+    options: [
+      { key: "A", text: "A production environment is only ever used for authoring new topics, never for live end-user traffic" },
+      { key: "B", text: "Using multiple environments guarantees the copilot will require no further testing ever again" },
+      { key: "C", text: "Separate environments let a team build, test, and refine changes safely without affecting the version of the copilot that real end users are currently interacting with" },
+      { key: "D", text: "Multiple environments are required only because Copilot Studio charges a separate fee for every environment with no functional benefit" }
+    ],
+    correct: "C",
+    explanation: "Maintaining separate environments, such as development and production, lets a team build, test, and refine changes to a copilot safely, without those in-progress changes affecting the version that real end users are currently interacting with in production."
+  },
+  {
+    id: 15,
+    lesson: 5,
+    lessonName: "Entities, variables & customization",
+    question: "What is an 'entity' used for within a Copilot Studio topic?",
+    options: [
+      { key: "A", text: "It identifies and extracts a specific piece of structured information from a user's message, such as a date, a product name, or a number, so the topic can use that value" },
+      { key: "B", text: "An entity permanently disables a topic from ever running again" },
+      { key: "C", text: "An entity is a setting that controls only the copilot's icon and color scheme" },
+      { key: "D", text: "Entities are used exclusively to configure the copilot's billing plan" }
+    ],
+    correct: "A",
+    explanation: "An entity identifies and extracts a specific piece of structured information from a user's message, such as a date, a product name, or a number, allowing the topic's conversation flow to reference and act on that extracted value."
+  },
+  {
+    id: 16,
+    lesson: 5,
+    lessonName: "Entities, variables & customization",
+    question: "What is the purpose of a 'variable' within a Copilot Studio conversation flow?",
+    options: [
+      { key: "A", text: "Variables are limited strictly to storing image files and cannot store text or numbers" },
+      { key: "B", text: "It stores a piece of information, such as a user's response or an extracted entity value, so it can be referenced or reused later in the same conversation flow" },
+      { key: "C", text: "A variable is a fixed value that can never change once the copilot is created" },
+      { key: "D", text: "Variables are used only to store the copilot's monthly cost" }
+    ],
+    correct: "B",
+    explanation: "A variable stores a piece of information, such as a user's response or a value extracted by an entity, so that it can be referenced or reused at a later point within the same conversation flow, such as personalizing a later message."
+  },
+  {
+    id: 17,
+    lesson: 5,
+    lessonName: "Entities, variables & customization",
+    question: "Why might a maker define a custom entity, in addition to using Copilot Studio's prebuilt entities?",
+    options: [
+      { key: "A", text: "Custom entities can only be used to change the copilot's color theme" },
+      { key: "B", text: "Defining a custom entity permanently removes the ability to use any prebuilt entity in the same copilot" },
+      { key: "C", text: "Custom entities are required before a copilot can recognize even a simple prebuilt value like a date" },
+      { key: "D", text: "To recognize domain-specific values relevant to their own business, such as internal product codes or department names, which prebuilt entities wouldn't cover" }
+    ],
+    correct: "D",
+    explanation: "A maker might define a custom entity to recognize domain-specific values relevant to their own business, such as internal product codes, department names, or other terminology, which general-purpose prebuilt entities wouldn't be designed to cover."
+  },
+  {
+    id: 18,
+    lesson: 6,
+    lessonName: "Configuring data sources & actions",
+    question: "What is the purpose of connecting a 'knowledge source', such as a website or a set of documents, to a copilot in Copilot Studio?",
+    options: [
+      { key: "A", text: "It lets the copilot generate grounded answers to user questions by referencing the content of that connected source, rather than answering purely from its general training" },
+      { key: "B", text: "A knowledge source can only be a single image file with no other format supported" },
+      { key: "C", text: "Knowledge sources are used only to change the visual appearance of the copilot's chat window" },
+      { key: "D", text: "Connecting a knowledge source permanently disables the copilot's ability to have any conversation at all" }
+    ],
+    correct: "A",
+    explanation: "Connecting a knowledge source, such as a website or a set of documents, lets the copilot generate grounded answers to user questions by referencing the actual content of that source, rather than relying purely on general knowledge from its underlying model."
+  },
+  {
+    id: 19,
+    lesson: 6,
+    lessonName: "Configuring data sources & actions",
+    question: "What is an 'action' in Copilot Studio, in the context of extending a copilot's capabilities beyond conversation?",
+    options: [
+      { key: "A", text: "Actions are used exclusively to permanently delete a topic" },
+      { key: "B", text: "An action can only ever display a static image with no other functionality" },
+      { key: "C", text: "A configured step that lets the copilot call an external system or service, such as retrieving a record or triggering a process, as part of a conversation flow" },
+      { key: "D", text: "An action is a setting that only changes the wording of the copilot's welcome message" }
+    ],
+    correct: "C",
+    explanation: "An action is a configured step within a topic that lets the copilot call an external system or service, such as retrieving a record from a database or triggering an automated process, extending what the copilot can accomplish beyond simply conversing."
+  },
+  {
+    id: 20,
+    lesson: 6,
+    lessonName: "Configuring data sources & actions",
+    question: "Why might a copilot need to combine both a connected knowledge source and one or more configured actions to fully address a business scenario?",
+    options: [
+      { key: "A", text: "A copilot can only ever use one of the two capabilities, never both together in the same conversation flow" },
+      { key: "B", text: "A knowledge source can help the copilot answer informational questions grounded in reference content, while actions let it actually retrieve live data or take steps, such as looking up a specific order status" },
+      { key: "C", text: "Knowledge sources and actions perform the exact same function, so combining them provides no additional benefit" },
+      { key: "D", text: "Actions are only relevant for copilots that have no knowledge source connected at all" }
+    ],
+    correct: "B",
+    explanation: "A connected knowledge source helps a copilot answer informational questions grounded in reference content, while configured actions let it go further by retrieving live, specific data, such as an individual order's status, so combining both often covers a broader range of business scenarios than either alone."
+  },
+  {
+    id: 21,
+    lesson: 6,
+    lessonName: "Configuring data sources & actions",
+    question: "When configuring an action that calls an external service, why is it important to define what inputs the action requires and what output it returns?",
+    options: [
+      { key: "A", text: "Inputs and outputs have no bearing on whether an action functions correctly within a conversation" },
+      { key: "B", text: "An action can only be configured with exactly zero inputs and zero outputs by design" },
+      { key: "C", text: "Defining inputs and outputs is only relevant for actions that never actually call any external service" },
+      { key: "D", text: "Clearly defined inputs and outputs let the copilot correctly pass along the right information to the external service and correctly use the result within the conversation flow afterward" }
+    ],
+    correct: "D",
+    explanation: "Clearly defining an action's required inputs and expected output lets the copilot correctly pass along the right information when calling the external service and correctly make use of the returned result within the rest of the conversation flow."
+  },
+  {
+    id: 22,
+    lesson: 7,
+    lessonName: "Copilot Studio + Power Platform integration",
+    question: "How does Copilot Studio commonly integrate with Power Automate to extend a copilot's capabilities?",
+    options: [
+      { key: "A", text: "A topic's conversation flow can call a Power Automate flow to trigger a multi-step automated process, such as creating a record or sending a notification, as part of handling a user's request" },
+      { key: "B", text: "Power Automate flows can only run on a fixed daily schedule with no relationship to a live conversation" },
+      { key: "C", text: "Power Automate can only be used to change the color scheme of the copilot's interface" },
+      { key: "D", text: "Copilot Studio and Power Automate cannot be connected to each other in any way" }
+    ],
+    correct: "A",
+    explanation: "A topic's conversation flow in Copilot Studio can call a Power Automate flow to trigger a multi-step automated process, such as creating a record in a business system or sending a notification, extending the copilot's capabilities as part of handling a user's request."
+  },
+  {
+    id: 23,
+    lesson: 7,
+    lessonName: "Copilot Studio + Power Platform integration",
+    question: "What benefit does integrating Copilot Studio with Power Apps provide for a broader business solution?",
+    options: [
+      { key: "A", text: "Power Apps can only be used to permanently delete a published copilot" },
+      { key: "B", text: "Integrating with Power Apps disables the copilot's ability to be published to Microsoft Teams" },
+      { key: "C", text: "It allows a conversational copilot experience to be combined with a custom Power Apps interface, so users can interact through both chat and structured app screens within the same solution" },
+      { key: "D", text: "Power Apps integration removes the need for the copilot to have any topics at all" }
+    ],
+    correct: "C",
+    explanation: "Integrating Copilot Studio with Power Apps allows a conversational copilot experience to be combined with a custom Power Apps interface, so users can interact through both a chat-based experience and structured app screens within the same overall business solution."
+  },
+  {
+    id: 24,
+    lesson: 7,
+    lessonName: "Copilot Studio + Power Platform integration",
+    question: "Why does Copilot Studio's integration with the broader Power Platform (including Power Automate, Power Apps, and Dataverse) matter for enterprise adoption?",
+    options: [
+      { key: "A", text: "This integration exists solely to increase the copilot's monthly subscription cost with no functional benefit" },
+      { key: "B", text: "It lets organizations connect a copilot to their existing business processes, data, and applications already built on the Power Platform, rather than building all of that integration from scratch" },
+      { key: "C", text: "Power Platform integration is only relevant for organizations with no existing business systems of any kind" },
+      { key: "D", text: "Enterprise adoption is unaffected by whether a copilot can connect to any other business systems" }
+    ],
+    correct: "B",
+    explanation: "Copilot Studio's integration with the broader Power Platform, including Power Automate, Power Apps, and Dataverse, lets organizations connect a copilot to their existing business processes, data, and applications, rather than needing to build all of that integration from scratch."
+  },
+  {
+    id: 25,
+    lesson: 8,
+    lessonName: "Boosting Copilot NLU & AI models",
+    question: "What does 'NLU' (Natural Language Understanding) refer to in the context of a Copilot Studio conversational agent?",
+    options: [
+      { key: "A", text: "The capability that lets the copilot interpret the intent and extract relevant information from a user's natural-language message, so it can determine which topic or action applies" },
+      { key: "B", text: "NLU refers exclusively to the copilot's ability to translate its interface into other written languages" },
+      { key: "C", text: "NLU only applies to copilots that exclusively use buttons, with no free-text input at all" },
+      { key: "D", text: "NLU is a billing category unrelated to how the copilot interprets user messages" }
+    ],
+    correct: "A",
+    explanation: "Natural Language Understanding (NLU) is the capability that lets the copilot interpret a user's intent and extract relevant information from their natural-language message, so it can determine which topic or action is the right match for that request."
+  },
+  {
+    id: 26,
+    lesson: 8,
+    lessonName: "Boosting Copilot NLU & AI models",
+    question: "Why might a maker add more varied example trigger phrases to a topic to improve the copilot's NLU performance?",
+    options: [
+      { key: "A", text: "A topic can only ever have exactly one single trigger phrase, so variety is not possible" },
+      { key: "B", text: "Adding more trigger phrases always makes the copilot slower with no improvement to accuracy" },
+      { key: "C", text: "Trigger phrase variety has no effect on how well the copilot recognizes a user's intent" },
+      { key: "D", text: "A wider variety of phrasing examples helps the underlying language model better generalize and recognize the many different ways real users might phrase the same underlying request" }
+    ],
+    correct: "D",
+    explanation: "Providing a wider variety of example trigger phrases helps the underlying language understanding model better generalize and recognize the many different ways real users might phrase the same underlying request, improving how reliably the correct topic gets triggered."
+  },
+  {
+    id: 27,
+    lesson: 8,
+    lessonName: "Boosting Copilot NLU & AI models",
+    question: "How can reviewing a copilot's conversation transcripts and analytics help improve its NLU performance over time?",
+    options: [
+      { key: "A", text: "Analytics can only report the copilot's total number of published environments, with no insight into conversation quality" },
+      { key: "B", text: "Conversation transcripts have no relationship to how well the copilot understands future user requests" },
+      { key: "C", text: "Reviewing real conversations can reveal patterns of misunderstood requests or missed topic matches, which a maker can use to refine trigger phrases, entities, or topic design" },
+      { key: "D", text: "Reviewing transcripts is only useful after a copilot has been permanently taken offline" }
+    ],
+    correct: "C",
+    explanation: "Reviewing real conversation transcripts and analytics can reveal patterns, such as recurring misunderstood requests or topics that frequently fail to trigger correctly, giving a maker concrete evidence to refine trigger phrases, entities, or overall topic design to improve future performance."
+  },
+  {
+    id: 28,
+    lesson: 8,
+    lessonName: "Boosting Copilot NLU & AI models",
+    question: "What advantage does connecting a copilot to a generative AI model provide for handling questions that don't match any explicitly authored topic?",
+    options: [
+      { key: "A", text: "Generative AI models can only be used to change the copilot's icon and have no effect on conversation handling" },
+      { key: "B", text: "The generative model can produce a relevant, grounded response using connected knowledge sources, rather than the copilot simply failing to respond or falling back to a generic 'I don't understand' message" },
+      { key: "C", text: "This connection removes the need for any NLU capability whatsoever" },
+      { key: "D", text: "Connecting a generative AI model guarantees the copilot will never need any authored topics at all" }
+    ],
+    correct: "B",
+    explanation: "Connecting a copilot to a generative AI model lets it produce a relevant, grounded response using connected knowledge sources for questions that don't match any explicitly authored topic, rather than the conversation failing outright or falling back to a generic, unhelpful message."
+  },
+  {
+    id: 29,
+    lesson: 9,
+    lessonName: "Copilot management & advanced capabilities",
+    question: "Why is centralized management important once an organization has multiple copilots built and published across different teams?",
+    options: [
+      { key: "A", text: "Centralized management helps maintain consistent governance, ownership, and oversight across all copilots, rather than each team's copilot operating in an untracked, siloed way" },
+      { key: "B", text: "Centralized management has no effect on how consistently governance policies are applied" },
+      { key: "C", text: "Managing multiple copilots centrally always guarantees zero maintenance effort going forward" },
+      { key: "D", text: "Centralized management is only relevant if an organization has exactly one single copilot in total" }
+    ],
+    correct: "A",
+    explanation: "As an organization builds and publishes multiple copilots across different teams, centralized management helps maintain consistent governance, clear ownership, and appropriate oversight, rather than allowing each copilot to operate in an untracked, siloed way."
+  },
+  {
+    id: 30,
+    lesson: 9,
+    lessonName: "Copilot management & advanced capabilities",
+    question: "What is the benefit of using 'orchestration' capabilities that let a single copilot coordinate multiple specialized topics, actions, or connected agents?",
+    options: [
+      { key: "A", text: "Orchestration removes the need for the copilot to have any trigger phrases at all" },
+      { key: "B", text: "Orchestration guarantees that a copilot will never make an incorrect routing decision" },
+      { key: "C", text: "Orchestration capabilities only apply to copilots that have exactly one topic and no other components" },
+      { key: "D", text: "Orchestration lets a copilot intelligently route a broader range of user requests to the most appropriate specialized capability, rather than requiring one giant, unwieldy topic to handle everything" }
+    ],
+    correct: "D",
+    explanation: "Orchestration capabilities let a copilot intelligently route a broader range of user requests to the most appropriate specialized topic, action, or connected agent, rather than requiring the maker to build one giant, unwieldy topic that tries to handle every possible scenario on its own."
+  },
+  {
+    id: 31,
+    lesson: 9,
+    lessonName: "Copilot management & advanced capabilities",
+    question: "Why might an advanced Copilot Studio solution involve multiple copilots or agents working together rather than a single, monolithic copilot?",
+    options: [
+      { key: "A", text: "Using multiple copilots together is always strictly forbidden within Copilot Studio" },
+      { key: "B", text: "A single monolithic copilot always performs better than any combination of specialized copilots, with no exceptions" },
+      { key: "C", text: "Splitting responsibilities across specialized copilots or agents can make each one easier to design, test, and maintain, while still combining their capabilities to address a broader overall scenario" },
+      { key: "D", text: "Multiple copilots can only be used if each one is limited to a single trigger phrase" }
+    ],
+    correct: "C",
+    explanation: "Splitting responsibilities across multiple specialized copilots or agents can make each one easier to design, test, and maintain individually, while still combining their capabilities through orchestration to address a broader overall business scenario than a single, monolithic copilot might handle well."
+  },
+  {
+    id: 32,
+    lesson: 10,
+    lessonName: "Connectors, actions & extensions",
+    question: "What is the general purpose of a 'connector' when extending a copilot's capabilities in Copilot Studio?",
+    options: [
+      { key: "A", text: "A connector is used exclusively to change the visual theme of the copilot's chat window" },
+      { key: "B", text: "It provides a prebuilt integration point to an external service or system, such as a CRM or ticketing system, that a copilot's actions can use without requiring custom integration code from scratch" },
+      { key: "C", text: "A connector can only be used to store the copilot's billing information" },
+      { key: "D", text: "Connectors permanently disable the copilot's ability to call any external service" }
+    ],
+    correct: "B",
+    explanation: "A connector provides a prebuilt integration point to an external service or system, such as a CRM or ticketing platform, that a copilot's actions can use to retrieve or send data, without requiring the maker to build custom integration code from scratch."
+  },
+  {
+    id: 33,
+    lesson: 10,
+    lessonName: "Connectors, actions & extensions",
+    question: "How do 'extensions' generally expand what a copilot built in Copilot Studio can do?",
+    options: [
+      { key: "A", text: "Extensions add new capabilities or integrations to a copilot, such as connecting to additional data sources or exposing additional actions, beyond what's available out of the box" },
+      { key: "B", text: "Extensions have no effect on a copilot's available capabilities" },
+      { key: "C", text: "Adding an extension always removes an existing knowledge source from the copilot" },
+      { key: "D", text: "Extensions can only be used to reduce the number of topics a copilot has" }
+    ],
+    correct: "A",
+    explanation: "Extensions add new capabilities or integrations to a copilot, such as connecting it to additional data sources or exposing additional actions, expanding what the copilot can do beyond its default out-of-the-box functionality."
+  },
+  {
+    id: 34,
+    lesson: 10,
+    lessonName: "Connectors, actions & extensions",
+    question: "When would a maker choose to build a custom connector rather than using an existing prebuilt connector for an action?",
+    options: [
+      { key: "A", text: "Custom connectors can only be used to change the copilot's name" },
+      { key: "B", text: "Custom connectors are limited strictly to services that require no authentication of any kind" },
+      { key: "C", text: "A custom connector is required even when a prebuilt connector already fully covers the needed integration" },
+      { key: "D", text: "When the external system the copilot needs to integrate with doesn't already have a prebuilt connector available, requiring a custom-built integration instead" }
+    ],
+    correct: "D",
+    explanation: "A maker would typically build a custom connector when the external system they need to integrate with doesn't already have a prebuilt connector available, requiring a custom-built integration to expose that system's capabilities to the copilot's actions."
+  },
+  {
+    id: 35,
+    lesson: 10,
+    lessonName: "Connectors, actions & extensions",
+    question: "Why is it important to consider authentication and permissions when configuring a connector-based action in a copilot?",
+    options: [
+      { key: "A", text: "Connector-based actions never require any authentication under any circumstances" },
+      { key: "B", text: "Authentication and permissions have no bearing on how a connector-based action behaves" },
+      { key: "C", text: "Because the action will be calling an external system on behalf of the user or the copilot, proper authentication ensures only authorized requests are made and sensitive data is protected" },
+      { key: "D", text: "Considering permissions is only relevant for actions that never call any external system" }
+    ],
+    correct: "C",
+    explanation: "Because a connector-based action calls an external system on behalf of the user or the copilot itself, properly configuring authentication and permissions ensures that only authorized requests are made and that sensitive data accessed through that integration remains protected."
+  },
+  {
+    id: 36,
+    lesson: 11,
+    lessonName: "Voice-enabled copilots",
+    question: "What does 'enabling voice' for a copilot generally add to its available channels?",
+    options: [
+      { key: "A", text: "Enabling voice permanently removes the copilot's ability to respond with any text at all" },
+      { key: "B", text: "The ability for users to interact with the copilot through spoken input and receive spoken responses, in addition to or instead of typed text" },
+      { key: "C", text: "Voice enablement only changes the color scheme of the text-based chat window" },
+      { key: "D", text: "Voice enablement has no effect on how users can interact with the copilot" }
+    ],
+    correct: "B",
+    explanation: "Enabling voice for a copilot adds the ability for users to interact with it through spoken input and receive spoken responses, extending the conversational experience beyond typed text alone."
+  },
+  {
+    id: 37,
+    lesson: 11,
+    lessonName: "Voice-enabled copilots",
+    question: "Why might designing conversation flows for a voice-enabled copilot require different considerations than designing for a purely text-based chat experience?",
+    options: [
+      { key: "A", text: "Spoken interactions benefit from shorter, clearer responses and different handling of pauses or interruptions, since users can't visually scan a long block of text the way they could in a chat window" },
+      { key: "B", text: "Considering how responses sound when spoken aloud has no bearing on user experience" },
+      { key: "C", text: "Voice-enabled copilots can only ever respond with a single fixed word, regardless of the conversation design" },
+      { key: "D", text: "Voice and text-based experiences always require the exact same conversation design with no differences whatsoever" }
+    ],
+    correct: "A",
+    explanation: "Voice interactions generally benefit from shorter, clearer responses and thoughtful handling of pauses or interruptions, since a user listening to a spoken response can't visually scan a long block of text the way they could in a text-based chat window, making these different design considerations important."
+  },
+  {
+    id: 38,
+    lesson: 11,
+    lessonName: "Voice-enabled copilots",
+    question: "Which of the following is a realistic use case for a voice-enabled copilot?",
+    options: [
+      { key: "A", text: "A voice-enabled copilot is only useful for editing spreadsheet formulas" },
+      { key: "B", text: "Voice-enabled copilots cannot be used in any customer-facing scenario" },
+      { key: "C", text: "A copilot that can only ever be accessed by typing on a physical keyboard" },
+      { key: "D", text: "A customer calling a support line and interacting with a spoken conversational agent to check an order status hands-free" }
+    ],
+    correct: "D",
+    explanation: "A realistic use case for a voice-enabled copilot is a customer calling a support line and interacting with a spoken conversational agent to check something like an order status hands-free, without needing to type or navigate a visual interface."
+  },
+  {
+    id: 39,
+    lesson: 12,
+    lessonName: "Performance analysis & security",
+    question: "What kind of insight does the analytics dashboard for a published copilot in Copilot Studio typically provide?",
+    options: [
+      { key: "A", text: "Analytics can only report on the copilot's icon and color scheme" },
+      { key: "B", text: "The analytics dashboard has no connection to how the copilot is actually being used" },
+      { key: "C", text: "Metrics such as conversation volume, topic engagement, and resolution rates, helping a maker understand how well the copilot is performing with real users" },
+      { key: "D", text: "The analytics dashboard only displays the copilot's original creation date, with no other information" }
+    ],
+    correct: "C",
+    explanation: "A copilot's analytics dashboard typically provides metrics such as conversation volume, topic engagement, and resolution rates, giving a maker meaningful insight into how well the copilot is actually performing with real users after publication."
+  },
+  {
+    id: 40,
+    lesson: 12,
+    lessonName: "Performance analysis & security",
+    question: "Why is data loss prevention (DLP) policy configuration relevant to a copilot that connects to multiple data sources and connectors?",
+    options: [
+      { key: "A", text: "DLP policies only apply to copilots that have no connected data sources at all" },
+      { key: "B", text: "DLP policies help control which connectors and data sources can be used together, reducing the risk of sensitive business data being inadvertently exposed to an unauthorized or non-compliant connector" },
+      { key: "C", text: "DLP policies exclusively control the copilot's visual color theme" },
+      { key: "D", text: "Configuring DLP policies has no effect on which connectors a copilot's actions can use" }
+    ],
+    correct: "B",
+    explanation: "Data loss prevention (DLP) policies help control which connectors and data sources can be combined within the same copilot or environment, reducing the risk of sensitive business data being inadvertently exposed to an unauthorized or non-compliant connector."
+  },
+  {
+    id: 41,
+    lesson: 12,
+    lessonName: "Performance analysis & security",
+    question: "Why is role-based access control important when managing who can author, publish, or administer copilots within an organization?",
+    options: [
+      { key: "A", text: "It ensures that only appropriately authorized people can make changes to a copilot's configuration or publish it, reducing the risk of unauthorized or accidental changes affecting end users" },
+      { key: "B", text: "Access control has no bearing on who is able to modify or publish a copilot" },
+      { key: "C", text: "Granting every employee full administrative access is always the recommended approach with no downside" },
+      { key: "D", text: "Role-based access control is only relevant for organizations with exactly one single employee" }
+    ],
+    correct: "A",
+    explanation: "Role-based access control ensures that only appropriately authorized people can make changes to a copilot's configuration or publish new versions, reducing the risk of unauthorized or accidental changes that could negatively affect the experience for end users."
+  },
+  {
+    id: 42,
+    lesson: 13,
+    lessonName: "Responsible AI in Copilot Studio",
+    question: "Why is content moderation an important responsible AI consideration for a generative-AI-powered copilot that interacts directly with end users?",
+    options: [
+      { key: "A", text: "Content moderation guarantees the copilot will never make a factual mistake" },
+      { key: "B", text: "Content moderation exclusively controls the copilot's billing plan" },
+      { key: "C", text: "Content moderation is only relevant for copilots that never use any generative AI capability" },
+      { key: "D", text: "Because the copilot can generate open-ended responses to a wide range of user input, content moderation helps reduce the risk of harmful, offensive, or otherwise inappropriate content reaching users" }
+    ],
+    correct: "D",
+    explanation: "Because a generative-AI-powered copilot can produce open-ended responses to a wide range of user input, content moderation is an important safeguard that helps reduce the risk of harmful, offensive, or otherwise inappropriate content reaching end users."
+  },
+  {
+    id: 43,
+    lesson: 13,
+    lessonName: "Responsible AI in Copilot Studio",
+    question: "Why is it good responsible AI practice to clearly disclose to users that they are interacting with an AI-powered copilot rather than a human?",
+    options: [
+      { key: "A", text: "Disclosing that an interaction is AI-powered always makes users trust the copilot less, with no benefit at all" },
+      { key: "B", text: "This kind of disclosure is legally irrelevant and has no connection to responsible AI practices" },
+      { key: "C", text: "Transparency about the nature of the interaction helps set appropriate user expectations and supports informed trust in the responses they receive" },
+      { key: "D", text: "Users are always able to tell they are speaking with an AI without any disclosure being necessary" }
+    ],
+    correct: "C",
+    explanation: "Clearly disclosing that a user is interacting with an AI-powered copilot rather than a human supports transparency, helping set appropriate expectations about the kind of responses they might receive and supporting more informed trust in the interaction."
+  },
+  {
+    id: 44,
+    lesson: 13,
+    lessonName: "Responsible AI in Copilot Studio",
+    question: "Why is it important to test a copilot for potential bias or unfair treatment across different user groups before broad deployment?",
+    options: [
+      { key: "A", text: "Bias only affects copilots that have zero connected knowledge sources" },
+      { key: "B", text: "A copilot's underlying language model can reflect biases present in its training data or configuration, so testing helps identify and reduce unfair or inconsistent treatment before it affects real users at scale" },
+      { key: "C", text: "Testing for bias has no relationship to how fairly a copilot behaves once deployed" },
+      { key: "D", text: "Bias testing is unnecessary since language models are guaranteed to treat every user group identically by default" }
+    ],
+    correct: "B",
+    explanation: "Because a copilot's underlying language model can reflect biases present in its training data or configuration, testing for potential bias or unfair treatment across different user groups before broad deployment helps identify and reduce those issues before they affect real users at scale."
+  },
+  {
+    id: 45,
+    lesson: 13,
+    lessonName: "Responsible AI in Copilot Studio",
+    question: "Why should a copilot handling sensitive topics, such as healthcare or financial guidance, include appropriate disclaimers or escalation paths to a human?",
+    options: [
+      { key: "A", text: "Because incorrect or incomplete AI-generated guidance on sensitive topics could have serious real-world consequences, disclaimers and human escalation paths help manage that risk responsibly" },
+      { key: "B", text: "Escalation paths are only useful for copilots that never discuss any topic related to a business process" },
+      { key: "C", text: "Sensitive-topic copilots should always be designed to prevent any possibility of a human ever reviewing the conversation" },
+      { key: "D", text: "Disclaimers and escalation paths are irrelevant to copilots handling sensitive topics and serve no protective purpose" }
+    ],
+    correct: "A",
+    explanation: "Because incorrect or incomplete AI-generated guidance on sensitive topics like healthcare or financial matters could have serious real-world consequences, including clear disclaimers and providing an escalation path to a human helps manage that risk more responsibly."
+  }
+];
+
+</script>
+<script>
+// ==========================================================
+// STATE
+// ==========================================================
+const TOTAL_Q = QUESTIONS.length;
+let current = 0;
+let answers = new Array(TOTAL_Q).fill(null);   // selected key or null
+let flagged = new Array(TOTAL_Q).fill(false);
+let startTime = null;
+let timerInterval = null;
+let elapsedSeconds = 0;
+let reviewFilter = 'all';
+
+// ==========================================================
+// LESSON COVERAGE (built on start screen)
+// ==========================================================
+function buildLessonCoverage() {
+  const counts = {};
+  const order = [];
+  QUESTIONS.forEach(q => {
+    if (!(q.lesson in counts)) { counts[q.lesson] = { name: q.lessonName, n: 0 }; order.push(q.lesson); }
+    counts[q.lesson].n++;
+  });
+  const container = document.getElementById('lesson-coverage');
+  order.sort((a,b) => a-b).forEach(l => {
+    const row = document.createElement('div');
+    row.className = 'lesson-row';
+    row.innerHTML = `<span class="ln">Lesson ${l}: ${counts[l].name}</span><span class="badge">${counts[l].n} Qs</span>`;
+    container.appendChild(row);
+  });
+}
+buildLessonCoverage();
+
+// ==========================================================
+// START
+// ==========================================================
+function startExam() {
+  document.getElementById('screen-start').classList.remove('active');
+  document.getElementById('screen-exam').classList.add('active');
+  startTime = Date.now();
+  timerInterval = setInterval(updateTimer, 1000);
+  buildNavGrid();
+  renderQuestion();
+}
+
+function updateTimer() {
+  elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
+  const m = Math.floor(elapsedSeconds / 60);
+  const s = elapsedSeconds % 60;
+  document.getElementById('timer-display').textContent = `${m}:${s.toString().padStart(2,'0')}`;
+}
+
+// ==========================================================
+// RENDER QUESTION
+// ==========================================================
+function renderQuestion() {
+  const q = QUESTIONS[current];
+  document.getElementById('q-num-label').textContent = `Question ${current + 1} of ${TOTAL_Q}`;
+  document.getElementById('q-lesson-tag').textContent = `Lesson ${q.lesson}: ${q.lessonName}`;
+  document.getElementById('q-text').textContent = q.question;
+  document.getElementById('progress-display').textContent = `Q${current + 1} / ${TOTAL_Q}`;
+
+  const flagBtn = document.getElementById('flag-btn');
+  flagBtn.classList.toggle('flagged', flagged[current]);
+  flagBtn.innerHTML = flagged[current] ? '🚩 Flagged' : '🚩 Flag for review';
+
+  const optContainer = document.getElementById('options-container');
+  optContainer.innerHTML = '';
+  q.options.forEach(opt => {
+    const div = document.createElement('div');
+    div.className = 'option' + (answers[current] === opt.key ? ' selected' : '');
+    div.onclick = () => selectAnswer(opt.key);
+    div.innerHTML = `<span class="opt-key">${opt.key}</span><span class="opt-text">${opt.text}</span>`;
+    optContainer.appendChild(div);
+  });
+
+  document.getElementById('prev-btn').disabled = current === 0;
+  document.getElementById('prev-btn').style.opacity = current === 0 ? '0.4' : '1';
+  document.getElementById('next-btn').textContent = current === TOTAL_Q - 1 ? 'Finish →' : 'Next →';
+
+  updateNavGrid();
+}
+
+function selectAnswer(key) {
+  answers[current] = key;
+  renderQuestion();
+}
+
+function toggleFlag() {
+  flagged[current] = !flagged[current];
+  renderQuestion();
+}
+
+function nextQuestion() {
+  if (current < TOTAL_Q - 1) { current++; renderQuestion(); }
+  else { confirmSubmit(); }
+}
+function prevQuestion() {
+  if (current > 0) { current--; renderQuestion(); }
+}
+
+// ==========================================================
+// NAVIGATOR
+// ==========================================================
+function buildNavGrid() {
+  const grid = document.getElementById('nav-grid');
+  grid.innerHTML = '';
+  for (let i = 0; i < TOTAL_Q; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'nav-cell';
+    cell.id = `nav-cell-${i}`;
+    cell.textContent = i + 1;
+    cell.onclick = () => { current = i; renderQuestion(); };
+    grid.appendChild(cell);
+  }
+}
+function updateNavGrid() {
+  for (let i = 0; i < TOTAL_Q; i++) {
+    const cell = document.getElementById(`nav-cell-${i}`);
+    cell.classList.toggle('current', i === current);
+    cell.classList.toggle('answered', answers[i] !== null);
+    cell.classList.toggle('flagged', flagged[i]);
+  }
+}
+
+// ==========================================================
+// SUBMIT
+// ==========================================================
+function confirmSubmit() {
+  const unanswered = answers.filter(a => a === null).length;
+  const msg = unanswered === 0
+    ? "You've answered all 30 questions. Ready to see your results?"
+    : `You have ${unanswered} unanswered question${unanswered > 1 ? 's' : ''}. You can still submit — unanswered questions count as skipped, not wrong.`;
+  document.getElementById('modal-unanswered-msg').textContent = msg;
+  document.getElementById('submit-modal').style.display = 'flex';
+}
+function closeSubmitModal() {
+  document.getElementById('submit-modal').style.display = 'none';
+}
+
+function submitExam() {
+  clearInterval(timerInterval);
+  document.getElementById('submit-modal').style.display = 'none';
+  document.getElementById('screen-exam').classList.remove('active');
+  document.getElementById('screen-results').classList.add('active');
+  renderResults();
+}
+
+// ==========================================================
+// RESULTS
+// ==========================================================
+function renderResults() {
+  let correct = 0, incorrect = 0, skipped = 0;
+  answers.forEach((a, i) => {
+    if (a === null) skipped++;
+    else if (a === QUESTIONS[i].correct) correct++;
+    else incorrect++;
+  });
+  const pct = Math.round((correct / TOTAL_Q) * 100);
+
+  document.getElementById('stat-correct').textContent = correct;
+  document.getElementById('stat-incorrect').textContent = incorrect;
+  document.getElementById('stat-skipped').textContent = skipped;
+  const m = Math.floor(elapsedSeconds / 60), s = elapsedSeconds % 60;
+  document.getElementById('stat-time').textContent = `${m}:${s.toString().padStart(2,'0')}`;
+
+  document.getElementById('score-big').textContent = `${pct}%`;
+  document.getElementById('score-sub').textContent = `${correct} of ${TOTAL_Q} correct`;
+
+  const hero = document.getElementById('band-hero');
+  const emoji = document.getElementById('band-emoji');
+  const label = document.getElementById('band-label');
+  const msg = document.getElementById('band-msg');
+
+  if (pct >= 80) {
+    hero.className = 'band-hero strong';
+    emoji.textContent = '🟢'; label.textContent = 'Strong';
+    msg.textContent = "Ready to move to the next module.";
+  } else if (pct >= 60) {
+    hero.className = 'band-hero good';
+    emoji.textContent = '🟡'; label.textContent = 'Good Progress';
+    msg.textContent = "Review 1–2 lessons and retry.";
+  } else {
+    hero.className = 'band-hero needs';
+    emoji.textContent = '🔴'; label.textContent = 'Needs Review';
+    msg.textContent = "Revisit the module before moving on.";
+  }
+
+  renderLessonBreakdown();
+}
+
+function renderLessonBreakdown() {
+  const lessonStats = {};
+  const order = [];
+  QUESTIONS.forEach((q, i) => {
+    if (!(q.lesson in lessonStats)) {
+      lessonStats[q.lesson] = { name: q.lessonName, total: 0, correct: 0 };
+      order.push(q.lesson);
+    }
+    lessonStats[q.lesson].total++;
+    if (answers[i] === q.correct) lessonStats[q.lesson].correct++;
+  });
+  order.sort((a,b) => a-b);
+  const body = document.getElementById('lesson-breakdown-body');
+  body.innerHTML = '';
+  order.forEach(l => {
+    const st = lessonStats[l];
+    const pct = Math.round((st.correct / st.total) * 100);
+    const barClass = pct >= 80 ? '' : pct >= 60 ? 'mid' : 'low';
+    const row = document.createElement('div');
+    row.className = 'lb-row';
+    row.innerHTML = `
+      <div class="lb-top"><span class="lb-name">Lesson ${l}: ${st.name}</span><span class="lb-score">${st.correct}/${st.total}</span></div>
+      <div class="lb-bar-bg"><div class="lb-bar-fill ${barClass}" style="width:${pct}%;"></div></div>
+    `;
+    body.appendChild(row);
+  });
+}
+
+// ==========================================================
+// REVIEW MODE
+// ==========================================================
+function showReview() {
+  document.getElementById('screen-results').classList.remove('active');
+  document.getElementById('screen-review').classList.add('active');
+  renderReviewList();
+}
+function backToResults() {
+  document.getElementById('screen-review').classList.remove('active');
+  document.getElementById('screen-results').classList.add('active');
+}
+function setReviewFilter(f) {
+  reviewFilter = f;
+  document.querySelectorAll('.rf-btn').forEach(b => b.classList.toggle('active', b.dataset.filter === f));
+  renderReviewList();
+}
+function renderReviewList() {
+  const list = document.getElementById('review-list');
+  list.innerHTML = '';
+  QUESTIONS.forEach((q, i) => {
+    const a = answers[i];
+    const status = a === null ? 'skipped' : (a === q.correct ? 'correct' : 'incorrect');
+    if (reviewFilter === 'correct' && status !== 'correct') return;
+    if (reviewFilter === 'incorrect' && status !== 'incorrect') return;
+    if (reviewFilter === 'skipped' && status !== 'skipped') return;
+    if (reviewFilter === 'flagged' && !flagged[i]) return;
+
+    const card = document.createElement('div');
+    card.className = 'review-q';
+    let tagHtml = status === 'correct'
+      ? '<span class="result-tag correct">✅ Correct</span>'
+      : status === 'incorrect'
+        ? '<span class="result-tag incorrect">❌ Incorrect</span>'
+        : '<span class="result-tag skipped">⬜ Skipped</span>';
+    if (flagged[i]) tagHtml += ' <span class="result-tag" style="background:var(--amber-bg); color:var(--amber-dark);">🚩 Flagged</span>';
+
+    let optsHtml = '';
+    q.options.forEach(opt => {
+      let cls = '';
+      if (opt.key === q.correct) cls = 'correct-answer';
+      else if (opt.key === a && a !== q.correct) cls = 'wrong-answer';
+      optsHtml += `<div class="rq-opt ${cls}"><span>${opt.key}</span><span>${opt.text}</span></div>`;
+    });
+
+    card.innerHTML = `
+      <div class="rq-top"><span class="lesson-tag">Lesson ${q.lesson}: ${q.lessonName}</span>${tagHtml}</div>
+      <div class="rq-text">Q${i + 1}. ${q.question}</div>
+      ${optsHtml}
+      <div class="rq-explain"><b>Explanation:</b> ${q.explanation}</div>
+    `;
+    list.appendChild(card);
+  });
+
+  if (list.innerHTML === '') {
+    list.innerHTML = '<div style="text-align:center; color:var(--text-3); padding:40px 0;">No questions match this filter.</div>';
+  }
+}
+
+</script>
+</body>
+</html>
