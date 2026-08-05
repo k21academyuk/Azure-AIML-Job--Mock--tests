@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>M13 Practice Test · Azure AI/ML · K21 Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy:#1A1248; --navy-mid:#2E2080; --green:#8DC63F; --green-hover:#79B030;
+    --green-tint:#F1F8E8; --blue:#1B9BD9; --blue-tint:#EBF6FD;
+    --page-bg:#F7F8FA; --card:#FFFFFF; --border:#E8EAEE;
+    --text-primary:#111827; --text-secondary:#4B5563; --text-muted:#9CA3AF;
+    --red:#EF4444; --red-tint:#FEF2F2; --amber:#F59E0B; --amber-tint:#FFFBEB;
+    --radius:14px; --radius-sm:8px;
+    --shadow:0 1px 4px rgba(0,0,0,.06); --shadow-md:0 4px 16px rgba(0,0,0,.10);
+  }
+  html{scroll-behavior:smooth;}
+  body{font-family:'DM Sans',sans-serif;background:var(--page-bg);color:var(--text-primary);min-height:100vh;}
+  .site-header{background:var(--navy);padding:14px 24px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:200;}
+  .logo-mark{width:34px;height:34px;background:var(--green);border-radius:8px;display:grid;place-items:center;font-weight:800;font-size:15px;color:#fff;flex-shrink:0;}
+  .logo-text{font-size:17px;font-weight:700;color:#fff;} .logo-text span{color:var(--green);}
+  .header-sub{margin-left:auto;font-size:12px;color:rgba(255,255,255,0.55);font-weight:500;text-align:right;line-height:1.4;}
+  .quiz-header{display:none;background:var(--navy);border-top:1px solid rgba(255,255,255,0.08);padding:10px 24px;align-items:center;gap:12px;position:sticky;top:62px;z-index:199;}
+  .quiz-header.active{display:flex;}
+  .q-counter{font-size:14px;font-weight:600;color:rgba(255,255,255,0.9);} .q-counter span{color:var(--green);}
+  .btn-submit-top{margin-left:auto;background:var(--green);color:#fff;border:none;border-radius:var(--radius-sm);padding:7px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s;}
+  .btn-submit-top:hover{background:var(--green-hover);}
+  .timer{font-size:14px;font-weight:600;color:rgba(255,255,255,0.8);background:rgba(255,255,255,0.08);padding:5px 12px;border-radius:20px;font-variant-numeric:tabular-nums;}
+  .screen{display:none;} .screen.active{display:block;}
+  .landing-tag{display:inline-flex;align-items:center;gap:6px;background:var(--green-tint);color:var(--green-hover);font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;margin-bottom:18px;}
+  .landing-title{font-size:clamp(22px,5vw,36px);font-weight:800;color:var(--navy);line-height:1.2;margin-bottom:14px;}
+  .landing-title span{color:var(--green);}
+  .landing-desc{font-size:15px;color:var(--text-secondary);line-height:1.65;max-width:680px;margin-bottom:28px;}
+  .stats-row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:28px;}
+  .stat-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:14px 20px;text-align:center;flex:1;min-width:110px;}
+  .stat-num{font-size:24px;font-weight:800;color:var(--navy);} .stat-label{font-size:12px;color:var(--text-muted);font-weight:500;margin-top:2px;}
+  .lessons-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin-bottom:28px;}
+  .lesson-chip{background:var(--card);border:1.5px solid var(--border);border-radius:10px;padding:10px 13px;display:flex;align-items:center;gap:8px;}
+  .lesson-badge{width:26px;height:26px;border-radius:6px;background:var(--blue-tint);color:var(--blue);font-size:10px;font-weight:700;display:grid;place-items:center;flex-shrink:0;}
+  .lesson-chip-text{font-size:12px;font-weight:600;color:var(--text-primary);line-height:1.3;}
+  .btn-start{background:var(--navy);color:#fff;border:none;border-radius:var(--radius);padding:16px 36px;font-size:17px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s,transform .15s;display:inline-flex;align-items:center;gap:10px;}
+  .btn-start:hover{background:var(--navy-mid);transform:translateY(-2px);}
+  .hint-text{margin-top:14px;font-size:13px;color:var(--text-muted);} .hint-text span{color:var(--blue);}
+  #quiz{max-width:840px;margin:0 auto;padding:24px 20px 80px;}
+  .quiz-layout{display:grid;grid-template-columns:1fr 250px;gap:20px;align-items:start;}
+  @media(max-width:740px){.quiz-layout{grid-template-columns:1fr;}}
+  .question-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow);}
+  .q-meta{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap;}
+  .q-num{font-size:13px;font-weight:600;color:var(--text-muted);}
+  .q-lesson-tag{font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;background:var(--blue-tint);color:var(--blue);}
+  .btn-flag{margin-left:auto;font-size:12px;font-weight:600;color:var(--text-muted);border:1.5px solid var(--border);background:none;border-radius:20px;padding:4px 12px;cursor:pointer;font-family:inherit;transition:all .15s;display:flex;align-items:center;gap:5px;}
+  .btn-flag.flagged{background:var(--amber-tint);color:var(--amber);border-color:var(--amber);}
+  .q-text{font-size:17px;font-weight:600;line-height:1.55;color:var(--text-primary);margin-bottom:22px;}
+  .options-list{display:flex;flex-direction:column;gap:10px;margin-bottom:22px;}
+  .option-btn{background:#fff;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:13px 16px;text-align:left;cursor:pointer;font-family:inherit;font-size:14.5px;color:var(--text-primary);line-height:1.45;display:flex;align-items:flex-start;gap:12px;transition:all .15s;font-weight:500;}
+  .option-btn:hover:not(:disabled){border-color:var(--navy);background:rgba(26,18,72,.03);}
+  .option-btn .opt-letter{width:24px;height:24px;border-radius:6px;background:var(--page-bg);border:1.5px solid var(--border);display:grid;place-items:center;font-size:11px;font-weight:700;color:var(--text-muted);flex-shrink:0;margin-top:1px;transition:all .15s;}
+  .option-btn.selected .opt-letter{background:var(--navy);border-color:var(--navy);color:#fff;}
+  .option-btn.selected{border-color:var(--navy);background:rgba(26,18,72,.04);}
+  .option-btn.correct{border-color:var(--green);background:var(--green-tint);}
+  .option-btn.correct .opt-letter{background:var(--green);border-color:var(--green);color:#fff;}
+  .option-btn.wrong{border-color:var(--red);background:var(--red-tint);}
+  .option-btn.wrong .opt-letter{background:var(--red);border-color:var(--red);color:#fff;}
+  .option-btn:disabled{cursor:default;}
+  .explanation-box{background:var(--green-tint);border:1.5px solid #c3e289;border-radius:var(--radius-sm);padding:14px 16px;font-size:13.5px;line-height:1.6;color:#3D6B15;display:none;margin-bottom:16px;}
+  .explanation-box strong{display:block;margin-bottom:4px;font-weight:700;}
+  .explanation-box.visible{display:block;}
+  .explanation-box.wrong-exp{background:var(--red-tint);border-color:#fca5a5;color:#7F1D1D;}
+  .nav-row{display:flex;gap:10px;align-items:center;}
+  .btn-nav{background:var(--page-bg);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:10px 18px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--text-primary);transition:all .15s;}
+  .btn-nav:hover{border-color:var(--navy);color:var(--navy);}
+  .btn-nav.primary{background:var(--navy);color:#fff;border-color:var(--navy);margin-left:auto;}
+  .btn-nav.primary:hover{background:var(--navy-mid);}
+  .last-q-msg{font-size:12.5px;color:var(--text-muted);text-align:center;display:none;flex:1;}
+  .nav-panel{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);position:sticky;top:128px;}
+  .nav-panel h4{font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;}
+  .nav-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:14px;}
+  .nav-dot{width:34px;height:34px;border-radius:7px;border:1.5px solid var(--border);background:#fff;font-size:11px;font-weight:700;color:var(--text-muted);display:grid;place-items:center;cursor:pointer;transition:all .15s;}
+  .nav-dot:hover{border-color:var(--navy);color:var(--navy);}
+  .nav-dot.current{border-color:var(--navy);background:var(--navy);color:#fff;}
+  .nav-dot.answered{background:var(--green-tint);border-color:var(--green);color:#3D6B15;}
+  .nav-dot.flagged{background:var(--amber-tint);border-color:var(--amber);color:var(--amber);}
+  .nav-dot.correct-nav{background:var(--green);border-color:var(--green);color:#fff;}
+  .nav-dot.wrong-nav{background:var(--red);border-color:var(--red);color:#fff;}
+  .nav-legend{font-size:11px;color:var(--text-muted);display:flex;flex-direction:column;gap:4px;}
+  .legend-item{display:flex;align-items:center;gap:6px;}
+  .legend-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
+  .results-header{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:32px;box-shadow:var(--shadow-md);margin-bottom:20px;text-align:center;}
+  .score-ring{width:110px;height:110px;border-radius:50%;border:7px solid var(--border);margin:0 auto 18px;display:grid;place-items:center;}
+  .score-ring.pass{border-color:var(--green);} .score-ring.fail{border-color:var(--red);}
+  .score-pct{font-size:30px;font-weight:800;color:var(--navy);}
+  .score-label{font-size:12px;color:var(--text-muted);font-weight:500;margin-top:-2px;}
+  .results-title{font-size:21px;font-weight:800;color:var(--navy);margin-bottom:6px;}
+  .results-sub{font-size:14px;color:var(--text-secondary);margin-bottom:22px;}
+  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px;}
+  @media(max-width:560px){.stats-grid{grid-template-columns:repeat(2,1fr);}}
+  .r-stat{background:var(--page-bg);border-radius:var(--radius-sm);padding:14px;text-align:center;}
+  .r-stat-val{font-size:20px;font-weight:800;color:var(--navy);}
+  .r-stat-key{font-size:11px;color:var(--text-muted);font-weight:500;margin-top:2px;}
+  .results-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+  .btn-results{padding:11px 22px;border-radius:var(--radius-sm);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;}
+  .btn-results.primary{background:var(--navy);color:#fff;border:none;} .btn-results.primary:hover{background:var(--navy-mid);}
+  .btn-results.secondary{background:#fff;color:var(--navy);border:1.5px solid var(--border);} .btn-results.secondary:hover{border-color:var(--navy);}
+  .lesson-breakdown{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);margin-bottom:20px;}
+  .breakdown-title{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:16px;}
+  .lesson-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .lesson-row:last-child{margin-bottom:0;}
+  .lr-tag{font-size:11px;font-weight:700;padding:3px 7px;border-radius:20px;flex-shrink:0;min-width:28px;text-align:center;background:var(--blue-tint);color:var(--blue);}
+  .lr-name{font-size:13px;font-weight:500;color:var(--text-primary);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .lr-bar-wrap{width:90px;height:7px;background:var(--border);border-radius:4px;overflow:hidden;flex-shrink:0;}
+  .lr-bar{height:100%;border-radius:4px;background:var(--green);}
+  .lr-bar.bad{background:var(--red);} .lr-bar.ok{background:var(--amber);}
+  .lr-score{font-size:13px;font-weight:700;color:var(--text-secondary);width:38px;text-align:right;flex-shrink:0;}
+  .review-header{display:flex;align-items:center;gap:12px;margin-bottom:22px;flex-wrap:wrap;}
+  .review-title{font-size:20px;font-weight:800;color:var(--navy);} .review-sub{font-size:13px;color:var(--text-muted);}
+  .btn-back{background:var(--page-bg);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:9px 16px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--text-secondary);transition:all .15s;margin-left:auto;}
+  .btn-back:hover{border-color:var(--navy);color:var(--navy);}
+  .review-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:22px;margin-bottom:14px;box-shadow:var(--shadow);}
+  .rc-meta{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+  .rc-num{font-size:12px;font-weight:700;color:var(--text-muted);}
+  .rc-lesson{font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;background:var(--blue-tint);color:var(--blue);}
+  .rc-badge{font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px;}
+  .rc-badge.correct{background:var(--green-tint);color:#3D6B15;} .rc-badge.wrong{background:var(--red-tint);color:var(--red);} .rc-badge.skipped{background:var(--amber-tint);color:var(--amber);}
+  .rc-question{font-size:15px;font-weight:600;color:var(--text-primary);margin-bottom:14px;line-height:1.5;}
+  .rc-options{display:flex;flex-direction:column;gap:7px;margin-bottom:14px;}
+  .rc-option{padding:9px 14px;border-radius:var(--radius-sm);font-size:13.5px;display:flex;align-items:flex-start;gap:10px;border:1.5px solid var(--border);}
+  .rc-option.correct-ans{border-color:var(--green);background:var(--green-tint);color:#3D6B15;}
+  .rc-option.user-wrong{border-color:var(--red);background:var(--red-tint);color:var(--red);}
+  .rc-option .opt-l{font-weight:700;font-size:12px;width:18px;flex-shrink:0;margin-top:1px;}
+  .rc-exp{background:var(--page-bg);border-left:3px solid var(--green);padding:12px 14px;border-radius:0 var(--radius-sm) var(--radius-sm) 0;font-size:13px;line-height:1.6;color:var(--text-secondary);}
+  .rc-exp strong{color:var(--navy);font-weight:700;display:block;margin-bottom:3px;}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:999;display:none;place-items:center;}
+  .modal-overlay.show{display:grid;}
+  .modal{background:#fff;border-radius:var(--radius);padding:28px;max-width:380px;width:90%;box-shadow:var(--shadow-md);text-align:center;}
+  .modal h3{font-size:18px;font-weight:700;color:var(--navy);margin-bottom:8px;}
+  .modal p{font-size:14px;color:var(--text-secondary);margin-bottom:22px;line-height:1.5;}
+  .modal-btns{display:flex;gap:10px;justify-content:center;}
+  .btn-modal{padding:10px 22px;border-radius:var(--radius-sm);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
+  .btn-modal.cancel{background:var(--page-bg);border:1.5px solid var(--border);color:var(--text-primary);}
+  .btn-modal.confirm{background:var(--navy);color:#fff;border:none;}
+  .tab-warning{background:var(--red);color:#fff;text-align:center;padding:8px 16px;font-size:13px;font-weight:600;display:none;position:sticky;top:110px;z-index:198;}
+  .tab-warning.show{display:block;}
+  .retake-row{display:flex;justify-content:center;gap:10px;margin-top:12px;flex-wrap:wrap;}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="logo-mark">K21</div>
+  <div class="logo-text">K21 <span>Academy</span></div>
+  <div class="header-sub">Azure AI/ML Job Focus Program<br/>Module 13 · Practice Test</div>
+</header>
+<div class="quiz-header" id="quizHeader">
+  <div class="q-counter">M13: Create Agents in Microsoft Copilot Studio &nbsp;·&nbsp; Q <span id="qCounterNum">1</span> / 45</div>
+  <div class="timer" id="timer">00:00</div>
+  <button class="btn-submit-top" onclick="openSubmitModal()">📋 Submit Exam</button>
+</div>
+<div class="tab-warning" id="tabWarning">⚠️ Tab switch detected! Return to the test. Attempts: <span id="tabCount">0</span></div>
+
+<!-- LANDING -->
+<div id="landing" class="screen active">
+  <div style="max-width:840px;margin:0 auto;padding:40px 20px 60px;">
+    <div class="landing-tag">📋 Azure AI/ML · K21 Academy</div>
+    <h1 class="landing-title">Create Agents in<br/><span>Microsoft Copilot Studio — Module 13</span></h1>
+    <p class="landing-desc">Test your understanding across all 13 lessons. Covers the Microsoft Copilot ecosystem, Copilot Studio interface, topic management, publishing and testing, entities and variables, data sources and actions, Power Platform integration, NLU boosting, advanced capabilities, connectors and extensions, voice copilots, performance analysis, security, and responsible AI — with full explanations after every answer.</p>
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-num">📝 45</div><div class="stat-label">Questions</div></div>
+      <div class="stat-card"><div class="stat-num">📚 13</div><div class="stat-label">Lessons</div></div>
+      <div class="stat-card"><div class="stat-num">🔄 ∞</div><div class="stat-label">Retries</div></div>
+    </div>
+    <p style="font-size:13px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;">13 Lessons Covered</p>
+    <div class="lessons-grid">
+      <div class="lesson-chip"><div class="lesson-badge">L1</div><div class="lesson-chip-text">Microsoft Copilot Ecosystem &amp; AI Tools</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L2</div><div class="lesson-chip-text">Copilot Studio Overview &amp; Interface</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L3</div><div class="lesson-chip-text">Topic Management &amp; Copilot Design</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L4</div><div class="lesson-chip-text">Publishing &amp; Testing Copilots</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L5</div><div class="lesson-chip-text">Entities, Variables &amp; Customization</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L6</div><div class="lesson-chip-text">Configuring Data Sources &amp; Actions</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L7</div><div class="lesson-chip-text">Copilot Studio + Power Platform Integration</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L8</div><div class="lesson-chip-text">Boosting Copilot NLU &amp; AI Models</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L9</div><div class="lesson-chip-text">Copilot Management &amp; Advanced Capabilities</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L10</div><div class="lesson-chip-text">Connectors, Actions &amp; Extensions</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L11</div><div class="lesson-chip-text">Voice-Enabled Copilots</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L12</div><div class="lesson-chip-text">Performance Analysis &amp; Security</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L13</div><div class="lesson-chip-text">Responsible AI in Copilot Studio</div></div>
+    </div>
+    <button class="btn-start" onclick="startTest()">🚀 Start Practice Test</button>
+    <p class="hint-text">💡 <span>Options shuffle every attempt</span> · Explanations after every answer · No time pressure</p>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz" class="screen">
+  <div class="quiz-layout">
+    <div>
+      <div class="question-card">
+        <div class="q-meta">
+          <div class="q-num">Question <span id="qNum">1</span> of 45</div>
+          <div class="q-lesson-tag" id="qLessonTag">L1</div>
+          <button class="btn-flag" id="btnFlag" onclick="toggleFlag()">🏳 Flag</button>
+        </div>
+        <div class="q-text" id="qText">Loading…</div>
+        <div class="options-list" id="optionsList"></div>
+        <div class="explanation-box" id="explanationBox"></div>
+        <div class="nav-row">
+          <button class="btn-nav" id="btnPrev" onclick="goToPrev()">← Previous</button>
+          <div class="last-q-msg" id="lastQMsg">🎯 Last question! Click <strong>Submit Exam</strong> above.</div>
+          <button class="btn-nav primary" id="btnNext" onclick="goToNext()">Next →</button>
+        </div>
+      </div>
+    </div>
+    <div class="nav-panel">
+      <h4>Question Navigator</h4>
+      <div class="nav-grid" id="navGrid"></div>
+      <div class="nav-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--green);"></div><span>Answered</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--amber);"></div><span>Flagged</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--border);"></div><span>Not visited</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div id="results" class="screen">
+  <div style="max-width:760px;margin:0 auto;padding:40px 20px 60px;">
+    <div class="landing-tag">🏁 Azure AI/ML Job Focus Program</div>
+    <div class="results-header">
+      <div class="score-ring" id="scoreRing"><div><div class="score-pct" id="scorePct">0%</div><div class="score-label">Score</div></div></div>
+      <div class="results-title" id="resultsTitle">Test Complete · Azure AI/ML</div>
+      <div class="results-sub">Module 13 — Create Agents in Microsoft Copilot Studio</div>
+      <div class="stats-grid">
+        <div class="r-stat"><div class="r-stat-val" id="rCorrect">0 / 45</div><div class="r-stat-key">Correct Answers</div></div>
+        <div class="r-stat"><div class="r-stat-val" id="rTime">—</div><div class="r-stat-key">⏱️ Time</div></div>
+        <div class="r-stat"><div class="r-stat-val" id="rWrong">—</div><div class="r-stat-key">❌ Incorrect</div></div>
+        <div class="r-stat"><div class="r-stat-val" id="rSkipped">—</div><div class="r-stat-key">⏭️ Skipped</div></div>
+      </div>
+      <div class="results-btns">
+        <button class="btn-results primary" onclick="showReview()">📋 Review All Questions &amp; Answers</button>
+        <button class="btn-results secondary" onclick="retakeTest()">🔄 Retake Test</button>
+      </div>
+    </div>
+    <div class="lesson-breakdown"><div class="breakdown-title">📊 Per-Lesson Breakdown</div><div id="lessonBreakdown"></div></div>
+    <div class="retake-row"><button class="btn-results secondary" onclick="retakeTest()">🔄 Retake Test</button></div>
+  </div>
+</div>
+
+<!-- REVIEW -->
+<div id="review" class="screen">
+  <div style="max-width:840px;margin:0 auto;padding:28px 20px 60px;">
+    <div class="review-header">
+      <div><div class="review-title">Questions &amp; Answers Review</div><div class="review-sub">All 45 questions with correct answers and explanations</div></div>
+      <button class="btn-back" onclick="showResults()">← Back to Results</button>
+    </div>
+    <div id="reviewCards"></div>
+    <div class="retake-row">
+      <button class="btn-back" onclick="showResults()">← Back to Results</button>
+      <button class="btn-results primary" onclick="retakeTest()" style="padding:10px 22px;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;background:var(--navy);color:#fff;">🔄 Retake Test</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="submitModal">
+  <div class="modal">
+    <h3>📋 Submit Exam?</h3>
+    <p>Are you sure you want to submit? Unanswered questions will be marked as skipped.</p>
+    <div class="modal-btns">
+      <button class="btn-modal cancel" onclick="closeSubmitModal()">Continue Quiz</button>
+      <button class="btn-modal confirm" onclick="submitExam()">Yes, Submit</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════
+//  QUESTION BANK — Azure AI/ML · Module 13 · Microsoft Copilot Studio
+//  45 Qs | L1–L13 | Answer distribution: A×12  B×11  C×11  D×11
+// ═══════════════════════════════════════════════════════════════════════
+const QUESTIONS=[
+
+// ─── L1: Microsoft Copilot Ecosystem & AI Tools (4 Qs) ───────────────
+{lesson:'L1',lessonName:'Microsoft Copilot Ecosystem & AI Tools',
+question:'What is the Microsoft Copilot ecosystem and how does it differ from Microsoft Copilot Studio?',
+options:[
+'Microsoft Copilot is the umbrella brand for AI assistants embedded across Microsoft 365, Azure, GitHub, Dynamics 365, and Windows — providing AI capabilities within existing Microsoft products; Copilot Studio is the low-code/no-code platform that organisations use to BUILD, customise, and deploy their own custom copilots and agents tailored to their specific business needs',
+'Microsoft Copilot is an open-source AI agent framework; Copilot Studio is Microsoft\'s managed cloud service for hosting and scaling those agents in production enterprise environments at high throughput',
+'Microsoft Copilot is a domain-specific programming language for writing AI agent logic; Copilot Studio is the IDE used for writing, testing, and debugging programs written in the Copilot language',
+'Microsoft Copilot is a data analytics product built on Azure Synapse; Copilot Studio is the drag-and-drop interface for connecting Copilot outputs to Power BI dashboards and business intelligence reports'
+],
+answer:0,
+explanation:'The Microsoft Copilot ecosystem has two layers: (1) Microsoft-built Copilots — embedded AI assistants in existing products: Microsoft 365 Copilot (in Word, Excel, Teams, Outlook), GitHub Copilot (code suggestions), Dynamics 365 Copilot (CRM/ERP AI), Windows Copilot, Bing Chat/Copilot, Azure AI services. These are designed by Microsoft for general use cases. (2) Custom Copilots via Copilot Studio — organisations build their own copilots for specific use cases not covered by the Microsoft-built ones: an internal IT helpdesk bot, a customer-facing product enquiry assistant, an HR policy navigator. Copilot Studio is the authoring platform for these custom agents. Knowing this distinction is fundamental to understanding when to use which.'},
+
+{lesson:'L1',lessonName:'Microsoft Copilot Ecosystem & AI Tools',
+question:'What is the layered technology stack that powers the Microsoft Copilot ecosystem and how do Azure AI Services contribute to it?',
+options:[
+'Azure OpenAI Service exclusively powers all Microsoft Copilot products and Copilot Studio — no other Azure AI Services are involved in the Copilot ecosystem architecture',
+'The Copilot ecosystem is built on a layered stack: Azure OpenAI Service (GPT-4o, embeddings) provides generative AI reasoning; Azure AI Services (Language, Speech, Vision) provide specialised capabilities; Microsoft Graph provides organisational data connectivity; Power Platform provides automation — Copilot Studio orchestrates all these as a unified authoring surface, enabling custom agents without requiring direct API coding by the author',
+'Azure AI Foundry is the only AI tool underlying Copilot Studio — all other Azure AI Services must be called explicitly via REST APIs by the developer, requiring code-level integrations outside Copilot Studio',
+'Microsoft Copilot tools run exclusively on proprietary Microsoft AI models with no connection to OpenAI or Azure services — the entire stack was developed independently by Microsoft Research without any OpenAI partnership involvement'
+],
+answer:1,
+explanation:'The Microsoft AI platform supporting Copilot is multi-layered: Foundation: Azure OpenAI Service provides GPT-4o (reasoning, generation), embeddings (semantic search), DALL-E (image generation), Whisper (speech). Specialised AI: Azure AI Language (CLU, NER, sentiment), Azure AI Speech (STT/TTS), Azure AI Vision, Azure AI Document Intelligence — these handle modality-specific tasks the generative model alone cannot. Data layer: Microsoft Graph — the unified API for all Microsoft 365 data (emails, calendar, SharePoint, Teams messages), enabling Copilot to personalise responses with organisational context. Automation: Power Platform (Power Automate, Dataverse) provides the workflow and data integration backbone. Copilot Studio sits atop all of this as the authoring surface — abstracting the complexity so authors configure rather than code.'},
+
+{lesson:'L1',lessonName:'Microsoft Copilot Ecosystem & AI Tools',
+question:'What is Microsoft 365 Copilot and how does it differ from a custom copilot built in Copilot Studio?',
+options:[
+'Microsoft 365 Copilot is a paid Azure API upgrade for Office developers; custom Copilot Studio copilots are exclusively for external customer-facing web chat and cannot be used internally',
+'Microsoft 365 Copilot and Copilot Studio copilots are identical — the same canvas and configuration tools produce both, with the only difference being the publishing channel chosen at deployment',
+'Microsoft 365 Copilot is a Microsoft-built AI assistant embedded in Word, Excel, PowerPoint, Teams, and Outlook that understands and acts on the user\'s specific Microsoft 365 data — emails, documents, meetings; a custom Copilot Studio copilot is built by an organisation to handle their own specific use cases, knowledge bases, and business workflows that M365 Copilot does not address',
+'Microsoft 365 Copilot is free for all Microsoft 365 subscribers; Copilot Studio copilots require a dedicated GPU compute reservation in Azure before any agent can be created or tested in the environment'
+],
+answer:2,
+explanation:'Microsoft 365 Copilot (requires M365 Copilot licence, ~$30/user/month) is deeply integrated into the Microsoft 365 apps: In Word — drafts, rewrites, summarises documents. In Excel — analyses data, generates formulas, creates pivot tables. In PowerPoint — creates presentations from prompts. In Teams — summarises meetings, captures action items, catches you up on missed conversations. In Outlook — summarises email threads, drafts replies. Critically, M365 Copilot has access to the user\'s own mailbox, documents, and meetings via Microsoft Graph. Custom Copilot Studio copilots serve different needs: a company\'s product troubleshooting assistant, an internal policy FAQ bot, a customer-facing order tracking copilot — scenarios where M365 Copilot has no data and no topic-specific capability. Both can coexist: Copilot Studio copilots can be published as extensions that M365 Copilot itself can invoke.'},
+
+{lesson:'L1',lessonName:'Microsoft Copilot Ecosystem & AI Tools',
+question:'What do GitHub Copilot, Dynamics 365 Copilot, and Microsoft Security Copilot illustrate about Microsoft\'s broader AI strategy?',
+options:[
+'GitHub Copilot, Dynamics 365 Copilot, and Security Copilot are completely separate unrelated products sharing the "Copilot" brand name only for marketing purposes, with no technical architecture overlap',
+'GitHub Copilot, Dynamics 365 Copilot, and Security Copilot are all built exclusively on Copilot Studio, meaning every Microsoft product copilot is a custom agent that customers can modify without restriction',
+'These three products run entirely on-premises without any cloud dependencies, demonstrating Microsoft\'s strategy for air-gapped enterprise AI deployment in regulated industries',
+'GitHub Copilot (real-time AI code suggestions for developers), Dynamics 365 Copilot (AI for CRM/ERP workflows, customer insights, and sales), and Security Copilot (natural language threat analysis and incident response) illustrate Microsoft\'s strategy of embedding domain-specific AI into every enterprise application layer — each Copilot is grounded in domain-specific data and actions relevant to that product\'s users'
+],
+answer:3,
+explanation:'Microsoft\'s "Copilot for every role and every product" strategy demonstrates how the same underlying AI platform (Azure OpenAI + Microsoft Graph + Power Platform) is contextualised for each domain: GitHub Copilot: trained on billions of lines of public code; embedded in VS Code, GitHub; suggests code completions, writes functions, reviews PRs in natural language. Dynamics 365 Copilot: grounded in CRM/ERP data (leads, accounts, cases); drafts emails to prospects, summarises case histories, forecasts sales pipeline. Microsoft Security Copilot: grounded in security signal data (Microsoft Sentinel, Defender, threat intelligence); analysts query in natural language to investigate threats, generate incident reports, identify attack paths. Each Copilot succeeds because it is grounded in the specific data and workflows its users care about — not a general-purpose assistant but a role-specific one.'},
+
+// ─── L2: Copilot Studio Overview & Interface (4 Qs) ──────────────────
+{lesson:'L2',lessonName:'Copilot Studio Overview & Interface',
+question:'What is Microsoft Copilot Studio and who is its primary intended user?',
+options:[
+'Copilot Studio is a low-code/no-code platform enabling business analysts, citizen developers, and enterprise teams to build, test, and deploy custom AI copilots and agents using a visual authoring canvas — without needing Python, NLP engineering expertise, or traditional bot framework development skills',
+'Copilot Studio is a professional developer tool requiring TypeScript programming expertise to build conversational agents using the Microsoft Bot Framework SDK v4 with Azure Bot Service',
+'Copilot Studio is a real-time analytics dashboard for monitoring all Microsoft 365 Copilot usage patterns, user adoption rates, and content creation metrics across an entire organisation tenant',
+'Copilot Studio is a dataset management platform used by data scientists to prepare and label training data for custom Azure AI Language CLU models deployed in Microsoft Teams chatbots'
+],
+answer:0,
+explanation:'Copilot Studio (formerly Power Virtual Agents, rebranded 2023) sits in Microsoft\'s "Power Platform" family alongside Power Apps, Power Automate, and Power BI — all targeted at citizen developers and business technologists. Key personas: Business analysts who know the domain (HR, customer service, IT) and want to build conversational experiences without developers. Power Platform makers who already build Power Apps and flows and want to add conversational AI. Enterprise IT teams deploying standardised copilots across departments. The platform provides: a visual canvas for drawing conversation flows (no code), natural language-driven NLU (no ML expertise needed to train intent classifiers), built-in testing tools, one-click publishing to Teams/web, pre-built templates, and no-code Power Automate integration. Copilot Studio is also available as a developer experience with pro-code extensibility through the Bot Framework SDK when needed.'},
+
+{lesson:'L2',lessonName:'Copilot Studio Overview & Interface',
+question:'Through what channels can a Copilot Studio copilot be published, and what does this multi-channel capability enable?',
+options:[
+'Copilot Studio copilots can only be published to Microsoft Teams — all other deployment channels require separate Azure Bot Service infrastructure that cannot be managed from within Copilot Studio',
+'Copilot Studio supports publishing to multiple channels including Microsoft Teams (embedded in channels and chats), custom websites (via JavaScript embed code), Microsoft Copilot (as an M365 Copilot extension), Dynamics 365 Customer Service, and third-party telephony systems — enabling one copilot definition to reach users wherever they already work',
+'Copilot Studio copilots publish only to Azure Bot Service, requiring the organisation to build a separate custom UI for each deployment scenario using React or Angular front-end frameworks',
+'Copilot Studio copilots publish exclusively to SharePoint Online intranet portals — all other channel deployments require configuring the Microsoft Bot Framework Direct Line Speech API with custom REST integration code'
+],
+answer:1,
+explanation:'One of Copilot Studio\'s key value propositions is write-once, publish-everywhere. A single copilot definition can be simultaneously deployed to: Microsoft Teams — embedded in Teams channels, group chats, or as a personal app; users interact without leaving Teams. Custom websites — a JavaScript snippet (5 lines) is copied into any HTML page, adding a chat widget to any internal or customer-facing site. Microsoft Copilot (M365 Copilot extension) — the custom copilot\'s knowledge and actions surface inside Teams, Word, Outlook when M365 Copilot invokes it. Dynamics 365 Customer Service / Omnichannel — the copilot handles first-tier resolution before escalating to human agents. Azure Communication Services / Telephony — voice-enabled IVR integration. Mobile apps — via the Direct Line API. This multi-channel strategy maximises reach from a single authoring investment.'},
+
+{lesson:'L2',lessonName:'Copilot Studio Overview & Interface',
+question:'What is the "Test your copilot" pane in Copilot Studio and how does it accelerate the development cycle?',
+options:[
+'The Test pane connects to a production load testing service that simulates thousands of concurrent users to validate copilot performance before enterprise-scale deployment',
+'The Test pane allows authors to download and run the copilot locally as a binary executable, enabling fully offline testing without any Azure cloud connectivity requirements',
+'The Test pane is an integrated real-time chat window in the Copilot Studio authoring interface that lets authors instantly test conversational behaviour — including topic triggering, variable capture, node traversal, and action calls — without publishing, enabling rapid iteration without any separate testing environment or deployment step',
+'The Test pane auto-generates regression test suites that run as Azure DevOps pipeline jobs to detect topic regressions across all conversation paths before each new version is published to channels'
+],
+answer:2,
+explanation:'The Copilot Studio Test pane is one of the most useful authoring features. It appears in the right panel of the authoring canvas and provides: Instant feedback — authors type user messages and immediately see the copilot\'s response without publishing. Topic tracing — enables "Track between topics" mode showing exactly which topic was triggered, which node was active, and what path through the conversation was followed. Variable inspector — shows the current value of all topic and global variables at each step, making it easy to debug why a condition branched unexpectedly. Action response inspection — shows what data a Power Automate flow returned to the topic. No publishing required — changes made in the canvas are immediately testable; only publish when ready for end users. This tight edit-test loop dramatically reduces development time compared to traditional bot development where testing requires full deployments.'},
+
+{lesson:'L2',lessonName:'Copilot Studio Overview & Interface',
+question:'What are "Solutions" in Copilot Studio and the Power Platform, and why are they critical for enterprise governance?',
+options:[
+'Solutions are pre-made copilot templates provided by Microsoft for common scenarios like IT helpdesk, HR FAQ, and order tracking — organisations select and deploy these without any customisation',
+'Solutions are performance packages bundling multiple copilots together for co-deployment, reducing API call latency through shared connection pooling and caching at the tenant level',
+'Solutions are cost optimisation plans grouping all Copilot Studio message sessions for billing consolidation, reducing per-message pricing for high-volume enterprise copilot deployments',
+'Solutions are structured containers in the Power Platform that package copilots, Power Automate flows, Dataverse tables, connection references, and environment variables together for version-controlled, transport-ready deployment across Dev → Test → Production environments — enabling proper ALM (Application Lifecycle Management) governance rather than manual, error-prone component-by-component migration'
+],
+answer:3,
+explanation:'Solutions are the Power Platform\'s answer to ALM (Application Lifecycle Management). Without solutions, copilot components exist loosely in one environment with no clean way to promote them. With solutions: Packaging: a Solution groups all related components — the copilot definition, its flows, Dataverse tables, connection references (abstractions of actual connector credentials), environment variables (configuration values that differ between environments), and canvas apps. Transport: Export the Solution as a managed or unmanaged package, import into the next environment. Pipelines: Power Platform Pipelines can automate this transport on approval. Environment variables: the API URL in Dev points to a sandbox; in Prod it points to production — the connection reference and environment variable change without touching the copilot logic. Source control: Solutions export as zip files containing XML/JSON that can be tracked in Git via the Power Platform CLI (pac solution export). This is essential for enterprise teams where Dev/Test/Prod separation is required by IT governance.'},
+
+// ─── L3: Topic Management & Copilot Design (4 Qs) ────────────────────
+{lesson:'L3',lessonName:'Topic Management & Copilot Design',
+question:'What is a "topic" in Copilot Studio and what are the two main types?',
+options:[
+'A topic is the fundamental unit of conversational logic — it defines how the copilot responds to a specific user intent; the two main types are System topics (pre-built by Microsoft to handle universal scenarios like greetings, escalation, and errors) and Custom topics (created by authors to handle their specific business conversations, questions, and tasks',
+'A topic is a knowledge article imported from SharePoint that the copilot searches and summarises when users ask questions — with two types: internal (from SharePoint) and external (from public websites crawled by the copilot)',
+'A topic is a statistical intent classification model trained on a set of sample utterances — with two types: classifier topics (triggered from utterances) and keyword topics (triggered from exact phrase matching only)',
+'A topic is a Dataverse record that stores conversation history for analytics — with two types: session topics (capturing full conversations) and message topics (capturing individual turns within a conversation)'
+],
+answer:0,
+explanation:'Topics are the core building blocks of any Copilot Studio copilot: System topics (pre-built, always present): Greeting — what the copilot says when a conversation starts. Fallback — triggered when no custom topic matches the user\'s input; default is "I didn\'t understand, please rephrase." Escalate — handles "I want to speak to a human" type intents. End of Conversation — handles goodbye scenarios. Error handling — triggered when system errors occur. These are editable: authors customise the text and behavior to match their brand. Custom topics (author-created): Each represents one user intent the copilot handles. Examples: "Check order status", "Reset my password", "Product return policy", "Book an appointment". Each custom topic has trigger phrases (training examples for the NLU), a conversation path (nodes defining the dialog), and optionally variables, conditions, and actions. A typical enterprise copilot has 20–100+ custom topics.'},
+
+{lesson:'L3',lessonName:'Topic Management & Copilot Design',
+question:'What are "trigger phrases" in a Copilot Studio topic and how does the NLU engine use them to match user input at runtime?',
+options:[
+'Trigger phrases are exact text strings that users must type verbatim for the topic to activate — any deviation from the exact phrasing causes the copilot to fall to the Fallback system topic',
+'Trigger phrases are example user utterances (5–10 per topic) that train the NLU engine on what user intent this topic handles — the engine learns a generalised intent classifier that matches semantically similar but differently-worded user inputs at runtime without requiring exact phrase matches',
+'Trigger phrases are HTTP webhook URLs called when a topic starts, allowing external systems to be notified whenever a user initiates that specific conversation topic with the deployed copilot',
+'Trigger phrases are the opening messages the copilot sends when a topic is triggered — displayed as the first bot message node in the conversation path when the topic is initiated by any trigger event'
+],
+answer:1,
+explanation:'Trigger phrases are training examples that teach the NLU (Natural Language Understanding) engine the intent boundary of a topic. Key properties: Quantity: Microsoft recommends 5–10 diverse phrases per topic. More diverse (not repetitive) examples generalise better. Generalisation: The NLU engine (built on CLU — Conversational Language Understanding) learns a semantic model from these examples and matches any similar user input, not just exact matches. "Check my order" as a trigger will match "where is my package?", "order status", "has my delivery shipped?". Semantic, not keyword: The matching uses transformer-based embeddings — it understands meaning, not just word overlap. Topic suggestion: Copilot Studio can suggest topics from existing documents, FAQs, or chat logs automatically. Conflicts: If two topics have overlapping trigger phrases, the NLU may route to the wrong topic — authors should check for overlaps using the topic suggestions tool and add disambiguation.'},
+
+{lesson:'L3',lessonName:'Topic Management & Copilot Design',
+question:'What is the "conversation path" in a Copilot Studio topic and what categories of nodes can it contain?',
+options:[
+'The conversation path is a flowchart exported as a PDF for business stakeholder review and compliance approval prior to any technical implementation work beginning',
+'The conversation path is an Azure DevOps pipeline linking user story definitions to topic implementation tasks that developers must complete before the topic can be activated for testing',
+'The conversation path is the visual flow built in the authoring canvas that defines what happens after a topic is triggered — containing message nodes (bot sends text/adaptive cards), question nodes (bot asks and stores responses), condition nodes (branch on variable values), action nodes (call flows or APIs), and redirect nodes (transfer to another topic)',
+'The conversation path is a training corpus of real user conversations automatically generated from analytics and used to retrain the NLU intent classifier on a weekly basis to stay current with user vocabulary'
+],
+answer:2,
+explanation:'The conversation path is built using a visual drag-and-drop canvas and contains several node types: Message nodes: The bot says something. Can contain plain text, speech-optimised responses, images, adaptive cards, quick-reply buttons. Question nodes: The bot asks a question and waits for user input. The response is extracted using an entity type (Date, Number, Email, custom entity) and stored in a variable. Optionally validates and reprompts. Condition nodes: Branches the conversation based on variable values or system variables (User.Language, Conversation.Channel). Like an if/else in code. Action nodes: Triggers a Power Automate flow, calls a connector, or invokes an HTTP action. Can pass input variables and receive output variables. Redirect nodes: Jumps to another topic (sub-topic pattern) and optionally returns. Variable management nodes: Set variable value, clear variables. End conversation: Triggers the end of conversation system topic. The canvas shows these as connected boxes with arrows, readable by non-developers.'},
+
+{lesson:'L3',lessonName:'Topic Management & Copilot Design',
+question:'What is "topic escalation" in Copilot Studio and why is configuring it properly considered a best practice for production copilots?',
+options:[
+'Topic escalation is an automatic feature that upgrades the NLU model to a more advanced version when conversation complexity exceeds a configurable threshold in the copilot\'s Settings panel',
+'Topic escalation is a billing mechanism that triggers a premium API tier when the monthly message count exceeds the standard plan allocation, continuing service without interruption or degradation',
+'Topic escalation is an Azure autoscaler that provisions additional Copilot Studio compute resources during peak traffic hours to maintain response time below the SLA target configured per environment',
+'Topic escalation is the configured mechanism by which the copilot hands off a conversation to a human agent when it cannot resolve the user\'s need — the "Escalate" system topic can redirect to Omnichannel for Customer Service, pass full conversation context and transcript to the agent, and should be configured thoughtfully because users who cannot reach a human when frustrated quickly lose trust in both the copilot and the brand'
+],
+answer:3,
+explanation:'Escalation is a critical design decision for production copilots: Why it matters: even the best copilot cannot resolve all user needs. Users who want a human and cannot reach one become frustrated and may abandon the service entirely. Configuration: The built-in "Escalate" system topic handles user intents like "agent", "human", "speak to someone", "I want to talk to a person". Authors customise: the bot acknowledges the escalation request gracefully, collects any additional context if needed, and transfers. Transfer targets: Dynamics 365 Customer Service / Omnichannel: the copilot initiates a transfer that passes conversation context (transcript, user ID, topic history, collected variables) to the human agent interface, so the agent sees the full conversation history and doesn\'t ask the user to repeat themselves. ServiceNow, Salesforce Service Cloud: via connectors. Custom escalation: creating a support ticket, sending an email, scheduling a callback. Best practice: Always configure escalation, even if just as "send an email to support". Never leave users in a loop with no exit.'},
+
+// ─── L4: Publishing & Testing Copilots (3 Qs) ────────────────────────
+{lesson:'L4',lessonName:'Publishing & Testing Copilots',
+question:'What happens during the "Publish" step in Copilot Studio and what is the relationship between the authoring environment and the published version?',
+options:[
+'Publishing commits the current authoring draft to production across all configured channels — before publishing, changes are only visible in the authoring environment and invisible to end users; after publishing, all connected channels immediately serve the updated copilot behavior, with Copilot Studio maintaining a clear distinction between the live published version and the ongoing authoring draft',
+'Publishing sends the copilot configuration to a Microsoft review queue for mandatory 48-hour compliance verification before it becomes available to any users or channels in production',
+'Publishing generates a Docker container image that the organisation must self-host on Azure Kubernetes Service — Copilot Studio does not provide any managed hosting infrastructure after the publish step',
+'Publishing permanently locks all topics from further editing — making changes requires creating a new copilot from scratch and re-publishing, which is why Git version control is strongly recommended before every publish operation'
+],
+answer:0,
+explanation:'Copilot Studio maintains two states: Authoring version: The current working draft. Authors can edit topics, add nodes, modify actions. Only visible in the Test pane — not to real end users. Published version: What end users see. Created by clicking "Publish" on the top bar. The publish operation is fast (seconds to minutes). Until published, all changes — even completed and tested ones — are invisible to users on all channels. After publishing: Users on Teams, the website embed, and all other channels immediately start receiving the new version of the copilot. Copilot Studio shows the last publish date/time, so authors always know what version is live. You can continue editing the authoring version after publishing — your in-progress changes don\'t affect the live version. Only the next publish will update what users see. This author-version vs. published-version distinction is important: make all your changes, test them in the Test pane, then publish when confident.'},
+
+{lesson:'L4',lessonName:'Publishing & Testing Copilots',
+question:'What does "Track between topics" logging in the Test pane show and how does it help resolve conversation routing issues?',
+options:[
+'Track between topics encrypts test conversation data and sends it to a Microsoft compliance vault that cannot be accessed by the copilot author — existing solely for regulatory audit trail purposes',
+'Track between topics shows step-by-step which topic was triggered, what path was followed through conversation nodes, what variable values were captured at each step, and which actions were called — letting authors pinpoint exactly where a conversation diverges from expected behavior without any external tools or log query languages',
+'Track between topics exports test conversations to Azure Log Analytics where Power BI reports analyse test coverage across all topics over a rolling 30-day window for quality assurance teams',
+'Track between topics is a paid Copilot Studio Premium feature not available in the standard trial environment used for initial copilot development and testing'
+],
+answer:1,
+explanation:'When "Track between topics" is enabled in the Test pane, the conversation panel shows real-time breadcrumbs: Topic triggered: "Triggered topic: Order Status" — confirms the NLU routed correctly. Node traversal: Each node executed is highlighted in the canvas as the conversation progresses — you can watch the path animate in real time. Variable values: The current value of all variables is shown after each node. If a question node was supposed to capture an email but captured something else, you see exactly what was stored. Action output: After a Power Automate action, the returned variables and their values are shown. Topic redirects: If one topic redirects to another, you see the chain. Common debugging scenarios: "My condition isn\'t branching correctly" → check variable values at the condition node. "My topic isn\'t triggering" → add more trigger phrases or check for conflicts with other topics. "My flow isn\'t returning data" → check action output variables. This eliminates guesswork in debugging complex conversation flows.'},
+
+{lesson:'L4',lessonName:'Publishing & Testing Copilots',
+question:'What channels are available for publishing a Copilot Studio copilot and what minimal configuration is required to deploy to a custom website?',
+options:[
+'Copilot Studio copilots can only be published to Microsoft Teams — website deployment requires separate Azure Bot Service infrastructure and a custom Bot Framework Web Chat React component',
+'Copilot Studio copilots can be published to any REST endpoint without configuration — the copilot auto-generates an OpenAPI specification that any application calls using standard HTTP requests',
+'Copilot Studio supports Teams, custom websites, Microsoft Copilot (as an extension), Dynamics 365, and more; for a custom website the author copies the provided JavaScript embed snippet into any HTML page with no server-side coding — and can optionally configure authentication, custom greeting, and styling through the Studio settings',
+'Custom website deployment requires provisioning an Azure Application Gateway and TLS termination before pasting the embed code — without this infrastructure the embedded chat widget will not function correctly in production'
+],
+answer:2,
+explanation:'Copilot Studio multi-channel publishing works as follows: Microsoft Teams: Author adds the copilot as a Teams app. Configurable for specific teams/channels or as a personal app available to all users via Teams admin centre policies. Custom website: In Copilot Studio → Settings → Channels → Custom website, copy the JavaScript snippet: <script src="..."><\/script><div id="webchatcontainer"><\/div>. Paste into any HTML page. The copilot appears as a chat bubble. Additional configuration options: Authentication (require Teams SSO before chat), custom welcome message, colour scheme matching brand guidelines. Mobile / Direct Line: More advanced scenarios use the Direct Line API for custom mobile apps. Microsoft Copilot (extension): Publishing the copilot as an M365 Copilot extension so it shows as an available capability within M365 Copilot in Teams/Outlook. Dynamics 365 Customer Service: Copilot Studio copilots are the native bot solution for D365 CS — configured from within D365 as a bot connection. The custom website embed is intentionally simple — no server infrastructure needed, just client-side JavaScript hosted by Microsoft.'},
+
+// ─── L5: Entities, Variables & Customization (4 Qs) ──────────────────
+{lesson:'L5',lessonName:'Entities, Variables & Customization',
+question:'What are "entities" in Copilot Studio and how do they differ from collecting a simple free-text response from a user?',
+options:[
+'Entities in Copilot Studio are Azure Cosmos DB collections storing structured conversation data for analytics and reporting across all sessions in the environment',
+'Entities are Power Automate workflow triggers that activate external processes when specific keywords are detected in user messages during a copilot conversation session',
+'Entities are Dataverse table schemas defining the structure of business data available through pre-built connectors to Dynamics 365, SharePoint, and other Microsoft data services',
+'Entities are structured data type definitions that tell the copilot how to recognise and extract specific types of information from user input — such as dates, numbers, locations, email addresses, or custom-defined values like product names — giving the copilot structured, typed values rather than raw unprocessed text, making downstream logic, validation, and API calls far more reliable'
+],
+answer:3,
+explanation:'When a copilot asks "What is your email address?" and the user types "my email is sarah.jones@contoso.com — please update it", without entities the variable stores the entire sentence. With the "Email" entity, the copilot extracts only "sarah.jones@contoso.com" and validates it matches email format. Entity benefits: Data quality: extracting structured values prevents downstream errors in APIs or database writes. Flexibility: users don\'t need to answer precisely — "I want to book for next Tuesday at 3pm" → DateTime entity extracts "2024-01-23T15:00:00" automatically. Validation: entities can be configured to retry if the user\'s response doesn\'t match the expected type. Practical example: "What date would you like to book?" → if user says "Thursday", the DateTime entity knows to resolve this to the nearest upcoming Thursday in the correct timezone. Types of entities: System (pre-built): Date and Time, Number, Currency, Boolean, Email, Phone, Age, Percentage, Duration, Location, Ordinal, Temperature. Custom entities: Closed list (fixed options: "Gold", "Silver", "Bronze" for a membership tier), Regex (for account numbers in a specific format), Machine learned (for complex domain-specific terms).'},
+
+{lesson:'L5',lessonName:'Entities, Variables & Customization',
+question:'What is the difference between system entities and custom entities in Copilot Studio?',
+options:[
+'System entities are pre-built by Microsoft covering common data types — Date/Time, Number, Email, Phone, Boolean, Duration, Money, Age, Ordinal, Geography, and more — available immediately without configuration; custom entities are defined by the author to recognise domain-specific values like product names, service tiers, department codes, or proprietary vocabulary unique to the organisation',
+'System entities can only be used in question nodes; custom entities can be used in any node type including message, condition, and Power Automate action nodes throughout a conversation topic',
+'System entities are stored permanently in Dataverse and persist across sessions; custom entities are ephemeral and only exist during the active conversation session, being cleared when the session ends',
+'System entities require a Microsoft AI Builder credit to use in production; custom entities are free and unlimited regardless of which Copilot Studio licensing plan the organisation has selected'
+],
+answer:0,
+explanation:'System entities: Microsoft pre-built and continuously improved these to work across languages and locales. They handle complex real-world variation: "Tomorrow", "next week", "in 3 days", "15th of March" all resolve to a Date entity value. "Three hundred dollars", "$300", "300 USD" all resolve to a Money entity. "$15.4 million" → Money entity. "Yes", "yeah", "yep", "sure" → Boolean(true). No configuration needed — select the entity type in the question node and it works. Custom entities: Closed list: "What product line are you enquiring about?" → options: ["Laptop", "Phone", "Tablet", "Accessories"]. The entity matches synonyms too: "laptops" → "Laptop". Regular expression: Account numbers must match pattern `ACC-\d{6}` — the entity validates format. Machine learned entity: For complex extraction trained on examples. When to use custom vs. system: Does Microsoft\'s pre-built entity cover your data type? → Use system. Is your data domain-specific (product names, internal codes, membership tiers)? → Create custom entity. Custom entities are free and have no usage limits.'},
+
+{lesson:'L5',lessonName:'Entities, Variables & Customization',
+question:'What are "variables" in Copilot Studio and what are the three variable scopes available to authors?',
+options:[
+'Variables in Copilot Studio are synonym lists mapping alternative user phrasings to canonical terms in the knowledge base, improving entity recognition accuracy and trigger phrase matching consistency',
+'Variables store values captured during a conversation for use in conditions, messages, or action calls; the three scopes are: Topic variables (exist only within the current topic and are cleared when leaving it), Global variables (persist across all topics for the entire session), and System variables (provided by the platform pre-populated with values like User.DisplayName, User.Id, System.Date, and conversation metadata)',
+'Variables in Copilot Studio are configuration flags in the Environment Settings panel controlling features like authentication mode, content moderation sensitivity level, and language detection behaviour',
+'Variables are always stored in Azure Key Vault for security and must be referenced using the Key Vault secret identifier — a compliance requirement enforced by the Power Platform governance layer for all enterprise Copilot Studio deployments'
+],
+answer:1,
+explanation:'Variables are the memory of a conversation — they store data collected from users or returned by actions. Three scopes: (1) Topic variables (default): Created within a topic, exist only during that topic\'s execution. Naming convention: TopicName.VariableName. Auto-cleared when the topic ends. Use for: temporary values like a product category the user selected, which may not be relevant to other topics. (2) Global variables: Created explicitly as global. Persist across ALL topics for the entire session. Naming: Global.VariableName. Use for: authenticated user\'s account number (needed in multiple topics), language preference, cart contents during a shopping flow. (3) System variables: Provided by Copilot Studio automatically. Read-only values about the current session: System.User.DisplayName — the user\'s name (if authenticated), System.Channel — which channel (Teams, web), System.Conversation.Id — unique conversation ID, System.Date — today\'s date. Useful for personalisation ("Hello {System.User.DisplayName}!") and channel-specific logic (show adaptive cards only on Teams where they render; use text-only for voice).'},
+
+{lesson:'L5',lessonName:'Entities, Variables & Customization',
+question:'How do question nodes work in Copilot Studio and what happens to the user\'s response during processing?',
+options:[
+'Question nodes send a REST API request to an Azure Document Intelligence endpoint and return structured field extractions from any document the user uploads during the conversation',
+'Question nodes are silent internal processing steps that run NLP classification on conversation history and automatically set variable values without any visible prompt being sent to the user',
+'A question node sends a prompt to the user, waits for their response, extracts the relevant value using the configured entity type (validating it matches the type), stores the extracted value in a specified variable, and continues the conversation — with configurable retry/reprompt logic if the user\'s response fails entity validation',
+'Question nodes in Copilot Studio only accept Yes/No button click responses — free-text question answering with entity extraction requires a separate Azure AI Language CLU model to be configured and connected via a custom connector action'
+],
+answer:2,
+explanation:'Question nodes are the primary mechanism for collecting structured information from users. How they work: (1) Configuration: Author adds a question node, writes the bot\'s question text ("What is your date of birth?"), selects the entity type (Date), and creates/selects a variable to store the result (topic.DateOfBirth). (2) Runtime — prompt: The bot sends the question to the user. (3) Runtime — user responds: "I was born on the 14th of September 1990". (4) Runtime — entity extraction: Copilot Studio applies the Date entity to extract "September 14, 1990" and stores it as a date value in topic.DateOfBirth. (5) Validation: If the entity cannot extract a valid value (user says "next Tuesday" when a birth date is expected — unreasonable for DoB), the bot reprompts with a configurable message. (6) Continue: The conversation path advances to the next node with the variable populated. Reprompt configuration: Authors can set a custom "I didn\'t understand, please try again" message, and limit reprompts (e.g., max 3 attempts, then redirect to escalation if extraction still fails). This makes question nodes much more robust than plain text collection.'},
+
+// ─── L6: Configuring Data Sources & Actions (4 Qs) ───────────────────
+{lesson:'L6',lessonName:'Configuring Data Sources & Actions',
+question:'What are "knowledge sources" in Copilot Studio and what types of sources can be configured for generative answers?',
+options:[
+'Knowledge sources are data connections enabling a copilot to answer questions from existing content — configurable sources include public website URLs, SharePoint sites, uploaded documents (PDF, Word), Dataverse tables, Azure AI Search indexes, and custom data sources — the Generative Answers feature uses these to provide contextually grounded responses without requiring topic authoring for every possible question',
+'Knowledge sources are training datasets uploaded in JSONL format used to fine-tune the underlying GPT model powering the copilot\'s generative AI responses in the Azure environment',
+'Knowledge sources are Azure AI Search indexes that a data engineer must pre-build before connection — the copilot cannot crawl or ingest content directly, only query pre-indexed data through the Azure portal',
+'Knowledge sources are Power BI datasets connected to answer numerical and analytical queries — they exclusively handle data analysis questions and cannot be used for general knowledge retrieval'
+],
+answer:0,
+explanation:'Knowledge sources (previously "Boost conversations with Generative Answers") enable the copilot to answer a broad range of questions it has no authored topic for. Supported source types: Public websites: Enter a URL and Copilot Studio crawls the site (up to 2 levels deep by default). Great for public documentation, FAQ pages, product pages. SharePoint: Connect to a SharePoint site/document library. The copilot uses the documents as its knowledge base — no manual ingestion needed. Documents: Upload PDF, Word, PowerPoint files directly. Useful for product manuals, policy documents, HR handbooks. Dataverse: Query structured Dataverse tables using natural language. Azure AI Search: Connect to an existing AI Search index with custom chunking and indexing. How it works at runtime: User asks a question → No topic matches exactly → Generative Answers searches knowledge sources → Retrieves relevant chunks → GPT synthesises a grounded answer with citations → Copilot responds with source links. Benefit: reduces topic authoring from "write a topic for every question" to "connect your knowledge sources and let generative AI handle the long tail." Best practice: keep topics for structured workflows (booking, returns, account changes); use knowledge sources for informational Q&A.'},
+
+{lesson:'L6',lessonName:'Configuring Data Sources & Actions',
+question:'What is the "Generative Answers" capability in Copilot Studio and how does it reduce topic authoring effort for informational use cases?',
+options:[
+'Generative Answers automatically writes all topic content for a copilot by analysing historical support ticket data and generating complete topic definitions without human review',
+'Generative Answers enables the copilot to dynamically generate responses by searching configured knowledge sources and using GPT to synthesise a grounded answer — meaning the copilot can respond to a far broader range of questions than authored topics alone cover, without requiring an author to write specific answer nodes for every possible question',
+'Generative Answers is a text-to-image feature that generates diagrams and infographics alongside text responses when explaining complex processes or workflows to users',
+'Generative Answers replaces all conversation topics with a single free-text generation mode — once enabled, all authored topics are disabled and every query is answered using GPT generation without structured topic logic'
+],
+answer:1,
+explanation:'Before Generative Answers, copilots could only answer questions that had a matching authored topic. If a user asked something outside the authored topic set, the Fallback topic would say "I didn\'t understand" — a poor experience. Generative Answers changes this: Trigger: When no topic matches the user\'s intent, instead of immediately falling back, the copilot searches all configured knowledge sources. Search: Uses semantic search (vector embeddings) to find the most relevant content chunks from the knowledge sources. Synthesise: GPT-4o reads the retrieved chunks and generates a fluent, coherent answer grounded in those chunks. Cite: The response includes references to the source documents, enabling users to verify the information. Coexistence with topics: Authored topics STILL take priority. If a topic matches (high confidence), it runs. Generative Answers is the fallback when no topic matches — they complement each other. Content moderation: Generative answers respect the configured content filters — responses are checked before being sent to users. Practical impact: A copilot with 30 authored topics (for structured workflows) + Generative Answers connected to a SharePoint library of 500 policy documents can effectively answer thousands of question variants without additional topic authoring.'},
+
+{lesson:'L6',lessonName:'Configuring Data Sources & Actions',
+question:'What is an "Action" in Copilot Studio and what are the two primary types an author can configure within a topic?',
+options:[
+'An Action is a pre-built Microsoft template handling common enterprise tasks like booking meetings, sending emails, or creating tickets — authors cannot create custom actions and must use the provided template library',
+'An Action is a compliance audit step that validates copilot outputs against the organisation\'s responsible AI policy before they are displayed to users at any point in a conversation',
+'An Action is a step in a conversation topic that performs an operation beyond text-based conversation — the two primary types are: Power Automate flows (triggered from topic nodes to automate processes, read/write data, call APIs, send emails, or interact with any connected system) and Connector actions (pre-built or custom connector operations that call external services like Salesforce, ServiceNow, or custom REST APIs)',
+'An Action in Copilot Studio is a JavaScript function embedded directly in the topic definition that executes client-side in the user\'s browser, enabling offline processing without cloud API dependencies'
+],
+answer:2,
+explanation:'Actions are how copilots do things beyond conversation. They turn the copilot from a question-answering bot into a workflow automation hub. Two primary types: (1) Power Automate flows: Author creates a flow in Power Automate that the topic triggers. The flow can: read from SharePoint/Dataverse/SQL, write records to Dataverse, call any REST API via HTTP action, send Outlook/Teams emails/messages, query Microsoft Graph, call Azure functions, connect to SAP, Salesforce, ServiceNow via pre-built connectors (900+). Input: variables from the topic are passed as input parameters. Output: the flow returns typed values that become variables in the topic. (2) Connector actions: The 900+ Power Platform connectors can be invoked directly from a topic without building a full Power Automate flow. Pre-built actions: "Get a SharePoint file", "Create a Dataverse record", "Send a Teams message", "Create a ServiceNow ticket". Custom connector actions: author-defined REST API operations from a custom connector definition. Choosing between them: connector actions are simpler for single API calls; Power Automate flows are better for complex multi-step logic, error handling, approvals, and scheduled processes.'},
+
+{lesson:'L6',lessonName:'Configuring Data Sources & Actions',
+question:'When a Copilot Studio topic calls a Power Automate flow, what data can be exchanged between the topic and the flow?',
+options:[
+'Flows called from Copilot Studio topics can only receive no input — all data the flow needs must be retrieved independently using its own triggers and connectors without values passed from the conversation',
+'Flows called from Copilot Studio support only a single text string as input and return only a single text string as output — complex structured data exchange requires a separate middleware API layer to be built',
+'Flows called from Copilot Studio cannot return output values — they are fire-and-forget triggers; the topic must independently poll a Dataverse table to determine when the flow has completed its processing',
+'Flows called from Copilot Studio can receive multiple typed input values from topic variables (text, numbers, Booleans, dates, tables) and return multiple typed output values back to the topic — captured as new topic variables usable in conditions, messages, or further actions within the same conversation'
+],
+answer:3,
+explanation:'The data exchange between a Copilot Studio topic and a Power Automate flow is bidirectional and typed: Inputs (topic → flow): When the author adds a "Call an action" node and selects a Power Automate flow, they map topic variables to the flow\'s defined input parameters. Example: topic.CustomerEmail → flow input "EmailAddress". topic.OrderNumber → flow input "OrderId". The flow receives these as parameters in its trigger. Supported types: Text, Number, Boolean, Table (JSON). Outputs (flow → topic): The flow defines output parameters it returns. In Power Automate, add a "Return value(s) to Power Virtual Agents" action at the end of the flow. The output parameters appear as variables in the Copilot Studio action node. Example: flow output "OrderStatus" → new topic variable topic.OrderStatus. topic.OrderStatus is then available for: Message node: "Your order {topic.OrderStatus}" Condition node: if topic.OrderStatus = "Shipped" → show tracking info. Another action call. This bidirectional typed exchange is what makes copilots genuine automation agents rather than just FAQ bots.'},
+
+// ─── L7: Copilot Studio + Power Platform Integration (3 Qs) ──────────
+{lesson:'L7',lessonName:'Copilot Studio + Power Platform Integration',
+question:'How does Copilot Studio integrate with Power Automate and what categories of business automation scenarios does this enable?',
+options:[
+'Copilot Studio topics can trigger Power Automate flows to: look up order status from ERP, create ServiceNow incidents, send approval emails via Outlook, write to Dataverse or SQL databases, call any REST API, post Teams notifications, and retrieve SharePoint documents — turning the copilot from a conversation tool into a full business automation gateway',
+'Power Automate exclusively initiates conversations with Copilot Studio — Power Automate always calls the copilot, and the copilot responds passively to the flow\'s data queries without direct topic initiation',
+'Copilot Studio and Power Automate share a runtime but exchange data only through Dataverse tables — there is no direct runtime call integration between the two platforms',
+'Copilot Studio integrates with Power Automate exclusively for sending Microsoft Teams notifications — all other automation scenarios require direct Azure Logic Apps connections outside the Power Platform'
+],
+answer:0,
+explanation:'Copilot Studio + Power Automate is the most powerful integration in the ecosystem. Complete automation scenarios enabled: Customer service: "What is my order status?" → flow calls the order management API → returns status to copilot → copilot tells user. IT helpdesk: "Reset my password" → flow creates ServiceNow incident + sends confirmation email via Outlook → returns ticket number. HR: "How many vacation days do I have left?" → flow queries Workday or HR Dataverse table → returns balance → copilot personalises the response. Finance: "Approve expense report #1234" → flow initiates Power Automate approval workflow → waits for manager approval → updates copilot variable. Procurement: "Create a purchase order for 10 laptops" → flow creates PO in SAP via SAP connector → returns PO number. Scheduling: "Book a meeting room for tomorrow 2pm" → flow calls Microsoft Graph calendar API → creates reservation → confirms to user. Why Power Automate specifically: 900+ pre-built connectors (SAP, Salesforce, ServiceNow, Workday, SQL, SharePoint, all Microsoft 365 services), no separate API middleware needed, available to citizen developers with no code, handles authentication/credentials securely.'},
+
+{lesson:'L7',lessonName:'Copilot Studio + Power Platform Integration',
+question:'How does Copilot Studio integrate with Power Apps and what unified experience does this create for application users?',
+options:[
+'Copilot Studio copilots must always run as standalone web chat widgets — embedding a copilot inside a Power Apps canvas application requires a separate Azure Bot Service deployment that cannot be managed from Copilot Studio',
+'Copilot Studio provides a Power Apps custom component that is embedded directly inside a canvas Power App — allowing organisations to build rich custom UIs with their own forms, grids, and navigation while the embedded copilot handles the conversational AI layer, providing users a unified application without switching tools',
+'Power Apps integration with Copilot Studio is achieved exclusively through the Power Apps portals product — canvas apps and model-driven apps cannot embed a Copilot Studio copilot component',
+'Copilot Studio and Power Apps are the same product — Copilot Studio is simply the new name for what was previously called "Power Apps Portals" after the rebranding to Microsoft Copilot Studio platform'
+],
+answer:1,
+explanation:'The Copilot Studio chatbot component for Power Apps enables seamless embedding: How it works: In Power Apps canvas app, add the "Chatbot" control from the component library. Connect it to a published Copilot Studio copilot using the environment + copilot selection. The copilot chat interface appears within the canvas app — same UI, same topics, same capabilities as the standalone web widget. Why this matters — use cases: Field service app: technicians use a Power Apps mobile app for job management; the embedded copilot answers "what parts do I need for a boiler model X?" or "how do I complete this repair procedure?" without leaving the app. Insurance claims: an adjustor uses a Power Apps model-driven app for case management; the embedded copilot looks up policy details and recommends settlement amounts. Retail inventory: store manager uses a Power App for inventory; the copilot assists with reorder calculations and supplier queries. Bidirectional data exchange: The Power App can pass variables to the copilot (pre-fill context like the current customer ID); the copilot can send data back to the Power App to update fields or navigate to another screen. This is much cleaner than context-switching between a separate chat window and the main application.'},
+
+{lesson:'L7',lessonName:'Copilot Studio + Power Platform Integration',
+question:'What role does Microsoft Dataverse play in a Copilot Studio solution and what data operations can copilots perform against it?',
+options:[
+'Dataverse in Copilot Studio stores only conversation transcripts and analytics — copilots cannot read from or write to custom business data tables in the Dataverse environment',
+'Dataverse provides the hosting infrastructure for the Copilot Studio application itself — it is a mandatory compute runtime for copilot logic execution, not a data storage platform for business records',
+'Dataverse serves as the system-of-record for business data in Power Platform — copilots can read Dataverse tables (retrieve customer records, product catalogues, appointment slots), create or update records (log service requests, update contact details), and use Dataverse data in decision conditions — all via Power Automate flows or direct Dataverse connector actions, enabling personalised responses based on live business data',
+'Dataverse is deprecated and being replaced by Azure Cosmos DB — Copilot Studio now recommends using Cosmos DB via HTTP connector for all structured data storage in new copilot solutions'
+],
+answer:2,
+explanation:'Microsoft Dataverse is the data backbone of the entire Power Platform. For Copilot Studio, it enables: Reading business data: "What are the available appointment slots for Dr. Smith?" → flow queries the Appointment table in Dataverse → returns available slots → copilot presents them to user. "What is my account balance?" → flow queries the Account entity filtering by user ID → returns balance. Writing data from conversations: "I\'d like to report an issue" → copilot collects description, category, priority via question nodes → flow creates a new Case record in Dataverse with all captured values. "Update my contact details" → copilot collects new email → flow updates the Contact record. Using data in conditions: flow retrieves the user\'s subscription tier from Dataverse → returns "Gold" → copilot condition branches to show premium features. Why Dataverse over Azure SQL: No-code CRUD operations via Power Automate Dataverse connector (no SQL queries needed). Role-based security enforced at the data layer — the flow\'s connection runs as a service account with restricted table permissions. Dataverse tables surface automatically as entity types in Power Apps for end-user CRUD UIs. Audit trails, business rules, calculated columns built in.'},
+
+// ─── L8: Boosting Copilot NLU & AI Models (3 Qs) ─────────────────────
+{lesson:'L8',lessonName:'Boosting Copilot NLU & AI Models',
+question:'What is AI Builder in the context of Copilot Studio and how can it extend copilot intelligence beyond the built-in NLU?',
+options:[
+'AI Builder is the language model powering Copilot Studio\'s NLU engine — configured automatically by Microsoft and not accessible or modifiable by authors or administrators',
+'AI Builder is Microsoft\'s code-first MLOps platform for training custom BERT models from scratch using enterprise text data and deploying them as custom model endpoints to external services',
+'AI Builder is a third-party integration requiring an Azure Machine Learning workspace before it can be connected to Copilot Studio via an API Management gateway',
+'AI Builder is a Power Platform component providing pre-built and custom AI models — document processing (Form Recognizer), text classification, object detection, sentiment analysis, business card reader — callable from Copilot Studio topics via Power Automate flows, enabling copilots to process documents, classify request types, analyse sentiment, and recognise images without custom ML model development'
+],
+answer:3,
+explanation:'AI Builder bridges the gap between Copilot Studio\'s conversation capabilities and more advanced AI tasks: Pre-built AI Builder models available to copilots: Document processing: user uploads an invoice photo → flow calls AI Builder invoice model → extracts vendor, amount, date → copilot confirms details and routes for approval. Text classification: user submits a support request → flow classifies it as "Billing", "Technical", "Account" → copilot routes to the appropriate sub-topic. Sentiment analysis: customer messages are analysed → if sentiment score is very negative → escalate immediately to a human agent. Object detection: image uploaded of damaged product → AI Builder identifies damage category → copilot logs a warranty claim. Business card reader: sales rep scans a business card at an event → AI Builder extracts name, email, company → flow creates a CRM contact. Custom AI Builder models: Classification models trained on your own labelled data. Entity extraction models for domain-specific fields. Prediction models (e.g., predict customer churn likelihood from conversation context). AI Builder credits: AI Builder operations consume AI Builder credits, which are included in some Power Platform licensing tiers or available as add-ons. The AI Builder + Copilot Studio + Power Automate combination makes copilots genuinely intelligent automation agents.'},
+
+{lesson:'L8',lessonName:'Boosting Copilot NLU & AI Models',
+question:'What does enabling "Generative AI" mode in Copilot Studio change about how the copilot understands and responds to users?',
+options:[
+'Enabling Generative AI mode allows the copilot to use GPT-powered LLMs for: generating answers from knowledge sources without pre-authored topic nodes, understanding more diverse user phrasing, engaging in more natural multi-turn conversations, and providing explanations and summaries — shifting the copilot from a rigid decision-tree model toward a flexible AI-driven experience while still using authored topics where defined',
+'Enabling Generative AI mode locks the copilot to only AI-generated responses and completely disables all manually authored topics — if no topic matches, the copilot always generates an answer using GPT with no fallback topic',
+'Generative AI mode connects the copilot to Azure OpenAI fine-tuning pipelines — each user conversation is automatically added to a fine-tuning dataset that updates the underlying GPT model nightly',
+'Generative AI mode is a preview feature that cannot be used in any published production copilot — it is available only in the Copilot Studio development sandbox environment for author testing'
+],
+answer:0,
+explanation:'Generative AI mode (Generative Orchestration in the latest Copilot Studio) represents a fundamental shift in how copilots work: Traditional Copilot Studio (topic-based): User message → NLU classifies intent → triggers matching topic → follows authored conversation path. Very predictable and auditable but requires a topic for every scenario. Generative AI mode: User message → AI orchestrator decides: is there a matching authored topic? → If yes: run the topic (predictable, structured). If no: search knowledge sources → generate an answer. Additionally: More flexible understanding: "Can I change where my stuff is being sent?" is understood as "update shipping address" even without that exact phrasing being a trigger phrase. Conversational context: better handling of multi-turn conversations where users reference previous turns ("What about the blue one instead?"). Generative answers from knowledge sources: the long-tail of questions is handled without topic authoring. Coexistence: topics and generative AI coexist — topics take priority, generative fills the gaps. Best practice: start with Generative AI mode enabled, add structured topics for the critical workflows that need precise, testable behavior (account changes, bookings, payments).'},
+
+{lesson:'L8',lessonName:'Boosting Copilot NLU & AI Models',
+question:'What is "orchestration" in the context of Copilot Studio\'s advanced capabilities and how does it support multi-agent scenarios?',
+options:[
+'Orchestration in Copilot Studio is the process of scheduling copilot publishing deployments across multiple environments at a configured time using the Power Platform admin centre pipeline',
+'Orchestration refers to the copilot\'s ability to dynamically route conversations to the appropriate topic, knowledge source, or external specialised agent — in multi-agent scenarios, an orchestrator copilot can delegate specific subtasks to specialised sub-copilots and aggregate their results, enabling complex workflows no single copilot can handle efficiently alone',
+'Orchestration is the process of manually mapping each trigger phrase to its corresponding topic in the NLU configuration, replacing the automatic intent classification of the NLU engine',
+'Orchestration is a security feature controlling which users are authorised to publish copilot updates, requiring multi-person approval workflows managed through Azure Active Directory conditional access policies'
+],
+answer:1,
+explanation:'As copilot deployments mature, organisations move beyond single-copilot architectures to multi-agent systems: What orchestration enables: Topic routing: the AI orchestrator decides which topic or knowledge source to use for each user message — with Generative AI mode, this decision is AI-driven rather than rule-based. Multi-agent delegation: an "Enterprise Assistant" orchestrator copilot can delegate: HR questions → specialist HR Copilot. IT questions → specialist IT Copilot. Finance questions → specialist Finance Copilot. The orchestrator copilot calls the specialist copilot as an action, receives the response, and returns it to the user — the user only sees one unified interface. Practical example: a unified company chatbot that appears as one interface to employees but internally routes to specialist sub-agents for each domain. Benefits: separation of concerns (each specialist copilot is maintained by the domain team), reuse (the same HR copilot can be called by multiple parent copilots), scalability (add new specialist copilots without modifying the orchestrator). This pattern mirrors agent architectures seen in Semantic Kernel and Microsoft Copilot Studio\'s Agent SDK.'},
+
+// ─── L9: Copilot Management & Advanced Capabilities (4 Qs) ───────────
+{lesson:'L9',lessonName:'Copilot Management & Advanced Capabilities',
+question:'What are "adaptive cards" in Copilot Studio and when should they be used instead of plain text responses?',
+options:[
+'Adaptive cards are pre-built conversation templates that auto-populate with Microsoft Graph data and are exclusively available for Microsoft Teams channel deployments with M365 Copilot licences',
+'Adaptive cards are UI components requiring a Power Apps premium connector and are unavailable in the standard Copilot Studio tier, reserved for enterprise plan customers only',
+'Adaptive cards are JSON-based rich UI components rendered in supported channels (Teams, web chat) displaying structured content visually — including buttons, images, tables, and input forms — providing a far richer user experience than plain text, ideal for product listings, approval requests, status dashboards, or multi-step selection forms within the conversation itself',
+'Adaptive cards are PDF reports automatically generated from conversation transcript data and emailed to users at the end of each completed copilot session as a downloadable summary'
+],
+answer:2,
+explanation:'Adaptive Cards are the Microsoft standard for rich conversation UI across all Microsoft surfaces (Teams, Outlook, Bot Framework). In Copilot Studio they enable: Structured data display: instead of "Your order #12345 is Shipped and will arrive December 20th", show an order card with: order number in bold, status badge (green "Shipped"), delivery date, and a "Track Package" button. Multi-choice selection: instead of a text menu, show clickable buttons or a dropdown for product categories, appointment times, or service tiers. Forms: collect multiple pieces of information in one card (name, email, department) rather than sequential question nodes. Images: show product images alongside descriptions. Action buttons: "Approve", "Decline", "View Details" buttons that trigger different topic paths or actions. The Adaptive Card JSON is authored in Copilot Studio or with the Adaptive Card Designer (adaptivecards.io), then pasted into a message node. Channel awareness: Adaptive cards render beautifully in Teams and web chat. For voice channels: don\'t use adaptive cards (no visual rendering). For classic text-only channels: test rendering first. Best practice: use adaptive cards for any structured data display — they dramatically improve perceived quality of enterprise copilots.'},
+
+{lesson:'L9',lessonName:'Copilot Management & Advanced Capabilities',
+question:'How does Copilot Studio handle topic switching when a user changes intent mid-conversation?',
+options:[
+'Multi-topic handling is disabled by default — authors must configure explicit navigation buttons at the end of each topic to prevent accidental topic switches mid-conversation',
+'Copilot Studio does not support mid-conversation topic changes — once a topic is triggered, the conversation is locked until the session ends or the user clicks a UI Reset button',
+'Mid-conversation topic switching requires an Azure Service Bus queue to buffer requests while the active topic finishes — ensuring orderly transitions without losing any message data',
+'Copilot Studio naturally handles topic switching — if a user changes intent mid-conversation, the NLU detects the new intent and redirects to the appropriate topic; nested topic calls allow one topic to call another via redirect nodes and return to the caller on completion, supporting complex multi-step workflows across topic boundaries'
+],
+answer:3,
+explanation:'Natural conversation rarely follows a linear path. Users digress, have follow-up questions, or completely change their mind. Copilot Studio handles this gracefully: Implicit topic switching: User is in the middle of an order status check when they type "Actually, how do I return an item?" The NLU detects a strong "Product Return" intent and can redirect to that topic. The current topic context is noted. Configuration: Authors can set whether mid-conversation switches are allowed. If interruption detection is enabled, any high-confidence intent match mid-topic can redirect. Nested topic calls (explicit): Author uses a "Redirect to topic" node within a topic, which calls another topic as a sub-routine. On completion, control returns to the calling topic. Example: "Order Status" topic → user needs to update address first → redirect to "Update Address" sub-topic → complete → return to "Order Status" with the order status query. This nesting enables modular design where common sub-topics (authentication, address collection, card payment) are reused across multiple parent topics. System topic: If no current topic matches and the user types something completely new, the Fallback system topic runs by default, attempting Generative Answers before showing the "I don\'t understand" message.'},
+
+{lesson:'L9',lessonName:'Copilot Management & Advanced Capabilities',
+question:'What are "environment variables" in Copilot Studio solutions and why are they essential for clean ALM across Dev, Test, and Production?',
+options:[
+'Environment variables store configuration values — API URLs, endpoint addresses, SharePoint site IDs — separately from the copilot definition, so when the copilot is promoted between environments, only the environment variables are updated to point to environment-specific resources without modifying any copilot topic logic',
+'Environment variables are read-only user session values automatically captured during conversations — like User.DisplayName and System.Date — that authors reference but cannot modify during the session',
+'Environment variables are Power Platform admin settings controlling tenant-wide security policies — they cannot be modified within Copilot Studio and require Global Administrator role in Azure Active Directory',
+'Environment variables are deprecated in favour of Azure Key Vault references — all configuration values in modern Copilot Studio must be stored in Key Vault and accessed through Managed Identity authentication'
+],
+answer:0,
+explanation:'Environment variables solve the "hardcoded values" problem in ALM: The problem without environment variables: A copilot\'s Power Automate flow has the SharePoint site URL "https://contoso.sharepoint.com/sites/HR-Dev" hardcoded in it. When promoting to Production, a developer must manually find and update every flow that uses this URL — error-prone and time-consuming. The solution with environment variables: Define an environment variable "HRSharePointSiteUrl" in the Solution. In Dev environment: value = "https://contoso.sharepoint.com/sites/HR-Dev". In Test environment: value = "https://contoso.sharepoint.com/sites/HR-Test". In Prod environment: value = "https://contoso.sharepoint.com/sites/HR". All flows reference the environment variable by name. When the Solution is imported to each environment, the admin sets the environment variable value for that environment — no flow changes needed. Common uses: API endpoint URLs (sandbox vs. production APIs). SharePoint site addresses. External system connection IDs. Feature toggle flags (is feature X enabled in this environment?). Environment variables are part of the Solution, transported with it, and configured per environment during import — the cornerstone of professional Power Platform ALM.'},
+
+{lesson:'L9',lessonName:'Copilot Management & Advanced Capabilities',
+question:'What is Content Moderation in Copilot Studio and how does it protect against inappropriate inputs and outputs?',
+options:[
+'Content moderation is implemented by training a custom BERT classifier on the organisation\'s acceptable use policy — all user inputs are pre-classified before reaching the copilot NLU engine',
+'Content Moderation in Copilot Studio integrates with Azure AI Content Safety services to evaluate both user inputs and AI-generated responses for harmful content categories — authors configure sensitivity thresholds for violence, hate speech, and sexual content, and the system blocks, modifies, or redirects responses that exceed thresholds before display to users',
+'Content moderation requires authors to add a condition node checking for prohibited keywords at the beginning of every topic — Copilot Studio provides no automated moderation capability and the responsibility lies entirely with the copilot author',
+'Content moderation is handled automatically by Microsoft with fixed global thresholds that cannot be adjusted by individual organisations based on their specific use case or audience requirements'
+],
+answer:1,
+explanation:'Copilot Studio content moderation uses Azure AI Content Safety as the underlying engine: Input moderation (user → copilot): User inputs are checked for harmful content before being processed by the NLU. Categories: Hate speech, sexual content, violence, self-harm. If a user message exceeds the threshold, it can be blocked or handled by a special response topic. Output moderation (copilot → user): Generated answers (from knowledge sources via Generative Answers) are checked before being sent. This prevents the copilot from inadvertently reproducing harmful content from its knowledge sources. Configuration: In Copilot Studio settings, authors and admins can: Enable/disable content moderation. Set sensitivity thresholds (Low, Medium, High) per category. Define what happens when content is flagged (block with message, redirect to escalation topic). Organisation customisation: Different thresholds make sense for different audiences. A children\'s educational copilot needs very high sensitivity. A cybersecurity research assistant may need lower sensitivity for technical threat content. A customer service copilot for general public would use medium settings. Integration with Microsoft\'s responsible AI commitments: content moderation is part of Microsoft\'s "Responsible AI by default" approach to Copilot products.'},
+
+// ─── L10: Connectors, Actions & Extensions (3 Qs) ────────────────────
+{lesson:'L10',lessonName:'Connectors, Actions & Extensions',
+question:'What are "custom connectors" in Copilot Studio / Power Platform and when would you build one rather than using the standard connector library?',
+options:[
+'Custom connectors are proprietary Microsoft APIs available only to enterprise-tier Copilot Studio subscribers, providing direct access to internal Microsoft backend services not in the standard connector library',
+'Custom connectors are pre-built Copilot Studio topic templates installed from the Microsoft AppSource marketplace for specific industry scenarios like healthcare triage and financial onboarding',
+'Custom connectors are OpenAPI-specification-based connections to any REST API not covered by the 1,000+ pre-built Power Platform connectors — authors create them by importing an OpenAPI (Swagger) definition or manually defining API operations, enabling copilots to call any organisation-specific or third-party REST service directly from a topic action',
+'Custom connectors are C# code libraries compiled into Azure Functions that extend the Copilot Studio NLU engine with domain-specific entity extraction logic, requiring Visual Studio 2022 and .NET 8 SDK'
+],
+answer:2,
+explanation:'The Power Platform has 1,000+ certified pre-built connectors (Salesforce, ServiceNow, Workday, Twitter, Dropbox, all Azure services, all Microsoft services). Custom connectors handle the "long tail" — APIs not in the standard library: When to build a custom connector: Your company\'s internal REST API (order management, HR system, product catalogue). A third-party service not yet in the Power Platform connector catalogue. A legacy system with a REST/SOAP API that the business relies on. How to create: Option A (Easiest): Import an OpenAPI (Swagger) JSON/YAML file — the connector definition is auto-generated from the API spec. Option B: Define the connector manually in the Power Platform custom connector wizard — specify the base URL, authentication type (OAuth 2.0, API key, basic), and define each operation (GET orders, POST new order, PUT update order). Option C: Import a Postman collection. What the connector provides: A list of named "actions" (e.g., "Get Order By ID", "Create Support Ticket") that appear in Power Automate and Copilot Studio as selectable operations — the same experience as a standard connector. Security: connectors handle authentication credentials securely — the copilot author never sees API keys; they\'re managed in the connection.'},
+
+{lesson:'L10',lessonName:'Connectors, Actions & Extensions',
+question:'What are Copilot extensions for Microsoft 365 Copilot and how are they built and published using Copilot Studio?',
+options:[
+'Copilot extensions are Azure Functions called directly by M365 Copilot — built exclusively using Teams Toolkit in VS Code, not through Copilot Studio',
+'Copilot extensions are custom SharePoint web parts adding conversational AI to SharePoint Online pages, requiring React and SPFx development skills',
+'Copilot extensions are Power BI custom visuals enabling natural language queries directly on dashboards, powered by Copilot Studio NLU',
+'Copilot extensions allow custom copilots built in Copilot Studio to surface their knowledge and actions within Microsoft 365 Copilot — when published as an extension, the M365 Copilot orchestrator can delegate matching queries to the custom copilot, enabling enterprise-specific integrations to be accessed from within Teams, Word, Outlook, and other M365 apps'
+],
+answer:3,
+explanation:'Copilot Studio → M365 Copilot extensions bridge the two Copilot tiers: M365 Copilot has general knowledge and access to the user\'s M365 data. It does not know about your company\'s specific systems (your order database, your HR policies, your product catalogue). Copilot extensions: A custom Copilot Studio copilot (with its topics, knowledge sources, and actions) is published as a "plugin" or "extension" that M365 Copilot can invoke. When M365 Copilot receives a query matching the extension\'s description, it delegates to the custom copilot. Example: "What is my leave balance?" typed in Teams Copilot → M365 Copilot determines this matches the "HR Assistant" Copilot Studio extension → delegates to the HR copilot → HR copilot calls Workday flow → returns balance → M365 Copilot presents the answer. Result: M365 Copilot gains enterprise-specific knowledge and actions. Users get a unified interface — they don\'t need to know which underlying system answers each question. Publishing: In Copilot Studio, publish the copilot to the "Microsoft Copilot" channel. The copilot\'s description is critical — M365 Copilot uses it to decide when to delegate to this extension. Admins enable the extension in the Teams admin centre for specific users or groups.'},
+
+{lesson:'L10',lessonName:'Connectors, Actions & Extensions',
+question:'What is the HTTP action connector available through Power Automate for Copilot Studio topics, and what does it enable without a full custom connector?',
+options:[
+'The HTTP action allows a topic (via Power Automate) to make arbitrary REST API calls to any HTTPS endpoint — GET, POST, PUT, DELETE requests with custom headers, authentication tokens, and JSON bodies — enabling integration with any REST API without building a formal custom connector, useful for rapid prototyping and APIs where only one or two specific endpoints are needed',
+'The HTTP action is a webhook receiver allowing external systems to push data to the copilot by calling a Copilot Studio endpoint, which triggers the appropriate topic automatically based on the incoming payload',
+'The HTTP action provides a drag-and-drop UI for building REST API calls without JSON configuration — authors select the endpoint and field mappings visually, and the HTTP request is auto-generated with no manual editing',
+'The HTTP action is exclusively for Azure internal service calls and cannot communicate with any external third-party REST APIs outside the Azure subscription boundary'
+],
+answer:0,
+explanation:'Power Automate\'s HTTP action is the "Swiss Army knife" for API integration without a custom connector: Use case: Your copilot needs to call a specific REST API endpoint, but the API has no Power Platform connector and building a full custom connector feels excessive for one endpoint. HTTP action configuration in Power Automate: Method: GET, POST, PUT, DELETE, PATCH. URI: "https://api.yourcompany.com/orders/{orderId}". Headers: "Content-Type: application/json", "Authorization: Bearer @{variables(\'AccessToken\')}". Body: JSON payload with dynamic content from the copilot\'s topic variables. Authentication: Basic, API key, OAuth 2.0 (with separate "Get an OAuth token" step). The response (JSON) is parsed and specific fields are extracted as output variables returned to the copilot topic. Example: copilot topic.OrderId ("12345") → Power Automate HTTP GET to "https://oms.company.com/api/orders/12345" with API key header → parse response JSON → extract "status", "deliveryDate", "carrier" → return to copilot → "Your order is {status}, expected delivery {deliveryDate} via {carrier}." When to use HTTP vs custom connector: HTTP: 1–2 API endpoints, one-off integration, rapid prototype. Custom connector: multiple endpoints, multiple authors/copilots will use the same API, need a reusable certified connector with proper documentation.'},
+
+// ─── L11: Voice-Enabled Copilots (3 Qs) ──────────────────────────────
+{lesson:'L11',lessonName:'Voice-Enabled Copilots',
+question:'How does Copilot Studio enable voice-powered copilot experiences and what Azure service underlies this capability?',
+options:[
+'Voice is implemented via WebRTC audio capture in the web chat widget using the browser\'s Web Speech API — no Azure cloud services are required for basic voice functionality in Copilot Studio',
+'Copilot Studio integrates with Azure AI Speech (Speech-to-Text for transcription and Text-to-Speech for voice response synthesis) to enable voice channels — including telephony/IVR via Azure Communication Services or Nuance, Teams voice, and custom voice implementations — the user speaks, Azure Speech transcribes, the copilot\'s NLU and topics process the text, and the response is synthesised back to speech',
+'Copilot Studio voice is available only through Microsoft Teams Calling Plans — standalone web applications and IVR systems cannot use Copilot Studio voice without a Teams Phone System licence',
+'Voice capability in Copilot Studio requires uploading a custom ONNX acoustic model trained on the organisation\'s user population because default Azure Speech models have insufficient accuracy for enterprise deployments'
+],
+answer:1,
+explanation:'Voice enablement in Copilot Studio involves a pipeline of Azure AI services: Speech-to-Text (STT): When a user speaks (on phone, Teams voice, or web with microphone), Azure AI Speech transcribes the audio to text in real time. Supports 100+ languages and dialects. Text processing: The transcribed text passes through the same NLU and topic engine as any text input — no separate "voice NLU" needed. Text-to-Speech (TTS): The copilot\'s text response is converted to synthesised speech using Azure AI Speech TTS. Neural voices: Azure offers 400+ neural voices in 140+ languages with natural prosody. Organisations can select the voice that matches their brand (gender, accent, pace). SSML (Speech Synthesis Markup Language): Authors use SSML tags in message nodes to control speech output: <break time="1s"/> (pause), <emphasis>important part</emphasis>, <say-as interpret-as="telephone">0207 123 4567</say-as>. Voice channels: Telephony IVR: Azure Communication Services provides phone number + PSTN connectivity. Teams: Copilot Studio can be connected to Teams Phone System for voice-enabled meeting assistants. Custom voice apps: Direct integration via the Bot Framework DirectLine Speech SDK for custom voice apps.'},
+
+{lesson:'L11',lessonName:'Voice-Enabled Copilots',
+question:'What conversation design considerations are unique to voice copilots that do not apply to text-based copilot design?',
+options:[
+'Voice copilots require all responses to be under 10 words — longer responses are automatically truncated by Azure Speech Text-to-Speech before being spoken',
+'Voice copilots cannot use variables or conditions — they must follow a purely linear conversation path because branching logic causes audio synchronisation failures in telephony systems',
+'Voice copilot design must account for: response conciseness and natural spoken language (no bullet points, markdown, or hyperlinks that are meaningless when read aloud), absence of visual elements (no adaptive cards, images, or buttons), ears-only navigation without visual cues, handling speech recognition errors and barge-in (user interrupting the bot mid-speech), and DTMF keypad input as a fallback alternative to speech for critical choices',
+'Voice copilots require a separate Copilot Studio licence and are built on an entirely different platform — two completely separate copilot definitions must be maintained (one for text, one for voice) with no shared topic content between them'
+],
+answer:2,
+explanation:'Voice copilot UX design is fundamentally different from text design. Specific considerations: Concise responses: "Your order #12345 shipped November 28th via FedEx, tracking number 1Z999AA1012345678, expected delivery December 2nd" is fine as text. As voice, split into: "Your order shipped on November 28th by FedEx. Would you like the tracking number?" No markdown: "Here are your options:\n- Option 1\n- Option 2" reads out "Here are your options: backslash n hyphen Option 1 backslash n hyphen Option 2" in TTS. Write voice responses as natural sentences. No links or buttons: TTS would read "Click here: https://..." — use spoken menus instead: "For billing, say Billing or press 1. For technical support, say Support or press 2." Barge-in: Users may speak over the bot (barge-in / interruption). Configure Azure Speech to detect this and stop TTS playback immediately. Error recovery: "I didn\'t catch that" with context-specific rephrasing, not generic "Sorry, could you repeat?" DTMF: For critical paths (authorise payment of $500 — yes or no?), keypad input is more reliable than speech. Pause management: Use SSML <break> tags to add natural pauses between sentences. Confirmation patterns: Repeat back what was heard before taking action: "I heard $500. Shall I proceed?"'},
+
+{lesson:'L11',lessonName:'Voice-Enabled Copilots',
+question:'What is Azure Communication Services\' role in enabling Copilot Studio telephony and IVR replacement scenarios?',
+options:[
+'Azure Communication Services provides DNS hosting for the Copilot Studio web chat domain — it is not involved in telephony or voice scenarios for copilot deployments',
+'Azure Communication Services handles billing and metering for Copilot Studio message sessions — tracking usage and generating invoices but playing no role in voice signal processing',
+'Azure Communication Services is a code-only SDK for .NET developers to build custom telephony applications — it cannot be used with Copilot Studio\'s low-code authoring environment',
+'Azure Communication Services provides the telephony infrastructure — phone number provisioning, PSTN connectivity, and call routing — that connects incoming telephone calls to Copilot Studio copilots, enabling IVR replacement where callers dial a phone number, their speech is transcribed by Azure Speech, the copilot handles the dialogue, and synthesised voice responses are played back — all without the caller needing any app or internet connection'
+],
+answer:3,
+explanation:'Azure Communication Services (ACS) is Microsoft\'s cloud communications platform. In the Copilot Studio voice architecture: Phone number: ACS provisions a direct-inward-dialling (DID) phone number in the organisation\'s country. PSTN connectivity: When a customer dials that number, ACS routes the call. Call handling: ACS connects the audio stream to the Bot Framework / Copilot Studio copilot. Speech processing: Azure AI Speech STT transcribes the caller\'s voice in real time. Copilot processing: The transcribed text is processed by the copilot topics and NLU as normal. Response: The copilot\'s response text is converted to speech by Azure AI Speech TTS and played back to the caller. Business scenarios enabled: IVR replacement: "Press 1 for billing" → replaced by "How can I help you today?" with NLU-driven routing. Automated customer service: handle common calls (order status, appointment scheduling) without human agents. After-hours support: copilot handles calls 24/7; creates tickets or schedules callbacks. Agent augmentation: copilot handles first-tier; transfers complex calls to human agents via ACS call transfer API. Outbound calls: ACS also enables outbound copilot calls for reminders, appointment confirmations, surveys. The entire stack is integrated — no separate IVR platform needed.'},
+
+// ─── L12: Performance Analysis & Security (3 Qs) ─────────────────────
+{lesson:'L12',lessonName:'Performance Analysis & Security',
+question:'What built-in analytics and reporting capabilities does Copilot Studio provide for monitoring copilot performance?',
+options:[
+'Copilot Studio analytics are disabled by default and require Power Platform admin enablement — data is then exported to Azure Blob Storage for analysis using custom Python or R scripts',
+'Copilot Studio only provides raw conversation CSV transcript logs that must be imported manually into Power BI — there is no pre-built dashboard or embedded metric visualisation available to authors',
+'Copilot Studio analytics track only total message volume and unique user counts — deeper metrics like topic performance, escalation rates, and abandonment require a separate Azure Monitor workspace',
+'Copilot Studio provides a built-in analytics dashboard with: total sessions, engaged sessions, resolution rate, escalation rate, abandonment rate, CSAT scores, topic triggering frequency, conversation path analysis, and customer satisfaction trends — enabling authors to identify underperforming topics, high-escalation areas, and satisfaction drivers for continuous improvement without any external tool setup'
+],
+answer:3,
+explanation:'Copilot Studio Analytics (available at copilotstudio.microsoft.com → Analytics tab) provides comprehensive out-of-the-box reporting: Summary tab: Total sessions (conversations started), Engaged sessions (user exchanged more than one turn), Resolution rate (% of sessions ended as "Resolved" not escalated or abandoned), Escalation rate (% transferred to human), Abandonment rate (% where user left mid-conversation), CSAT (if customer satisfaction survey is configured at end of conversation). Topics tab: Which topics triggered most often (frequency), Resolution rate per topic (some topics resolve well, others don\'t), Escalation rate per topic (high escalation on a topic means it needs improvement), "Not triggered" metrics (topics that exist but no user ever triggers — may be irrelevant or have poor trigger phrases). Customer satisfaction tab: CSAT score trends over time, session-level satisfaction scores. Usage tab: Sessions by channel, sessions by time of day and day of week. Conversation analytics: Click on a session to see the full conversation transcript. Drill down to understand exactly where users dropped off. Action: Use analytics to prioritise improvements — focus on high-frequency + low-resolution topics first, as these have the biggest improvement ROI.'},
+
+{lesson:'L12',lessonName:'Performance Analysis & Security',
+question:'What authentication options does Copilot Studio support for controlling user access to copilots?',
+options:[
+'Copilot Studio supports three authentication configurations: No authentication (publicly accessible without sign-in, for anonymous public websites and external chatbots); Microsoft (Azure AD / Entra ID — users sign in with Microsoft accounts, enabling access to Microsoft Graph data and user-specific personalisation); and Custom OAuth 2.0 (configure any OAuth 2.0 provider — Okta, Auth0, ADFS — for organisations using non-Microsoft identity systems)',
+'Copilot Studio has only one authentication mode — mandatory Azure Active Directory — and has no option to create publicly accessible copilots for anonymous users or external-facing deployments',
+'Authentication in Copilot Studio is managed entirely through Azure API Management — the copilot itself has no authentication settings and relies on the API gateway for all identity validation',
+'The three authentication options in Copilot Studio are: Password (stored in Dataverse), Biometric (Windows Hello facial recognition), and Client Certificate — following standard enterprise multi-factor authentication patterns'
+],
+answer:0,
+explanation:'Copilot Studio authentication (Settings → Security → Authentication): Option 1 — No authentication: The copilot is publicly accessible without any sign-in. The copilot has no knowledge of who the user is. Use cases: public-facing customer service bot (anyone who visits the website), anonymous product FAQ. Limitation: cannot personalise with user-specific data (no access to the user\'s orders, account, etc.). Option 2 — Authenticate with Microsoft (Azure AD / Entra ID): Users are prompted to sign in with their Microsoft account (Teams handles this automatically for Teams-embedded copilots). After authentication, the copilot receives the user\'s Azure AD identity: System.User.DisplayName, System.User.Id, System.User.Email. The copilot can use Microsoft Graph to access the user\'s calendar, emails, Teams messages (with consented scopes). Use cases: internal IT helpdesk (knows which user is asking), HR copilot (retrieves the user\'s leave balance from HR system using their employee ID). Option 3 — Custom OAuth 2.0: For organisations using Okta, Auth0, Ping Identity, or ADFS. Configure the OpenID Connect endpoints, client ID, and scopes. The copilot performs the OAuth flow and receives an ID token. Use cases: customer-facing copilots where customers have accounts in a non-Microsoft identity system. Note: When a copilot calls Power Automate flows, the flows run under the connection credentials (service account), separate from the end-user authentication.'},
+
+{lesson:'L12',lessonName:'Performance Analysis & Security',
+question:'What is a Data Loss Prevention (DLP) policy in the Power Platform context and how does it govern what Copilot Studio copilots can do?',
+options:[
+'DLP policies automatically encrypt all conversation data with AES-256 and prevent conversation content from being stored in any logs — mandatory for all regulated industry deployments',
+'DLP policies are Power Platform governance rules configured by admins in the Power Platform admin centre that control which connectors copilots and flows can use — grouping connectors into "Business" and "Non-Business" buckets and blocking copilots from mixing data from sensitive business connectors with non-business consumer connectors',
+'DLP policies are topic-level content filters preventing authors from creating topics containing competitor product names, legal disclaimers, or regulated financial advice content',
+'DLP scans all knowledge source documents for PII before indexing, redacting personal data so it cannot appear in copilot generative answers — implemented automatically with no configuration needed'
+],
+answer:1,
+explanation:'DLP policies are the Power Platform administrator\'s primary tool for data governance. How they work: Classification: Admins classify every available connector into one of two groups: Business (sensitive data, trusted): Microsoft 365 (SharePoint, Outlook, Teams), Dynamics 365, Salesforce, ServiceNow, Azure services. Non-Business (consumer services, lower trust): Twitter, Facebook, Dropbox, personal Gmail, consumer apps. Isolation: A single copilot (or its connected Power Automate flow) cannot mix Business and Non-Business connectors in the same solution. Practical example: You don\'t want a copilot that has access to Dynamics 365 customer data (Business) to also be able to post to Twitter (Non-Business) — the risk being that customer data could be accidentally or maliciously exfiltrated to a public social media platform. A DLP policy blocking this combination enforces the data boundary. Application to Copilot Studio: If an admin creates a DLP policy that classifies Twitter as Non-Business and SharePoint as Business, any Copilot Studio copilot flow that tries to use both will be blocked — the flow will fail to save with a DLP violation error. Scope: DLP policies can be applied at tenant level (all environments), a specific environment, or a subset of environments. This gives organisations granular control — strict policies in Production, more permissive in sandbox.'},
+
+// ─── L13: Responsible AI in Copilot Studio (3 Qs) ────────────────────
+{lesson:'L13',lessonName:'Responsible AI in Copilot Studio',
+question:'What are Microsoft\'s responsible AI principles and how are they practically reflected in Copilot Studio\'s design and features?',
+options:[
+'Microsoft\'s responsible AI for Copilot Studio is enforced solely by mandatory Microsoft engineer code review before any copilot can be published — automated safeguards are not used in the platform',
+'Responsible AI in Copilot Studio is implemented only through the content filter setting blocking explicit adult content — no other ethical AI principles are technically enforced in the platform',
+'Microsoft\'s responsible AI principles (Fairness, Reliability, Privacy, Inclusiveness, Transparency, and Accountability) are embedded in Copilot Studio through: built-in content safety filters blocking harmful outputs, source citations in generative answers (transparency), configurable conversation logging and data retention controls (privacy), the published Responsible AI FAQ for each AI feature, audit logging for accountability, and the requirement to acknowledge responsible AI guidelines before enabling certain AI features',
+'Responsible AI in Copilot Studio requires purchasing the "Microsoft AI Ethics" add-on licence — without it, none of the fairness, privacy, or transparency features are activated in the environment'
+],
+answer:2,
+explanation:'Microsoft\'s responsible AI framework (RAI) has six principles with concrete Copilot Studio implementations: Fairness: The NLU engine is trained to avoid biased intent recognition across demographic groups. Content moderation treats all users consistently. Reliability & Safety: Built-in content safety filters (Azure AI Content Safety) prevent harmful outputs. Circuit-breaker patterns in escalation prevent users from being stranded. Privacy: Conversation logging is configurable — organisations can disable logging for sensitive deployments. Data residency: Power Platform environments store data in configured geographic regions. Compliance certifications (ISO 27001, SOC2, GDPR alignment). Inclusiveness: Support for 100+ languages. Accessibility: the web chat widget meets WCAG 2.1 AA standards for screen readers and keyboard navigation. Voice channels for users who prefer or need audio interaction. Transparency: Generative Answers cites source documents — users can verify where answers came from. Responsible AI FAQs published for every AI feature. Prompt inspection tools for administrators. Accountability: Azure Active Directory audit logs track who published copilots, who changed settings. Power Platform admin centre provides tenant-wide copilot governance visibility. DLP policies enforce organisational data policies. Environment-level admin controls for what authors can do.'},
+
+{lesson:'L13',lessonName:'Responsible AI in Copilot Studio',
+question:'What is "grounding" in the context of responsible generative AI in Copilot Studio and why is it critical for reliable copilot behaviour?',
+options:[
+'Grounding is the CSS positioning property anchoring the chat widget to the corner of a web page — preventing the bubble from overlapping with other page UI elements',
+'Grounding is a Power Platform licensing requirement mandating each copilot message be processed through a certified Azure data centre in the organisation\'s home country for data sovereignty compliance',
+'Grounding is a performance optimisation pre-caching frequently asked questions in Azure Redis Cache to reduce response latency for the most common copilot queries',
+'Grounding connects the copilot\'s generative AI responses to specific, verified knowledge sources — SharePoint documents, websites, Dataverse records — rather than allowing GPT to generate from its general pre-trained knowledge alone, reducing hallucination and ensuring responses are traceable to authoritative organisational content rather than potentially outdated or inaccurate general internet knowledge'
+],
+answer:3,
+explanation:'Grounding is the most important concept for responsible deployment of generative AI in enterprise copilots. The problem with ungrounded generation: GPT\'s pre-training data is from 2021 and general internet sources. If asked "What is our company\'s refund policy?", an ungrounded copilot might make up a plausible-sounding but entirely wrong policy. Even for factual questions ("What is the capital of France?"), ungrounded generation cannot be verified for accuracy in production. Grounding in Copilot Studio: Knowledge sources are configured (SharePoint policy documents, product manuals, HR handbook). When a question is asked, the copilot retrieves relevant chunks from these sources using semantic search. GPT synthesises a response using ONLY the retrieved content — instructed to answer only from the provided context. Source citations are shown: "According to the HR Handbook (Section 4.2): you are entitled to 25 days annual leave." Why grounding is a responsible AI requirement: Accuracy: responses are based on verified organisational content, not hallucinated from general knowledge. Auditability: every answer cites its source — administrators can trace where an answer came from. Currency: updating the SharePoint document updates the copilot\'s knowledge without retraining. Trust: users can verify claims by following the citation link. Scope control: the copilot only knows what you have authorised it to know.'},
+
+{lesson:'L13',lessonName:'Responsible AI in Copilot Studio',
+question:'What processes should organisations implement for "human oversight" of deployed copilot systems as part of responsible AI governance?',
+options:[
+'Responsible AI governance includes: configuring escalation to human agents for sensitive or unresolvable queries (keeping humans in the loop for high-stakes decisions), regularly reviewing analytics and conversation transcripts to identify errors or harmful outputs, establishing content review processes for knowledge sources before publication, collecting CSAT feedback from users, and defining clear escalation paths so users always know how to reach a human when needed',
+'Human oversight means requiring a human agent to approve every copilot response before it is sent to the user — all messages pass through a moderation queue reviewed by a staff member before delivery',
+'Human oversight is only required for copilots in regulated industries like healthcare and finance — consumer-facing retail and entertainment copilots are fully exempt from oversight requirements',
+'Human oversight is automated by Microsoft using AI monitoring that automatically flags problematic responses and takes corrective action without any involvement from the organisation\'s administrators'
+],
+answer:0,
+explanation:'Responsible AI governance for copilots requires ongoing human oversight — not just at build time but throughout the copilot\'s life in production: Escalation design (humans in the loop): Configure the Escalate system topic to ensure users can always reach a human agent for complex or sensitive queries. For high-stakes actions (e.g., "cancel my subscription", "process a refund of $5,000"), route for human confirmation rather than automating fully. Analytics review: Weekly or monthly review of the Analytics dashboard: High escalation-rate topics → likely failing to resolve — improve topic content or add Generative Answers. High abandonment rate → users give up → conversation design issue. Low CSAT topics → user dissatisfied with that topic — investigate. Conversation transcript sampling: Randomly review actual conversation transcripts monthly. Flag problematic copilot responses (hallucinations, inappropriate content, incorrect information). Track failure modes and improve. Knowledge source governance: Before publishing new knowledge sources (documents, SharePoint sites), review for accuracy, currency, and appropriateness. Remove outdated documents. Designate content owners for each knowledge source. Feedback mechanisms: Enable the CSAT survey. Add a "Was this helpful? Yes/No" adaptive card at the end of topics. Review feedback regularly. Incident process: Define what happens if a copilot produces a harmful or incorrect response. Who is notified? Who can take it offline? How quickly?'}
+
+]; // end QUESTIONS
+
+// ════════════════════════════════
+//  ENGINE
+// ════════════════════════════════
+const TOTAL=QUESTIONS.length; // 45
+
+let state={questions:[],currentIdx:0,userAnswers:[],shuffledOptions:[],shuffledAnswers:[],flagged:[],answered:[],startTime:null,endTime:null,timerInterval:null,tabSwitches:0,submitted:false};
+
+function shuffleArray(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function startTest(){
+  state.questions=[...QUESTIONS];state.currentIdx=0;
+  state.userAnswers=new Array(TOTAL).fill(-1);state.flagged=new Array(TOTAL).fill(false);
+  state.answered=new Array(TOTAL).fill(false);state.submitted=false;state.tabSwitches=0;state.startTime=Date.now();
+  state.shuffledOptions=[];state.shuffledAnswers=[];
+  state.questions.forEach(q=>{const ct=q.options[q.answer];const sh=shuffleArray(q.options);state.shuffledOptions.push(sh);state.shuffledAnswers.push(sh.indexOf(ct));});
+  showScreen('quiz');document.getElementById('quizHeader').classList.add('active');buildNavGrid();renderQuestion();startTimer();
+}
+
+function startTimer(){clearInterval(state.timerInterval);state.timerInterval=setInterval(()=>{const e=Math.floor((Date.now()-state.startTime)/1000);document.getElementById('timer').textContent=`${String(Math.floor(e/60)).padStart(2,'0')}:${String(e%60).padStart(2,'0')}`;},1000);}
+
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+
+function renderQuestion(){
+  const idx=state.currentIdx,q=state.questions[idx];
+  const opts=state.shuffledOptions[idx],cs=state.shuffledAnswers[idx],uc=state.userAnswers[idx],ia=state.answered[idx];
+  document.getElementById('qNum').textContent=idx+1;document.getElementById('qCounterNum').textContent=idx+1;
+  document.getElementById('qLessonTag').textContent=q.lesson;
+  const bf=document.getElementById('btnFlag');bf.className='btn-flag'+(state.flagged[idx]?' flagged':'');bf.innerHTML=state.flagged[idx]?'🚩 Flagged':'🏳 Flag';
+  document.getElementById('qText').textContent=q.question;
+  const letters=['A','B','C','D'];const ol=document.getElementById('optionsList');ol.innerHTML='';
+  opts.forEach((ot,i)=>{const btn=document.createElement('button');btn.className='option-btn';
+    if(ia){btn.disabled=true;if(i===cs)btn.classList.add('correct');else if(i===uc)btn.classList.add('wrong');}
+    else if(i===uc)btn.classList.add('selected');
+    btn.innerHTML=`<span class="opt-letter">${letters[i]}</span><span>${ot}</span>`;
+    if(!ia)btn.onclick=()=>selectAnswer(i);ol.appendChild(btn);});
+  const eb=document.getElementById('explanationBox');
+  if(ia){const ok=uc===cs;eb.className='explanation-box visible'+(ok?'':' wrong-exp');eb.innerHTML=`<strong>${ok?'✅ Correct!':'❌ Incorrect'}</strong>${q.explanation}`;}
+  else{eb.className='explanation-box';eb.innerHTML='';}
+  document.getElementById('btnPrev').style.display=idx===0?'none':'';
+  const il=idx===TOTAL-1;document.getElementById('btnNext').style.display=il?'none':'';
+  document.getElementById('lastQMsg').style.display=il?'block':'none';updateNavGrid();
+}
+
+function selectAnswer(i){const idx=state.currentIdx;if(state.answered[idx])return;state.userAnswers[idx]=i;state.answered[idx]=true;renderQuestion();}
+function toggleFlag(){state.flagged[state.currentIdx]=!state.flagged[state.currentIdx];renderQuestion();}
+function goToNext(){if(state.currentIdx<TOTAL-1){state.currentIdx++;renderQuestion();}}
+function goToPrev(){if(state.currentIdx>0){state.currentIdx--;renderQuestion();}}
+function jumpTo(i){state.currentIdx=i;renderQuestion();}
+
+function buildNavGrid(){
+  const g=document.getElementById('navGrid');g.innerHTML='';
+  for(let i=0;i<TOTAL;i++){const d=document.createElement('div');d.className='nav-dot';d.textContent=i+1;d.id=`navDot${i}`;d.onclick=()=>jumpTo(i);g.appendChild(d);}
+}
+function updateNavGrid(){
+  for(let i=0;i<TOTAL;i++){const d=document.getElementById(`navDot${i}`);if(!d)continue;d.className='nav-dot';
+    if(i===state.currentIdx)d.classList.add('current');
+    else if(state.submitted){if(state.answered[i])d.classList.add(state.userAnswers[i]===state.shuffledAnswers[i]?'correct-nav':'wrong-nav');}
+    else if(state.flagged[i])d.classList.add('flagged');
+    else if(state.answered[i])d.classList.add('answered');}
+}
+
+function openSubmitModal(){document.getElementById('submitModal').classList.add('show');}
+function closeSubmitModal(){document.getElementById('submitModal').classList.remove('show');}
+
+function submitExam(){
+  closeSubmitModal();clearInterval(state.timerInterval);state.endTime=Date.now();state.submitted=true;
+  document.getElementById('quizHeader').classList.remove('active');document.getElementById('tabWarning').classList.remove('show');
+  updateNavGrid();computeResults();showScreen('results');
+}
+
+function computeResults(){
+  let correct=0,wrong=0,skipped=0;const lm={};
+  state.questions.forEach((q,i)=>{
+    if(!lm[q.lesson])lm[q.lesson]={name:q.lessonName,total:0,correct:0};
+    lm[q.lesson].total++;
+    if(!state.answered[i]){skipped++;return;}
+    if(state.userAnswers[i]===state.shuffledAnswers[i]){correct++;lm[q.lesson].correct++;}else wrong++;
+  });
+  const pct=Math.round((correct/TOTAL)*100);const e=Math.floor((state.endTime-state.startTime)/1000);
+  document.getElementById('scorePct').textContent=`${pct}%`;document.getElementById('rCorrect').textContent=`${correct} / ${TOTAL}`;
+  document.getElementById('rTime').textContent=`${String(Math.floor(e/60)).padStart(2,'0')}:${String(e%60).padStart(2,'0')}`;
+  document.getElementById('rWrong').textContent=wrong;document.getElementById('rSkipped').textContent=skipped;
+  document.getElementById('scoreRing').className='score-ring '+(pct>=70?'pass':'fail');
+  document.getElementById('resultsTitle').textContent=pct>=70?`✅ Well done! ${pct}% — Module 13 Complete`:`📘 Keep practising — ${pct}% — Review & Retry`;
+  const bd=document.getElementById('lessonBreakdown');bd.innerHTML='';
+  Object.entries(lm).forEach(([tag,data])=>{
+    const pl=Math.round((data.correct/data.total)*100);const bc=pl>=70?'':pl>=40?' ok':' bad';
+    bd.innerHTML+=`<div class="lesson-row"><div class="lr-tag">${tag}</div><div class="lr-name">${data.name}</div><div class="lr-bar-wrap"><div class="lr-bar${bc}" style="width:${pl}%"></div></div><div class="lr-score">${data.correct}/${data.total}</div></div>`;
+  });
+}
+
+function showReview(){
+  const letters=['A','B','C','D'];const c=document.getElementById('reviewCards');c.innerHTML='';
+  state.questions.forEach((q,i)=>{
+    const opts=state.shuffledOptions[i],cs=state.shuffledAnswers[i],uc=state.userAnswers[i],ia=state.answered[i];
+    const ok=ia&&uc===cs;const badge=ia?(ok?'correct':'wrong'):'skipped';const bt=ia?(ok?'✅ Correct':'❌ Incorrect'):'⏭ Skipped';
+    let oh='';
+    opts.forEach((o,j)=>{let cl='rc-option';if(j===cs)cl+=' correct-ans';else if(ia&&j===uc)cl+=' user-wrong';oh+=`<div class="${cl}"><span class="opt-l">${letters[j]}</span><span>${o}</span></div>`;});
+    c.innerHTML+=`<div class="review-card"><div class="rc-meta"><div class="rc-num">Q${i+1}</div><div class="rc-lesson">${q.lesson} · ${q.lessonName}</div><div class="rc-badge ${badge}">${bt}</div></div><div class="rc-question">${q.question}</div><div class="rc-options">${oh}</div><div class="rc-exp"><strong>💡 Explanation</strong>${q.explanation}</div></div>`;
+  });showScreen('review');
+}
+function showResults(){showScreen('results');}
+function retakeTest(){startTest();}
+
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden&&!state.submitted&&state.startTime){
+    state.tabSwitches++;document.getElementById('tabCount').textContent=state.tabSwitches;
+    document.getElementById('tabWarning').classList.add('show');
+    setTimeout(()=>document.getElementById('tabWarning').classList.remove('show'),5000);
+  }
+});
+</script>
+</body>
+</html>

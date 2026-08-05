@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>M11 Practice Test · Azure AI/ML · K21 Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy:#1A1248; --navy-mid:#2E2080; --green:#8DC63F; --green-hover:#79B030;
+    --green-tint:#F1F8E8; --blue:#1B9BD9; --blue-tint:#EBF6FD;
+    --page-bg:#F7F8FA; --card:#FFFFFF; --border:#E8EAEE;
+    --text-primary:#111827; --text-secondary:#4B5563; --text-muted:#9CA3AF;
+    --red:#EF4444; --red-tint:#FEF2F2; --amber:#F59E0B; --amber-tint:#FFFBEB;
+    --purple:#7C3AED; --purple-tint:#F5F3FF;
+    --radius:14px; --radius-sm:8px;
+    --shadow:0 1px 4px rgba(0,0,0,.06); --shadow-md:0 4px 16px rgba(0,0,0,.10);
+  }
+  html{scroll-behavior:smooth;}
+  body{font-family:'DM Sans',sans-serif;background:var(--page-bg);color:var(--text-primary);min-height:100vh;}
+  .site-header{background:var(--navy);padding:14px 24px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:200;}
+  .logo-mark{width:34px;height:34px;background:var(--green);border-radius:8px;display:grid;place-items:center;font-weight:800;font-size:15px;color:#fff;flex-shrink:0;}
+  .logo-text{font-size:17px;font-weight:700;color:#fff;} .logo-text span{color:var(--green);}
+  .header-sub{margin-left:auto;font-size:12px;color:rgba(255,255,255,0.55);font-weight:500;text-align:right;line-height:1.4;}
+  .quiz-header{display:none;background:var(--navy);border-top:1px solid rgba(255,255,255,0.08);padding:10px 24px;align-items:center;gap:12px;position:sticky;top:62px;z-index:199;}
+  .quiz-header.active{display:flex;}
+  .q-counter{font-size:14px;font-weight:600;color:rgba(255,255,255,0.9);} .q-counter span{color:var(--green);}
+  .btn-submit-top{margin-left:auto;background:var(--green);color:#fff;border:none;border-radius:var(--radius-sm);padding:7px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s;}
+  .btn-submit-top:hover{background:var(--green-hover);}
+  .timer{font-size:14px;font-weight:600;color:rgba(255,255,255,0.8);background:rgba(255,255,255,0.08);padding:5px 12px;border-radius:20px;font-variant-numeric:tabular-nums;}
+  .screen{display:none;} .screen.active{display:block;}
+  .landing-tag{display:inline-flex;align-items:center;gap:6px;background:var(--green-tint);color:var(--green-hover);font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;margin-bottom:18px;}
+  .landing-title{font-size:clamp(22px,5vw,36px);font-weight:800;color:var(--navy);line-height:1.2;margin-bottom:14px;}
+  .landing-title span{color:var(--green);}
+  .landing-desc{font-size:15px;color:var(--text-secondary);line-height:1.65;max-width:660px;margin-bottom:28px;}
+  .stats-row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:28px;}
+  .stat-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:14px 20px;text-align:center;flex:1;min-width:110px;}
+  .stat-num{font-size:24px;font-weight:800;color:var(--navy);} .stat-label{font-size:12px;color:var(--text-muted);font-weight:500;margin-top:2px;}
+  .section-label{font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;margin-top:22px;display:flex;align-items:center;gap:8px;}
+  .section-label::after{content:'';flex:1;height:1px;background:var(--border);}
+  .section-pip{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+  .lessons-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-bottom:6px;}
+  .lesson-chip{background:var(--card);border:1.5px solid var(--border);border-radius:10px;padding:10px 13px;display:flex;align-items:center;gap:8px;}
+  .lesson-badge{width:26px;height:26px;border-radius:6px;font-size:10px;font-weight:700;display:grid;place-items:center;flex-shrink:0;}
+  .lesson-badge.cv{background:var(--blue-tint);color:var(--blue);} .lesson-badge.di{background:var(--purple-tint);color:var(--purple);}
+  .lesson-chip-text{font-size:12px;font-weight:600;color:var(--text-primary);line-height:1.3;}
+  .btn-start{background:var(--navy);color:#fff;border:none;border-radius:var(--radius);padding:16px 36px;font-size:17px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s,transform .15s;display:inline-flex;align-items:center;gap:10px;margin-top:24px;}
+  .btn-start:hover{background:var(--navy-mid);transform:translateY(-2px);}
+  .hint-text{margin-top:14px;font-size:13px;color:var(--text-muted);} .hint-text span{color:var(--blue);}
+  #quiz{max-width:840px;margin:0 auto;padding:24px 20px 80px;}
+  .quiz-layout{display:grid;grid-template-columns:1fr 250px;gap:20px;align-items:start;}
+  @media(max-width:740px){.quiz-layout{grid-template-columns:1fr;}}
+  .question-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow);}
+  .q-meta{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap;}
+  .q-num{font-size:13px;font-weight:600;color:var(--text-muted);}
+  .q-lesson-tag{font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;background:var(--blue-tint);color:var(--blue);}
+  .q-lesson-tag.di-tag{background:var(--purple-tint);color:var(--purple);}
+  .btn-flag{margin-left:auto;font-size:12px;font-weight:600;color:var(--text-muted);border:1.5px solid var(--border);background:none;border-radius:20px;padding:4px 12px;cursor:pointer;font-family:inherit;transition:all .15s;display:flex;align-items:center;gap:5px;}
+  .btn-flag.flagged{background:var(--amber-tint);color:var(--amber);border-color:var(--amber);}
+  .q-text{font-size:17px;font-weight:600;line-height:1.55;color:var(--text-primary);margin-bottom:22px;}
+  .options-list{display:flex;flex-direction:column;gap:10px;margin-bottom:22px;}
+  .option-btn{background:#fff;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:13px 16px;text-align:left;cursor:pointer;font-family:inherit;font-size:14.5px;color:var(--text-primary);line-height:1.45;display:flex;align-items:flex-start;gap:12px;transition:all .15s;font-weight:500;}
+  .option-btn:hover:not(:disabled){border-color:var(--navy);background:rgba(26,18,72,.03);}
+  .option-btn .opt-letter{width:24px;height:24px;border-radius:6px;background:var(--page-bg);border:1.5px solid var(--border);display:grid;place-items:center;font-size:11px;font-weight:700;color:var(--text-muted);flex-shrink:0;margin-top:1px;transition:all .15s;}
+  .option-btn.selected .opt-letter{background:var(--navy);border-color:var(--navy);color:#fff;}
+  .option-btn.selected{border-color:var(--navy);background:rgba(26,18,72,.04);}
+  .option-btn.correct{border-color:var(--green);background:var(--green-tint);}
+  .option-btn.correct .opt-letter{background:var(--green);border-color:var(--green);color:#fff;}
+  .option-btn.wrong{border-color:var(--red);background:var(--red-tint);}
+  .option-btn.wrong .opt-letter{background:var(--red);border-color:var(--red);color:#fff;}
+  .option-btn:disabled{cursor:default;}
+  .explanation-box{background:var(--green-tint);border:1.5px solid #c3e289;border-radius:var(--radius-sm);padding:14px 16px;font-size:13.5px;line-height:1.6;color:#3D6B15;display:none;margin-bottom:16px;}
+  .explanation-box strong{display:block;margin-bottom:4px;font-weight:700;}
+  .explanation-box.visible{display:block;}
+  .explanation-box.wrong-exp{background:var(--red-tint);border-color:#fca5a5;color:#7F1D1D;}
+  .nav-row{display:flex;gap:10px;align-items:center;}
+  .btn-nav{background:var(--page-bg);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:10px 18px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--text-primary);transition:all .15s;}
+  .btn-nav:hover{border-color:var(--navy);color:var(--navy);}
+  .btn-nav.primary{background:var(--navy);color:#fff;border-color:var(--navy);margin-left:auto;}
+  .btn-nav.primary:hover{background:var(--navy-mid);}
+  .last-q-msg{font-size:12.5px;color:var(--text-muted);text-align:center;display:none;flex:1;}
+  .nav-panel{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);position:sticky;top:128px;}
+  .nav-panel h4{font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;}
+  .nav-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:14px;}
+  .nav-dot{width:34px;height:34px;border-radius:7px;border:1.5px solid var(--border);background:#fff;font-size:11px;font-weight:700;color:var(--text-muted);display:grid;place-items:center;cursor:pointer;transition:all .15s;}
+  .nav-dot:hover{border-color:var(--navy);color:var(--navy);}
+  .nav-dot.current{border-color:var(--navy);background:var(--navy);color:#fff;}
+  .nav-dot.answered{background:var(--green-tint);border-color:var(--green);color:#3D6B15;}
+  .nav-dot.flagged{background:var(--amber-tint);border-color:var(--amber);color:var(--amber);}
+  .nav-dot.correct-nav{background:var(--green);border-color:var(--green);color:#fff;}
+  .nav-dot.wrong-nav{background:var(--red);border-color:var(--red);color:#fff;}
+  .nav-divider{grid-column:1/-1;height:1px;background:var(--border);margin:3px 0;}
+  .nav-section-label{grid-column:1/-1;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.4px;margin-top:2px;}
+  .nav-legend{font-size:11px;color:var(--text-muted);display:flex;flex-direction:column;gap:4px;}
+  .legend-item{display:flex;align-items:center;gap:6px;}
+  .legend-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
+  .results-header{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:32px;box-shadow:var(--shadow-md);margin-bottom:20px;text-align:center;}
+  .score-ring{width:110px;height:110px;border-radius:50%;border:7px solid var(--border);margin:0 auto 18px;display:grid;place-items:center;}
+  .score-ring.pass{border-color:var(--green);} .score-ring.fail{border-color:var(--red);}
+  .score-pct{font-size:30px;font-weight:800;color:var(--navy);}
+  .score-label{font-size:12px;color:var(--text-muted);font-weight:500;margin-top:-2px;}
+  .results-title{font-size:21px;font-weight:800;color:var(--navy);margin-bottom:6px;}
+  .results-sub{font-size:14px;color:var(--text-secondary);margin-bottom:22px;}
+  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px;}
+  @media(max-width:560px){.stats-grid{grid-template-columns:repeat(2,1fr);}}
+  .r-stat{background:var(--page-bg);border-radius:var(--radius-sm);padding:14px;text-align:center;}
+  .r-stat-val{font-size:20px;font-weight:800;color:var(--navy);}
+  .r-stat-key{font-size:11px;color:var(--text-muted);font-weight:500;margin-top:2px;}
+  .results-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+  .btn-results{padding:11px 22px;border-radius:var(--radius-sm);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;}
+  .btn-results.primary{background:var(--navy);color:#fff;border:none;} .btn-results.primary:hover{background:var(--navy-mid);}
+  .btn-results.secondary{background:#fff;color:var(--navy);border:1.5px solid var(--border);} .btn-results.secondary:hover{border-color:var(--navy);}
+  .lesson-breakdown{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);margin-bottom:20px;}
+  .breakdown-title{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:16px;}
+  .breakdown-section{font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin:14px 0 8px;}
+  .lesson-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .lesson-row:last-child{margin-bottom:0;}
+  .lr-tag{font-size:11px;font-weight:700;padding:3px 7px;border-radius:20px;flex-shrink:0;min-width:28px;text-align:center;}
+  .lr-tag.cv{background:var(--blue-tint);color:var(--blue);} .lr-tag.di{background:var(--purple-tint);color:var(--purple);}
+  .lr-name{font-size:13px;font-weight:500;color:var(--text-primary);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .lr-bar-wrap{width:100px;height:7px;background:var(--border);border-radius:4px;overflow:hidden;flex-shrink:0;}
+  .lr-bar{height:100%;border-radius:4px;background:var(--green);}
+  .lr-bar.bad{background:var(--red);} .lr-bar.ok{background:var(--amber);}
+  .lr-score{font-size:13px;font-weight:700;color:var(--text-secondary);width:38px;text-align:right;flex-shrink:0;}
+  .review-header{display:flex;align-items:center;gap:12px;margin-bottom:22px;flex-wrap:wrap;}
+  .review-title{font-size:20px;font-weight:800;color:var(--navy);} .review-sub{font-size:13px;color:var(--text-muted);}
+  .btn-back{background:var(--page-bg);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:9px 16px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--text-secondary);transition:all .15s;margin-left:auto;}
+  .btn-back:hover{border-color:var(--navy);color:var(--navy);}
+  .review-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:22px;margin-bottom:14px;box-shadow:var(--shadow);}
+  .rc-meta{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+  .rc-num{font-size:12px;font-weight:700;color:var(--text-muted);}
+  .rc-lesson{font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;}
+  .rc-lesson.cv{background:var(--blue-tint);color:var(--blue);} .rc-lesson.di{background:var(--purple-tint);color:var(--purple);}
+  .rc-badge{font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px;}
+  .rc-badge.correct{background:var(--green-tint);color:#3D6B15;} .rc-badge.wrong{background:var(--red-tint);color:var(--red);} .rc-badge.skipped{background:var(--amber-tint);color:var(--amber);}
+  .rc-question{font-size:15px;font-weight:600;color:var(--text-primary);margin-bottom:14px;line-height:1.5;}
+  .rc-options{display:flex;flex-direction:column;gap:7px;margin-bottom:14px;}
+  .rc-option{padding:9px 14px;border-radius:var(--radius-sm);font-size:13.5px;display:flex;align-items:flex-start;gap:10px;border:1.5px solid var(--border);}
+  .rc-option.correct-ans{border-color:var(--green);background:var(--green-tint);color:#3D6B15;}
+  .rc-option.user-wrong{border-color:var(--red);background:var(--red-tint);color:var(--red);}
+  .rc-option .opt-l{font-weight:700;font-size:12px;width:18px;flex-shrink:0;margin-top:1px;}
+  .rc-exp{background:var(--page-bg);border-left:3px solid var(--green);padding:12px 14px;border-radius:0 var(--radius-sm) var(--radius-sm) 0;font-size:13px;line-height:1.6;color:var(--text-secondary);}
+  .rc-exp strong{color:var(--navy);font-weight:700;display:block;margin-bottom:3px;}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:999;display:none;place-items:center;}
+  .modal-overlay.show{display:grid;}
+  .modal{background:#fff;border-radius:var(--radius);padding:28px;max-width:380px;width:90%;box-shadow:var(--shadow-md);text-align:center;}
+  .modal h3{font-size:18px;font-weight:700;color:var(--navy);margin-bottom:8px;}
+  .modal p{font-size:14px;color:var(--text-secondary);margin-bottom:22px;line-height:1.5;}
+  .modal-btns{display:flex;gap:10px;justify-content:center;}
+  .btn-modal{padding:10px 22px;border-radius:var(--radius-sm);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
+  .btn-modal.cancel{background:var(--page-bg);border:1.5px solid var(--border);color:var(--text-primary);}
+  .btn-modal.confirm{background:var(--navy);color:#fff;border:none;}
+  .tab-warning{background:var(--red);color:#fff;text-align:center;padding:8px 16px;font-size:13px;font-weight:600;display:none;position:sticky;top:110px;z-index:198;}
+  .tab-warning.show{display:block;}
+  .retake-row{display:flex;justify-content:center;gap:10px;margin-top:12px;flex-wrap:wrap;}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="logo-mark">K21</div>
+  <div class="logo-text">K21 <span>Academy</span></div>
+  <div class="header-sub">Azure AI/ML Job Focus Program<br/>Module 11 · Practice Test</div>
+</header>
+<div class="quiz-header" id="quizHeader">
+  <div class="q-counter">M11: Computer Vision, Doc Intelligence &amp; Knowledge &nbsp;·&nbsp; Q <span id="qCounterNum">1</span> / 40</div>
+  <div class="timer" id="timer">00:00</div>
+  <button class="btn-submit-top" onclick="openSubmitModal()">📋 Submit Exam</button>
+</div>
+<div class="tab-warning" id="tabWarning">⚠️ Tab switch detected! Return to the test. Attempts: <span id="tabCount">0</span></div>
+
+<!-- LANDING -->
+<div id="landing" class="screen active">
+  <div style="max-width:800px;margin:0 auto;padding:40px 20px 60px;">
+    <div class="landing-tag">📋 Azure AI/ML · K21 Academy</div>
+    <h1 class="landing-title">Computer Vision, Doc Intelligence<br/><span>&amp; Knowledge — Module 11</span></h1>
+    <p class="landing-desc">Test your understanding across all 11 lessons in Module 11. Covers computer vision fundamentals, Azure AI Vision capabilities, image analysis, face detection, image classification, Video Indexer, Azure AI Document Intelligence, custom document models, custom AI Search skills, knowledge stores, and intelligent search implementation — with full explanations after every answer.</p>
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-num">📝 40</div><div class="stat-label">Questions</div></div>
+      <div class="stat-card"><div class="stat-num">📚 11</div><div class="stat-label">Lessons</div></div>
+      <div class="stat-card"><div class="stat-num">🔄 ∞</div><div class="stat-label">Retries</div></div>
+    </div>
+    <div class="section-label"><div class="section-pip" style="background:var(--blue);"></div>Computer Vision · Lessons 1–6</div>
+    <div class="lessons-grid">
+      <div class="lesson-chip"><div class="lesson-badge cv">L1</div><div class="lesson-chip-text">Fundamentals of Computer Vision</div></div>
+      <div class="lesson-chip"><div class="lesson-badge cv">L2</div><div class="lesson-chip-text">Computer Vision Capabilities in Azure</div></div>
+      <div class="lesson-chip"><div class="lesson-badge cv">L3</div><div class="lesson-chip-text">Image Analysis — Azure AI Vision</div></div>
+      <div class="lesson-chip"><div class="lesson-badge cv">L4</div><div class="lesson-chip-text">Detecting Faces with Azure AI Vision</div></div>
+      <div class="lesson-chip"><div class="lesson-badge cv">L5</div><div class="lesson-chip-text">Image Classification with Azure AI Vision</div></div>
+      <div class="lesson-chip"><div class="lesson-badge cv">L6</div><div class="lesson-chip-text">Analyzing Videos Using Video Indexer</div></div>
+    </div>
+    <div class="section-label" style="margin-top:18px;"><div class="section-pip" style="background:var(--purple);"></div>Document Intelligence &amp; Knowledge · Lessons 7–11</div>
+    <div class="lessons-grid">
+      <div class="lesson-chip"><div class="lesson-badge di">L7</div><div class="lesson-chip-text">Azure AI Document Intelligence Solution</div></div>
+      <div class="lesson-chip"><div class="lesson-badge di">L8</div><div class="lesson-chip-text">Analyze Document Using Custom Model</div></div>
+      <div class="lesson-chip"><div class="lesson-badge di">L9</div><div class="lesson-chip-text">Custom Skill for Azure AI Search</div></div>
+      <div class="lesson-chip"><div class="lesson-badge di">L10</div><div class="lesson-chip-text">Knowledge Store with Azure AI Search</div></div>
+      <div class="lesson-chip"><div class="lesson-badge di">L11</div><div class="lesson-chip-text">Implementing an Intelligent Search Solution</div></div>
+    </div>
+    <button class="btn-start" onclick="startTest()">🚀 Start Practice Test</button>
+    <p class="hint-text">💡 <span>Options shuffle every attempt</span> · Explanations after every answer · No time pressure</p>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz" class="screen">
+  <div class="quiz-layout">
+    <div>
+      <div class="question-card">
+        <div class="q-meta">
+          <div class="q-num">Question <span id="qNum">1</span> of 40</div>
+          <div class="q-lesson-tag" id="qLessonTag">L1</div>
+          <button class="btn-flag" id="btnFlag" onclick="toggleFlag()">🏳 Flag</button>
+        </div>
+        <div class="q-text" id="qText">Loading…</div>
+        <div class="options-list" id="optionsList"></div>
+        <div class="explanation-box" id="explanationBox"></div>
+        <div class="nav-row">
+          <button class="btn-nav" id="btnPrev" onclick="goToPrev()">← Previous</button>
+          <div class="last-q-msg" id="lastQMsg">🎯 Last question! Click <strong>Submit Exam</strong> above.</div>
+          <button class="btn-nav primary" id="btnNext" onclick="goToNext()">Next →</button>
+        </div>
+      </div>
+    </div>
+    <div class="nav-panel">
+      <h4>Question Navigator</h4>
+      <div class="nav-grid" id="navGrid"></div>
+      <div class="nav-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--green);"></div><span>Answered</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--amber);"></div><span>Flagged</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--border);"></div><span>Not visited</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div id="results" class="screen">
+  <div style="max-width:740px;margin:0 auto;padding:40px 20px 60px;">
+    <div class="landing-tag">🏁 Azure AI/ML Job Focus Program</div>
+    <div class="results-header">
+      <div class="score-ring" id="scoreRing"><div><div class="score-pct" id="scorePct">0%</div><div class="score-label">Score</div></div></div>
+      <div class="results-title" id="resultsTitle">Test Complete · Azure AI/ML</div>
+      <div class="results-sub">Module 11 — Computer Vision, Doc Intelligence &amp; Knowledge</div>
+      <div class="stats-grid">
+        <div class="r-stat"><div class="r-stat-val" id="rCorrect">0 / 40</div><div class="r-stat-key">Correct Answers</div></div>
+        <div class="r-stat"><div class="r-stat-val" id="rTime">—</div><div class="r-stat-key">⏱️ Time</div></div>
+        <div class="r-stat"><div class="r-stat-val" id="rWrong">—</div><div class="r-stat-key">❌ Incorrect</div></div>
+        <div class="r-stat"><div class="r-stat-val" id="rSkipped">—</div><div class="r-stat-key">⏭️ Skipped</div></div>
+      </div>
+      <div class="results-btns">
+        <button class="btn-results primary" onclick="showReview()">📋 Review All Questions &amp; Answers</button>
+        <button class="btn-results secondary" onclick="retakeTest()">🔄 Retake Test</button>
+      </div>
+    </div>
+    <div class="lesson-breakdown"><div class="breakdown-title">📊 Per-Lesson Breakdown</div><div id="lessonBreakdown"></div></div>
+    <div class="retake-row"><button class="btn-results secondary" onclick="retakeTest()">🔄 Retake Test</button></div>
+  </div>
+</div>
+
+<!-- REVIEW -->
+<div id="review" class="screen">
+  <div style="max-width:840px;margin:0 auto;padding:28px 20px 60px;">
+    <div class="review-header">
+      <div><div class="review-title">Questions &amp; Answers Review</div><div class="review-sub">All 40 questions with correct answers and explanations</div></div>
+      <button class="btn-back" onclick="showResults()">← Back to Results</button>
+    </div>
+    <div id="reviewCards"></div>
+    <div class="retake-row">
+      <button class="btn-back" onclick="showResults()">← Back to Results</button>
+      <button class="btn-results primary" onclick="retakeTest()" style="padding:10px 22px;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;background:var(--navy);color:#fff;">🔄 Retake Test</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="submitModal">
+  <div class="modal">
+    <h3>📋 Submit Exam?</h3>
+    <p>Are you sure you want to submit? Unanswered questions will be marked as skipped.</p>
+    <div class="modal-btns">
+      <button class="btn-modal cancel" onclick="closeSubmitModal()">Continue Quiz</button>
+      <button class="btn-modal confirm" onclick="submitExam()">Yes, Submit</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════
+//  QUESTION BANK — Azure AI/ML · Module 11
+//  40 Qs | L1-L6 Computer Vision | L7-L11 Doc Intel & Knowledge
+//  Answer distribution: A×10  B×10  C×10  D×10
+// ═══════════════════════════════════════════════════════════════════════
+const QUESTIONS=[
+// L1: Fundamentals of Computer Vision (4 Qs)
+{lesson:'L1',lessonName:'Fundamentals of Computer Vision',section:'cv',
+question:'What is computer vision and what types of tasks does it enable AI systems to perform?',
+options:['A field of AI that enables computers to interpret visual information — including classifying images, detecting and localising objects with bounding boxes, segmenting pixels by class, recognising faces, reading text via OCR, and understanding video content','A programming framework for building 3D rendering pipelines and generating photorealistic synthetic images for gaming and simulation','A data augmentation pipeline that artificially expands training datasets by applying geometric transformations to existing images for model robustness','A signal processing toolkit that converts 2D pixel arrays into mathematical graph representations for classical computer algorithms to process'],
+answer:0,explanation:'Computer vision gives AI the ability to "see" — processing pixel data to understand visual content. Core tasks: image classification (what is in the image?), object detection (what is it and where?), image segmentation (which pixels belong to which class?), OCR (reading text in images), face recognition, and video understanding. Azure provides both pre-built services (Azure AI Vision) and custom training (Custom Vision, Azure ML) covering all these tasks.'},
+
+{lesson:'L1',lessonName:'Fundamentals of Computer Vision',section:'cv',
+question:'What is the fundamental building block of a digital image, and how does a computer represent colour in a standard RGB image?',
+options:['A "frame" — overlapping pixel grids captured at different time intervals and stacked into a 3D temporal tensor for sequential processing','A "pixel" — the smallest image unit; colour images are represented as three-channel (Red, Green, Blue) tensors where each channel has intensity values 0–255, forming a numeric array the model processes mathematically','A "voxel" — a 3D unit capturing both colour and depth used identically in 2D images and 3D point clouds for spatial modelling','A "kernel" — a small matrix of numeric weights that slides across the image to detect structural edge and texture patterns'],
+answer:1,explanation:'A digital image is a grid of pixels. Each pixel in an RGB colour image is represented by three numeric values (R, G, B channels), each ranging from 0–255. A 100×100 colour image is a (100,100,3) numeric tensor — 30,000 numbers. Computer vision models process these numeric arrays using mathematical operations. Grayscale images have one channel (0–255). Understanding this representation is foundational to grasping how CNNs and image APIs like Azure AI Vision work internally.'},
+
+{lesson:'L1',lessonName:'Fundamentals of Computer Vision',section:'cv',
+question:'What is a Convolutional Neural Network (CNN) and why is it the dominant architecture for computer vision tasks?',
+options:['A recurrent network that processes images frame-by-frame, maintaining hidden state memory across temporal steps for video understanding tasks','A transformer model applying self-attention across flattened image patches to capture global relationships between distant pixel regions','A neural network that uses learnable convolutional filter kernels sliding spatially across an image to detect local patterns — edges, textures, shapes — while sharing weights across positions, dramatically reducing the parameter count vs. fully connected networks','A decision tree ensemble classifying images by branching on pixel intensity thresholds sampled from multiple regions of the input image'],
+answer:2,explanation:'CNNs exploit the spatial structure of images using two key mechanisms: (1) Convolution — small learnable filters (e.g., 3×3) slide across the image, detecting local patterns wherever they appear. Early layers learn low-level features (edges, corners); deeper layers combine them into shapes and objects. (2) Weight sharing — the same filter is reused across all spatial positions, massively reducing parameters vs. fully connected layers. Pooling layers downsample feature maps for translation invariance. These properties make CNNs computationally efficient and highly accurate for image tasks.'},
+
+{lesson:'L1',lessonName:'Fundamentals of Computer Vision',section:'cv',
+question:'What is "object detection" in computer vision, and how does it differ fundamentally from image classification?',
+options:['A technique that removes background noise using edge-detection preprocessing filters before the main classification model processes the cleaned input','A quality-assessment method measuring image resolution and sharpness to determine if an image meets minimum standards for AI processing','A post-processing step grouping similar pixels into labelled regions after a classification model assigns whole-image category labels','A task that both identifies WHAT objects are present AND WHERE each is located by predicting bounding box coordinates — going beyond classification, which only answers "what category?" without any spatial localisation of individual objects'],
+answer:3,explanation:'Image classification outputs one label for the whole image ("this is a cat photo"). Object detection is richer: it outputs a list of detected objects, each with a class label, confidence score, and bounding box coordinates (x, y, width, height). For example: [{class:"car", confidence:0.97, box:[102,45,280,190]}, {class:"person", confidence:0.89, box:[310,50,80,220]}]. Azure AI Vision provides pre-built object detection; Azure Custom Vision lets you train custom object detectors on your own labelled images.'},
+
+// L2: Computer Vision Capabilities in Azure (4 Qs)
+{lesson:'L2',lessonName:'Computer Vision Capabilities in Azure',section:'cv',
+question:'What is Azure AI Vision and what are its core pre-built image analysis capabilities available without any custom model training?',
+options:['A cloud computer vision platform offering scene captioning, object detection with bounding boxes, OCR, image tagging, background removal, smart cropping, spatial analysis of people in video, and face attribute detection — all via REST API without any custom training required','A cloud platform exclusively for training custom computer vision models from scratch using your own annotated images uploaded to Azure Blob Storage','A real-time video streaming service applying computer vision filters and overlays to live video feeds for broadcast media production','An Azure DevOps plugin that analyses UI screenshots and auto-generates web accessibility audit reports for WCAG compliance testing'],
+answer:0,explanation:'Azure AI Vision (part of Azure AI Services) provides rich pre-built, API-callable capabilities: (1) Image Analysis — captions, dense captions, tags, object detection, people detection; (2) OCR/Read API — printed and handwritten text extraction; (3) Smart Cropping — content-aware thumbnail generation; (4) Background Removal — foreground segmentation with transparent PNG output; (5) Spatial Analysis — people counting and movement tracking in video; (6) Face detection with basic attributes. No model training needed — submit an image URL or binary to the API and receive structured JSON.'},
+
+{lesson:'L2',lessonName:'Computer Vision Capabilities in Azure',section:'cv',
+question:'What is the Azure AI Vision "Read" (OCR) API and what two processing modes does it support for different document scenarios?',
+options:['A handwriting analysis service that converts samples to typed text then attempts author identification using stroke pattern recognition models','An OCR API that extracts printed and handwritten text from images and documents — supporting synchronous mode for immediate single-image results and asynchronous mode for multi-page PDFs and large document batches that return a polling URL','A content accessibility service generating descriptive alt-text from image content to meet WCAG 2.1 compliance requirements for disabled users','A PII redaction service that detects and replaces sensitive text such as SSNs and credit card numbers in scanned document images'],
+answer:1,explanation:'Azure AI Vision Read API detects and extracts printed and handwritten text from images (JPEG, PNG, BMP, TIFF) and PDFs. It returns text hierarchically — pages → lines → words — with bounding polygon coordinates and confidence scores. Two modes: (1) Synchronous — submit an image and receive results immediately in the HTTP response; ideal for single images in real-time UIs; (2) Asynchronous — submit a PDF or image batch, receive an operation URL, poll until complete, then retrieve results; handles large multi-page documents without timeout issues.'},
+
+{lesson:'L2',lessonName:'Computer Vision Capabilities in Azure',section:'cv',
+question:'What is "image tagging" in Azure AI Vision and how does it differ from "image captioning"?',
+options:['A workflow for manually labelling training images with bounding boxes and class labels for custom object detection model training preparation','A content moderation feature applying safety rating labels (safe, adult, racy, gory) to uploaded images for platform policy enforcement','A feature returning a flat list of keyword tags for objects, scenes, actions, and attributes present — whereas captioning generates a complete natural language sentence describing the holistic scene with context and relationships between elements','A metadata system embedding EXIF location, timestamp, and camera settings into image files for digital asset management cataloguing'],
+answer:2,explanation:'Tagging and captioning answer "what is in this image?" at different abstraction levels. Tagging returns keyword lists with confidence scores: ["person","outdoor","bicycle","road","wearing helmet","riding"] — great for search indexing and filtering. Captioning returns a fluent sentence: "A helmeted person rides a bicycle on a sunny road" — describing relationships holistically. Dense captioning extends this by generating localised captions for specific regions of interest within the image. Both are available via the Azure AI Vision Image Analysis API v4.0.'},
+
+{lesson:'L2',lessonName:'Computer Vision Capabilities in Azure',section:'cv',
+question:'What is "spatial analysis" in Azure AI Vision and what real-world use cases does it enable?',
+options:['A feature measuring GPS coordinates and physical dimensions of objects in satellite or aerial photography imagery for geospatial analysis','A 3D scene reconstruction capability estimating depth and room layout from a single 2D photograph using monocular depth estimation AI','An Azure Maps integration cross-referencing detected image landmarks with geographic metadata to provide location-aware visual context','A real-time video feature detecting and tracking people\'s presence, movement, and proximity within defined zones in live camera feeds — enabling occupancy monitoring, queue-length measurement, social distancing compliance, and retail foot-traffic analytics'],
+answer:3,explanation:'Azure AI Vision Spatial Analysis connects to live video streams and uses AI to understand the spatial behaviour of people in physical spaces. It can: count people entering/exiting zones, measure dwell time, detect crowding (more than N people in a zone), track movement paths, and measure inter-person distances. Common use cases: retail customer flow analytics, building occupancy compliance, airport queue management, and factory floor safety (detecting people in restricted zones). It runs on Azure IoT Edge for low-latency local inference without streaming all video to the cloud.'},
+
+// L3: Image Analysis – Azure AI Vision (4 Qs)
+{lesson:'L3',lessonName:'Image Analysis — Azure AI Vision',section:'cv',
+question:'What does "dense captioning" in Azure AI Vision produce that standard single-caption generation does not?',
+options:['Multiple localised captions — one holistic caption for the full image plus additional individual captions for each automatically detected region of interest — giving spatially-aware descriptions of different parts of a complex scene','Captions automatically translated into multiple target languages simultaneously to support multilingual content delivery without separate API calls','A confidence-ranked list of 10 alternative caption phrasings for the same scene enabling A/B testing of different descriptive styles for editorial workflows','Extended paragraph-length descriptions including estimated camera settings, geographic location inference, and photograph date derived from visual cues'],
+answer:0,explanation:'Standard captioning: one sentence for the whole image ("A dog playing in a park"). Dense captioning goes deeper: it detects multiple regions of interest and generates a separate localised caption for each — plus an overall caption. For a street scene: "A busy city street" (overall), "A red double-decker bus" (region 1), "Two pedestrians crossing at a traffic light" (region 2). Each localised caption includes the bounding box of its region. Invaluable for detailed image indexing, accessibility descriptions, and content understanding pipelines. Available in Azure AI Vision Image Analysis API v4.0.'},
+
+{lesson:'L3',lessonName:'Image Analysis — Azure AI Vision',section:'cv',
+question:'What is the "background removal" feature in Azure AI Vision and what does it return as output?',
+options:['A content moderation feature detecting and blurring inappropriate or violent content appearing in the background of uploaded images for safety','A segmentation feature separating the foreground subject from the background — returning either a PNG with the background made fully transparent (alpha channel) or a binary foreground/background segmentation mask — useful for product photography, portrait editing, and compositing','A noise-reduction preprocessing step removing JPEG compression artefacts and sharpening blurred areas before the main vision analysis pipeline runs','A feature labelling background environmental elements (sky, water, vegetation, architecture) separately from foreground subjects for environmental classification'],
+answer:1,explanation:'Azure AI Vision background removal uses AI segmentation to identify the primary foreground subject(s) and separate them from background. Two output options: (1) Foreground matting — a PNG with background pixels set to fully transparent (alpha=0), ready to composite onto any new background; (2) Binary mask — black-and-white image showing foreground (white) vs. background (black) pixels. Powers e-commerce product image automation (clean white-background shots without Photoshop), ID photo processing, and virtual background generation for video conferencing and content creation pipelines.'},
+
+{lesson:'L3',lessonName:'Image Analysis — Azure AI Vision',section:'cv',
+question:'What is "smart cropping" in Azure AI Vision and how does the AI determine which region to crop to for a given target aspect ratio?',
+options:['A batch image resizing service generating multiple standard thumbnail sizes from a single source image for responsive web and mobile delivery','A GPU-accelerated feature randomly cropping images during data augmentation to expand computer vision model training datasets','A content-aware cropping feature analysing the image to identify the most visually important region — the primary subject, face, or focal point — then cropping to preserve that content for a specified target aspect ratio, avoiding cutting off important elements','An AI feature automatically detecting and removing PII-containing image regions before pictures are stored in Azure Blob Storage for compliance'],
+answer:2,explanation:'Smart cropping solves the problem that naive thumbnail generation (centre crop, random crop) cuts off important subjects. Azure AI Vision analyses image saliency — which regions draw visual attention — using the same models powering dense captioning and object detection. Given a target aspect ratio (1:1 for square social posts, 16:9 for banners), it returns bounding box coordinates for the crop region that best captures the visually important content. Widely used in CMS platforms, e-commerce systems, and media pipelines where varied-composition images must fill fixed layout slots.'},
+
+{lesson:'L3',lessonName:'Image Analysis — Azure AI Vision',section:'cv',
+question:'What is "Custom Vision" in Azure AI Vision and what problem does it solve that pre-built models cannot address?',
+options:['A service applying artistic colour grading and style transfer effects to images for creative marketing production workflows','A vector image database storing visual product embeddings for fast similarity search in recommendation engine applications','A real-time edge SDK deploying pre-built object detection onto Azure IoT Edge devices for local inference without cloud connectivity','A service for training and deploying domain-specific image classifiers and object detectors on your own labelled images — solving the gap that pre-built models only recognise generic categories like "dog" or "bottle", not your specific products, defect types, equipment, or other proprietary visual concepts'],
+answer:3,explanation:'Pre-built Azure AI Vision models recognise thousands of general ImageNet categories. Custom Vision extends this to your domain: a manufacturing company training to recognise specific defect types; a retailer training to recognise their exact SKUs on shelves; a medical company classifying cell types in microscope images. Custom Vision provides: a portal for uploading labelled images, transfer learning-powered training (works with as few as 15 images per class), evaluation metrics, and one-click model export to ONNX, CoreML, or TensorFlow for edge deployment.'},
+
+// L4: Detecting Faces with Azure AI Vision (3 Qs)
+{lesson:'L4',lessonName:'Detecting Faces with Azure AI Vision',section:'cv',
+question:'What is the Azure Face API and what are its three primary operational capabilities?',
+options:['An Azure AI service providing: (1) face detection — locating faces and returning bounding boxes; (2) face attribute analysis — estimating head pose, blur, occlusion, and accessories; and (3) face verification and identification — comparing faces 1:1 or matching a probe face against an enrolled group 1:N','A biometric service generating cryptographic face hash tokens for passwordless Azure Active Directory multi-factor authentication sign-in integration','A video surveillance platform continuously tracking all persons in live camera feeds and generating individual movement history logs for security analytics','A deepfake content moderation service detecting and flagging AI-generated synthetic face images in uploaded user content for policy enforcement'],
+answer:0,explanation:'Azure Face API provides three capability tiers: (1) Detection — finds faces in images, returns bounding boxes, face landmarks (eyes, nose, mouth), and non-sensitive attributes (head pose, glasses, blur, exposure, occlusion). (2) Verification (1:1) — "Is face A the same person as face B?" Returns similarity confidence score and isIdentical boolean. (3) Identification (1:N) — "Who is this person?" Compares a probe face against a PersonGroup (enrolled persons with multiple face examples each) and returns the closest match with confidence. Used in access control, customer recognition, and media archiving workflows.'},
+
+{lesson:'L4',lessonName:'Detecting Faces with Azure AI Vision',section:'cv',
+question:'What is the difference between "face verification" and "face identification" in the Azure Face API?',
+options:['Face verification checks whether a face meets minimum image quality thresholds before enrollment in a PersonGroup for future identification queries','Face verification is a 1:1 comparison — does face image A match face image B? Returns a similarity score and boolean; face identification is 1:N — who is this person among enrolled candidates? — comparing a probe face against all persons in a group and returning the top matching candidate','Face verification determines whether a detected face is a real live person or a spoofed photograph/mask as part of anti-spoofing liveness detection','Face verification is the enrollment step of adding a detected face image to a Person object within a PersonGroup before identification queries can be run'],
+answer:1,explanation:'1:1 Verification: "Are these two photos of the same person?" Call Detect on both images to get face IDs, call Verify with the two IDs. Returns: isIdentical (true/false) + confidence score (0–1). Use case: confirming a selfie matches a government ID photo during onboarding. 1:N Identification: "Who is this person among a known group?" Pre-enroll faces in a PersonGroup (each Person has multiple training face images), train the group, then call Identify with a detected face ID. Returns: top-k candidate Persons with confidence scores. Use case: employee access control against an HR database.'},
+
+{lesson:'L4',lessonName:'Detecting Faces with Azure AI Vision',section:'cv',
+question:'What responsible AI restrictions does Microsoft impose on sensitive Azure Face API capabilities, and what is the primary justification?',
+options:['Microsoft restricts Face API to Azure Government cloud regions only, requiring DoD security clearance before any face identification endpoint can be accessed in production','Microsoft requires all Face API customers to submit monthly compliance reports listing every individual identified, the stated purpose, and data retention practices used','Microsoft restricts access to sensitive Face API capabilities — including face identification against groups, emotion attribute prediction, and certain demographic inference attributes — to vetted, approved use cases through a Limited Access programme, due to the significant privacy, civil liberties, and discriminatory harm risks of unchecked large-scale facial recognition technology','Microsoft automatically blocks Face API calls where image EXIF metadata indicates the photograph was taken in a public outdoor location'],
+answer:2,explanation:'Following Microsoft\'s Responsible AI commitments and civil society feedback, a Limited Access policy was implemented for Azure Face API\'s higher-risk capabilities. Key drivers: documented risks of facial recognition — incorrect identifications causing wrongful arrests, disproportionate error rates across demographic groups, mass surveillance enabling, and chilling effects on civil liberties. Specifically restricted: (1) face identification/recognition (1:N); (2) emotion prediction (deemed unreliable and potentially harmful); (3) age, gender, and demographic inference attributes. Basic face detection (bounding box, head pose, occlusion) remains openly accessible. Applicants must submit use-case documentation for Microsoft review.'},
+
+// L5: Image Classification with Azure AI Vision (4 Qs)
+{lesson:'L5',lessonName:'Image Classification with Azure AI Vision',section:'cv',
+question:'What is Azure Custom Vision and what core problem does it solve that pre-built Azure AI Vision models cannot address?',
+options:['A service applying colour grading, lens flare, and style transfer effects to uploaded images for brand marketing production workflows','A vector similarity search service storing image embeddings for fast nearest-neighbour product lookup in recommendation pipeline integrations','A streaming analytics service applying pre-built object detection to live Azure IoT Edge camera feeds for manufacturing quality inspection','A training and deployment service for domain-specific image classifiers and object detectors trained on your own labelled images — solving the gap that pre-built models recognise only generic categories, not your company\'s specific products, defect types, plant species, or other proprietary visual concepts'],
+answer:3,explanation:'Pre-built Azure AI Vision classifies images into thousands of general-purpose categories. Custom Vision gives you full control: you define categories, upload labelled training images, and Azure trains a model using transfer learning from a powerful pre-trained backbone. This means far fewer images needed (15–50 per class often sufficient) vs. training from scratch. Practical applications: a bakery classifying bread types, a hospital classifying X-ray findings, a utility company classifying infrastructure damage, a retailer detecting product placement compliance on shelves. Models can be exported for offline/edge inference.'},
+
+{lesson:'L5',lessonName:'Image Classification with Azure AI Vision',section:'cv',
+question:'In Azure Custom Vision, what is the recommended minimum number of labelled training images per class and why does it work with such small datasets?',
+options:['At least 15 images per class as the hard minimum (30–50+ recommended for robust generalisation) — Custom Vision achieves this with small datasets because transfer learning starts from powerful pre-trained vision model weights rather than random initialisation','At least 1,000 images per class — Custom Vision trains a full CNN from random weight initialisation which requires substantial data to converge to accurate boundaries','Exactly 50 images per class strictly enforced — the Custom Vision service rejects training jobs where any class has fewer or more than 50 images','No minimum — Custom Vision uses zero-shot visual classification so a single example image per class is sufficient for reliable production deployment'],
+answer:0,explanation:'Custom Vision uses transfer learning: instead of training a CNN from scratch (needing thousands of images per class), it starts with weights pre-trained on millions of images. These weights already encode powerful visual features — edges, textures, shapes, colours. Fine-tuning adapts these for your specific categories using your small labelled dataset. The pre-trained features generalise well, so 15–50 images per class can produce production-quality results. More diverse images (different lighting, angles, backgrounds) per class improve generalisation. Custom Vision also applies data augmentation automatically during training.'},
+
+{lesson:'L5',lessonName:'Image Classification with Azure AI Vision',section:'cv',
+question:'What is the difference between a "multilabel" and a "multiclass" image classification project in Azure Custom Vision?',
+options:['Multilabel projects use a CNN classification head; multiclass projects use a k-nearest-neighbour classifier on extracted CNN feature vectors','In a multiclass project, each image gets exactly one class label (mutually exclusive categories); in a multilabel project, each image can simultaneously receive multiple class labels — used when an image genuinely belongs to several categories at once','Multilabel returns confidence scores for each class; multiclass returns only the single predicted class name without any probability values in the response','Multiclass projects train on Azure GPU compute; multilabel projects use CPU compute clusters due to reduced computational complexity per training step'],
+answer:1,explanation:'Multiclass (single-label): each image belongs to exactly one class — routing a support ticket to one department or identifying one bird species. The model uses a softmax output layer (probabilities sum to 1, categories compete). Multilabel: an image can belong to multiple categories simultaneously — a food photo tagged as both "vegetarian" AND "spicy" AND "Asian cuisine". The model uses independent sigmoid outputs per class (each class decided independently, no competition). Choosing the correct type is architecturally important and determined by your business logic. Both are supported in the Custom Vision portal and API.'},
+
+{lesson:'L5',lessonName:'Image Classification with Azure AI Vision',section:'cv',
+question:'What does the "Iteration" concept represent in the Azure Custom Vision training workflow, and why is it important for production deployments?',
+options:['The number of internal training epochs the model completes per training job, configurable as a hyperparameter in the Custom Vision training API call','A named compute configuration specifying GPU tier, model architecture, and training data version for reproducible ML experiment tracking','A versioned trained model snapshot within a Custom Vision project — each retraining run creates a new Iteration with its own performance metrics; you choose which Iteration to publish to the prediction endpoint and can roll back to prior Iterations if a new run performs worse on real-world data','An automated weekly retraining schedule that triggers a new run when newly labelled images are added to the Custom Vision training project'],
+answer:2,explanation:'Every time you train (or retrain) a Custom Vision project, Azure creates a new "Iteration" — a complete versioned trained model. Each Iteration has its own evaluation metrics (Precision, Recall, AP per class) on your test set. This versioning is critical for production: run Iteration 1 in production while training Iteration 2 on new data; if Iteration 2 is better, publish it to the prediction endpoint (atomic swap, zero downtime); if worse, keep Iteration 1. Any Iteration can also be exported as a portable model file (ONNX, CoreML, TensorFlow) for offline/edge deployment independent of the cloud endpoint.'},
+
+// L6: Analyzing Videos Using Video Indexer (3 Qs)
+{lesson:'L6',lessonName:'Analyzing Videos Using Video Indexer',section:'cv',
+question:'What is Azure Video Indexer and what categories of multimodal insights can it automatically extract from uploaded videos?',
+options:['A real-time video transcoding and adaptive bitrate streaming service converting uploaded videos to HLS and DASH formats for Azure CDN global delivery','A video editing platform using AI to generate highlight reels and short social media clips from long-form content without manual editing','An Azure service for building custom video recommendation engines by analysing user viewing patterns and engagement signals across a media catalogue','An AI-powered video intelligence service automatically extracting rich insights without code — including speech transcription, speaker diarisation, named entities from speech, topic detection, keyframe extraction, on-screen text OCR, face detection, emotion analysis, audio event detection, and scene segmentation'],
+answer:3,explanation:'Azure Video Indexer processes audio, visual, and speech streams simultaneously to extract: (Audio) speech-to-text transcript with speaker labels, language detection, audio event detection; (Text) on-screen OCR text, named entity mentions, keywords and topics; (Visual) scene segmentation with keyframe extraction, face detection, shot type classification; (Derived) sentiment timeline, content moderation signals. All insights are timestamped JSON accessible via API or the Video Indexer web portal. No ML expertise required — submit a video URL and retrieve comprehensive, actionable intelligence.'},
+
+{lesson:'L6',lessonName:'Analyzing Videos Using Video Indexer',section:'cv',
+question:'What is speaker diarisation in Azure Video Indexer and why is it particularly valuable for meeting and interview content?',
+options:['Automatically labelling each speaker throughout the video transcript as "Speaker 1", "Speaker 2", etc. — enabling clearly attributed transcripts showing who said what in multi-person recordings without any manual annotation effort','Detecting and timestamping background music segments separately from spoken dialogue to enable copyright identification and licensing compliance checks','Generating chapter headings and section titles for long-form educational videos based on detected topic transitions in the audio and visual content','An automated audio enhancement feature removing background noise, reducing echo, and normalising volume levels across speakers recorded in different acoustic environments'],
+answer:0,explanation:'Speaker diarisation solves the "who said what" problem. Without it, a video transcript is an undifferentiated wall of text with no attribution. Azure Video Indexer automatically segments audio by speaker, assigning consistent labels to each speaker\'s turns throughout. A 1-hour board meeting becomes: "Speaker 1: What are Q3 projections? Speaker 2: Revenue is up 12%..." This transforms raw transcripts into structured, searchable conversation records. Combined with Azure AI Search indexing, you can query "all meetings where Speaker 3 discussed the acquisition" across an entire video library.'},
+
+{lesson:'L6',lessonName:'Analyzing Videos Using Video Indexer',section:'cv',
+question:'What is the Azure Video Indexer embeddable widget and what development benefit does it provide to application builders?',
+options:['A configurable Azure API Management policy controlling rate limits, authentication, and response caching for Video Indexer REST API calls in enterprise production environments','An embeddable web component that developers add to their applications to provide a branded interactive video player with built-in access to Video Indexer insights — transcript, speaker timeline, keywords, scene navigation — without building a custom insight viewer UI from scratch','A serverless Azure Function trigger automatically starting a new Video Indexer analysis job when a new video file lands in a connected Azure Blob Storage container','An Azure Logic Apps connector mapping Video Indexer JSON output fields to Azure SQL table schema columns for automated metadata persistence and business reporting'],
+answer:1,explanation:'Azure Video Indexer provides two embeddable iframe widgets: (1) Player widget — video player synced with insight navigation; (2) Insights widget — interactive panels showing transcript with speaker labels, keyword cloud, topic timeline, face gallery, and scene thumbnails — all clickable to jump to the corresponding video timestamp. This dramatically reduces development effort: instead of building custom components to parse Video Indexer JSON and sync with a video player, you embed two iframes with your access token and get a fully functional, branded insight viewer. Ideal for video search portals, media archives, and meeting intelligence applications.'},
+
+// L7: Azure AI Document Intelligence Solution (4 Qs)
+{lesson:'L7',lessonName:'Azure AI Document Intelligence Solution',section:'di',
+question:'What is Azure AI Document Intelligence (formerly Form Recognizer) and what makes it fundamentally different from basic OCR?',
+options:['A document management workflow platform routing, approving, and archiving business documents through configurable SharePoint Online pipeline stages','A cloud document conversion service transforming scanned PDFs into editable Word files using pixel-accurate text reconstruction algorithms','An AI service going far beyond OCR by understanding document structure and semantics — extracting not just text but structured key-value pairs, tables, selection marks, and field values with spatial relationships, enabling automated data extraction from forms, invoices, receipts, contracts, and IDs','A compliance auditing service scanning uploaded documents for policy violations and flagging non-compliant clauses in legal and regulatory contracts'],
+answer:2,explanation:'Basic OCR gives you a raw text string — no structure. Azure AI Document Intelligence understands document meaning: "Invoice Number: INV-2024-0042" is a key-value pair; a table has rows and columns with semantic relationships; checkboxes, signatures, and barcodes are identified. For an invoice, it returns typed structured JSON: {InvoiceId:"INV-2024-0042", VendorName:"Contoso Ltd", InvoiceTotal:{amount:47250.00, currencyCode:"GBP"}, PaymentTerm:"Net 30"}. This structured output directly feeds downstream business processes without custom text parsing code, enabling true document automation at scale.'},
+
+{lesson:'L7',lessonName:'Azure AI Document Intelligence Solution',section:'di',
+question:'What are the three main model categories available in Azure AI Document Intelligence?',
+options:['Supervised, unsupervised, and semi-supervised models — the three ML training paradigms used internally by the document extraction service','Image models for photographs, text models for digitally created PDFs, and hybrid models for documents containing both embedded images and selectable text','Extraction models for key-value pairs, classification models for routing, and generation models for creating new document drafts from structured data templates','Prebuilt models (ready for common types: invoices, receipts, IDs, W-2 forms — no training needed), layout models (extracting structure from any document), and custom models (trained on your own documents for your unique field schema)'],
+answer:3,explanation:'Three practical tiers: (1) Prebuilt — Microsoft pre-trained models for high-volume common document types: invoices, receipts, business cards, W-2 tax forms, driver\'s licences, passports. Call the API — no training needed. (2) Layout — extracts the structural skeleton of ANY document: paragraphs in reading order, tables with row/column structure, selection marks, and handwriting. You handle field extraction logic. (3) Custom — you define the field schema, label examples in Document Intelligence Studio, and train a model specific to your document templates. Choice depends on whether a prebuilt model exists and how standardised your layout is.'},
+
+{lesson:'L7',lessonName:'Azure AI Document Intelligence Solution',section:'di',
+question:'What structured data does the Azure AI Document Intelligence prebuilt invoice model extract out of the box without any custom training?',
+options:['Vendor name and address, customer billing and shipping details, invoice number, invoice date, due date, purchase order number, line items (description, quantity, unit price, amount), subtotal, tax details, and total amount — all returned as typed structured key-value JSON with per-field confidence scores','Only raw text of the invoice in reading order — a separate custom extraction pipeline is then required to identify individual invoice fields from the plain text output','The visual layout and branding of the invoice — font families, colour scheme, column widths, and logo position — for template reconstruction and supplier branding analysis','Digital signature blocks and cryptographic certificate metadata embedded in electronically signed invoice PDFs for legal authenticity and non-repudiation verification'],
+answer:0,explanation:'The prebuilt-invoice model extracts a comprehensive, standardised set of typed fields: VendorName, VendorAddress, CustomerName, CustomerAddress, BillingAddress, ShippingAddress, InvoiceId, InvoiceDate, DueDate, PurchaseOrder, SubTotal, TotalTax, InvoiceTotal, AmountDue, ServiceStartDate, ServiceEndDate, and Items[] (each with Description, Quantity, Unit, UnitPrice, ProductCode, Amount). Each field includes a confidence score (0–1) and bounding polygon coordinates in the source document. This enables zero-configuration invoice processing automation across suppliers with different invoice formats — no template programming required.'},
+
+{lesson:'L7',lessonName:'Azure AI Document Intelligence Solution',section:'di',
+question:'What is "document classification" in Azure AI Document Intelligence and when would you build a custom classifier?',
+options:['A feature analysing document sentiment and formality level to determine whether incoming documents are professional, casual, or hostile in tone','A capability automatically identifying the type of an incoming document — invoice, purchase order, receipt, contract, or W-2 — routing it to the appropriate extraction model or business workflow without manual human triage','A content safety scanner checking uploaded documents for profanity, PII, and policy violations before they enter the extraction pipeline','A clustering feature organising large document libraries into thematic groups using unsupervised topic modelling for archive management'],
+answer:1,explanation:'In real-world intelligent document processing (IDP), mixed document types arrive together — a batch of scanned mail might contain invoices, contracts, and HR forms interleaved. Document classification is the first automated step: identify which extraction model to apply. Azure AI Document Intelligence custom classifier lets you define your document type taxonomy, label training examples, and train a classifier that predicts document type with confidence scores. You then route: invoice → prebuilt-invoice model; purchase_order → custom extraction model; contract → custom contract model. One fully automated end-to-end IDP pipeline with no manual sorting.'},
+
+// L8: Analyze Document Using Custom Model (4 Qs)
+{lesson:'L8',lessonName:'Analyze Document Using Custom Model',section:'di',
+question:'When should you use a "custom template" model versus a "custom neural" model in Azure AI Document Intelligence?',
+options:['Custom template models extract from images only; custom neural models extract from PDFs with embedded selectable text content','Custom template models require 1,000+ training documents; custom neural models need as few as 5 examples per variant','Custom template models work best for fixed-layout structured forms where field positions are consistent across documents (e.g., standard tax forms); custom neural models handle semi-structured or variable-layout documents where field positions vary across different instances (e.g., invoices from many different suppliers)','Custom template models output only key-value pairs; custom neural models also extract tables, handwritten text, and selection marks from documents'],
+answer:2,explanation:'The choice comes down to layout variability: Template model — designed for highly structured, fixed-layout documents. The field "Tax ID" always appears at the same coordinates on page 1. Uses spatial anchor points and template matching. Works well for internal forms, government forms, and standardised PDFs with consistent layouts. Neural model — designed for semi-structured documents where the same information appears in different positions, fonts, and formats across instances. "Total Amount" in the header on Supplier A\'s invoice but in the footer on Supplier B\'s. The neural model learns semantic field meaning, not just position — generally more robust for diverse document sets.'},
+
+{lesson:'L8',lessonName:'Analyze Document Using Custom Model',section:'di',
+question:'What is the minimum number of labelled training documents needed for an Azure AI Document Intelligence custom model, and what tool is used for labelling?',
+options:['At least 1,000 labelled documents using the Azure Machine Learning data labelling portal with bounding box annotations around each field','At least 500 labelled documents per type uploaded with accompanying JSON annotation files in COCO format to Azure Blob Storage','Exactly 200 training documents split 80/20 into training and validation using the Azure Portal built-in document labelling workflow','A minimum of 5 labelled documents (15–20 recommended for robust layout variant coverage) using the Azure AI Document Intelligence Studio web interface — where you click on text spans in each document and assign them to field names defined in your schema'],
+answer:3,explanation:'Azure AI Document Intelligence custom models require very few training examples due to powerful pre-trained document understanding foundations. The hard minimum is 5 labelled documents. 15–20 covering all production layout variants is strongly recommended. The labelling tool is Document Intelligence Studio (studio.cognitiveservices.azure.com): (1) create a project connecting to Azure Blob Storage; (2) define field schema (field names and types: string, number, date, selection mark, signature, table); (3) open each training document, highlight text spans by clicking/dragging, and assign them to fields; (4) trigger training and view field-level accuracy metrics. No programming required for labelling.'},
+
+{lesson:'L8',lessonName:'Analyze Document Using Custom Model',section:'di',
+question:'What is "model composition" in Azure AI Document Intelligence and what business problem does it elegantly solve?',
+options:['Composing multiple custom extraction models into a single callable endpoint — the composed model automatically classifies each submitted document\'s type and routes it to the most appropriate sub-model for field extraction, enabling a single API call to handle mixed-type document streams with unified response format','Aggregating the JSON extraction results from multiple separate Document Intelligence API calls into a single consolidated response for simpler downstream application integration code','A training technique merging labelled datasets from two existing custom models to create a larger combined model with broader document type coverage and improved accuracy','An Azure Logic Apps workflow combining Document Intelligence extraction output with Azure SQL data to generate enriched cross-referenced business intelligence reports automatically'],
+answer:0,explanation:'Model composition solves the mixed-document-stream problem without requiring a separate classification step in application code. Create individual custom models for each document type (Model A for purchase orders, Model B for invoices, Model C for delivery notes). Compose them into a single composed model endpoint. When your application submits a document: the service automatically classifies which sub-model best matches, applies that model, and returns both the document type and extracted fields in one unified response. Your application handles one endpoint URL and one response format regardless of document type diversity. Supports up to 200 component models per composed model.'},
+
+{lesson:'L8',lessonName:'Analyze Document Using Custom Model',section:'di',
+question:'What does the "confidence score" per extracted field in Azure AI Document Intelligence represent, and how should production systems use it?',
+options:['The percentage of the document\'s total text content successfully extracted — the remainder potentially lost due to scan quality, resolution, or image noise issues','A 0–1 value indicating model confidence in having correctly identified and extracted that specific field — used in production to implement human-review queues where low-confidence extractions are flagged for manual verification rather than automatically processed downstream','A structural completeness metric measuring whether all required fields in the extraction schema are present and non-empty in the processed document','A latency estimate indicating milliseconds the Document Intelligence service took to process and extract that specific field from the submitted document'],
+answer:1,explanation:'Confidence scores are essential for production-grade intelligent document processing. Each extracted field carries a confidence value 0–1. A score of 0.98 means 98% confidence; 0.41 means significant uncertainty (low resolution, partial occlusion, layout deviation from training). Production pattern: set a threshold (e.g., 0.85). Fields above → automatically process. Fields below → route to human review queue via Azure Logic Apps or Power Automate. This "human in the loop" approach achieves high automation rates (typically 80–95% fully automated) while maintaining accuracy SLAs — reducing both manual effort and costly extraction errors.'},
+
+// L9: Custom Skill for Azure AI Search (3 Qs)
+{lesson:'L9',lessonName:'Custom Skill for Azure AI Search',section:'di',
+question:'What is a "custom skill" in an Azure AI Search enrichment pipeline, and why create one instead of using only built-in cognitive skills?',
+options:['A custom OData query filter adding domain-specific relevance boosting logic to a search index scoring profile for personalised result ranking','A custom Azure Active Directory role granting granular field-level access control permissions to specific document sections in the search index','An HTTPS endpoint (typically an Azure Function) integrated into an AI Search skillset to perform specialised processing — calling proprietary ML models, applying business-specific transformations, or enriching with external data sources that built-in cognitive skills cannot access','A pre-trained domain model binary uploaded to Azure AI Search to replace the built-in entity recognition with a more specialised domain-specific alternative'],
+answer:2,explanation:'Built-in cognitive skills cover common general-purpose enrichments (entity recognition, key phrases, OCR, translation, sentiment). Custom skills extend the pipeline for unique needs: (1) Domain ML model — call an Azure ML endpoint classifying contracts by risk level; (2) External enrichment — look up a product code in your ERP API to add pricing and inventory data; (3) Custom NLP — apply a fine-tuned BERT model for medical term normalisation; (4) Business rules — apply proprietary redaction or field validation logic. The custom skill receives document batches via HTTP POST, processes them, and returns enriched JSON seamlessly integrated into the indexer pipeline.'},
+
+{lesson:'L9',lessonName:'Custom Skill for Azure AI Search',section:'di',
+question:'What JSON API contract must a custom skill endpoint implement to integrate correctly with an Azure AI Search indexer skillset?',
+options:['An OData v4 REST endpoint with Entity Data Model type annotations on all input and output field definitions for schema validation compatibility','An Azure Service Bus message contract where the skill reads input document batches from a queue and writes enriched results to a separate output topic','An Azure Functions binding schema where input arrives via HTTP trigger request body and output is returned through explicit binding annotations on the function method','A specific JSON web API contract: accept an HTTP POST with a "values" array of input records (each with "recordId" and "data" payload), then return a matching "values" array of enriched records with the same recordIds — enabling AI Search to call the skill in batch and correctly correlate outputs back to source documents'],
+answer:3,explanation:'Azure AI Search custom skill protocol is simple but strict. Input body: {"values":[{"recordId":"doc1","data":{"text":"...","languageCode":"en"}},{"recordId":"doc2",...}]}. Your skill processes each record and returns: {"values":[{"recordId":"doc1","data":{"entities":[...],"topics":[...]}},{"recordId":"doc2",...}]}. The recordId correlation is critical — AI Search matches outputs back to inputs by recordId, not position. If your skill fails on doc2 but succeeds on doc1, return an errors array for doc2 while returning data for doc1. The simple contract is implementable in any language (Azure Functions, Flask, FastAPI, ASP.NET).'},
+
+{lesson:'L9',lessonName:'Custom Skill for Azure AI Search',section:'di',
+question:'How does Azure AI Search pass document data to a custom skill during an indexer run, and what happens to the skill\'s output after it is returned?',
+options:['AI Search sends a batch HTTP POST to the custom skill with input records; the skill returns enriched output records; AI Search maps outputs to enriched index fields or passes them as inputs to the next skill in the skillset — the enrichment tree grows cumulatively with each skill\'s contributions to each document','AI Search writes input documents to Azure Blob Storage monitored by the custom skill via Event Grid trigger, then reads skill output from a separate designated results container','AI Search passes document data through a shared Cosmos DB collection with a "pending" status; the custom skill polls for pending records, processes them, and updates status to "complete" with results embedded inline','AI Search publishes input document data to an Azure Service Bus queue; the custom skill subscribes and processes asynchronously, sending a webhook callback when done without returning structured field data to the search service'],
+answer:0,explanation:'The enrichment pipeline works as a tree of skill executions per document during each indexer run. For each document: (1) Indexer extracts raw content from the data source; (2) Skills execute per the skillset definition — each skill\'s output fields are added to the document\'s in-memory "enrichment tree"; (3) Output field mappings write selected enrichment tree fields to the search index. Custom skills participate identically to built-in skills: AI Search calls the HTTP endpoint in batches, receives the JSON response, adds output fields to the enrichment tree, and the next skill can reference those fields as its own inputs. This chaining is powerful — OCR text → custom NLP entity model → search index.'},
+
+// L10: Knowledge Store with Azure AI Search (4 Qs)
+{lesson:'L10',lessonName:'Knowledge Store with Azure AI Search',section:'di',
+question:'What is a "knowledge store" in Azure AI Search and what critical limitation of a standard search index does it overcome?',
+options:['An Azure Cosmos DB global replica mirroring search index content for multi-region, low-latency read access from geographically distributed applications','A persistent storage destination — in Azure Blob Storage or Azure Table Storage — where complete enriched content from the AI pipeline (extracted entities, key phrases, translated text, image captions, table data) is saved in full structured form for downstream analytics, Power BI, ML training, and data warehouse consumption — overcoming the limitation that a search index only stores fields needed for search queries','A managed Azure SQL database storing complete document extraction metadata and field-level provenance records for regulatory compliance audit trails','A built-in caching tier within Azure AI Search persisting enrichment computation results between indexer runs to avoid reprocessing unchanged documents on incremental runs'],
+answer:1,explanation:'A search index is optimised for answering search queries quickly — it stores only the fields you map, compressed for search. The knowledge store is the complementary counterpart: it persists the FULL enrichment tree output to Azure Storage in formats convenient for non-search consumption. Example: a document processing pipeline enriches PDFs with entity extraction, key phrases, translated text, image captions. The search index stores title, body, and entity tags for search. The knowledge store stores the complete entity JSON, full translation, image captions, and table data — queryable by Power BI, consumable by Azure ML for training data, loadable into Azure Synapse. Same pipeline, dual output destinations, no duplicate compute.'},
+
+{lesson:'L10',lessonName:'Knowledge Store with Azure AI Search',section:'di',
+question:'What are "projections" in an Azure AI Search knowledge store configuration, and what are the three projection types available?',
+options:['Relevance signals — BM25 score, freshness boost, field weights — projecting a numeric relevance score onto each document in the search result set','Azure ML model configurations projecting AI enrichment output into an MLflow-compatible feature store format for downstream model training pipelines','Configuration blocks defining how enriched content is written to the knowledge store — with three types: table projections (structured data to Azure Table Storage rows), object projections (enriched document JSON to Azure Blob Storage), and file projections (extracted binary files like images to Azure Blob Storage as raw blobs)','Azure Cognitive Services response schemas defining how entity, sentiment, and key phrase results are projected into a standardised cross-service annotation format'],
+answer:2,explanation:'Projections are the heart of knowledge store configuration — they define what gets written, where, and in what shape. Table projections: flatten enrichment tree data into rows in Azure Table Storage — ideal for Power BI (natively queries Table Storage) and Excel pivot table analysis. One row per extracted entity per document with columns for entityText, entityCategory, confidence, sourceDocumentId. Object projections: write the full enriched document JSON to Azure Blob Storage — ideal for ML training data pipelines, custom analytics, and archiving. File projections: write extracted binary content (images, embedded files) to blob storage as raw bytes — useful for computer vision post-processing. Multiple projection types can coexist for different downstream consumers.'},
+
+{lesson:'L10',lessonName:'Knowledge Store with Azure AI Search',section:'di',
+question:'What is the role of the "Shaper skill" in relation to the knowledge store in an Azure AI Search enrichment pipeline?',
+options:['The Shaper skill encrypts sensitive enrichment outputs using Azure Key Vault keys before writing them to the knowledge store for security compliance','The Shaper skill controls execution order and merge strategy when multiple parallel cognitive skills produce overlapping enrichment fields for the same document','The Shaper skill compresses large enrichment JSON payloads to reduce Azure Blob Storage costs for high-volume knowledge store object projection scenarios','The Shaper skill consolidates and reshapes enriched fields from multiple sources in the enrichment tree into a precisely structured nested object — creating the exact schema you want projected to the knowledge store, making it the essential architectural tool for defining clean, reusable output shapes referenced by table and object projections'],
+answer:3,explanation:'After running through multiple skills, the enrichment tree is a complex, inconsistently structured graph of fields from different sources. The Shaper skill acts as a schema designer: you define the output structure you want and map enrichment tree fields into it. Example: Shaper creates "DocumentSummary" combining {title (from metadata), entities (from entity skill), keyPhrases (from key phrase skill), sentiment (from sentiment skill), translatedContent (from translation skill)}. Knowledge store projections reference this clean "DocumentSummary" shape. Without Shaper, you\'d project raw enrichment tree paths which are harder to maintain. Shaper outputs are reusable — one output can feed both table AND object projections without duplication.'},
+
+{lesson:'L10',lessonName:'Knowledge Store with Azure AI Search',section:'di',
+question:'How does a knowledge store enable downstream analytics workflows that a search index alone cannot practically support?',
+options:['The knowledge store persists enriched content in Azure Storage formats analytics tools consume natively — Table Storage loads directly into Power BI for dashboards, blob JSON feeds ML training pipelines, and the same enrichment pipeline simultaneously powers search AND analytics without duplicating the enrichment compute','The knowledge store provides full-text search over enriched content with lower latency than the primary search index by caching hot-path queries in Azure Redis Cache','The knowledge store stores a cold-tier replica of the search index readable by Azure Synapse Analytics serverless SQL without any ETL data movement pipelines required','The knowledge store auto-generates Power BI dashboard layouts from enrichment output fields using AI-powered visualisation templates requiring zero manual report configuration'],
+answer:0,explanation:'The knowledge store\'s analytics value comes from its storage format choices. Azure Table Storage is natively supported as a Power BI data source — a business analyst connects Power BI Desktop directly to table projections, building entity frequency charts, sentiment trend lines, and topic distribution graphs without data engineering. Blob JSON object projections are consumable by Azure ML SDK (list_blobs → read JSON → pandas DataFrame), enabling the enrichment pipeline output to serve as labelled training data for fine-tuning models. Azure Synapse Analytics can query blob JSON via serverless SQL OPENROWSET. One indexer run → one skillset → search index for users AND knowledge store for analytics. No duplicate pipelines, no extra enrichment compute.'},
+
+// L11: Implementing an Intelligent Search Solution (3 Qs)
+{lesson:'L11',lessonName:'Implementing an Intelligent Search Solution',section:'di',
+question:'What is a "scoring profile" in Azure AI Search and how does it customise search result ranking beyond pure BM25 text relevance?',
+options:['A pipeline configuration evaluating each document during indexing to assign a priority tier determining ingestion order into the search index','A configuration boosting documents\' relevance scores based on business-defined criteria — such as high "reviewCount" numeric values, documents matching specific field values, or recently published documents via date-decay functions — allowing business rules to supplement pure BM25 text relevance in final result ranking','A machine learning model trained on historical user click-through data that personalises search rankings for each individual user session in real time','A field-level data classification security configuration assigning trust tiers to documents and suppressing confidential-tier content for unauthorised user roles'],
+answer:1,explanation:'Azure AI Search\'s BM25 ranks by text term frequency and rarity — the most textually relevant document wins. Scoring profiles layer business logic on top: (1) Field weights — weight matches in "title" 3× more than "body"; (2) Magnitude boost — boost documents with high "rating" numeric values or large "viewCount"; (3) Freshness decay — exponential decay function boosting newer documents by publish_date, declining with age; (4) Tag matching — boost documents whose category tags overlap with query-time parameters. Multiple functions combine in one scoring profile. How e-commerce surfaces sponsored products, news sites show recent articles, and HR platforms prioritise high-rated candidates.'},
+
+{lesson:'L11',lessonName:'Implementing an Intelligent Search Solution',section:'di',
+question:'What is "faceted navigation" in Azure AI Search and what user experience pattern does it create for search applications?',
+options:['A geographic map overlay plotting search results as pins on an interactive map, letting users filter by clicking geographic regions showing result density','An AI-powered autocomplete feature predicting and completing the user\'s search query as they type based on historical popular query patterns in the index','A filtering mechanism computing and displaying aggregated document counts for each distinct value of designated facetable fields — such as "Brand: Apple (45), Samsung (32), Sony (18)" — allowing users to progressively narrow results by clicking facet values without writing complex query syntax','A relevance feedback system where users mark results as "relevant" or "not relevant" to dynamically adjust scoring weights for subsequent queries in the session'],
+answer:2,explanation:'Faceted navigation is the familiar filter panel in every modern e-commerce and enterprise search UI. In Azure AI Search, mark fields as "facetable" in the index schema (Category, Brand, Price range, Rating, Publication Year). When users execute a query with facets requested, AI Search returns: matching documents AND facet aggregations: [{value:"Electronics",count:145},{value:"Clothing",count:89},...]. Your UI renders these as clickable filter chips. Users progressively narrow: "show me Electronics" → "from Samsung (32)" → "published in 2024 (12)". Each selection appends an OData filter. Azure AI Search computes facet counts natively and efficiently — no extra aggregation pipeline required.'},
+
+{lesson:'L11',lessonName:'Implementing an Intelligent Search Solution',section:'di',
+question:'What is a "synonym map" in Azure AI Search and how does it improve search recall for users whose terminology differs from document authors?',
+options:['A machine translation lookup table converting search query terms from a non-English source language to the primary English language used in the search index','An NLP preprocessing component expanding abbreviations and acronyms found in indexed documents to their full written-out forms during the ingestion process','A user-facing suggestion panel recommending alternative search phrases when a query returns zero results, displayed as "Did you mean?" correction links','A configured mapping of equivalent terms telling Azure AI Search to treat specified words as interchangeable — so a search for "car" also matches "automobile" or "vehicle", and "MI" also finds "myocardial infarction" — increasing recall without requiring users to know the exact terminology used by document authors'],
+answer:3,explanation:'Synonym maps solve vocabulary mismatch — one of the most common causes of zero-result searches. Users search in their language ("car") but documents use engineering terminology ("automobile") or legal terms ("motor vehicle"). Azure AI Search synonym maps define equivalences: "car, automobile, vehicle => car". At query time, a user search for "car" automatically expands to "(car OR automobile OR vehicle)" before execution — no index changes required. One-way mappings also supported ("USA => United States of America"). Synonym maps applied per field via search analyzer configuration. Especially valuable in healthcare (patients say "heart attack", documents say "myocardial infarction"), legal, and technical domains.'}
+]; // end QUESTIONS
+
+// ════════════════════════════
+//  ENGINE
+// ════════════════════════════
+const TOTAL=QUESTIONS.length; // 40
+function isCV(l){return parseInt(l.replace('L',''))<=6;}
+
+let state={questions:[],currentIdx:0,userAnswers:[],shuffledOptions:[],shuffledAnswers:[],flagged:[],answered:[],startTime:null,endTime:null,timerInterval:null,tabSwitches:0,submitted:false};
+
+function shuffleArray(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function startTest(){
+  state.questions=[...QUESTIONS];state.currentIdx=0;
+  state.userAnswers=new Array(TOTAL).fill(-1);state.flagged=new Array(TOTAL).fill(false);
+  state.answered=new Array(TOTAL).fill(false);state.submitted=false;state.tabSwitches=0;state.startTime=Date.now();
+  state.shuffledOptions=[];state.shuffledAnswers=[];
+  state.questions.forEach(q=>{const ct=q.options[q.answer];const sh=shuffleArray(q.options);state.shuffledOptions.push(sh);state.shuffledAnswers.push(sh.indexOf(ct));});
+  showScreen('quiz');document.getElementById('quizHeader').classList.add('active');buildNavGrid();renderQuestion();startTimer();
+}
+
+function startTimer(){clearInterval(state.timerInterval);state.timerInterval=setInterval(()=>{const e=Math.floor((Date.now()-state.startTime)/1000);document.getElementById('timer').textContent=`${String(Math.floor(e/60)).padStart(2,'0')}:${String(e%60).padStart(2,'0')}`;},1000);}
+
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+
+function renderQuestion(){
+  const idx=state.currentIdx,q=state.questions[idx];
+  const opts=state.shuffledOptions[idx],cs=state.shuffledAnswers[idx],uc=state.userAnswers[idx],ia=state.answered[idx];
+  document.getElementById('qNum').textContent=idx+1;document.getElementById('qCounterNum').textContent=idx+1;
+  const lt=document.getElementById('qLessonTag');lt.textContent=q.lesson;lt.className='q-lesson-tag'+(isCV(q.lesson)?'':' di-tag');
+  const bf=document.getElementById('btnFlag');bf.className='btn-flag'+(state.flagged[idx]?' flagged':'');bf.innerHTML=state.flagged[idx]?'🚩 Flagged':'🏳 Flag';
+  document.getElementById('qText').textContent=q.question;
+  const letters=['A','B','C','D'];const ol=document.getElementById('optionsList');ol.innerHTML='';
+  opts.forEach((ot,i)=>{const btn=document.createElement('button');btn.className='option-btn';
+    if(ia){btn.disabled=true;if(i===cs)btn.classList.add('correct');else if(i===uc)btn.classList.add('wrong');}
+    else if(i===uc)btn.classList.add('selected');
+    btn.innerHTML=`<span class="opt-letter">${letters[i]}</span><span>${ot}</span>`;
+    if(!ia)btn.onclick=()=>selectAnswer(i);ol.appendChild(btn);});
+  const eb=document.getElementById('explanationBox');
+  if(ia){const ok=uc===cs;eb.className='explanation-box visible'+(ok?'':' wrong-exp');eb.innerHTML=`<strong>${ok?'✅ Correct!':'❌ Incorrect'}</strong>${q.explanation}`;}
+  else{eb.className='explanation-box';eb.innerHTML='';}
+  document.getElementById('btnPrev').style.display=idx===0?'none':'';
+  const il=idx===TOTAL-1;document.getElementById('btnNext').style.display=il?'none':'';
+  document.getElementById('lastQMsg').style.display=il?'block':'none';updateNavGrid();
+}
+
+function selectAnswer(i){const idx=state.currentIdx;if(state.answered[idx])return;state.userAnswers[idx]=i;state.answered[idx]=true;renderQuestion();}
+function toggleFlag(){state.flagged[state.currentIdx]=!state.flagged[state.currentIdx];renderQuestion();}
+function goToNext(){if(state.currentIdx<TOTAL-1){state.currentIdx++;renderQuestion();}}
+function goToPrev(){if(state.currentIdx>0){state.currentIdx--;renderQuestion();}}
+function jumpTo(i){state.currentIdx=i;renderQuestion();}
+
+function buildNavGrid(){
+  const g=document.getElementById('navGrid');g.innerHTML='';
+  for(let i=0;i<TOTAL;i++){
+    if(i===0){const sl=document.createElement('div');sl.className='nav-section-label';sl.textContent='Computer Vision';g.appendChild(sl);}
+    if(i===22){const dv=document.createElement('div');dv.className='nav-divider';g.appendChild(dv);const sl=document.createElement('div');sl.className='nav-section-label';sl.textContent='Doc Intelligence';g.appendChild(sl);}
+    const d=document.createElement('div');d.className='nav-dot';d.textContent=i+1;d.id=`navDot${i}`;d.onclick=()=>jumpTo(i);g.appendChild(d);
+  }
+}
+function updateNavGrid(){
+  for(let i=0;i<TOTAL;i++){const d=document.getElementById(`navDot${i}`);if(!d)continue;d.className='nav-dot';
+    if(i===state.currentIdx)d.classList.add('current');
+    else if(state.submitted){if(state.answered[i])d.classList.add(state.userAnswers[i]===state.shuffledAnswers[i]?'correct-nav':'wrong-nav');}
+    else if(state.flagged[i])d.classList.add('flagged');
+    else if(state.answered[i])d.classList.add('answered');}
+}
+
+function openSubmitModal(){document.getElementById('submitModal').classList.add('show');}
+function closeSubmitModal(){document.getElementById('submitModal').classList.remove('show');}
+
+function submitExam(){
+  closeSubmitModal();clearInterval(state.timerInterval);state.endTime=Date.now();state.submitted=true;
+  document.getElementById('quizHeader').classList.remove('active');document.getElementById('tabWarning').classList.remove('show');
+  updateNavGrid();computeResults();showScreen('results');
+}
+
+function computeResults(){
+  let correct=0,wrong=0,skipped=0;const lm={};
+  state.questions.forEach((q,i)=>{
+    if(!lm[q.lesson])lm[q.lesson]={name:q.lessonName,section:q.section,total:0,correct:0};
+    lm[q.lesson].total++;
+    if(!state.answered[i]){skipped++;return;}
+    if(state.userAnswers[i]===state.shuffledAnswers[i]){correct++;lm[q.lesson].correct++;}else wrong++;
+  });
+  const pct=Math.round((correct/TOTAL)*100);const e=Math.floor((state.endTime-state.startTime)/1000);
+  document.getElementById('scorePct').textContent=`${pct}%`;document.getElementById('rCorrect').textContent=`${correct} / ${TOTAL}`;
+  document.getElementById('rTime').textContent=`${String(Math.floor(e/60)).padStart(2,'0')}:${String(e%60).padStart(2,'0')}`;
+  document.getElementById('rWrong').textContent=wrong;document.getElementById('rSkipped').textContent=skipped;
+  document.getElementById('scoreRing').className='score-ring '+(pct>=70?'pass':'fail');
+  document.getElementById('resultsTitle').textContent=pct>=70?`✅ Well done! ${pct}% — Module 11 Complete`:`📘 Keep practising — ${pct}% — Review & Retry`;
+  const bd=document.getElementById('lessonBreakdown');bd.innerHTML='';let cvDone=false,diDone=false;
+  Object.entries(lm).forEach(([tag,data])=>{
+    const cv=data.section==='cv';
+    if(cv&&!cvDone){bd.innerHTML+='<div class="breakdown-section">🔵 Computer Vision</div>';cvDone=true;}
+    if(!cv&&!diDone){bd.innerHTML+='<div class="breakdown-section">🟣 Document Intelligence &amp; Knowledge</div>';diDone=true;}
+    const pl=Math.round((data.correct/data.total)*100);const bc=pl>=70?'':pl>=40?' ok':' bad';const tc=cv?'cv':'di';
+    bd.innerHTML+=`<div class="lesson-row"><div class="lr-tag ${tc}">${tag}</div><div class="lr-name">${data.name}</div><div class="lr-bar-wrap"><div class="lr-bar${bc}" style="width:${pl}%"></div></div><div class="lr-score">${data.correct}/${data.total}</div></div>`;
+  });
+}
+
+function showReview(){
+  const letters=['A','B','C','D'];const c=document.getElementById('reviewCards');c.innerHTML='';
+  state.questions.forEach((q,i)=>{
+    const opts=state.shuffledOptions[i],cs=state.shuffledAnswers[i],uc=state.userAnswers[i],ia=state.answered[i];
+    const ok=ia&&uc===cs;const badge=ia?(ok?'correct':'wrong'):'skipped';const bt=ia?(ok?'✅ Correct':'❌ Incorrect'):'⏭ Skipped';
+    const sc=isCV(q.lesson)?'cv':'di';let oh='';
+    opts.forEach((o,j)=>{let cl='rc-option';if(j===cs)cl+=' correct-ans';else if(ia&&j===uc)cl+=' user-wrong';oh+=`<div class="${cl}"><span class="opt-l">${letters[j]}</span><span>${o}</span></div>`;});
+    c.innerHTML+=`<div class="review-card"><div class="rc-meta"><div class="rc-num">Q${i+1}</div><div class="rc-lesson ${sc}">${q.lesson} · ${q.lessonName}</div><div class="rc-badge ${badge}">${bt}</div></div><div class="rc-question">${q.question}</div><div class="rc-options">${oh}</div><div class="rc-exp"><strong>💡 Explanation</strong>${q.explanation}</div></div>`;
+  });showScreen('review');
+}
+function showResults(){showScreen('results');}
+function retakeTest(){startTest();}
+
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden&&!state.submitted&&state.startTime){
+    state.tabSwitches++;document.getElementById('tabCount').textContent=state.tabSwitches;
+    document.getElementById('tabWarning').classList.add('show');
+    setTimeout(()=>document.getElementById('tabWarning').classList.remove('show'),5000);
+  }
+});
+</script>
+</body>
+</html>

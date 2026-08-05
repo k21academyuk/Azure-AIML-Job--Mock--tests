@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>M14 Practice Test · Azure AI/ML · K21 Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy:#1A1248; --navy-mid:#2E2080; --green:#8DC63F; --green-hover:#79B030;
+    --green-tint:#F1F8E8; --blue:#1B9BD9; --blue-tint:#EBF6FD;
+    --page-bg:#F7F8FA; --card:#FFFFFF; --border:#E8EAEE;
+    --text-primary:#111827; --text-secondary:#4B5563; --text-muted:#9CA3AF;
+    --red:#EF4444; --red-tint:#FEF2F2; --amber:#F59E0B; --amber-tint:#FFFBEB;
+    --radius:14px; --radius-sm:8px;
+    --shadow:0 1px 4px rgba(0,0,0,.06); --shadow-md:0 4px 16px rgba(0,0,0,.10);
+  }
+  html{scroll-behavior:smooth;}
+  body{font-family:'DM Sans',sans-serif;background:var(--page-bg);color:var(--text-primary);min-height:100vh;}
+  .site-header{background:var(--navy);padding:14px 24px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:200;}
+  .logo-mark{width:34px;height:34px;background:var(--green);border-radius:8px;display:grid;place-items:center;font-weight:800;font-size:15px;color:#fff;flex-shrink:0;}
+  .logo-text{font-size:17px;font-weight:700;color:#fff;} .logo-text span{color:var(--green);}
+  .header-sub{margin-left:auto;font-size:12px;color:rgba(255,255,255,0.55);font-weight:500;text-align:right;line-height:1.4;}
+  .quiz-header{display:none;background:var(--navy);border-top:1px solid rgba(255,255,255,0.08);padding:10px 24px;align-items:center;gap:12px;position:sticky;top:62px;z-index:199;}
+  .quiz-header.active{display:flex;}
+  .q-counter{font-size:14px;font-weight:600;color:rgba(255,255,255,0.9);} .q-counter span{color:var(--green);}
+  .btn-submit-top{margin-left:auto;background:var(--green);color:#fff;border:none;border-radius:var(--radius-sm);padding:7px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s;}
+  .btn-submit-top:hover{background:var(--green-hover);}
+  .timer{font-size:14px;font-weight:600;color:rgba(255,255,255,0.8);background:rgba(255,255,255,0.08);padding:5px 12px;border-radius:20px;font-variant-numeric:tabular-nums;}
+  .screen{display:none;} .screen.active{display:block;}
+  .landing-tag{display:inline-flex;align-items:center;gap:6px;background:var(--green-tint);color:var(--green-hover);font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;margin-bottom:18px;}
+  .landing-title{font-size:clamp(22px,5vw,36px);font-weight:800;color:var(--navy);line-height:1.2;margin-bottom:14px;}
+  .landing-title span{color:var(--green);}
+  .landing-desc{font-size:15px;color:var(--text-secondary);line-height:1.65;max-width:680px;margin-bottom:28px;}
+  .stats-row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:28px;}
+  .stat-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:14px 20px;text-align:center;flex:1;min-width:110px;}
+  .stat-num{font-size:24px;font-weight:800;color:var(--navy);} .stat-label{font-size:12px;color:var(--text-muted);font-weight:500;margin-top:2px;}
+  .lessons-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-bottom:28px;}
+  .lesson-chip{background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:12px;}
+  .lesson-badge{width:30px;height:30px;border-radius:8px;background:var(--blue-tint);color:var(--blue);font-size:11px;font-weight:700;display:grid;place-items:center;flex-shrink:0;}
+  .lesson-chip-text{font-size:13px;font-weight:600;color:var(--text-primary);line-height:1.3;}
+  .lesson-chip-sub{font-size:11px;color:var(--text-muted);margin-top:2px;font-weight:500;}
+  .btn-start{background:var(--navy);color:#fff;border:none;border-radius:var(--radius);padding:16px 36px;font-size:17px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s,transform .15s;display:inline-flex;align-items:center;gap:10px;}
+  .btn-start:hover{background:var(--navy-mid);transform:translateY(-2px);}
+  .hint-text{margin-top:14px;font-size:13px;color:var(--text-muted);} .hint-text span{color:var(--blue);}
+  #quiz{max-width:840px;margin:0 auto;padding:24px 20px 80px;}
+  .quiz-layout{display:grid;grid-template-columns:1fr 220px;gap:20px;align-items:start;}
+  @media(max-width:720px){.quiz-layout{grid-template-columns:1fr;}}
+  .question-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow);}
+  .q-meta{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap;}
+  .q-num{font-size:13px;font-weight:600;color:var(--text-muted);}
+  .q-lesson-tag{font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;background:var(--blue-tint);color:var(--blue);}
+  .btn-flag{margin-left:auto;font-size:12px;font-weight:600;color:var(--text-muted);border:1.5px solid var(--border);background:none;border-radius:20px;padding:4px 12px;cursor:pointer;font-family:inherit;transition:all .15s;display:flex;align-items:center;gap:5px;}
+  .btn-flag.flagged{background:var(--amber-tint);color:var(--amber);border-color:var(--amber);}
+  .q-text{font-size:17px;font-weight:600;line-height:1.55;color:var(--text-primary);margin-bottom:22px;}
+  .options-list{display:flex;flex-direction:column;gap:10px;margin-bottom:22px;}
+  .option-btn{background:#fff;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:13px 16px;text-align:left;cursor:pointer;font-family:inherit;font-size:14.5px;color:var(--text-primary);line-height:1.45;display:flex;align-items:flex-start;gap:12px;transition:all .15s;font-weight:500;}
+  .option-btn:hover:not(:disabled){border-color:var(--navy);background:rgba(26,18,72,.03);}
+  .option-btn .opt-letter{width:24px;height:24px;border-radius:6px;background:var(--page-bg);border:1.5px solid var(--border);display:grid;place-items:center;font-size:11px;font-weight:700;color:var(--text-muted);flex-shrink:0;margin-top:1px;transition:all .15s;}
+  .option-btn.selected .opt-letter{background:var(--navy);border-color:var(--navy);color:#fff;}
+  .option-btn.selected{border-color:var(--navy);background:rgba(26,18,72,.04);}
+  .option-btn.correct{border-color:var(--green);background:var(--green-tint);}
+  .option-btn.correct .opt-letter{background:var(--green);border-color:var(--green);color:#fff;}
+  .option-btn.wrong{border-color:var(--red);background:var(--red-tint);}
+  .option-btn.wrong .opt-letter{background:var(--red);border-color:var(--red);color:#fff;}
+  .option-btn:disabled{cursor:default;}
+  .explanation-box{background:var(--green-tint);border:1.5px solid #c3e289;border-radius:var(--radius-sm);padding:14px 16px;font-size:13.5px;line-height:1.6;color:#3D6B15;display:none;margin-bottom:16px;}
+  .explanation-box strong{display:block;margin-bottom:4px;font-weight:700;}
+  .explanation-box.visible{display:block;}
+  .explanation-box.wrong-exp{background:var(--red-tint);border-color:#fca5a5;color:#7F1D1D;}
+  .nav-row{display:flex;gap:10px;align-items:center;}
+  .btn-nav{background:var(--page-bg);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:10px 18px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--text-primary);transition:all .15s;}
+  .btn-nav:hover{border-color:var(--navy);color:var(--navy);}
+  .btn-nav.primary{background:var(--navy);color:#fff;border-color:var(--navy);margin-left:auto;}
+  .btn-nav.primary:hover{background:var(--navy-mid);}
+  .last-q-msg{font-size:12.5px;color:var(--text-muted);text-align:center;display:none;flex:1;}
+  .nav-panel{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);position:sticky;top:128px;}
+  .nav-panel h4{font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;}
+  .nav-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px;}
+  .nav-dot{width:38px;height:38px;border-radius:8px;border:1.5px solid var(--border);background:#fff;font-size:12px;font-weight:700;color:var(--text-muted);display:grid;place-items:center;cursor:pointer;transition:all .15s;}
+  .nav-dot:hover{border-color:var(--navy);color:var(--navy);}
+  .nav-dot.current{border-color:var(--navy);background:var(--navy);color:#fff;}
+  .nav-dot.answered{background:var(--green-tint);border-color:var(--green);color:#3D6B15;}
+  .nav-dot.flagged{background:var(--amber-tint);border-color:var(--amber);color:var(--amber);}
+  .nav-dot.correct-nav{background:var(--green);border-color:var(--green);color:#fff;}
+  .nav-dot.wrong-nav{background:var(--red);border-color:var(--red);color:#fff;}
+  .nav-legend{font-size:11px;color:var(--text-muted);display:flex;flex-direction:column;gap:4px;}
+  .legend-item{display:flex;align-items:center;gap:6px;}
+  .legend-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
+  .results-header{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:32px;box-shadow:var(--shadow-md);margin-bottom:20px;text-align:center;}
+  .score-ring{width:110px;height:110px;border-radius:50%;border:7px solid var(--border);margin:0 auto 18px;display:grid;place-items:center;}
+  .score-ring.pass{border-color:var(--green);} .score-ring.fail{border-color:var(--red);}
+  .score-pct{font-size:30px;font-weight:800;color:var(--navy);}
+  .score-label{font-size:12px;color:var(--text-muted);font-weight:500;margin-top:-2px;}
+  .results-title{font-size:21px;font-weight:800;color:var(--navy);margin-bottom:6px;}
+  .results-sub{font-size:14px;color:var(--text-secondary);margin-bottom:22px;}
+  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px;}
+  @media(max-width:560px){.stats-grid{grid-template-columns:repeat(2,1fr);}}
+  .r-stat{background:var(--page-bg);border-radius:var(--radius-sm);padding:14px;text-align:center;}
+  .r-stat-val{font-size:20px;font-weight:800;color:var(--navy);}
+  .r-stat-key{font-size:11px;color:var(--text-muted);font-weight:500;margin-top:2px;}
+  .results-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+  .btn-results{padding:11px 22px;border-radius:var(--radius-sm);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;}
+  .btn-results.primary{background:var(--navy);color:#fff;border:none;} .btn-results.primary:hover{background:var(--navy-mid);}
+  .btn-results.secondary{background:#fff;color:var(--navy);border:1.5px solid var(--border);} .btn-results.secondary:hover{border-color:var(--navy);}
+  .lesson-breakdown{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);margin-bottom:20px;}
+  .breakdown-title{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:16px;}
+  .lesson-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .lesson-row:last-child{margin-bottom:0;}
+  .lr-tag{font-size:11px;font-weight:700;padding:3px 7px;border-radius:20px;flex-shrink:0;min-width:28px;text-align:center;background:var(--blue-tint);color:var(--blue);}
+  .lr-name{font-size:13px;font-weight:500;color:var(--text-primary);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .lr-bar-wrap{width:110px;height:7px;background:var(--border);border-radius:4px;overflow:hidden;flex-shrink:0;}
+  .lr-bar{height:100%;border-radius:4px;background:var(--green);}
+  .lr-bar.bad{background:var(--red);} .lr-bar.ok{background:var(--amber);}
+  .lr-score{font-size:13px;font-weight:700;color:var(--text-secondary);width:38px;text-align:right;flex-shrink:0;}
+  .review-header{display:flex;align-items:center;gap:12px;margin-bottom:22px;flex-wrap:wrap;}
+  .review-title{font-size:20px;font-weight:800;color:var(--navy);} .review-sub{font-size:13px;color:var(--text-muted);}
+  .btn-back{background:var(--page-bg);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:9px 16px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--text-secondary);transition:all .15s;margin-left:auto;}
+  .btn-back:hover{border-color:var(--navy);color:var(--navy);}
+  .review-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:22px;margin-bottom:14px;box-shadow:var(--shadow);}
+  .rc-meta{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+  .rc-num{font-size:12px;font-weight:700;color:var(--text-muted);}
+  .rc-lesson{font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;background:var(--blue-tint);color:var(--blue);}
+  .rc-badge{font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px;}
+  .rc-badge.correct{background:var(--green-tint);color:#3D6B15;} .rc-badge.wrong{background:var(--red-tint);color:var(--red);} .rc-badge.skipped{background:var(--amber-tint);color:var(--amber);}
+  .rc-question{font-size:15px;font-weight:600;color:var(--text-primary);margin-bottom:14px;line-height:1.5;}
+  .rc-options{display:flex;flex-direction:column;gap:7px;margin-bottom:14px;}
+  .rc-option{padding:9px 14px;border-radius:var(--radius-sm);font-size:13.5px;display:flex;align-items:flex-start;gap:10px;border:1.5px solid var(--border);}
+  .rc-option.correct-ans{border-color:var(--green);background:var(--green-tint);color:#3D6B15;}
+  .rc-option.user-wrong{border-color:var(--red);background:var(--red-tint);color:var(--red);}
+  .rc-option .opt-l{font-weight:700;font-size:12px;width:18px;flex-shrink:0;margin-top:1px;}
+  .rc-exp{background:var(--page-bg);border-left:3px solid var(--green);padding:12px 14px;border-radius:0 var(--radius-sm) var(--radius-sm) 0;font-size:13px;line-height:1.6;color:var(--text-secondary);}
+  .rc-exp strong{color:var(--navy);font-weight:700;display:block;margin-bottom:3px;}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:999;display:none;place-items:center;}
+  .modal-overlay.show{display:grid;}
+  .modal{background:#fff;border-radius:var(--radius);padding:28px;max-width:380px;width:90%;box-shadow:var(--shadow-md);text-align:center;}
+  .modal h3{font-size:18px;font-weight:700;color:var(--navy);margin-bottom:8px;}
+  .modal p{font-size:14px;color:var(--text-secondary);margin-bottom:22px;line-height:1.5;}
+  .modal-btns{display:flex;gap:10px;justify-content:center;}
+  .btn-modal{padding:10px 22px;border-radius:var(--radius-sm);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
+  .btn-modal.cancel{background:var(--page-bg);border:1.5px solid var(--border);color:var(--text-primary);}
+  .btn-modal.confirm{background:var(--navy);color:#fff;border:none;}
+  .tab-warning{background:var(--red);color:#fff;text-align:center;padding:8px 16px;font-size:13px;font-weight:600;display:none;position:sticky;top:110px;z-index:198;}
+  .tab-warning.show{display:block;}
+  .retake-row{display:flex;justify-content:center;gap:10px;margin-top:12px;flex-wrap:wrap;}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="logo-mark">K21</div>
+  <div class="logo-text">K21 <span>Academy</span></div>
+  <div class="header-sub">Azure AI/ML Job Focus Program<br/>Module 14 · Practice Test</div>
+</header>
+<div class="quiz-header" id="quizHeader">
+  <div class="q-counter">M14: LangChain, LangGraph &amp; CrewAI &nbsp;·&nbsp; Q <span id="qCounterNum">1</span> / 16</div>
+  <div class="timer" id="timer">00:00</div>
+  <button class="btn-submit-top" onclick="openSubmitModal()">📋 Submit Exam</button>
+</div>
+<div class="tab-warning" id="tabWarning">⚠️ Tab switch detected! Return to the test. Attempts: <span id="tabCount">0</span></div>
+<div id="landing" class="screen active">
+  <div style="max-width:780px;margin:0 auto;padding:40px 20px 60px;">
+    <div class="landing-tag">📋 Azure AI/ML · K21 Academy</div>
+    <h1 class="landing-title">LangChain, LangGraph<br/><span>&amp; CrewAI — Module 14</span></h1>
+    <p class="landing-desc">Test your understanding across both lessons in Module 14. Covers LangChain fundamentals — components, LCEL, document loaders, text splitting, vector stores, agents, and LangSmith — plus RAG architecture (indexing, retrieval, generation), dense vs. sparse retrieval, RAG vs. fine-tuning trade-offs, CrewAI multi-agent orchestration, and LangGraph stateful graph workflows.</p>
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-num">📝 16</div><div class="stat-label">Questions</div></div>
+      <div class="stat-card"><div class="stat-num">📚 2</div><div class="stat-label">Lessons</div></div>
+      <div class="stat-card"><div class="stat-num">🔄 ∞</div><div class="stat-label">Retries</div></div>
+    </div>
+    <p style="font-size:13px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;">2 Lessons Covered</p>
+    <div class="lessons-grid">
+      <div class="lesson-chip"><div class="lesson-badge">L1</div><div><div class="lesson-chip-text">Mastering LangChain Text to Retrieval</div><div class="lesson-chip-sub">Components · LCEL · Loaders · Vector Stores · Agents · LangSmith</div></div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L2</div><div><div class="lesson-chip-text">Intro to LLM RAG and Crew AI</div><div class="lesson-chip-sub">RAG Pipeline · Retrieval Strategies · CrewAI · LangGraph</div></div></div>
+    </div>
+    <button class="btn-start" onclick="startTest()">🚀 Start Practice Test</button>
+    <p class="hint-text">💡 <span>Options shuffle every attempt</span> · Explanations after every answer · No time pressure</p>
+  </div>
+</div>
+<div id="quiz" class="screen">
+  <div class="quiz-layout">
+    <div>
+      <div class="question-card">
+        <div class="q-meta">
+          <div class="q-num">Question <span id="qNum">1</span> of 16</div>
+          <div class="q-lesson-tag" id="qLessonTag">L1</div>
+          <button class="btn-flag" id="btnFlag" onclick="toggleFlag()">🏳 Flag</button>
+        </div>
+        <div class="q-text" id="qText">Loading…</div>
+        <div class="options-list" id="optionsList"></div>
+        <div class="explanation-box" id="explanationBox"></div>
+        <div class="nav-row">
+          <button class="btn-nav" id="btnPrev" onclick="goToPrev()">← Previous</button>
+          <div class="last-q-msg" id="lastQMsg">🎯 Last question! Click <strong>Submit Exam</strong> above.</div>
+          <button class="btn-nav primary" id="btnNext" onclick="goToNext()">Next →</button>
+        </div>
+      </div>
+    </div>
+    <div class="nav-panel">
+      <h4>Question Navigator</h4>
+      <div class="nav-grid" id="navGrid"></div>
+      <div class="nav-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--green);"></div><span>Answered</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--amber);"></div><span>Flagged</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--border);"></div><span>Not visited</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="results" class="screen">
+  <div style="max-width:720px;margin:0 auto;padding:40px 20px 60px;">
+    <div class="landing-tag">🏁 Azure AI/ML Job Focus Program</div>
+    <div class="results-header">
+      <div class="score-ring" id="scoreRing"><div><div class="score-pct" id="scorePct">0%</div><div class="score-label">Score</div></div></div>
+      <div class="results-title" id="resultsTitle">Test Complete · Azure AI/ML</div>
+      <div class="results-sub">Module 14 — LangChain, LangGraph &amp; CrewAI</div>
+      <div class="stats-grid">
+        <div class="r-stat"><div class="r-stat-val" id="rCorrect">0 / 16</div><div class="r-stat-key">Correct Answers</div></div>
+        <div class="r-stat"><div class="r-stat-val" id="rTime">—</div><div class="r-stat-key">⏱️ Time</div></div>
+        <div class="r-stat"><div class="r-stat-val" id="rWrong">—</div><div class="r-stat-key">❌ Incorrect</div></div>
+        <div class="r-stat"><div class="r-stat-val" id="rSkipped">—</div><div class="r-stat-key">⏭️ Skipped</div></div>
+      </div>
+      <div class="results-btns">
+        <button class="btn-results primary" onclick="showReview()">📋 Review All Questions &amp; Answers</button>
+        <button class="btn-results secondary" onclick="retakeTest()">🔄 Retake Test</button>
+      </div>
+    </div>
+    <div class="lesson-breakdown"><div class="breakdown-title">📊 Per-Lesson Breakdown</div><div id="lessonBreakdown"></div></div>
+    <div class="retake-row"><button class="btn-results secondary" onclick="retakeTest()">🔄 Retake Test</button></div>
+  </div>
+</div>
+<div id="review" class="screen">
+  <div style="max-width:820px;margin:0 auto;padding:28px 20px 60px;">
+    <div class="review-header">
+      <div><div class="review-title">Questions &amp; Answers Review</div><div class="review-sub">All 16 questions with correct answers and explanations</div></div>
+      <button class="btn-back" onclick="showResults()">← Back to Results</button>
+    </div>
+    <div id="reviewCards"></div>
+    <div class="retake-row">
+      <button class="btn-back" onclick="showResults()">← Back to Results</button>
+      <button class="btn-results primary" onclick="retakeTest()" style="padding:10px 22px;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;background:var(--navy);color:#fff;">🔄 Retake Test</button>
+    </div>
+  </div>
+</div>
+<div class="modal-overlay" id="submitModal">
+  <div class="modal">
+    <h3>📋 Submit Exam?</h3>
+    <p>Are you sure you want to submit? Unanswered questions will be marked as skipped.</p>
+    <div class="modal-btns">
+      <button class="btn-modal cancel" onclick="closeSubmitModal()">Continue Quiz</button>
+      <button class="btn-modal confirm" onclick="submitExam()">Yes, Submit</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════
+//  QUESTION BANK — Azure AI/ML · Module 14
+//  16 Qs | L1 x 8, L2 x 8 | A x4  B x4  C x4  D x4
+// ═══════════════════════════════════════════════════════════════════════
+const QUESTIONS=[
+
+// ─── L1: Mastering LangChain Text to Retrieval (8 Qs) ────────────────
+{lesson:'L1',lessonName:'Mastering LangChain Text to Retrieval',
+question:'What is LangChain and what core developer problem does it solve when building LLM-powered applications?',
+options:[
+'LangChain is a Python and JavaScript framework providing standardised components and composable abstractions for LLM applications — solving the friction that integrating LLMs, vector stores, document loaders, memory, and tools from scratch requires extensive boilerplate; LangChain provides a unified interface for chaining all these components cleanly and consistently',
+'LangChain is a training platform for fine-tuning large language models on domain-specific datasets, addressing the limitation that general-purpose LLMs lack industry-specific vocabulary and reasoning depth',
+'LangChain is a cloud-hosted vector database service for storing and retrieving text embeddings, competing with Pinecone and Weaviate through a serverless pay-per-query pricing model',
+'LangChain is a prompt testing and evaluation framework exclusively for OpenAI GPT models, providing automated red-teaming and safety benchmarking across different model versions'
+],
+answer:0,
+explanation:'LangChain (launched 2022) emerged from the friction of building LLM applications with raw API calls — developers had to repeatedly re-implement conversation history management, prompt construction, document chunking, vector store connections, and tool integrations from scratch. LangChain standardises all of this: 180+ Document Loaders (PDF, web, YouTube, Notion, SQL, GitHub), Text Splitters, Embedding adapters, Vector Store interfaces (FAISS, Chroma, Pinecone, Azure AI Search, pgvector), LLM provider interfaces (OpenAI, Azure OpenAI, Anthropic, Google, Ollama for local models), and a composable chain framework. Available in Python (langchain) and JavaScript/TypeScript (langchainjs). The framework is modular — use only the components needed for your specific application architecture.'},
+
+{lesson:'L1',lessonName:'Mastering LangChain Text to Retrieval',
+question:'What are the six core component categories in LangChain and what does each provide to application developers?',
+options:[
+'LangChain has six fixed pipeline steps: Loaders, Splitters, Embedders, Storers, Retrievers, and Generators — they must be used in this exact sequence with no customisation of the pipeline order permitted',
+'LangChain\'s core components are: LLMs and Chat Models (interfaces to foundation models like GPT-4o, Claude, Llama), Prompt Templates (structured reusable prompt construction), Chains (composable component sequences), Memory (conversation history management), Agents (LLM-driven decision loops with tool use), and Retrievers (semantic document retrieval) — modular building blocks composable into any LLM application',
+'LangChain\'s six components are exclusively commercial hosted APIs: GPT Connector, Embedding Service, Vector Index, Semantic Cache, Response Validator, and Output Formatter — all requiring a paid LangSmith Plus subscription',
+'LangChain provides only three core components — Prompts, Models, and Parsers — and the six-component claim is inaccurate; chains, agents, and memory are third-party plugins from the LangChain Hub marketplace'
+],
+answer:1,
+explanation:'LangChain\'s six component categories: (1) LLMs/Chat Models — unified interface to 50+ providers; swap GPT-4o for Claude 3.5 or Llama 3 with one line change. (2) Prompt Templates — parametrised, reusable prompt construction with variables and versioning. (3) Chains — the core composition primitive; strings components together with LCEL. (4) Memory — ConversationBufferMemory, ConversationSummaryMemory, VectorStoreMemory for different context management strategies. (5) Agents — ReAct, OpenAI Tools, and custom reasoning loops with dynamic tool selection. (6) Retrievers — BaseRetriever interface supporting vector stores, BM25, Ensemble, Self-query, multi-vector, and parent-document retrieval strategies. These are modular — a simple chatbot might use only LLM + Prompt Template + Memory, while a full RAG pipeline adds Document Loaders, Text Splitters, and Retrievers.'},
+
+{lesson:'L1',lessonName:'Mastering LangChain Text to Retrieval',
+question:'What is LangChain Expression Language (LCEL) and what does the pipe operator (|) enable in a chain definition?',
+options:[
+'LCEL is LangChain\'s SQL-like query language for retrieving documents from vector databases using natural language predicates instead of traditional structured query syntax',
+'LCEL is a JSON configuration format for declaring LangChain pipelines in YAML files compiled to Python at runtime, enabling non-developer analysts to build RAG applications without coding',
+'LCEL is LangChain\'s declarative composition interface where the pipe operator (|) chains Runnable components left-to-right — the output of each component automatically becomes the input of the next — enabling concise readable pipelines: "prompt | llm | output_parser" creates a chain where the prompt feeds the LLM whose output is parsed into a structured result, with built-in streaming, batching, and async support throughout',
+'LCEL is a natural language interface that converts plain English pipeline descriptions into executable Python code using a code-generation LLM running on LangSmith servers'
+],
+answer:2,
+explanation:'LCEL (introduced in LangChain v0.1) replaced legacy chain classes with a unified composition interface. Every LangChain component implements the Runnable protocol: .invoke(), .stream(), .batch(), .astream(). The | operator pipes them: chain = prompt | llm | parser. Key capabilities: (1) Streaming by default — every step can stream tokens to the caller without special handling; (2) Async-first — all runnables support .ainvoke() and .astream() for production async servers; (3) Parallel composition — RunnableParallel runs branches simultaneously: {"context": retriever, "question": passthrough} | prompt | llm; (4) Fallbacks — chain.with_fallbacks([backup_chain]); (5) Retry logic — chain.with_retry(stop_after_attempt=3). LCEL chains are also directly deployable via LangServe as REST APIs. The composability makes complex multi-step pipelines readable and maintainable.'},
+
+{lesson:'L1',lessonName:'Mastering LangChain Text to Retrieval',
+question:'What is a Document Loader in LangChain and what does it return that enables downstream processing?',
+options:[
+'A Document Loader validates uploaded document structure against a JSON Schema before text splitting and embedding begin in the RAG pipeline',
+'A Document Loader caches previously loaded documents in Redis to prevent redundant file-system or API reads on subsequent pipeline runs for identical source content',
+'A Document Loader filters irrelevant documents from vector store search results before passing retrieved content to the LLM, acting as a relevance pre-filter in the generation step',
+'A Document Loader ingests content from a specific source and returns a list of Document objects — each containing page_content (the text) and metadata (source URL, page number, author, timestamps) — making diverse sources (PDFs, web pages, YouTube transcripts, Notion, SharePoint, Azure Blob Storage, GitHub repos, SQL databases) uniformly accessible as Document objects for downstream text splitting and embedding'
+],
+answer:3,
+explanation:'Document Loaders are the entry point of any RAG pipeline. LangChain ships 180+ loaders in langchain_community. Each returns List[Document] where Document has page_content (str) and metadata (dict). Examples: PyPDFLoader loads a PDF returning one Document per page with metadata {"source": "report.pdf", "page": 0}. WebBaseLoader scrapes a web page. YoutubeLoader returns the full transcript. AzureBlobStorageContainerLoader loads all files from an Azure Blob container. UnstructuredFileLoader handles mixed file types automatically. The metadata field is critical for RAG citations — when the retriever returns chunks, source metadata tells you which document and page each chunk came from, enabling "According to [source], ..." in generated answers. Consistent Document object interface means any loader output feeds identically into any text splitter.'},
+
+{lesson:'L1',lessonName:'Mastering LangChain Text to Retrieval',
+question:'What is text splitting in a LangChain RAG pipeline and why must chunk size and overlap be carefully tuned?',
+options:[
+'Text splitting breaks large documents into smaller overlapping chunks that fit within embedding model limits and are semantically coherent enough for independent retrieval — chunk size controls how much context each chunk contains (too small loses context, too large reduces retrieval precision), and overlap ensures key sentences spanning chunk boundaries are not lost at split points',
+'Text splitting removes punctuation, stop words, and HTML tags from raw text before embedding model ingestion, producing cleaner and more compact vectors with improved semantic density',
+'Text splitting divides documents into exactly equal 512-token sections, a fixed standard enforced by all major embedding models including Azure OpenAI text-embedding-3-large',
+'Text splitting is a LangSmith Premium feature that automatically tests multiple chunking strategies in parallel and selects the configuration maximising downstream retrieval accuracy on a held-out evaluation set'
+],
+answer:0,
+explanation:'Text splitting configuration is one of the most impactful decisions in RAG system design. Key splitter types in LangChain: RecursiveCharacterTextSplitter — the recommended default; attempts to split on paragraph, sentence, word boundaries in sequence, preserving natural text units. TokenTextSplitter — splits on exact token counts, respecting embedding model limits. MarkdownHeaderTextSplitter — preserves document hierarchy (H1, H2, H3 headers become metadata). Key parameters: chunk_size: typically 500–1500 tokens. Smaller chunks provide higher retrieval precision but less context per chunk; larger chunks provide more context but match less precisely. chunk_overlap: typically 10–20% of chunk_size (100–300 tokens). Ensures sentences at the end of one chunk also appear at the start of the next, preventing "split boundary blindness" where a key sentence is cut and lost from both adjacent chunks. Optimal configuration is dataset-specific — evaluate with retrieval metrics like MRR (Mean Reciprocal Rank) and hit rate before choosing production values.'},
+
+{lesson:'L1',lessonName:'Mastering LangChain Text to Retrieval',
+question:'What is a vector store in LangChain and how does it find semantically relevant document chunks at query time?',
+options:[
+'A vector store caches raw text of retrieved chunks to prevent redundant embedding model calls for previously seen content during repeated RAG pipeline runs on the same document corpus',
+'A vector store persists document chunk embeddings (high-dimensional float vectors) alongside their text and metadata; at retrieval time it embeds the user\'s query then performs approximate nearest-neighbour search to return the top-k chunks whose embedding vectors are geometrically closest — enabling semantic search that finds conceptually related content even when exact query words do not appear in the document',
+'A vector store is an in-memory Python dictionary mapping chunk IDs to Document objects, providing O(1) lookup but no similarity search — used only for unit testing and local development prototypes',
+'A vector store is a specialised SQL database extension providing full-text BM25 keyword ranking accessed through LangChain as a thin adapter over traditional relational database full-text search'
+],
+answer:1,
+explanation:'Vector stores are the persistence and retrieval layer of RAG systems. Indexing workflow: each Document chunk is embedded (e.g., Azure OpenAI text-embedding-3-large produces 3072-dimensional float vectors); the vector plus chunk text plus metadata are stored together. Retrieval workflow: the user\'s query is embedded with the same model; the vector store finds top-k chunks using ANN (Approximate Nearest Neighbour) algorithms like HNSW or IVF. LangChain integrates with: Local/embedded: FAISS (Facebook AI Similarity Search), Chroma, Qdrant. Cloud managed: Pinecone, Weaviate, Milvus, Qdrant Cloud. Azure-native: Azure AI Search (vector search + keyword search + hybrid), Azure Cosmos DB (with vector index), pgvector (PostgreSQL extension). Azure AI Search is the recommended production choice for Azure-based applications — integrates with Azure Blob Storage for document indexing, supports RBAC via Azure AD, and offers hybrid retrieval combining vector and keyword search with Reciprocal Rank Fusion. Usage: vectorstore.as_retriever(search_kwargs={"k": 5}) returns the 5 most similar chunks for any query.'},
+
+{lesson:'L1',lessonName:'Mastering LangChain Text to Retrieval',
+question:'What is LangSmith and what capabilities does it provide across development and production lifecycle stages?',
+options:[
+'LangSmith is a CLI deployment tool for publishing LangChain applications to Azure Kubernetes Service, providing containerised LLM service management with auto-scaling and health monitoring dashboards',
+'LangSmith is an open-source vector database optimised for LangChain LCEL pipelines, providing native Runnable integration and automatic index management without manual configuration overhead',
+'LangSmith is LangChain\'s observability, debugging, and evaluation platform — providing full distributed tracing of every LLM call, retrieval step, tool invocation, and chain node; visualising execution trees with latency and cost per step; prompt versioning and A/B comparison; automated RAG evaluation measuring faithfulness and answer relevance; and production monitoring of error rates, latency percentiles, and user feedback',
+'LangSmith is a fine-tuning orchestration service that ingests LangChain execution traces and automatically generates supervised fine-tuning datasets for distilling large LLM reasoning into smaller, faster deployment models'
+],
+answer:2,
+explanation:'LangSmith (cloud.langsmith.com, requires LANGCHAIN_API_KEY env var) solves the "black box" problem of LLM applications. Key capabilities: Tracing: every chain run is logged as a tree of spans showing the full input and output at every step — retrieved chunks, the complete prompt sent to the LLM (with all template variables resolved), the LLM response, tool calls and their return values, parsing results. Debugging: inspect exactly what context was retrieved and what prompt was sent when an answer was wrong. Prompt Hub: version-control prompts with Git-like commits, run A/B experiments comparing prompt variants on the same test set. Evaluation: create test datasets of (question, expected_answer) pairs; run automated evaluators measuring Correctness (LLM-as-judge), Faithfulness (is the answer grounded in retrieved context?), and Retrieval relevance (are retrieved chunks relevant to the query?). Production monitoring: per-session latency percentiles, token usage and cost breakdown by chain step, error rate tracking, user feedback collection (thumbs up/down). Integration is zero-code: set LANGCHAIN_TRACING_V2=true and LANGCHAIN_API_KEY — all LangChain calls are traced automatically.'},
+
+{lesson:'L1',lessonName:'Mastering LangChain Text to Retrieval',
+question:'In LangChain, what is an Agent and how does it fundamentally differ from a static LCEL Chain?',
+options:[
+'An Agent is a fixed sequence of steps defined at authoring time that always executes in the same order regardless of input, differing from a Chain only by having built-in error handling and retry logic',
+'An Agent is a LangChain-managed thread pool executing multiple Chains in parallel for throughput, while a static Chain always executes its steps serially in one thread with no concurrency',
+'An Agent selects which vector store to query based on the detected topic of the user\'s question, while a Chain always queries all connected vector stores and merges the results into one ranked list',
+'A LangChain Agent is an LLM-driven dynamic reasoning loop where the model decides at runtime which action or tool to invoke next — the execution sequence is NOT hardcoded; the LLM generates a thought, selects a tool, observes the result, and repeats until the task is done — unlike a static Chain where every step is predetermined in code regardless of intermediate results'
+],
+answer:3,
+explanation:'The Agent vs. Chain distinction is fundamental in LangChain architecture: Static Chain (LCEL): the developer pre-defines every step. retrieve | prompt | llm | parser always runs retrieve, always prompts, always parses. Predictable, testable, but inflexible for dynamic tasks. Agent (ReAct or OpenAI Tools pattern): the LLM IS the planner. Given a set of tools (web_search, calculator, python_repl, sql_query, file_read), the agent runs a reasoning loop: Thought: I need to find today\'s MSFT stock price then calculate 15% of it. Action: web_search("MSFT stock price today"). Observation: "$418.20". Thought: Now I calculate 15% of 418.20. Action: calculator("0.15 * 418.20"). Observation: "62.73". Final Answer: 15% of MSFT is $62.73. No step was hardcoded — the LLM decided the entire sequence dynamically based on intermediate observations. Modern LangChain agent patterns: OpenAI Tools agent (structured tool calling), ReAct (text-based reasoning trace), and LangGraph-based agents (stateful graph with cycle support). Agents are essential for any workflow where the correct sequence of steps depends on intermediate results.'},
+
+// ─── L2: Intro to LLM RAG and Crew AI (8 Qs) ─────────────────────────
+{lesson:'L2',lessonName:'Intro to LLM RAG and Crew AI',
+question:'What is Retrieval-Augmented Generation (RAG) and what fundamental LLM limitations does it address?',
+options:[
+'RAG grounds LLM responses in verified, up-to-date, domain-specific information by retrieving relevant documents at query time and injecting them as prompt context — solving the core limitations that LLMs have a static knowledge cutoff, cannot access proprietary organisational data at inference time, and hallucinate when asked about topics not well-represented in their training data',
+'RAG is a fine-tuning technique training a model on a retrieval-augmented dataset where each training example includes retrieved passages alongside the target answer, teaching the model to rely on retrieved context during inference rather than parametric memory',
+'RAG is a model compression method replacing a large LLM\'s parametric memory with a compact retrieval index, reducing parameter count while maintaining factual accuracy on knowledge-intensive benchmarks',
+'RAG is a response caching layer storing previously generated LLM answers in a vector database to avoid redundant API calls when semantically similar questions are submitted repeatedly by different users'
+],
+answer:0,
+explanation:'RAG (introduced in Lewis et al. 2020, "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks") solves three fundamental LLM limitations: (1) Knowledge cutoff: LLMs are frozen at training time — a model trained in 2024 knows nothing about events after its cutoff date. RAG retrieves from any updated knowledge source at query time, keeping responses current. (2) Private data: LLMs were not trained on your company\'s internal documents, Confluence pages, customer records, or proprietary research. RAG fetches from your private sources without exposing them during training. (3) Hallucination: LLMs generate plausible-sounding text even when they lack real knowledge. With RAG, the system prompt contains "Answer only based on the following context: [retrieved chunks]" — grounding the response in real source material and enabling source citations. RAG is the dominant production pattern for enterprise LLM applications, directly supported by Azure OpenAI On Your Data, Azure AI Search, and LangChain create_retrieval_chain.'},
+
+{lesson:'L2',lessonName:'Intro to LLM RAG and Crew AI',
+question:'What are the three phases of a complete RAG pipeline and what specifically happens in each phase?',
+options:[
+'RAG has three phases: Training (fine-tune the LLM on domain documents), Indexing (pre-compute all possible question-answer pairs), and Serving (return pre-computed answers) — making RAG a QA lookup table populated by LLM-generated answers during a one-time batch run',
+'RAG\'s three phases are: Indexing (documents are loaded, chunked, embedded into vectors, and stored in a vector database — a one-time or periodic offline process), Retrieval (the user\'s query is embedded with the same model; the vector database returns the top-k semantically closest chunks at query time), and Generation (the retrieved chunks are injected into the LLM\'s prompt as grounding context and the LLM generates a factually anchored answer referencing that content)',
+'RAG has three phases: Parsing (convert documents to plain text), Ranking (sort all chunks by BM25 keyword relevance score), and Prompting (concatenate all ranked chunks into one long prompt regardless of context window limits)',
+'RAG\'s three phases are: Pre-training (train a dedicated encoder on the document corpus), Retrieval (use the encoder to find relevant passages), and Distillation (compress retrieved passages into a shorter summary before passing to a separate generator LLM)'
+],
+answer:1,
+explanation:'The RAG pipeline has two distinct time horizons: Offline — Indexing phase (done once, updated when source documents change): Load: Document Loaders ingest source files (PDF, web pages, SharePoint, databases). Split: Text Splitters chunk into 500-1000 token pieces with overlap. Embed: each chunk is passed to an embedding model (Azure OpenAI text-embedding-3-large produces 3072-dim vectors). Store: chunk text + vector + metadata stored in vector database (Azure AI Search, FAISS, Pinecone). Online — per user query: Retrieve: user query is embedded with the same model; vector DB returns top-k most similar chunks (k=3-5 typically). Generate: retrieved chunks are formatted into the prompt: "Context: {chunk_1}...{chunk_k}. Question: {query}. Answer based only on the provided context and cite your sources." The LLM generates a grounded, source-attributed response. LangChain implements this as create_retrieval_chain(retriever, combine_docs_chain) or vectorstore.as_retriever() | stuff_documents_chain. Azure AI Search handles indexing from Azure Blob Storage automatically, making it the simplest production path for Azure-hosted RAG systems.'},
+
+{lesson:'L2',lessonName:'Intro to LLM RAG and Crew AI',
+question:'What is the difference between dense retrieval and sparse retrieval, and how does hybrid retrieval combine their strengths?',
+options:[
+'Dense retrieval uses GPU-accelerated ANN search for speed; sparse retrieval uses CPU linear scan for cost efficiency; hybrid dynamically selects between them based on the query token count threshold',
+'Dense retrieval finds exact keyword matches via inverted indexes; sparse retrieval uses approximate nearest-neighbour on compressed vectors; hybrid applies both sequentially and deduplicates results',
+'Dense retrieval uses embedding models to find semantically similar chunks via cosine similarity — excelling at conceptual matches ("automobile" matches "car"); sparse retrieval uses keyword-based BM25 scoring — excelling at exact term matches (product codes, names, serial numbers); hybrid retrieval combines both rank lists using Reciprocal Rank Fusion (RRF) or weighted scoring to capture both semantic relevance and exact keyword precision simultaneously',
+'Dense retrieval always returns more documents than sparse; hybrid simply takes the intersection of both result sets, returning only chunks appearing in both the dense and sparse result lists simultaneously'
+],
+answer:2,
+explanation:'Dense vs. sparse distinction is critical for production RAG quality: Dense retrieval (vector/semantic search): uses embedding models (text-embedding-3, sentence-transformers) to compute semantic similarity via cosine distance. Strength: finds relevant chunks even when vocabulary differs — "vehicle" matches "automobile", "cardiac arrest" matches "heart attack", "machine learning model" matches "AI algorithm". Weakness: can miss chunks containing exact product codes (INV-2024-0042), version numbers (v4.2.1), or proper names where the embedding treats many similar strings as equivalent. Sparse retrieval (BM25 keyword matching): traditional inverted index using term frequency and inverse document frequency. Strength: exact match for "Invoice INV-2024-0042", "Azure Function v4 isolated worker model", "John Smith employee ID 44321". Weakness: misses semantically related content with different vocabulary. Hybrid retrieval: runs both in parallel then combines: Reciprocal Rank Fusion (RRF): score = sum(1/(k + rank_dense) + 1/(k + rank_sparse)) — robust, parameter-free default. Weighted combination: alpha times dense score + (1-alpha) times sparse score. Azure AI Search implements native hybrid retrieval with RRF — the recommended production configuration for enterprise RAG because it handles both vocabulary mismatch and exact match cases reliably.'},
+
+{lesson:'L2',lessonName:'Intro to LLM RAG and Crew AI',
+question:'When should teams choose RAG versus fine-tuning to improve LLM performance on domain-specific use cases, and can the approaches be combined?',
+options:[
+'RAG is always preferable to fine-tuning because fine-tuning causes catastrophic forgetting of the base model\'s general knowledge, making the fine-tuned model useless outside the specific trained domain',
+'Fine-tuning is always preferable to RAG because it permanently embeds domain knowledge into model weights, eliminating retrieval infrastructure and consistently delivering lower inference latency for all query types',
+'RAG should be chosen when knowledge changes frequently and fine-tuning when the domain has unusual vocabulary — these are the only two factors that fully determine the correct choice between the approaches',
+'Use RAG when the knowledge base is large or frequently updated (adding a document takes seconds vs. retraining), factual citations are required, or private data must stay out of training; use fine-tuning when the model needs to internalise a consistent output format, learn domain-specific reasoning patterns, or work with low-latency constraints; production systems frequently combine both — a fine-tuned model using RAG for current factual grounding'
+],
+answer:3,
+explanation:'RAG vs. Fine-tuning decision framework: Choose RAG when: Knowledge is dynamic (product catalogue updates weekly, regulations change). Citations and auditability are required ("from the 2024 Annual Report, page 14"). Private data cannot be included in training for security or compliance reasons (customer PII, trade secrets). Rapid iteration is needed — update the knowledge base in minutes without retraining or downtime. Choose Fine-tuning when: The model needs to learn a consistent output format or schema it should reliably follow. Domain uses specialised reasoning patterns not captured by retrieval (legal contract analysis logic, medical diagnosis decision trees). Low latency is critical and retrieval adds unacceptable overhead. Style and tone must be deeply consistent (corporate communication guidelines). Combining both: fine-tune a model to understand your domain\'s format and reasoning patterns, then add RAG to give it access to current facts and source citations. Example: a legal AI assistant fine-tuned on contract analysis reasoning patterns + RAG connected to current jurisdiction regulations and case law. Azure OpenAI supports fine-tuning (GPT-4o fine-tuning API) and RAG (Azure OpenAI On Your Data with Azure AI Search integration).'},
+
+{lesson:'L2',lessonName:'Intro to LLM RAG and Crew AI',
+question:'What is CrewAI and what is its fundamental abstraction model for building collaborative multi-agent AI systems?',
+options:[
+'CrewAI is a Python framework for orchestrating role-playing AI agents — its core abstraction is a Crew (a team of Agents) where each Agent has a Role (professional persona), Goal (specific objective), and Backstory (contextual background); the Crew executes a list of Tasks by routing each to the most appropriate agent and synthesising outputs into a final deliverable, enabling complex workflows to be decomposed into specialised collaborative agent roles',
+'CrewAI is a distributed training platform where crew members (GPU worker nodes) collaboratively train a large language model using data parallelism across Azure virtual machine clusters',
+'CrewAI is a prompt engineering library providing role-based system prompt templates — different crew roles supply pre-written prompts but there is no actual agent-to-agent communication, task delegation, or multi-step orchestration in the framework',
+'CrewAI is a proprietary Microsoft multi-agent framework integrated with Azure AI Foundry, requiring an active Azure subscription and Entra ID authentication before any multi-agent workflow can be deployed'
+],
+answer:0,
+explanation:'CrewAI (open-source, crewai.com) provides a high-level abstraction for multi-agent collaboration. Core classes: Agent — defined by role (professional persona), goal (specific objective), backstory (contextual background together forming the system prompt), llm (any LangChain-compatible model — GPT-4o, Claude 3.5, Llama 3, Azure OpenAI), and tools (list of callable capabilities). Crew — the team coordinator managing agent collaboration and task routing. Task — a discrete work unit with description, expected_output, assigned agent, and optional context (prior task outputs to pass as input). Example crew: researcher = Agent(role="Senior Research Analyst", goal="Find comprehensive information on LLM trends", backstory="Experienced tech analyst with 10 years in AI research", llm=ChatOpenAI(model="gpt-4o"), tools=[SerperDevTool()]). writer = Agent(role="Technical Writer", goal="Transform research into clear documentation"). research_task = Task(description="Research the top 5 LLM frameworks of 2024", agent=researcher). writing_task = Task(description="Write a 500-word summary", agent=writer, context=[research_task]). Crew(agents=[researcher, writer], tasks=[research_task, writing_task], process=Process.sequential).kickoff() executes the full workflow.'},
+
+{lesson:'L2',lessonName:'Intro to LLM RAG and Crew AI',
+question:'In CrewAI, how do Agents, Tasks, and Tools interact, and what role does the underlying LLM play within each Agent?',
+options:[
+'In CrewAI: Agents are Python functions, Tasks are thread-pool workers executing those functions concurrently, and Tools are REST API connectors supplying real-time external data to the functions',
+'In CrewAI: Agents are autonomous AI entities with a defined role, goal, backstory, and access to specific tools; Tasks are discrete work units with description, expected output, and optional context from prior tasks; Tools are Python-callable capabilities (web search, file I/O, code execution, API calls, database queries) that agents invoke to gather information — the agent\'s LLM reasons about which tool to call next, interprets tool outputs, and decides when the task is complete',
+'In CrewAI: Agents are static rule-based decision trees, Tasks are SQL queries against a knowledge base, and Tools are pre-built LangChain chains that agents invoke as sub-routines without any LLM reasoning between calls',
+'In CrewAI: Agents are cloud microservices, Tasks are REST endpoints those services expose, and Tools are API authentication tokens; the Crew orchestrates them via a service mesh using gRPC for inter-agent communication'
+],
+answer:1,
+explanation:'CrewAI\'s three-layer architecture works as follows: Agents: each Agent wraps an LLM (any LangChain-compatible model — GPT-4o, Claude 3.5, Llama 3 via Ollama) with a persona defined by role + goal + backstory (together forming the system prompt that shapes how the LLM reasons). The LLM IS the intelligence of each agent — it plans, reasons, and decides which tools to use. allow_delegation=True enables an agent to assign subtasks to teammates. Tasks: each Task is an assignment specifying what must be done (description), what the output should look like (expected_output), and which agent does it (agent). context=[prior_task] threads prior task outputs as additional input to the current task — the writer agent receives the researcher\'s full report as context automatically. output_file="report.md" saves the result to disk. Tools: Built-in tools include SerperDevTool (Google Search via Serper API), WebsiteSearchTool (URL scraping), FileReadTool, CodeInterpreterTool, DirectoryReadTool. Custom tools: decorate any Python function with @tool decorator. All tools follow LangChain\'s BaseTool interface — any LangChain tool works in CrewAI. Execution loop: agent reads task description, reasons about what information is needed, picks a tool, executes it, reads the output, decides the next step, repeats until satisfied, returns the completed result.'},
+
+{lesson:'L2',lessonName:'Intro to LLM RAG and Crew AI',
+question:'What are the two task execution strategies in CrewAI — sequential and hierarchical — and when is each the better choice?',
+options:[
+'Sequential means each task waits for the prior task output forming a data pipeline — best for deep reasoning requiring all context at once; hierarchical runs all tasks simultaneously in parallel — best for independent tasks with no dependencies',
+'Sequential distributes tasks equally across agents to maximise GPU utilisation; hierarchical prioritises tasks by importance score, routing high-priority tasks to more capable LLM models automatically',
+'Sequential execution runs tasks in a defined order where each task can use prior task outputs as context — ideal for linear workflows (research then analyse then draft then review); hierarchical execution adds a manager agent that dynamically assigns tasks to the most capable worker agent based on task requirements and agent capabilities — ideal for complex workflows where optimal task routing cannot be fully predetermined by the developer',
+'Sequential and hierarchical execution are functionally identical in CrewAI — the process parameter controls only logging verbosity, not the actual routing, delegation, or execution order of tasks between agents in the crew'
+],
+answer:2,
+explanation:'CrewAI Process strategies: Sequential (Process.sequential): Tasks run in the declared order. Task 1 output flows to Task 2 via context=[task1], Task 2 output to Task 3, etc. Best for: clearly ordered linear workflows — content pipeline (collect sources, summarise, draft article, proofread), code review pipeline (read PR, analyse patterns, write suggestions, format report). Simple, predictable, fully deterministic execution with no routing surprises. Hierarchical (Process.hierarchical): Requires a manager_llm parameter (typically a stronger model — GPT-4o as manager directing GPT-4o-mini workers). CrewAI automatically creates a manager agent that reads all task descriptions and dynamically decides: which agent is best suited for each task, the optimal execution order, whether to retry with a different agent if output quality is poor, and how to synthesise and combine outputs into the final result. Best for: open-ended research projects where the best approach is unclear upfront, complex multi-domain tasks requiring expert routing, agentic coding and debugging workflows where each step informs the next dynamically. Practical guidance: start with sequential for well-defined workflows; switch to hierarchical when you find yourself wanting the manager\'s judgment to determine how work is distributed and ordered.'},
+
+{lesson:'L2',lessonName:'Intro to LLM RAG and Crew AI',
+question:'How does LangGraph differ from both LangChain LCEL chains and CrewAI, and what types of agentic workflows is it best suited for?',
+options:[
+'LangGraph is LangChain\'s proprietary hosted cloud service for deploying conversational agents at enterprise scale, differing from LCEL chains in that LangGraph applications run in a managed cloud while LCEL chains execute locally',
+'LangGraph is a data visualisation library generating execution flow diagrams of LangChain chains for debugging and documentation — differing from CrewAI in that LangGraph produces static diagrams while CrewAI generates interactive runtime execution traces',
+'LangGraph is functionally identical to LangChain LCEL chains — both share the same execution engine and differ only in API naming conventions introduced during the LangChain v0.2 library restructuring',
+'LangGraph models agent workflows as stateful directed graphs where nodes are processing steps and edges are conditional transitions based on current state — unlike LCEL chains (which follow fixed linear pipelines) and CrewAI (which focuses on role-based multi-agent teams), LangGraph excels at workflows requiring cycles, conditional branching, human-in-the-loop checkpoints, persistent cross-step state, and complex agent loops like iterative reasoning, agentic coding, and long-running task management'
+],
+answer:3,
+explanation:'LangGraph (part of the LangChain ecosystem) was designed specifically for complex agentic workflows that static LCEL cannot handle. What LangGraph adds over LCEL: State: a TypedDict shared across all nodes — nodes read from and write to the shared state rather than passing data linearly in a chain. Cycles: graphs can loop — an agent takes an action, observes the result, and may return to the reasoning node to take another action (required for any genuine multi-step agent). Conditional edges: routing based on state — after the LLM responds, route to "tools" if it called a tool, or "end" if it returned a final answer. Persistence: LangGraph checkpointers (SqliteSaver, PostgresSaver) save state at every step enabling: resumable long-running workflows after failure or interruption, human-in-the-loop pauses where a person reviews and approves before the next step, and time-travel debugging (replay execution from any historical checkpoint). Comparison: LCEL (prompt | llm | parser): linear, no cycles, no shared state, best for simple chains. CrewAI: multi-agent role-based crews and tasks, best for teams of specialised collaborative agents. LangGraph: stateful graph with cycles and conditional edges, best for complex single-agent or multi-agent reasoning loops. Production systems frequently combine all three: LangChain components for module wiring, LangGraph for orchestration of agent loops, Azure OpenAI as the LLM provider, and Azure AI Search as the retrieval layer.'}
+
+]; // end QUESTIONS
+
+// ════════════════════════════════
+//  ENGINE
+// ════════════════════════════════
+const TOTAL=QUESTIONS.length; // 16
+
+let state={questions:[],currentIdx:0,userAnswers:[],shuffledOptions:[],shuffledAnswers:[],flagged:[],answered:[],startTime:null,endTime:null,timerInterval:null,tabSwitches:0,submitted:false};
+
+function shuffleArray(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function startTest(){
+  state.questions=[...QUESTIONS];state.currentIdx=0;
+  state.userAnswers=new Array(TOTAL).fill(-1);state.flagged=new Array(TOTAL).fill(false);
+  state.answered=new Array(TOTAL).fill(false);state.submitted=false;state.tabSwitches=0;state.startTime=Date.now();
+  state.shuffledOptions=[];state.shuffledAnswers=[];
+  state.questions.forEach(q=>{const ct=q.options[q.answer];const sh=shuffleArray(q.options);state.shuffledOptions.push(sh);state.shuffledAnswers.push(sh.indexOf(ct));});
+  showScreen('quiz');document.getElementById('quizHeader').classList.add('active');buildNavGrid();renderQuestion();startTimer();
+}
+
+function startTimer(){clearInterval(state.timerInterval);state.timerInterval=setInterval(()=>{const e=Math.floor((Date.now()-state.startTime)/1000);document.getElementById('timer').textContent=`${String(Math.floor(e/60)).padStart(2,'0')}:${String(e%60).padStart(2,'0')}`;},1000);}
+
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+
+function renderQuestion(){
+  const idx=state.currentIdx,q=state.questions[idx];
+  const opts=state.shuffledOptions[idx],cs=state.shuffledAnswers[idx],uc=state.userAnswers[idx],ia=state.answered[idx];
+  document.getElementById('qNum').textContent=idx+1;document.getElementById('qCounterNum').textContent=idx+1;
+  document.getElementById('qLessonTag').textContent=q.lesson;
+  const bf=document.getElementById('btnFlag');bf.className='btn-flag'+(state.flagged[idx]?' flagged':'');bf.innerHTML=state.flagged[idx]?'🚩 Flagged':'🏳 Flag';
+  document.getElementById('qText').textContent=q.question;
+  const letters=['A','B','C','D'];const ol=document.getElementById('optionsList');ol.innerHTML='';
+  opts.forEach((ot,i)=>{const btn=document.createElement('button');btn.className='option-btn';
+    if(ia){btn.disabled=true;if(i===cs)btn.classList.add('correct');else if(i===uc)btn.classList.add('wrong');}
+    else if(i===uc)btn.classList.add('selected');
+    btn.innerHTML=`<span class="opt-letter">${letters[i]}</span><span>${ot}</span>`;
+    if(!ia)btn.onclick=()=>selectAnswer(i);ol.appendChild(btn);});
+  const eb=document.getElementById('explanationBox');
+  if(ia){const ok=uc===cs;eb.className='explanation-box visible'+(ok?'':' wrong-exp');eb.innerHTML=`<strong>${ok?'✅ Correct!':'❌ Incorrect'}</strong>${q.explanation}`;}
+  else{eb.className='explanation-box';eb.innerHTML='';}
+  document.getElementById('btnPrev').style.display=idx===0?'none':'';
+  const il=idx===TOTAL-1;document.getElementById('btnNext').style.display=il?'none':'';
+  document.getElementById('lastQMsg').style.display=il?'block':'none';updateNavGrid();
+}
+
+function selectAnswer(i){const idx=state.currentIdx;if(state.answered[idx])return;state.userAnswers[idx]=i;state.answered[idx]=true;renderQuestion();}
+function toggleFlag(){state.flagged[state.currentIdx]=!state.flagged[state.currentIdx];renderQuestion();}
+function goToNext(){if(state.currentIdx<TOTAL-1){state.currentIdx++;renderQuestion();}}
+function goToPrev(){if(state.currentIdx>0){state.currentIdx--;renderQuestion();}}
+function jumpTo(i){state.currentIdx=i;renderQuestion();}
+
+function buildNavGrid(){
+  const g=document.getElementById('navGrid');g.innerHTML='';
+  for(let i=0;i<TOTAL;i++){const d=document.createElement('div');d.className='nav-dot';d.textContent=i+1;d.id=`navDot${i}`;d.onclick=()=>jumpTo(i);g.appendChild(d);}
+}
+function updateNavGrid(){
+  for(let i=0;i<TOTAL;i++){const d=document.getElementById(`navDot${i}`);if(!d)continue;d.className='nav-dot';
+    if(i===state.currentIdx)d.classList.add('current');
+    else if(state.submitted){if(state.answered[i])d.classList.add(state.userAnswers[i]===state.shuffledAnswers[i]?'correct-nav':'wrong-nav');}
+    else if(state.flagged[i])d.classList.add('flagged');
+    else if(state.answered[i])d.classList.add('answered');}
+}
+
+function openSubmitModal(){document.getElementById('submitModal').classList.add('show');}
+function closeSubmitModal(){document.getElementById('submitModal').classList.remove('show');}
+
+function submitExam(){
+  closeSubmitModal();clearInterval(state.timerInterval);state.endTime=Date.now();state.submitted=true;
+  document.getElementById('quizHeader').classList.remove('active');document.getElementById('tabWarning').classList.remove('show');
+  updateNavGrid();computeResults();showScreen('results');
+}
+
+function computeResults(){
+  let correct=0,wrong=0,skipped=0;const lm={};
+  state.questions.forEach((q,i)=>{
+    if(!lm[q.lesson])lm[q.lesson]={name:q.lessonName,total:0,correct:0};
+    lm[q.lesson].total++;
+    if(!state.answered[i]){skipped++;return;}
+    if(state.userAnswers[i]===state.shuffledAnswers[i]){correct++;lm[q.lesson].correct++;}else wrong++;
+  });
+  const pct=Math.round((correct/TOTAL)*100);const e=Math.floor((state.endTime-state.startTime)/1000);
+  document.getElementById('scorePct').textContent=`${pct}%`;document.getElementById('rCorrect').textContent=`${correct} / ${TOTAL}`;
+  document.getElementById('rTime').textContent=`${String(Math.floor(e/60)).padStart(2,'0')}:${String(e%60).padStart(2,'0')}`;
+  document.getElementById('rWrong').textContent=wrong;document.getElementById('rSkipped').textContent=skipped;
+  document.getElementById('scoreRing').className='score-ring '+(pct>=70?'pass':'fail');
+  document.getElementById('resultsTitle').textContent=pct>=70?`✅ Well done! ${pct}% — Module 14 Complete`:`📘 Keep practising — ${pct}% — Review & Retry`;
+  const bd=document.getElementById('lessonBreakdown');bd.innerHTML='';
+  Object.entries(lm).forEach(([tag,data])=>{
+    const pl=Math.round((data.correct/data.total)*100);const bc=pl>=70?'':pl>=40?' ok':' bad';
+    bd.innerHTML+=`<div class="lesson-row"><div class="lr-tag">${tag}</div><div class="lr-name">${data.name}</div><div class="lr-bar-wrap"><div class="lr-bar${bc}" style="width:${pl}%"></div></div><div class="lr-score">${data.correct}/${data.total}</div></div>`;
+  });
+}
+
+function showReview(){
+  const letters=['A','B','C','D'];const c=document.getElementById('reviewCards');c.innerHTML='';
+  state.questions.forEach((q,i)=>{
+    const opts=state.shuffledOptions[i],cs=state.shuffledAnswers[i],uc=state.userAnswers[i],ia=state.answered[i];
+    const ok=ia&&uc===cs;const badge=ia?(ok?'correct':'wrong'):'skipped';const bt=ia?(ok?'✅ Correct':'❌ Incorrect'):'⏭ Skipped';
+    let oh='';
+    opts.forEach((o,j)=>{let cl='rc-option';if(j===cs)cl+=' correct-ans';else if(ia&&j===uc)cl+=' user-wrong';oh+=`<div class="${cl}"><span class="opt-l">${letters[j]}</span><span>${o}</span></div>`;});
+    c.innerHTML+=`<div class="review-card"><div class="rc-meta"><div class="rc-num">Q${i+1}</div><div class="rc-lesson">${q.lesson} · ${q.lessonName}</div><div class="rc-badge ${badge}">${bt}</div></div><div class="rc-question">${q.question}</div><div class="rc-options">${oh}</div><div class="rc-exp"><strong>💡 Explanation</strong>${q.explanation}</div></div>`;
+  });showScreen('review');
+}
+function showResults(){showScreen('results');}
+function retakeTest(){startTest();}
+
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden&&!state.submitted&&state.startTime){
+    state.tabSwitches++;document.getElementById('tabCount').textContent=state.tabSwitches;
+    document.getElementById('tabWarning').classList.add('show');
+    setTimeout(()=>document.getElementById('tabWarning').classList.remove('show'),5000);
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>M16 Practice Test · Azure AI/ML · K21 Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy:#1A1248; --navy-mid:#2E2080; --green:#8DC63F; --green-hover:#79B030;
+    --green-tint:#F1F8E8; --blue:#1B9BD9; --blue-tint:#EBF6FD;
+    --page-bg:#F7F8FA; --card:#FFFFFF; --border:#E8EAEE;
+    --text-primary:#111827; --text-secondary:#4B5563; --text-muted:#9CA3AF;
+    --red:#EF4444; --red-tint:#FEF2F2; --amber:#F59E0B; --amber-tint:#FFFBEB;
+    --radius:14px; --radius-sm:8px;
+    --shadow:0 1px 4px rgba(0,0,0,.06); --shadow-md:0 4px 16px rgba(0,0,0,.10);
+  }
+  html{scroll-behavior:smooth;}
+  body{font-family:'DM Sans',sans-serif;background:var(--page-bg);color:var(--text-primary);min-height:100vh;}
+  .site-header{background:var(--navy);padding:14px 24px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:200;}
+  .logo-mark{width:34px;height:34px;background:var(--green);border-radius:8px;display:grid;place-items:center;font-weight:800;font-size:15px;color:#fff;flex-shrink:0;}
+  .logo-text{font-size:17px;font-weight:700;color:#fff;} .logo-text span{color:var(--green);}
+  .header-sub{margin-left:auto;font-size:12px;color:rgba(255,255,255,0.55);font-weight:500;text-align:right;line-height:1.4;}
+  .quiz-header{display:none;background:var(--navy);border-top:1px solid rgba(255,255,255,0.08);padding:10px 24px;align-items:center;gap:12px;position:sticky;top:62px;z-index:199;}
+  .quiz-header.active{display:flex;}
+  .q-counter{font-size:14px;font-weight:600;color:rgba(255,255,255,0.9);} .q-counter span{color:var(--green);}
+  .btn-submit-top{margin-left:auto;background:var(--green);color:#fff;border:none;border-radius:var(--radius-sm);padding:7px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s;}
+  .btn-submit-top:hover{background:var(--green-hover);}
+  .timer{font-size:14px;font-weight:600;color:rgba(255,255,255,0.8);background:rgba(255,255,255,0.08);padding:5px 12px;border-radius:20px;font-variant-numeric:tabular-nums;}
+  .screen{display:none;} .screen.active{display:block;}
+  .landing-tag{display:inline-flex;align-items:center;gap:6px;background:var(--green-tint);color:var(--green-hover);font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;margin-bottom:18px;}
+  .landing-title{font-size:clamp(22px,5vw,36px);font-weight:800;color:var(--navy);line-height:1.2;margin-bottom:14px;}
+  .landing-title span{color:var(--green);}
+  .landing-desc{font-size:15px;color:var(--text-secondary);line-height:1.65;max-width:680px;margin-bottom:28px;}
+  .stats-row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:28px;}
+  .stat-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:14px 20px;text-align:center;flex:1;min-width:110px;}
+  .stat-num{font-size:24px;font-weight:800;color:var(--navy);} .stat-label{font-size:12px;color:var(--text-muted);font-weight:500;margin-top:2px;}
+  .lessons-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin-bottom:28px;}
+  .lesson-chip{background:var(--card);border:1.5px solid var(--border);border-radius:10px;padding:10px 13px;display:flex;align-items:center;gap:8px;}
+  .lesson-badge{width:26px;height:26px;border-radius:6px;background:var(--blue-tint);color:var(--blue);font-size:10px;font-weight:700;display:grid;place-items:center;flex-shrink:0;}
+  .lesson-chip-text{font-size:12px;font-weight:600;color:var(--text-primary);line-height:1.3;}
+  .btn-start{background:var(--navy);color:#fff;border:none;border-radius:var(--radius);padding:16px 36px;font-size:17px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s,transform .15s;display:inline-flex;align-items:center;gap:10px;}
+  .btn-start:hover{background:var(--navy-mid);transform:translateY(-2px);}
+  .hint-text{margin-top:14px;font-size:13px;color:var(--text-muted);} .hint-text span{color:var(--blue);}
+  #quiz{max-width:840px;margin:0 auto;padding:24px 20px 80px;}
+  .quiz-layout{display:grid;grid-template-columns:1fr 230px;gap:20px;align-items:start;}
+  @media(max-width:740px){.quiz-layout{grid-template-columns:1fr;}}
+  .question-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow);}
+  .q-meta{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap;}
+  .q-num{font-size:13px;font-weight:600;color:var(--text-muted);}
+  .q-lesson-tag{font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;background:var(--blue-tint);color:var(--blue);}
+  .btn-flag{margin-left:auto;font-size:12px;font-weight:600;color:var(--text-muted);border:1.5px solid var(--border);background:none;border-radius:20px;padding:4px 12px;cursor:pointer;font-family:inherit;transition:all .15s;display:flex;align-items:center;gap:5px;}
+  .btn-flag.flagged{background:var(--amber-tint);color:var(--amber);border-color:var(--amber);}
+  .q-text{font-size:17px;font-weight:600;line-height:1.55;color:var(--text-primary);margin-bottom:22px;}
+  .options-list{display:flex;flex-direction:column;gap:10px;margin-bottom:22px;}
+  .option-btn{background:#fff;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:13px 16px;text-align:left;cursor:pointer;font-family:inherit;font-size:14.5px;color:var(--text-primary);line-height:1.45;display:flex;align-items:flex-start;gap:12px;transition:all .15s;font-weight:500;}
+  .option-btn:hover:not(:disabled){border-color:var(--navy);background:rgba(26,18,72,.03);}
+  .option-btn .opt-letter{width:24px;height:24px;border-radius:6px;background:var(--page-bg);border:1.5px solid var(--border);display:grid;place-items:center;font-size:11px;font-weight:700;color:var(--text-muted);flex-shrink:0;margin-top:1px;transition:all .15s;}
+  .option-btn.selected .opt-letter{background:var(--navy);border-color:var(--navy);color:#fff;}
+  .option-btn.selected{border-color:var(--navy);background:rgba(26,18,72,.04);}
+  .option-btn.correct{border-color:var(--green);background:var(--green-tint);}
+  .option-btn.correct .opt-letter{background:var(--green);border-color:var(--green);color:#fff;}
+  .option-btn.wrong{border-color:var(--red);background:var(--red-tint);}
+  .option-btn.wrong .opt-letter{background:var(--red);border-color:var(--red);color:#fff;}
+  .option-btn:disabled{cursor:default;}
+  .explanation-box{background:var(--green-tint);border:1.5px solid #c3e289;border-radius:var(--radius-sm);padding:14px 16px;font-size:13.5px;line-height:1.6;color:#3D6B15;display:none;margin-bottom:16px;}
+  .explanation-box strong{display:block;margin-bottom:4px;font-weight:700;}
+  .explanation-box.visible{display:block;}
+  .explanation-box.wrong-exp{background:var(--red-tint);border-color:#fca5a5;color:#7F1D1D;}
+  .nav-row{display:flex;gap:10px;align-items:center;}
+  .btn-nav{background:var(--page-bg);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:10px 18px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--text-primary);transition:all .15s;}
+  .btn-nav:hover{border-color:var(--navy);color:var(--navy);}
+  .btn-nav.primary{background:var(--navy);color:#fff;border-color:var(--navy);margin-left:auto;}
+  .btn-nav.primary:hover{background:var(--navy-mid);}
+  .last-q-msg{font-size:12.5px;color:var(--text-muted);text-align:center;display:none;flex:1;}
+  .nav-panel{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);position:sticky;top:128px;}
+  .nav-panel h4{font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;}
+  .nav-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin-bottom:14px;}
+  .nav-dot{width:30px;height:30px;border-radius:7px;border:1.5px solid var(--border);background:#fff;font-size:10px;font-weight:700;color:var(--text-muted);display:grid;place-items:center;cursor:pointer;transition:all .15s;}
+  .nav-dot:hover{border-color:var(--navy);color:var(--navy);}
+  .nav-dot.current{border-color:var(--navy);background:var(--navy);color:#fff;}
+  .nav-dot.answered{background:var(--green-tint);border-color:var(--green);color:#3D6B15;}
+  .nav-dot.flagged{background:var(--amber-tint);border-color:var(--amber);color:var(--amber);}
+  .nav-dot.correct-nav{background:var(--green);border-color:var(--green);color:#fff;}
+  .nav-dot.wrong-nav{background:var(--red);border-color:var(--red);color:#fff;}
+  .nav-legend{font-size:11px;color:var(--text-muted);display:flex;flex-direction:column;gap:4px;}
+  .legend-item{display:flex;align-items:center;gap:6px;}
+  .legend-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
+  .results-header{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:32px;box-shadow:var(--shadow-md);margin-bottom:20px;text-align:center;}
+  .score-ring{width:110px;height:110px;border-radius:50%;border:7px solid var(--border);margin:0 auto 18px;display:grid;place-items:center;}
+  .score-ring.pass{border-color:var(--green);} .score-ring.fail{border-color:var(--red);}
+  .score-pct{font-size:30px;font-weight:800;color:var(--navy);}
+  .score-label{font-size:12px;color:var(--text-muted);font-weight:500;margin-top:-2px;}
+  .results-title{font-size:21px;font-weight:800;color:var(--navy);margin-bottom:6px;}
+  .results-sub{font-size:14px;color:var(--text-secondary);margin-bottom:22px;}
+  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px;}
+  @media(max-width:560px){.stats-grid{grid-template-columns:repeat(2,1fr);}}
+  .r-stat{background:var(--page-bg);border-radius:var(--radius-sm);padding:14px;text-align:center;}
+  .r-stat-val{font-size:20px;font-weight:800;color:var(--navy);}
+  .r-stat-key{font-size:11px;color:var(--text-muted);font-weight:500;margin-top:2px;}
+  .results-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+  .btn-results{padding:11px 22px;border-radius:var(--radius-sm);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;}
+  .btn-results.primary{background:var(--navy);color:#fff;border:none;} .btn-results.primary:hover{background:var(--navy-mid);}
+  .btn-results.secondary{background:#fff;color:var(--navy);border:1.5px solid var(--border);} .btn-results.secondary:hover{border-color:var(--navy);}
+  .lesson-breakdown{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);margin-bottom:20px;}
+  .breakdown-title{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:16px;}
+  .lesson-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .lesson-row:last-child{margin-bottom:0;}
+  .lr-tag{font-size:11px;font-weight:700;padding:3px 7px;border-radius:20px;flex-shrink:0;min-width:28px;text-align:center;background:var(--blue-tint);color:var(--blue);}
+  .lr-name{font-size:13px;font-weight:500;color:var(--text-primary);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .lr-bar-wrap{width:100px;height:7px;background:var(--border);border-radius:4px;overflow:hidden;flex-shrink:0;}
+  .lr-bar{height:100%;border-radius:4px;background:var(--green);}
+  .lr-bar.bad{background:var(--red);} .lr-bar.ok{background:var(--amber);}
+  .lr-score{font-size:13px;font-weight:700;color:var(--text-secondary);width:38px;text-align:right;flex-shrink:0;}
+  .review-header{display:flex;align-items:center;gap:12px;margin-bottom:22px;flex-wrap:wrap;}
+  .review-title{font-size:20px;font-weight:800;color:var(--navy);} .review-sub{font-size:13px;color:var(--text-muted);}
+  .btn-back{background:var(--page-bg);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:9px 16px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--text-secondary);transition:all .15s;margin-left:auto;}
+  .btn-back:hover{border-color:var(--navy);color:var(--navy);}
+  .review-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:22px;margin-bottom:14px;box-shadow:var(--shadow);}
+  .rc-meta{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+  .rc-num{font-size:12px;font-weight:700;color:var(--text-muted);}
+  .rc-lesson{font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;background:var(--blue-tint);color:var(--blue);}
+  .rc-badge{font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px;}
+  .rc-badge.correct{background:var(--green-tint);color:#3D6B15;} .rc-badge.wrong{background:var(--red-tint);color:var(--red);} .rc-badge.skipped{background:var(--amber-tint);color:var(--amber);}
+  .rc-question{font-size:15px;font-weight:600;color:var(--text-primary);margin-bottom:14px;line-height:1.5;}
+  .rc-options{display:flex;flex-direction:column;gap:7px;margin-bottom:14px;}
+  .rc-option{padding:9px 14px;border-radius:var(--radius-sm);font-size:13.5px;display:flex;align-items:flex-start;gap:10px;border:1.5px solid var(--border);}
+  .rc-option.correct-ans{border-color:var(--green);background:var(--green-tint);color:#3D6B15;}
+  .rc-option.user-wrong{border-color:var(--red);background:var(--red-tint);color:var(--red);}
+  .rc-option .opt-l{font-weight:700;font-size:12px;width:18px;flex-shrink:0;margin-top:1px;}
+  .rc-exp{background:var(--page-bg);border-left:3px solid var(--green);padding:12px 14px;border-radius:0 var(--radius-sm) var(--radius-sm) 0;font-size:13px;line-height:1.6;color:var(--text-secondary);}
+  .rc-exp strong{color:var(--navy);font-weight:700;display:block;margin-bottom:3px;}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:999;display:none;place-items:center;}
+  .modal-overlay.show{display:grid;}
+  .modal{background:#fff;border-radius:var(--radius);padding:28px;max-width:380px;width:90%;box-shadow:var(--shadow-md);text-align:center;}
+  .modal h3{font-size:18px;font-weight:700;color:var(--navy);margin-bottom:8px;}
+  .modal p{font-size:14px;color:var(--text-secondary);margin-bottom:22px;line-height:1.5;}
+  .modal-btns{display:flex;gap:10px;justify-content:center;}
+  .btn-modal{padding:10px 22px;border-radius:var(--radius-sm);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
+  .btn-modal.cancel{background:var(--page-bg);border:1.5px solid var(--border);color:var(--text-primary);}
+  .btn-modal.confirm{background:var(--navy);color:#fff;border:none;}
+  .tab-warning{background:var(--red);color:#fff;text-align:center;padding:8px 16px;font-size:13px;font-weight:600;display:none;position:sticky;top:110px;z-index:198;}
+  .tab-warning.show{display:block;}
+  .retake-row{display:flex;justify-content:center;gap:10px;margin-top:12px;flex-wrap:wrap;}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="logo-mark">K21</div>
+  <div class="logo-text">K21 <span>Academy</span></div>
+  <div class="header-sub">Azure AI/ML Job Focus Program<br/>Module 16 · Practice Test</div>
+</header>
+<div class="quiz-header" id="quizHeader">
+  <div class="q-counter">M16: MLOps — Experiment with Azure ML &nbsp;·&nbsp; Q <span id="qCounterNum">1</span> / 24</div>
+  <div class="timer" id="timer">00:00</div>
+  <button class="btn-submit-top" onclick="openSubmitModal()">📋 Submit Exam</button>
+</div>
+<div class="tab-warning" id="tabWarning">⚠️ Tab switch detected! Return to the test. Attempts: <span id="tabCount">0</span></div>
+
+<div id="landing" class="screen active">
+  <div style="max-width:800px;margin:0 auto;padding:40px 20px 60px;">
+    <div class="landing-tag">📋 Azure AI/ML · K21 Academy</div>
+    <h1 class="landing-title">MLOps — Experiment with<br/><span>Azure ML — Module 16</span></h1>
+    <p class="landing-desc">Test your understanding across all 4 lessons. Covers MLOps principles on Azure, the Azure ML workspace, environments, pipelines, and endpoints — plus data ingestion (datastores, data assets, MLTable, versioning, data drift) — data transformation, feature engineering, missing value handling, encoding, and feature stores — and model training with compute targets, HyperDrive, AutoML, MLflow, and the model registry.</p>
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-num">📝 24</div><div class="stat-label">Questions</div></div>
+      <div class="stat-card"><div class="stat-num">📚 4</div><div class="stat-label">Lessons</div></div>
+      <div class="stat-card"><div class="stat-num">🔄 ∞</div><div class="stat-label">Retries</div></div>
+    </div>
+    <p style="font-size:13px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;">4 Lessons Covered</p>
+    <div class="lessons-grid">
+      <div class="lesson-chip"><div class="lesson-badge">L1</div><div class="lesson-chip-text">MLOps on Azure</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L2</div><div class="lesson-chip-text">Data Ingestion</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L3</div><div class="lesson-chip-text">Data Transform, Integrity &amp; Feature Engineering</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L4</div><div class="lesson-chip-text">Model Training &amp; Tuning</div></div>
+    </div>
+    <button class="btn-start" onclick="startTest()">🚀 Start Practice Test</button>
+    <p class="hint-text">💡 <span>Options shuffle every attempt</span> · Explanations after every answer · No time pressure</p>
+  </div>
+</div>
+
+<div id="quiz" class="screen">
+  <div class="quiz-layout">
+    <div>
+      <div class="question-card">
+        <div class="q-meta">
+          <div class="q-num">Question <span id="qNum">1</span> of 24</div>
+          <div class="q-lesson-tag" id="qLessonTag">L1</div>
+          <button class="btn-flag" id="btnFlag" onclick="toggleFlag()">🏳 Flag</button>
+        </div>
+        <div class="q-text" id="qText">Loading…</div>
+        <div class="options-list" id="optionsList"></div>
+        <div class="explanation-box" id="explanationBox"></div>
+        <div class="nav-row">
+          <button class="btn-nav" id="btnPrev" onclick="goToPrev()">← Previous</button>
+          <div class="last-q-msg" id="lastQMsg">🎯 Last question! Click <strong>Submit Exam</strong> above.</div>
+          <button class="btn-nav primary" id="btnNext" onclick="goToNext()">Next →</button>
+        </div>
+      </div>
+    </div>
+    <div class="nav-panel">
+      <h4>Question Navigator</h4>
+      <div class="nav-grid" id="navGrid"></div>
+      <div class="nav-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--green);"></div><span>Answered</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--amber);"></div><span>Flagged</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--border);"></div><span>Not visited</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="results" class="screen">
+  <div style="max-width:740px;margin:0 auto;padding:40px 20px 60px;">
+    <div class="landing-tag">🏁 Azure AI/ML Job Focus Program</div>
+    <div class="results-header">
+      <div class="score-ring" id="scoreRing"><div><div class="score-pct" id="scorePct">0%</div><div class="score-label">Score</div></div></div>
+      <div class="results-title" id="resultsTitle">Test Complete · Azure AI/ML</div>
+      <div class="results-sub">Module 16 — MLOps: Experiment with Azure ML</div>
+      <div class="stats-grid">
+        <div class="r-stat"><div class="r-stat-val" id="rCorrect">0 / 24</div><div class="r-stat-key">Correct Answers</div></div>
+        <div class="r-stat"><div class="r-stat-val" id="rTime">—</div><div class="r-stat-key">⏱️ Time</div></div>
+        <div class="r-stat"><div class="r-stat-val" id="rWrong">—</div><div class="r-stat-key">❌ Incorrect</div></div>
+        <div class="r-stat"><div class="r-stat-val" id="rSkipped">—</div><div class="r-stat-key">⏭️ Skipped</div></div>
+      </div>
+      <div class="results-btns">
+        <button class="btn-results primary" onclick="showReview()">📋 Review All Questions &amp; Answers</button>
+        <button class="btn-results secondary" onclick="retakeTest()">🔄 Retake Test</button>
+      </div>
+    </div>
+    <div class="lesson-breakdown"><div class="breakdown-title">📊 Per-Lesson Breakdown</div><div id="lessonBreakdown"></div></div>
+    <div class="retake-row"><button class="btn-results secondary" onclick="retakeTest()">🔄 Retake Test</button></div>
+  </div>
+</div>
+
+<div id="review" class="screen">
+  <div style="max-width:840px;margin:0 auto;padding:28px 20px 60px;">
+    <div class="review-header">
+      <div><div class="review-title">Questions &amp; Answers Review</div><div class="review-sub">All 24 questions with correct answers and explanations</div></div>
+      <button class="btn-back" onclick="showResults()">← Back to Results</button>
+    </div>
+    <div id="reviewCards"></div>
+    <div class="retake-row">
+      <button class="btn-back" onclick="showResults()">← Back to Results</button>
+      <button class="btn-results primary" onclick="retakeTest()" style="padding:10px 22px;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;background:var(--navy);color:#fff;">🔄 Retake Test</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="submitModal">
+  <div class="modal">
+    <h3>📋 Submit Exam?</h3>
+    <p>Are you sure you want to submit? Unanswered questions will be marked as skipped.</p>
+    <div class="modal-btns">
+      <button class="btn-modal cancel" onclick="closeSubmitModal()">Continue Quiz</button>
+      <button class="btn-modal confirm" onclick="submitExam()">Yes, Submit</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════
+//  QUESTION BANK — Azure AI/ML · Module 16 · MLOps on Azure ML
+//  24 Qs | L1×6, L2×6, L3×6, L4×6 | A×6  B×6  C×6  D×6
+// ═══════════════════════════════════════════════════════════════════════
+const QUESTIONS=[
+
+// ─── L1: MLOps on Azure (6 Qs) Q1-Q6 ────────────────────────────────
+{lesson:'L1',lessonName:'MLOps on Azure',
+question:'What is MLOps and what key problems in the ML development lifecycle does it solve?',
+options:[
+'MLOps (Machine Learning Operations) is a discipline combining ML, DevOps, and data engineering practices to automate and standardise the end-to-end ML lifecycle — solving problems including poor model reproducibility, slow manual deployment processes, absence of production monitoring, difficulty scaling ML workflows, and the disconnection between data science experimentation and production engineering teams',
+'MLOps is a proprietary Microsoft training framework built exclusively for Azure, providing specialised GPU cluster management and distributed training capabilities unavailable in open-source ML frameworks',
+'MLOps is a regulatory compliance standard requiring all AI models to be audited by a government body before deployment, ensuring models meet minimum accuracy thresholds for each regulated industry vertical',
+'MLOps is a software architecture pattern for microservices that determines how machine learning model inference endpoints are exposed as REST APIs with rate limiting and authentication middleware layers'
+],
+answer:0,
+explanation:'MLOps emerged from the observation that 90% of ML models never reach production, and those that do often fail within months. It addresses four core gaps in traditional ML development: (1) Reproducibility: without MLOps, re-running an experiment from six months ago is nearly impossible due to changed data, code, and environments. MLOps mandates versioning of data, code, and environments together. (2) Deployment velocity: manual deployment of a new model version takes days or weeks. MLOps CI/CD pipelines reduce this to hours or minutes with automated testing gates. (3) Production monitoring: models deployed without monitoring degrade silently as real-world data patterns shift. MLOps adds continuous evaluation, data drift detection, and automated retraining triggers. (4) Collaboration: data scientists and ML engineers work in separate silos with incompatible tooling. MLOps provides shared infrastructure (Azure ML workspace), shared experiment tracking (MLflow), and shared deployment tooling (Azure ML endpoints + GitHub Actions). Azure ML is designed to implement the full MLOps lifecycle from data ingestion through monitoring.'},
+
+{lesson:'L1',lessonName:'MLOps on Azure',
+question:'What is the Azure Machine Learning workspace and what core resources does it contain?',
+options:[
+'An Azure ML workspace is a virtual machine specification that defines CPU and GPU requirements for training jobs, replacing manual compute provisioning through the Azure portal interface',
+'An Azure ML workspace is the top-level Azure resource providing a centralised hub for all ML activities — containing compute resources (clusters and instances), data assets and datastores, experiments and run history, registered models, deployment endpoints, versioned environments (conda and Docker specs), and pipelines; secured by Azure AD and backed by Azure Storage, Key Vault, Container Registry, and Application Insights',
+'An Azure ML workspace is a Python package manager that creates isolated environments for each ML project, similar to conda or virtualenv but with built-in GPU driver management and Azure integration',
+'An Azure ML workspace is a billing namespace grouping Azure ML compute costs for departmental chargeback purposes without providing any functional ML capabilities beyond cost attribution and reporting'
+],
+answer:1,
+explanation:'The Azure ML workspace (created via portal, CLI, or ARM template) is the organisational unit for everything ML in Azure. Associated Azure resources created automatically: Azure Storage Account — stores training data, run outputs, and model artifacts. Azure Key Vault — stores secrets, connection strings, and credentials securely. Azure Container Registry — stores custom Docker images for environments. Application Insights — tracks telemetry from deployed model endpoints. Within the workspace itself: Datastores: registered connections to storage (Blob, ADLS, SQL). Data Assets: versioned named references to specific data. Compute: Clusters (scalable) and Instances (dev VMs). Environments: versioned conda/Docker software specifications. Experiments and Runs: grouped training job histories with metrics. Model Registry: versioned model artifacts with metadata. Endpoints: managed online (real-time) and batch inference endpoints. Pipelines: saved multi-step workflow DAGs. Components: reusable, versioned pipeline step definitions. Access control uses Azure RBAC — roles like AzureML Data Scientist, AzureML Compute Operator, and workspace Owner can be assigned at the workspace level.'},
+
+{lesson:'L1',lessonName:'MLOps on Azure',
+question:'What is the difference between Azure ML Studio and the Azure ML Python SDK v2, and when would you use each?',
+options:[
+'Azure ML Studio is the legacy product now deprecated and no longer receiving updates or security patches, while the Python SDK v2 is the current recommended approach for all Azure ML interactions',
+'Azure ML Studio is only accessible from within a corporate VPN while the Python SDK can be used from any internet connection, making Studio suitable only for secure on-premises enterprise environments',
+'Azure ML Studio is a web-based graphical interface for authoring, managing, and monitoring ML experiments — ideal for visual exploration, dataset management, experiment monitoring, and no-code/low-code authoring; the Azure ML Python SDK v2 provides programmatic control for automating pipelines, scripting training jobs, and integrating ML workflows into CI/CD systems — ideal for production engineering, batch automation, and code-first development teams',
+'Azure ML Studio and the Python SDK v2 are identical in capability — Studio is simply a visual wrapper that generates Python SDK code behind the scenes with no additional features or limitations compared to the code interface'
+],
+answer:2,
+explanation:'Azure ML Studio (ml.azure.com) and the Python SDK v2 are complementary tools that serve different workflows. Azure ML Studio (web UI): Visual drag-and-drop Designer for building pipelines without code. Dataset registration and data profiling (statistics, missing value counts, distributions). Experiment comparison — compare metrics from multiple runs side by side in charts. Model registry browsing — view registered models, their versions, and evaluation metrics. Endpoint management — monitor deployed endpoint latency, error rates, and request counts. Notebook experience — JupyterLab embedded in Studio on a Compute Instance. Labeling projects — manage human labeling workflows. Automated ML wizard — no-code AutoML experiment submission. Azure ML Python SDK v2 (azureml-sdk): Submit training jobs programmatically in CI/CD pipelines. Build, register, and schedule multi-step Pipelines as code. Query experiment results programmatically (for automated quality gates). Register models from training runs. Create and update endpoints. Best practice: use Studio for exploration, monitoring, and ad-hoc work; use the SDK and CLI for automation and reproducible production workflows. The Azure ML CLI v2 (az ml) is a third option — shell scripting for automation.'},
+
+{lesson:'L1',lessonName:'MLOps on Azure',
+question:'What are the deployment options for Azure ML managed endpoints and what use case does each serve?',
+options:[
+'Azure ML provides one endpoint type for all use cases — the managed online endpoint supports both real-time and batch inference through different HTTP methods on the same URL',
+'The three endpoint types are Development, Staging, and Production — corresponding to the three deployment environment stages in a standard software release pipeline',
+'Azure ML endpoints are categorised by Azure region — West US, East US, and European — chosen based on the geographic location of the majority of end users requiring model inference',
+'Managed Online Endpoints deliver real-time synchronous inference — one HTTP request receives an immediate response — ideal for interactive apps (fraud scoring, recommendation APIs, chatbot responses); Batch Endpoints handle asynchronous large-scale scoring over many files or records on compute clusters — ideal for overnight batch processing and bulk inference jobs where latency per prediction is less important than overall throughput'
+],
+answer:3,
+explanation:'Azure ML managed endpoints abstract away the infrastructure management of model serving: Managed Online Endpoint: Real-time REST API endpoint. Each endpoint has one or more Deployments (different model versions or configurations). Traffic can be split between deployments — 90% to v2, 10% to v3 for canary testing. Auto-scaling based on request volume. Supports blue-green deployment for zero-downtime model updates. Use case: customer-facing APIs requiring sub-second response times. Batch Endpoint: Accepts batch jobs — submit a pointer to files in Azure Storage, get back results in Azure Storage. Runs asynchronously on Compute Clusters. Supports parallel task distribution across nodes. Use case: scoring millions of customer records overnight, processing a month of sensor data, bulk model evaluation. Key comparison: Online endpoints scale pods (Kubernetes-style), charge per second of pod running time plus a small per-prediction cost. Batch endpoints spin up compute clusters, charge for cluster uptime, and are often more cost-effective for large volumes. Both types are managed — Microsoft handles infrastructure patching, load balancing, and availability.'},
+
+{lesson:'L1',lessonName:'MLOps on Azure',
+question:'What is an Azure ML Environment and why is it essential for training job reproducibility?',
+options:[
+'An Azure ML Environment is a versioned specification of all software dependencies required to run training or inference code — defining the base Docker image or conda specification with exact Python and package versions — ensuring that a job run today produces the same result when re-run months later on different compute, eliminating environment-mismatch failures in collaborative ML workflows',
+'An Azure ML Environment is a geographic availability zone configuration that determines which Azure data centre region will provision compute resources for training and model deployment operations',
+'An Azure ML Environment is a security access control configuration that defines which users and service principals are permitted to submit training jobs, view experiment results, and register models within the workspace',
+'An Azure ML Environment is a cost management policy that caps the maximum compute spending per experiment, automatically terminating training jobs that exceed the defined budget threshold set by workspace administrators'
+],
+answer:0,
+explanation:'Azure ML Environments solve the software reproducibility problem — the most common cause of "works on my machine, fails in CI" failures. An Environment specifies: Base Docker image: FROM mcr.microsoft.com/azureml/openmpi4.1.0-cuda11.8-cudnn8-ubuntu22.04 or a custom registry image. Conda specification: Python 3.10, scikit-learn==1.3.2, torch==2.1.0, azureml-mlflow==1.54.0 with exact pinned versions. Pip requirements: any packages not in conda. Environment variables. Environments are versioned automatically — each modification creates a new immutable version. First-time use: Azure ML builds the Docker image from the spec and pushes to the workspace Container Registry. Subsequent uses: the cached image is pulled directly, making job startup fast. Curated environments: Microsoft provides pre-built environments for common frameworks (AzureML-sklearn-1.0-ubuntu20.04-py38-cpu, AzureML-pytorch-1.13-ubuntu20.04-py38-cuda11.7-gpu) that are kept updated with security patches. Custom environments: teams create environment YAML files in their Git repository — tracked alongside training code, ensuring the environment specification and code version always match.'},
+
+{lesson:'L1',lessonName:'MLOps on Azure',
+question:'What is an Azure ML Pipeline and how does it differ from submitting a single training job directly to compute?',
+options:[
+'An Azure ML Pipeline is a sequential data loading operation that ingests data from Azure Blob Storage into compute node memory before a single-step training job begins executing its model training code',
+'An Azure ML Pipeline is a directed acyclic graph of reusable, versioned, cacheable Components — each step handles one stage (data ingestion, preprocessing, training, evaluation, registration) and can run on different compute targets; if a step\'s inputs and code are unchanged since the last run, its cached output is reused without re-execution, enabling expensive preprocessing steps to be skipped when only the training script changes',
+'An Azure ML Pipeline is the term for a GitHub Actions CI/CD workflow file when specifically configured to trigger Azure ML training jobs from code repository push events',
+'An Azure ML Pipeline is a streaming data processing job built on Apache Spark that continuously ingests new training data from Azure Event Hubs and incrementally retrains the model as new data arrives'
+],
+answer:1,
+explanation:'A single training job is monolithic — if any part fails or changes, everything reruns. Azure ML Pipelines solve this with a DAG architecture: Caching: if Step 1 (data preprocessing) produced outputs from identical inputs and code, its cached outputs are reused in the next run. Only Step 2 (training) reruns when the training script changes. This can save hours of preprocessing compute time. Parallelism: independent steps execute simultaneously on separate compute targets. Feature engineering for tabular data and image preprocessing can run in parallel. Reusability: Components are registered in the Component Registry, versioned, and reusable across pipelines — a "standardise features" component defined once can be used in a dozen different training pipelines. Flexibility: each step can use different compute — data prep on CPU clusters, GPU training on NC-series clusters, evaluation back on CPU. Scheduling: pipelines can be triggered on a schedule (nightly retraining) or on events (new data arrival in a storage container). Monitoring: each step has its own run history, logs, and metrics in Studio. Pipeline YAML definition (CLI v2): pipeline.yml defines inputs, outputs, and the graph of component jobs — committed to Git and version-controlled alongside training code.'},
+
+// ─── L2: Data Ingestion (6 Qs) Q7-Q12 ────────────────────────────────
+{lesson:'L2',lessonName:'Data Ingestion',
+question:'What is an Azure ML Datastore and how does it differ from a Data Asset?',
+options:[
+'An Azure ML Datastore and Data Asset are identical concepts with different names — Microsoft renamed the feature from Datastore to Data Asset in Azure ML SDK v2 without any functional differences',
+'An Azure ML Datastore is an in-memory cache storing training data on compute nodes to accelerate data loading, while a Data Asset is a pointer to this cached data that training jobs reference',
+'An Azure ML Datastore is a registered connection that stores credentials to an underlying Azure storage service (Blob Storage, ADLS Gen2, Azure Files, SQL Database) without duplicating data; a Data Asset is a versioned, named reference to a specific file, folder, or table within a Datastore — jobs reference Data Assets (the what and which version), while Datastores handle authentication to the underlying storage (the how and where)',
+'An Azure ML Datastore is the physical Azure Storage account automatically provisioned when a workspace is created; a Data Asset is an automated data quality report generated from the stored training data files'
+],
+answer:2,
+explanation:'Understanding the Datastore vs. Data Asset separation is key for Azure ML data architecture. Datastore: a connection registration. Does NOT move or copy data. Stores the authentication credential securely (account key in Key Vault, SAS token, managed identity, or service principal). Types: AzureBlobDatastore, AzureDataLakeGen2Datastore, AzureFileDatastore, AzureSqlDatabaseDatastore. The workspace-default datastore (workspaceblobstore) is created automatically. Data Asset (formerly "Dataset"): a versioned, typed reference to data within a Datastore. Three types in SDK v2: URI_FILE (single file), URI_FOLDER (directory), MLTABLE (structured tabular data with transformation spec). Creating a Data Asset: my_data = Data(path="azureml://datastores/workspaceblobstore/paths/training/", type=AssetTypes.URI_FOLDER, name="customer_features", version="3"). Jobs reference data assets by name and version: job_inputs = {"training_data": Input(type="uri_folder", path="azureml:customer_features:3")}. Data lineage: the Model Registry records which Data Asset version (name + version) was used to train each registered model — enabling full reproducibility and auditing.'},
+
+{lesson:'L2',lessonName:'Data Ingestion',
+question:'What is the MLTable format in Azure ML v2 and what does it enable over a raw URI file reference?',
+options:[
+'MLTable is a compressed binary format that reduces storage costs by 60% compared to CSV or Parquet through domain-specific compression algorithms optimised for tabular numeric ML training data',
+'MLTable is the Azure ML SDK v2 name for Apache Parquet files — Microsoft uses this terminology to distinguish Azure-managed Parquet from general-purpose Parquet stored in Azure Data Lake Storage',
+'MLTable is a preprocessing wrapper that automatically converts all input data types (CSV, JSON, images) into a standardised float32 tensor format required by all Azure ML AutoML training jobs',
+'MLTable is a YAML-based specification that defines how to read tabular data from one or more underlying files — specifying path(s), format (CSV, Parquet, Delta Lake), delimiter, header, type overrides, and optional transformations such as filtering rows or selecting columns — enabling consistent data loading logic to be applied across different compute targets and environments without re-implementing data access code in every training script'
+],
+answer:3,
+explanation:'MLTable (stored as an MLTable YAML file alongside the data files) is the recommended format for tabular data in Azure ML SDK v2. Example MLTable YAML: paths: [{file: ./training_data.csv}], transformations: [{read_delimited: {delimiter: ",", encoding: "utf8", header: all_files_same_headers}}, {take_random_sample: {probability: 0.5}}]. Key advantages over raw URI references: Self-describing: a consumer of an MLTable does not need to know the file format, delimiter, column types, or how to handle headers — all encoding in the spec. Multi-file support: an MLTable can span many files in a directory, handling them as one logical dataset without the consumer managing glob patterns. Transformation pipeline: filtering, sampling, column selection, and type casting are defined in the spec — applied consistently everywhere the MLTable is consumed. AutoML native: Azure ML AutoML requires MLTable format for training data — it reads the spec and handles data loading internally. Loading in a training script: from mltable import load; tbl = load("azureml:my_mltable:1"); df = tbl.to_pandas_dataframe(). Schema validation: MLTable can enforce column types, preventing downstream failures from unexpected data format changes between data versions.'},
+
+{lesson:'L2',lessonName:'Data Ingestion',
+question:'What data sources can Azure ML connect to for training data ingestion and what is the recommended authentication method for production?',
+options:[
+'Azure ML can ingest training data from Azure Blob Storage, Azure Data Lake Storage Gen1 and Gen2, Azure Files, Azure SQL Database, Azure PostgreSQL, Azure Databricks Delta Lake, Amazon S3, and on-premises SQL Server via private endpoint; managed identity is the recommended production authentication method as it eliminates secrets management — no credentials to store, rotate, or accidentally expose in code repositories',
+'Azure ML can only ingest from Azure Blob Storage — all other data sources require a separate ETL pipeline to copy data to Blob Storage before any Azure ML training job can access it',
+'Azure ML data ingestion is limited to CSV files — Parquet, JSON, and image formats must be converted to CSV before being registered as data assets in the Azure ML workspace',
+'Azure ML authenticates exclusively through shared access signatures (SAS tokens) and does not support managed identity or service principal authentication for any data source connections'
+],
+answer:0,
+explanation:'Azure ML data ingestion breadth is one of its enterprise strengths: Azure-native sources: Azure Blob Storage (most common), Azure Data Lake Storage Gen2 (optimal for large-scale data — hierarchical namespace, ACLs), Azure Files (useful for shared scratch space), Azure SQL Database and Synapse SQL (tabular business data). Azure Databricks: Delta Lake tables accessed via the Databricks Delta Lake Datastore — enables sharing processed feature data between Databricks and Azure ML. Cross-cloud: Amazon S3 and GCS via credential-based datastores (less common but supported). On-premises: SQL Server reachable via Azure Private Endpoint or VPN gateway. Authentication priority: Managed Identity (recommended for production): the Azure ML compute resource uses its assigned managed identity to authenticate to storage. No secrets in code, no rotation needed, full Azure AD audit trail. Service Principal: used for non-Azure compute or CI/CD pipelines that need cross-resource access. Account Key / SAS token: avoid in production — store in Key Vault if necessary, rotate regularly. Data loading patterns: streaming (read data directly from storage as mini-batches during training), cache-ahead (mount storage or copy to local SSD at job start for performance-sensitive training), or pre-stage (copy data to local NVMe SSD as a pipeline step before training).'},
+
+{lesson:'L2',lessonName:'Data Ingestion',
+question:'What is data versioning in Azure ML and why is it essential for MLOps reproducibility?',
+options:[
+'Data versioning automatically compresses older dataset versions to save storage costs, keeping the current version at full resolution and storing all prior versions in a compressed archive format',
+'Data versioning assigns an immutable version number to each registered Data Asset — training jobs reference a specific version explicitly; this ensures model reproducibility (reproduce any prior model by using its exact data version), enables data lineage tracking (which model used which data), and provides rollback capability when new data introduces quality problems',
+'Data versioning applies a Git-style branching model where Data Assets have main, develop, and feature branches — training jobs automatically pull from the branch matching the current code branch',
+'Data versioning is a compliance feature that automatically redacts PII from new data versions, creating sanitised training versions while preserving original versions for regulatory auditing requirements'
+],
+answer:1,
+explanation:'Data versioning is the data-side of ML reproducibility. Without versioning: "Last month\'s model was more accurate — but what data was it trained on?" is an unanswerable question. With Azure ML data versioning: Explicit version reference: Job A uses customer_features:3; Job B uses customer_features:4. The version is part of the job definition committed to Git. Immutability: once a data version is registered, its underlying data is not overwritten. A new data version (customer_features:5) is registered when the dataset updates. Lineage graph: Azure ML tracks Data Asset version + code commit SHA + environment version + model artifact for every training run. Any registered model can be traced back through the complete lineage to the exact data it was trained on. Automated versioning: in CI/CD pipelines, register a new data version whenever the source data is updated (e.g., after a Databricks job processes new raw data), then trigger model retraining referencing the new version. Rollback: if customer_features:5 contains quality issues, training pipelines can pin back to customer_features:4 with a one-line change to the pipeline YAML — no data restoration needed.'},
+
+{lesson:'L2',lessonName:'Data Ingestion',
+question:'What is Azure ML Data Labeling and how does it integrate into the ML development pipeline?',
+options:[
+'Azure ML Data Labeling is a text annotation tool exclusively for NLP tasks that marks named entities, sentiment labels, and document categories using rule-based automatic labeling without human annotators',
+'Azure ML Data Labeling automatically generates labels for all common computer vision tasks using zero-shot GPT-4 vision capabilities without requiring any human annotation effort or review',
+'Azure ML Data Labeling is a managed human-labeling project service providing a web interface for annotators to label images or text; it supports ML-assisted prelabeling (a model trained on early labels proposes labels for remaining items for human review), tracks annotator agreement with inter-annotator agreement metrics, and exports completed labels directly as versioned Data Assets ready for training jobs',
+'Azure ML Data Labeling is a data quality scoring tool that assigns automated confidence scores to each sample in a dataset based on statistical analysis, rather than a tool for human annotation of training examples'
+],
+answer:2,
+explanation:'Azure ML Data Labeling (Projects section in Studio) manages the full human labeling workflow for computer vision and NLP tasks. Supported task types: Image classification (single or multi-label), Object detection (bounding boxes), Image segmentation (pixel-level masks), Text classification, Named entity recognition. ML-assisted labeling: After enough examples are labeled (typically 200-300), Azure ML trains a labeling model. This model pre-labels the remaining unlabeled items. Human annotators review and correct the pre-labels — far faster than labeling from scratch. The labeling model improves as more corrections are made. Annotator management: Multiple annotators can be assigned. Instructions with example images are shown to annotators. Inter-annotator agreement metrics show where annotators disagree (indicating ambiguous labeling guidelines). Annotations where annotators disagree are flagged for review. Export and integration: Completed labels export as Data Assets (URI_FOLDER containing labeled images and annotation JSON files). These integrate directly into training pipelines as versioned data — when labels are updated, a new data version is registered and training is triggered automatically via CI/CD.'},
+
+{lesson:'L2',lessonName:'Data Ingestion',
+question:'What is data drift in the context of deployed ML models and how does Azure ML help detect it?',
+options:[
+'Data drift refers to model code changes that occur when the Azure ML SDK is upgraded, causing previously working training scripts to require code modifications to maintain compatibility with new API versions',
+'Data drift means intentional data schema changes that the data engineering team makes to improve downstream model quality — representing planned and scheduled data evolution rather than any unexpected production issue',
+'Data drift is a storage performance issue where reading training data from Blob Storage becomes progressively slower as dataset size grows, requiring periodic index rebuilding to maintain acceptable training data loading speeds',
+'Data drift is the statistical change in production input data distribution over time relative to the training data distribution — causing model predictions to silently degrade without any code changes; Azure ML Dataset Monitor can compare feature distributions between a reference dataset (training data) and a target dataset (recent production inference inputs), computing drift metrics and sending alerts when drift exceeds configurable thresholds'
+],
+answer:3,
+explanation:'Data drift is one of the leading causes of production ML model degradation. Causes: Seasonal patterns: a fraud model trained on summer purchase patterns performs differently in December. Concept drift: what constitutes fraud evolves as criminals adapt to detection systems. Source system changes: an upstream data pipeline is modified, subtly changing feature distributions. User behaviour changes: a recommendation model trained pre-pandemic on travel patterns fails post-pandemic. Population shift: the demographics of users submitting requests changes from the training population. Azure ML Dataset Monitor: create a DatasetConsumptionConfig linking the training dataset (reference) and a production inference log dataset (target). Set a monitoring schedule (daily, weekly). Azure ML computes: Per-feature drift metrics — Wasserstein distance for numerical features, Chi-squared test for categorical features. Overall dataset drift score (0 to 1). Alerts: configure to notify via email or Azure Monitor alerts when the drift coefficient exceeds a threshold (e.g., 0.3). Automated response: combine Dataset Monitor alerts with Azure Logic Apps or GitHub Actions to trigger an automatic model retraining pipeline when drift is detected, replacing the degraded model with one trained on current data distributions.'},
+
+// ─── L3: Data Transform, Integrity & Feature Engineering (6 Qs) Q13-Q18
+{lesson:'L3',lessonName:'Data Transform, Integrity & Feature Engineering',
+question:'What is feature engineering and why is it considered one of the highest-impact activities in the ML development process?',
+options:[
+'Feature engineering uses domain knowledge and data transformation techniques to create new or improved input features from raw data — it is high-impact because the quality and informativeness of features is the primary determinant of model performance; a well-engineered feature set enables a simple linear model to outperform a complex model applied to raw data by providing the model with directly useful signal rather than requiring it to derive meaning from low-level inputs',
+'Feature engineering is the process of compressing trained model weights into smaller representations to reduce inference latency, applied after training is complete and before deployment to production serving infrastructure',
+'Feature engineering is the data augmentation technique of artificially expanding a small training dataset by applying transformations such as flipping, rotating, and adding noise to create additional training examples from existing ones',
+'Feature engineering is a fully automated Azure ML AutoML capability requiring no human input — AutoML discovers, constructs, and selects all features automatically without any domain knowledge or manual feature definition'
+],
+answer:0,
+explanation:'The famous machine learning practitioner saying that "feature engineering is 80% of the work" reflects real production experience. Why features matter so much: Models cannot learn relationships that are not representable from the inputs. A linear model given raw date fields cannot learn seasonal patterns — but given "is_weekend", "month_sin", "month_cos" features, it can. Even powerful deep learning models benefit from domain-informed features that encode expert knowledge. Feature engineering examples: E-commerce: "days_since_last_purchase", "purchase_frequency_30_days", "average_order_value" from raw transaction logs. Fraud detection: "transaction_amount / avg_amount_same_merchant", "time_since_last_transaction", "distance_from_home_location" from raw event streams. NLP: TF-IDF vectors, n-gram frequency features, sentiment scores from raw text before embedding was common. Time series: lag features (yesterday\'s value, last week\'s value), rolling averages, rate of change, seasonal indicators. Azure ML Feature Engineering tools: Automated feature engineering in AutoML (categorical encoding, datetime expansion, missing value handling, text vectorisation). Custom feature engineering in pipeline components that produce Data Assets consumed by training jobs. Managed Feature Store for sharing features across teams.'},
+
+{lesson:'L3',lessonName:'Data Transform, Integrity & Feature Engineering',
+question:'What is the difference between normalisation and standardisation in feature scaling, and when should each be applied?',
+options:[
+'Normalisation and standardisation are interchangeable terms for the exact same transformation — both scale features to zero mean and unit variance using the same formula (x minus mean) divided by standard deviation',
+'Normalisation (Min-Max scaling) rescales features to a fixed range (0 to 1) using (x minus min) divided by (max minus min) — best for neural networks and distance-based algorithms, assumes bounded input range; standardisation (Z-score scaling) transforms to zero mean and unit variance using (x minus mean) divided by standard deviation — best for algorithms assuming normally distributed inputs (SVM, PCA, logistic regression) and more robust to outliers than Min-Max scaling',
+'Normalisation applies to categorical features (converting categories to numbers in the 0 to 1 range) while standardisation applies to continuous numerical features (scaling them to mean zero and unit variance)',
+'Normalisation increases the magnitude of all feature values uniformly while standardisation decreases values — normalisation is used for small datasets and standardisation is used for large datasets above one million training rows'
+],
+answer:1,
+explanation:'Feature scaling is required by many algorithms that compute distances or use gradient-based optimisation. Without scaling, features with large numeric ranges (salary: 20,000 to 200,000) dominate features with small ranges (age: 18 to 90) in distance calculations. Normalisation (Min-Max): Formula: x_scaled = (x - x_min) / (x_max - x_min). Output range: [0, 1] by default (or [a, b] for custom ranges). Best for: neural networks (keeps activations in stable ranges), k-NN (distance-sensitive), image pixel values (0-255 to 0-1). Risk: highly sensitive to outliers — one extreme value compresses all other values into a narrow band. Standardisation (Z-score): Formula: x_scaled = (x - mean) / std_dev. Output: mean=0, std=1, no fixed range bounds. Best for: SVM, logistic regression, PCA (assumes roughly normal distribution), any algorithm where gradient descent is used. More robust to outliers since dividing by standard deviation (which includes outlier influence) is less extreme than compressing to a fixed range. Neither: tree-based algorithms (Random Forest, gradient boosting) are invariant to monotonic feature transformations — scaling does not affect split quality and is unnecessary. Always fit the scaler on training data ONLY, then transform both train and test sets — preventing data leakage from test statistics into training.'},
+
+{lesson:'L3',lessonName:'Data Transform, Integrity & Feature Engineering',
+question:'What are the three main strategies for handling missing values in ML training data, and what are the trade-offs of each approach?',
+options:[
+'Missing values must always be removed by dropping the affected rows — imputation is considered bad practice because it introduces artificial data that biases models toward patterns not present in real-world data',
+'The only valid approaches are forward-fill for time series data and backward-fill for cross-sectional data — these are the only statistically valid missing value strategies for any data type in ML',
+'Three main strategies: (1) Deletion — drop rows or columns with missing values; preserves data purity but reduces dataset size and may introduce selection bias if data is not missing at random; (2) Imputation — replace missing values with mean, median, mode, KNN-derived estimates, or model-predicted values; maintains sample size but introduces assumptions about the missing data distribution; (3) Missingness indicator — add a binary column flagging which rows had missing values, preserving the absence-of-data as a learnable signal, often combined with imputation for the value column',
+'Missing values are handled automatically by all Azure ML AutoML algorithms using a proprietary neural imputation network, so data scientists never need to address missing values manually when using Azure ML'
+],
+answer:2,
+explanation:'Missing data handling is one of the most consequential data preprocessing decisions. Types of missingness (matters for strategy choice): MCAR (Missing Completely At Random): missingness is unrelated to any observed or unobserved variable. Deletion is safe, imputation is fine. MAR (Missing At Random): missingness depends on observed variables. Imputation using those observed variables is appropriate. MNAR (Missing Not At Random): missingness depends on the missing value itself (people with very high income skip the income field). Deletion or simple imputation introduces bias — needs careful analysis. Strategy 1 — Deletion: Column deletion: if a feature has >70% missing values, it likely adds little predictive value; drop it. Row deletion: safe only if MCAR and the deletion fraction is small (under 5%). Strategy 2 — Imputation options: Simple: mean (continuous, symmetric distributions), median (continuous, skewed or with outliers), mode (categorical). KNN imputation: find k most similar rows and average their values — preserves relationships between features, computationally expensive for large datasets. Iterative (MICE): model each feature with missing values using all other features; iterate until convergence — most statistically rigorous, very slow. Strategy 3 — Missingness Indicator: Create "feature_was_missing" binary column BEFORE imputing the original feature. The model can then learn that absence itself is predictive (e.g., age field missing may correlate with certain user segments). Azure ML AutoML applies configurable imputation strategies as part of its automated preprocessing.'},
+
+{lesson:'L3',lessonName:'Data Transform, Integrity & Feature Engineering',
+question:'What is one-hot encoding for categorical variables and what problem does high cardinality create for this approach?',
+options:[
+'One-hot encoding sorts categorical variable categories into alphabetical order before training, enabling gradient boosting algorithms to efficiently binary-search for the optimal category split point in tree building',
+'One-hot encoding converts continuous numerical features into discrete categories by binning into equal-width buckets — the resulting binary bucket-membership columns are the encoded representation of the original continuous variable',
+'One-hot encoding represents categorical variables as ordered integer codes (0, 1, 2, 3...) where each integer represents one category, preserving category ordering for algorithms that assume ordinal relationships between values',
+'One-hot encoding converts each unique category into a separate binary column (value 0 or 1 per row, exactly one column is 1 per row); high cardinality — many unique values such as 50,000 distinct product IDs — creates an extremely wide sparse matrix with thousands of near-empty columns, causing memory overflow, slow training, and poor generalisation — alternatives include target encoding, hash encoding, or learned embedding layers'
+],
+answer:3,
+explanation:'One-hot encoding (OHE) is the most common approach for nominal categorical variables (unordered categories). How it works: "Color" with values ["Red", "Green", "Blue"] becomes three columns: Color_Red, Color_Green, Color_Blue. Each row has exactly one 1 and two 0s. Why not use ordinal encoding (0, 1, 2) for nominal features? Linear models would interpret 2 (Blue) as twice 1 (Green) — a spurious mathematical relationship. OHE removes this false ordering. High cardinality problem: A "user_city" feature with 10,000 unique cities becomes 10,000 binary columns. A training set of 100,000 rows becomes a 100,000 x 10,000 matrix — 1 billion entries, mostly zeros. Memory: 1B float32 values = 4GB RAM just for this feature. Most columns have a 1 in only a handful of rows — almost no training signal per column. Alternative encodings: Target encoding: replace each category with the mean target value for that category (customer_city: mean purchase amount for that city). Risk of leakage — must use cross-validation. Frequency encoding: replace category with its frequency (count or proportion) in the training data. Hash encoding: map all categories to a fixed number of hash buckets (e.g., 64 buckets), trading some collision accuracy for memory efficiency. Embeddings: train a dense low-dimensional embedding vector per category — standard approach in deep learning, available via Keras Embedding layer.'},
+
+{lesson:'L3',lessonName:'Data Transform, Integrity & Feature Engineering',
+question:'What is an Azure ML Component and what advantages does it provide over inline pipeline step code?',
+options:[
+'An Azure ML Component is a self-contained, versioned unit of ML logic specifying its inputs, outputs, environment, and code — registered in a Component Registry for sharing across pipelines and workspaces; benefits include: reusability (define once, use in many pipelines), independent versioning (component v3 can run in pipeline A while component v2 runs in pipeline B), step-level caching, and the ability to run independent components in parallel on separate compute targets',
+'An Azure ML Component is the term for a single training script file containing all ML code — the Component concept enforces that all training logic must live in exactly one Python file rather than a multi-file project structure',
+'An Azure ML Component is a billing unit in Azure ML representing one compute instance used for one pipeline step, charged at a per-minute rate independent of actual computational resources consumed',
+'An Azure ML Component is a pre-built read-only Microsoft ML algorithm that cannot be modified or extended — Components are library building blocks from the Azure ML algorithm catalogue for standard tasks only'
+],
+answer:0,
+explanation:'Azure ML Components (formerly "Components" in Designer, now first-class SDK v2 citizens) are the building blocks of reusable, maintainable ML pipelines. Component anatomy: Specification (YAML): name, version, type, inputs (with types and optional defaults), outputs, environment reference, command to execute. Code: a Python script or module that reads inputs, processes data, and writes outputs. Registration: registered to the workspace or a shared Component Registry (centralised catalogue for an organisation). Component YAML example: name: normalise_features, version: 2, inputs: {raw_data: {type: uri_folder}, method: {type: string, default: standard}}, outputs: {scaled_data: {type: uri_folder}}, environment: azureml:feature-eng-env:3, command: python normalise.py --input ${{inputs.raw_data}} --method ${{inputs.method}} --output ${{outputs.scaled_data}}. Pipeline YAML references: normalise_step: type: command, component: azureml:normalise_features:2, inputs: {raw_data: ${{parent.inputs.training_data}}, method: minmax}. Caching: Azure ML hashes the component version + all input values. If the hash matches a prior run, the cached output is returned immediately without executing the step. Critical for expensive preprocessing — normalising 100GB takes 20 minutes; with caching it takes 2 seconds on subsequent runs.'},
+
+{lesson:'L3',lessonName:'Data Transform, Integrity & Feature Engineering',
+question:'What is a Feature Store and how does Azure ML integrate with managed feature stores for enterprise ML projects?',
+options:[
+'A Feature Store in Azure ML is identical to an Azure ML Datastore — the terms are interchangeable, both referring to the credential-based connection to an underlying Azure storage service',
+'A Feature Store is a centralised repository for curated, reusable ML feature definitions — storing transformation logic and precomputed feature values that can be served for training (historical feature values) and real-time inference (current feature values); Azure ML integrates with Azure Machine Learning Managed Feature Store and Microsoft Fabric Feature Store, enabling teams to share features across models, guarantee training-serving consistency, and eliminate duplicate feature engineering work across projects',
+'A Feature Store is Azure ML\'s term for the model artifact registry — the centralised storage for trained model weights and metadata that are versioned and retrieved for deployment to managed endpoints',
+'A Feature Store is a distributed key-value cache similar to Redis that stores inference results for common inputs, reducing endpoint latency through result memoisation rather than providing any feature engineering or transformation capabilities'
+],
+answer:1,
+explanation:'The Feature Store pattern addresses a painful scaling problem in enterprise ML: dozens of teams independently compute the same features (customer age, lifetime value, churn propensity) using slightly different logic, leading to inconsistency and redundant compute. Feature Store concepts: Feature: a named, typed, versioned transformation of raw data (e.g., customer_30_day_purchase_count: COUNT of purchases in the last 30 days per customer_id). Feature Set: a group of related features with shared entity keys and a shared source dataset (e.g., CustomerTransactionFeatures: purchase_count_30d, avg_order_value_30d, days_since_last_purchase). Feature Store: the registry of all Feature Sets with their transformation code, materialization schedule, and precomputed historical values. Azure ML Managed Feature Store: Defined in Python or YAML, registered in the workspace. Materialises (precomputes and stores) feature values on a schedule to Azure Storage in offline (training) format. Point-in-time lookup: for training, retrieve the feature values as they existed at each training example timestamp — preventing data leakage from future values. Online serving: feature values can be materialised to Azure Cache for Redis for sub-millisecond real-time lookup during inference. Training-serving skew prevention: the same Feature Set definition is used for both training (batch historical lookup) and inference (online real-time lookup), guaranteeing identical feature computation logic.'},
+
+// ─── L4: Model Training & Tuning (6 Qs) Q19-Q24 ──────────────────────
+{lesson:'L4',lessonName:'Model Training & Tuning',
+question:'What are Azure ML compute targets and what are the two primary types used for running training jobs?',
+options:[
+'Azure ML compute targets are virtual network configurations determining IP address ranges and firewall rules, with one type for training and one for inference environments',
+'Azure ML compute targets are geographic deployment zones (East US, West Europe, etc.) determining where compute is provisioned, selected based on data residency requirements and carbon footprint preferences',
+'Azure ML Compute Clusters are scalable node pools that auto-scale from 0 to a configured maximum based on job queue depth — ideal for training because nodes scale to zero when idle (zero cost), support distributed multi-GPU training, and allow multiple jobs to queue; Compute Instances are single-node managed development VMs (with JupyterLab, VS Code, and pre-installed ML libraries) — ideal for interactive experimentation, notebook development, and ad-hoc script testing',
+'Azure ML compute targets are selected from a fixed four-size catalogue (Small, Medium, Large, Extra-Large) chosen at workspace creation and cannot be changed for the lifetime of that workspace'
+],
+answer:2,
+explanation:'Compute is one of the most operationally important Azure ML concepts. Compute Cluster details: node sizes range from Standard_DS3_v2 (4 vCPU, 14GB RAM, no GPU) to Standard_ND96asr_v4 (96 vCPU, 900GB RAM, 8x A100 80GB GPUs). min_instances=0 means the cluster scales to zero when no jobs are running — critical for cost control, as idle GPUs are very expensive. max_instances sets the ceiling — a cluster set to max 10 × Standard_NC6 nodes can run distributed training across 10 GPUs. idle_seconds_before_scaledown: time after jobs complete before nodes are deallocated. Job queue: Azure ML automatically provisions nodes up to max_instances when jobs are waiting. Supported frameworks: PyTorch (DistributedDataParallel), TensorFlow (MultiWorkerMirroredStrategy), Horovod, DeepSpeed, accelerate. Compute Instance details: a fully managed VM with JupyterLab, VS Code Server, conda, and all Azure ML SDK pre-installed. Scheduled auto-start and auto-stop (by time of day) to reduce idle costs. Custom scripts run on creation for environment setup. SSH access available. Shared across team or dedicated to one user. Compute targets for inference: Managed Online Endpoint: serverless pods (Kubernetes under the hood). AKS (Azure Kubernetes Service): bring your own cluster for specialised requirements. Azure Container Instances: for low-traffic or dev/test endpoints.'},
+
+{lesson:'L4',lessonName:'Model Training & Tuning',
+question:'What is an Azure ML Experiment and how does the Run concept support iterative model development?',
+options:[
+'An Azure ML Experiment is a billing group that aggregates compute costs for a specific team or project, enabling finance teams to attribute cloud spending to individual ML initiatives',
+'An Azure ML Experiment is a static report generated at the end of training that summarises model metrics, confusion matrices, and feature importance rankings in a standard PDF document format',
+'An Azure ML Experiment is a single execution of a training script on compute, producing one set of metrics and artifacts — each independent training attempt creates a separate Experiment in the workspace',
+'An Azure ML Experiment is a named grouping of related training Runs within the workspace — each Run records the complete execution context: hyperparameters, logged metrics (per-epoch loss and accuracy), code snapshot, environment version, compute used, duration, and output model artifacts; comparing Runs within an Experiment enables data scientists to identify the best hyperparameter combinations and track the full history of model development iterations'
+],
+answer:3,
+explanation:'The Experiment and Run hierarchy is the core accountability unit for ML model development in Azure ML. Experiment: a named grouping — all training attempts for "customer_churn_model" go in one Experiment. Runs accumulate over weeks of development. Compare runs side by side in Studio\'s Experiments tab. Run: one execution of training code. Created by submitting a job (SDK, CLI, or Studio). Automatically captures: System metadata: start time, duration, compute used, cost estimate. Code: a snapshot of the training script and supporting code. Environment: which environment (by version) was used. Inputs: references to Data Assets consumed. Tags: custom key-value metadata ("task": "classification", "dataset_version": "3"). Metrics: logged via mlflow.log_metric() or run.log(). Per-epoch metrics create time-series charts in Studio. Final metrics are compared across runs in the run comparison table. Artifacts: any file saved to outputs/ or logged via mlflow.log_artifact() — model weights, evaluation plots, confusion matrices, feature importance charts. Status: Running, Completed, Failed, Cancelled. Child Runs: HyperDrive and AutoML create child runs within a parent run for each hyperparameter combination or algorithm tried.'},
+
+{lesson:'L4',lessonName:'Model Training & Tuning',
+question:'What is HyperDrive in Azure ML and what hyperparameter search strategies does it support?',
+options:[
+'HyperDrive is Azure ML\'s automated hyperparameter tuning service that runs multiple training jobs concurrently with different hyperparameter combinations; it supports: Random Search (sample uniformly at random — easily parallelisable, strong baseline), Grid Search (exhaustive search over a discrete parameter grid), and Bayesian Optimisation (uses prior run results to guide the next hyperparameter proposal toward regions of likely improvement — more efficient than random search); early termination policies (Bandit, Truncation Selection) automatically cancel underperforming runs before completion to save compute budget',
+'HyperDrive is a distributed gradient descent optimiser that automatically selects the optimal learning rate and batch size for PyTorch and TensorFlow models without requiring any user configuration or search',
+'HyperDrive is Azure ML\'s data pipeline orchestration service — named for its ability to drive data through multi-step preprocessing pipelines at high throughput with automatic scaling and fault tolerance',
+'HyperDrive is a neural architecture search (NAS) feature that automatically adjusts model layer count and width during training based on real-time performance metrics, building the optimal architecture without manual design'
+],
+answer:0,
+explanation:'HyperDrive makes hyperparameter tuning a first-class, parallelised, compute-efficient operation in Azure ML. Configuration components: Parameter Space: define search ranges for each hyperparameter — choice([32, 64, 128]) for discrete options, uniform(0.001, 0.1) for continuous ranges, loguniform(-6, -2) for learning rate (log scale). Primary Metric: the metric your training script logs (e.g., "val_accuracy") that HyperDrive maximises or minimises. Max Total Runs and Max Concurrent Runs: controls total compute budget and parallelism. Search Strategy: Random: each run samples hyperparameters independently from the defined distributions. Fastest to start, often finds good results quickly, highly parallelisable. Grid: systematic exhaustive search — only practical when the parameter space is small and discrete (2-3 parameters, few values each). Bayesian: uses a Gaussian Process surrogate model to predict which hyperparameter regions will perform best. Proposes experiments sequentially, learning from each result. More efficient than random for expensive experiments but requires sequential evaluation (less parallelism). Early Termination Policies: Bandit Policy: terminate any run whose primary metric falls more than slack_factor below the best performing run so far. MedianStopping: terminate runs performing below the median of all completed runs. Truncation Selection: terminate the bottom p% of runs at each evaluation interval. These policies can cut wasted compute by 30-60% on large sweeps.'},
+
+{lesson:'L4',lessonName:'Model Training & Tuning',
+question:'What is AutoML in Azure ML and what types of ML tasks and tasks does it support?',
+options:[
+'AutoML in Azure ML automatically writes Python training scripts from plain English task descriptions, generating complete production-ready code without any developer involvement in scripting',
+'AutoML (Automated Machine Learning) in Azure ML automatically searches across algorithm candidates, preprocessing steps, and hyperparameter combinations to find the best-performing model for a given labelled dataset; it supports: classification, regression, time series forecasting, NLP text classification, NLP named entity recognition, image classification, and image object detection — all within configurable time budget and optimisation metric constraints',
+'AutoML in Azure ML is a continuous retraining service that automatically retrains registered models on a schedule whenever new training data is added to a connected Datastore, without any data scientist involvement',
+'AutoML in Azure ML is a model compression service applying quantisation, pruning, and knowledge distillation to reduce model sizes for deployment to edge devices and mobile applications'
+],
+answer:1,
+explanation:'Azure ML AutoML reduces the hours-long process of model selection and tuning to a configuration file and a submit call. What AutoML automates: (1) Algorithm selection: for classification it tries logistic regression, SVM, LightGBM, XGBoost, RandomForest, ExtraTrees, gradient boosting, and more. (2) Preprocessing: automatic handling of missing values, categorical encoding, normalisation, text vectorisation, datetime feature extraction. (3) Featurisation: generates interaction features, polynomial features, target encoding for high-cardinality categoricals. (4) Hyperparameter tuning: Bayesian optimisation within each algorithm\'s hyperparameter space. (5) Ensemble construction: generates a VotingEnsemble and StackEnsemble from the best individual models — often the top-performing output. Configuring AutoML (SDK v2): experiment_config = AutoMLConfig(task="classification", primary_metric="AUC_weighted", training_data=mltable_data, label_column_name="churn", n_cross_validations=5, experiment_timeout_hours=1.0, max_concurrent_iterations=4). Supported primary metrics: classification (AUC_weighted, accuracy, F1_score), regression (RMSE, R2, MAPE), forecasting (RMSE, MAPE, SMAPE). Explainability: AutoML generates SHAP-based feature importance for the best model automatically. Guardrails: AutoML runs data validation checks (class imbalance detection, sample size warnings, data leakage detection) before training and reports issues with recommendations.'},
+
+{lesson:'L4',lessonName:'Model Training & Tuning',
+question:'How does MLflow integrate with Azure ML and what does it enable in training runs?',
+options:[
+'MLflow is a competitor to Azure ML that cannot be used simultaneously — teams must choose one system exclusively for experiment tracking and cannot use MLflow logging alongside Azure ML run history',
+'MLflow in Azure ML is exclusively used for model packaging and deployment — it converts trained models from any framework into a standard format for endpoint serving, but plays no role in experiment tracking or metric logging during training',
+'Azure ML uses MLflow as its native experiment tracking protocol — training scripts call mlflow.log_param(), mlflow.log_metric(), and mlflow.log_artifact() to record hyperparameters, per-epoch metrics, and output files; these are automatically routed to the Azure ML Run in the workspace; models logged with mlflow framework-specific log_model functions can be registered directly into the Azure ML Model Registry from the Run for downstream deployment to managed endpoints',
+'MLflow integration with Azure ML requires manually exporting metrics from the MLflow tracking server and importing them into Azure ML Studio using a custom REST API script — there is no automatic synchronisation between the two systems'
+],
+answer:2,
+explanation:'Azure ML adopted MLflow as its native experiment tracking protocol in v2 — making Azure ML experiments fully compatible with the MLflow open standard. In a training script running on Azure ML compute: import mlflow; mlflow.start_run() (or let Azure ML create the run context automatically). Hyperparameter logging: mlflow.log_param("learning_rate", 0.001); mlflow.log_param("max_depth", 6). These appear as the Run hyperparameters in Studio. Metric logging: mlflow.log_metric("train_loss", 0.45, step=1); mlflow.log_metric("val_accuracy", 0.87, step=10). Per-step metrics create time-series charts in Studio and in the HyperDrive parallel coordinates chart. Artifact logging: mlflow.log_artifact("confusion_matrix.png"); mlflow.log_artifact("feature_importance.csv"). Model logging: mlflow.sklearn.log_model(model, "model") or mlflow.pytorch.log_model(model, "model"). This saves the model in MLflow format with inference code included. Model registration: mlflow.register_model(f"runs:/{run_id}/model", "my_classifier", tags={"dataset": "customer_features:3"}). The model appears in the Azure ML Model Registry with full lineage (run ID, parameters, metrics, dataset version). Portability: because Azure ML uses the MLflow protocol, training code written for Azure ML runs unchanged on any MLflow tracking server (Databricks, local, etc.) with no code changes.'},
+
+{lesson:'L4',lessonName:'Model Training & Tuning',
+question:'What is the Azure ML Model Registry and how does the workflow connect a training Run to a deployed production endpoint?',
+options:[
+'The Azure ML Model Registry is an internal database storing only model file size and training duration for billing — it does not store model weights or provide deployment capability beyond metadata',
+'The Azure ML Model Registry is a read-only archive of Microsoft pre-trained foundation models that users can deploy but cannot add their own models to as registered custom model entries',
+'The Azure ML Model Registry automatically deploys every newly registered model to a production endpoint without any manual approval, implementing continuous deployment whenever a model achieves accuracy above a configurable threshold',
+'The Azure ML Model Registry stores versioned model artifacts with metadata (training metrics, data lineage, environment, tags); the end-to-end deployment workflow: a training Run logs and registers a model to the Registry (with version, tags, and metric snapshot); a CI/CD pipeline evaluates the new version against the current champion, promotes to the Endpoint via blue-green deployment if quality gates pass, and enables zero-downtime traffic shifting between model versions with full rollback capability'
+],
+answer:3,
+explanation:'The Model Registry is the handoff point between training and serving — the central governance layer for production models. Model registration: from a training run: mlflow.register_model("runs:/abc123/model", "churn_classifier"). From CLI: az ml model create --name churn_classifier --version 3 --path ./model_outputs. Metadata captured: Framework (sklearn, pytorch, onnx). Training metrics snapshot (val_AUC: 0.89, val_F1: 0.82). Data Asset lineage (customer_features:4). Environment used for training. Code snapshot (git commit SHA if configured). Tags (business_owner: "risk_team", use_case: "churn_prevention"). Deployment workflow with CI/CD: GitHub Action trigger: new model registered to Registry. Evaluate step: compare new model metrics against current production model in the Registry. Decision: if new_model.val_AUC greater than current_model.val_AUC + 0.01 → promote. Deployment: az ml online-deployment create pointing to the new model version with traffic_allocation: 10% (canary). Monitor canary metrics (error rate, latency, prediction distribution). If healthy after N hours: shift traffic to 100%. If degraded: set traffic_allocation to 0% (instant rollback without redeployment). The Registry maintains the full chain of custody for every model version, enabling compliance audits: who registered it, what data it was trained on, what metrics it achieved, when it was deployed, and who approved the deployment.'}
+
+]; // end QUESTIONS
+
+// ════════════════════════════════
+//  ENGINE
+// ════════════════════════════════
+const TOTAL=QUESTIONS.length; // 24
+
+let state={questions:[],currentIdx:0,userAnswers:[],shuffledOptions:[],shuffledAnswers:[],flagged:[],answered:[],startTime:null,endTime:null,timerInterval:null,tabSwitches:0,submitted:false};
+
+function shuffleArray(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function startTest(){
+  state.questions=[...QUESTIONS];state.currentIdx=0;
+  state.userAnswers=new Array(TOTAL).fill(-1);state.flagged=new Array(TOTAL).fill(false);
+  state.answered=new Array(TOTAL).fill(false);state.submitted=false;state.tabSwitches=0;state.startTime=Date.now();
+  state.shuffledOptions=[];state.shuffledAnswers=[];
+  state.questions.forEach(q=>{const ct=q.options[q.answer];const sh=shuffleArray(q.options);state.shuffledOptions.push(sh);state.shuffledAnswers.push(sh.indexOf(ct));});
+  showScreen('quiz');document.getElementById('quizHeader').classList.add('active');buildNavGrid();renderQuestion();startTimer();
+}
+
+function startTimer(){clearInterval(state.timerInterval);state.timerInterval=setInterval(()=>{const e=Math.floor((Date.now()-state.startTime)/1000);document.getElementById('timer').textContent=`${String(Math.floor(e/60)).padStart(2,'0')}:${String(e%60).padStart(2,'0')}`;},1000);}
+
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+
+function renderQuestion(){
+  const idx=state.currentIdx,q=state.questions[idx];
+  const opts=state.shuffledOptions[idx],cs=state.shuffledAnswers[idx],uc=state.userAnswers[idx],ia=state.answered[idx];
+  document.getElementById('qNum').textContent=idx+1;document.getElementById('qCounterNum').textContent=idx+1;
+  document.getElementById('qLessonTag').textContent=q.lesson;
+  const bf=document.getElementById('btnFlag');bf.className='btn-flag'+(state.flagged[idx]?' flagged':'');bf.innerHTML=state.flagged[idx]?'🚩 Flagged':'🏳 Flag';
+  document.getElementById('qText').textContent=q.question;
+  const letters=['A','B','C','D'];const ol=document.getElementById('optionsList');ol.innerHTML='';
+  opts.forEach((ot,i)=>{const btn=document.createElement('button');btn.className='option-btn';
+    if(ia){btn.disabled=true;if(i===cs)btn.classList.add('correct');else if(i===uc)btn.classList.add('wrong');}
+    else if(i===uc)btn.classList.add('selected');
+    btn.innerHTML=`<span class="opt-letter">${letters[i]}</span><span>${ot}</span>`;
+    if(!ia)btn.onclick=()=>selectAnswer(i);ol.appendChild(btn);});
+  const eb=document.getElementById('explanationBox');
+  if(ia){const ok=uc===cs;eb.className='explanation-box visible'+(ok?'':' wrong-exp');eb.innerHTML=`<strong>${ok?'✅ Correct!':'❌ Incorrect'}</strong>${q.explanation}`;}
+  else{eb.className='explanation-box';eb.innerHTML='';}
+  document.getElementById('btnPrev').style.display=idx===0?'none':'';
+  const il=idx===TOTAL-1;document.getElementById('btnNext').style.display=il?'none':'';
+  document.getElementById('lastQMsg').style.display=il?'block':'none';updateNavGrid();
+}
+
+function selectAnswer(i){const idx=state.currentIdx;if(state.answered[idx])return;state.userAnswers[idx]=i;state.answered[idx]=true;renderQuestion();}
+function toggleFlag(){state.flagged[state.currentIdx]=!state.flagged[state.currentIdx];renderQuestion();}
+function goToNext(){if(state.currentIdx<TOTAL-1){state.currentIdx++;renderQuestion();}}
+function goToPrev(){if(state.currentIdx>0){state.currentIdx--;renderQuestion();}}
+function jumpTo(i){state.currentIdx=i;renderQuestion();}
+
+function buildNavGrid(){
+  const g=document.getElementById('navGrid');g.innerHTML='';
+  for(let i=0;i<TOTAL;i++){const d=document.createElement('div');d.className='nav-dot';d.textContent=i+1;d.id=`navDot${i}`;d.onclick=()=>jumpTo(i);g.appendChild(d);}
+}
+function updateNavGrid(){
+  for(let i=0;i<TOTAL;i++){const d=document.getElementById(`navDot${i}`);if(!d)continue;d.className='nav-dot';
+    if(i===state.currentIdx)d.classList.add('current');
+    else if(state.submitted){if(state.answered[i])d.classList.add(state.userAnswers[i]===state.shuffledAnswers[i]?'correct-nav':'wrong-nav');}
+    else if(state.flagged[i])d.classList.add('flagged');
+    else if(state.answered[i])d.classList.add('answered');}
+}
+
+function openSubmitModal(){document.getElementById('submitModal').classList.add('show');}
+function closeSubmitModal(){document.getElementById('submitModal').classList.remove('show');}
+
+function submitExam(){
+  closeSubmitModal();clearInterval(state.timerInterval);state.endTime=Date.now();state.submitted=true;
+  document.getElementById('quizHeader').classList.remove('active');document.getElementById('tabWarning').classList.remove('show');
+  updateNavGrid();computeResults();showScreen('results');
+}
+
+function computeResults(){
+  let correct=0,wrong=0,skipped=0;const lm={};
+  state.questions.forEach((q,i)=>{
+    if(!lm[q.lesson])lm[q.lesson]={name:q.lessonName,total:0,correct:0};
+    lm[q.lesson].total++;
+    if(!state.answered[i]){skipped++;return;}
+    if(state.userAnswers[i]===state.shuffledAnswers[i]){correct++;lm[q.lesson].correct++;}else wrong++;
+  });
+  const pct=Math.round((correct/TOTAL)*100);const e=Math.floor((state.endTime-state.startTime)/1000);
+  document.getElementById('scorePct').textContent=`${pct}%`;document.getElementById('rCorrect').textContent=`${correct} / ${TOTAL}`;
+  document.getElementById('rTime').textContent=`${String(Math.floor(e/60)).padStart(2,'0')}:${String(e%60).padStart(2,'0')}`;
+  document.getElementById('rWrong').textContent=wrong;document.getElementById('rSkipped').textContent=skipped;
+  document.getElementById('scoreRing').className='score-ring '+(pct>=70?'pass':'fail');
+  document.getElementById('resultsTitle').textContent=pct>=70?`✅ Well done! ${pct}% — Module 16 Complete`:`📘 Keep practising — ${pct}% — Review & Retry`;
+  const bd=document.getElementById('lessonBreakdown');bd.innerHTML='';
+  Object.entries(lm).forEach(([tag,data])=>{
+    const pl=Math.round((data.correct/data.total)*100);const bc=pl>=70?'':pl>=40?' ok':' bad';
+    bd.innerHTML+=`<div class="lesson-row"><div class="lr-tag">${tag}</div><div class="lr-name">${data.name}</div><div class="lr-bar-wrap"><div class="lr-bar${bc}" style="width:${pl}%"></div></div><div class="lr-score">${data.correct}/${data.total}</div></div>`;
+  });
+}
+
+function showReview(){
+  const letters=['A','B','C','D'];const c=document.getElementById('reviewCards');c.innerHTML='';
+  state.questions.forEach((q,i)=>{
+    const opts=state.shuffledOptions[i],cs=state.shuffledAnswers[i],uc=state.userAnswers[i],ia=state.answered[i];
+    const ok=ia&&uc===cs;const badge=ia?(ok?'correct':'wrong'):'skipped';const bt=ia?(ok?'✅ Correct':'❌ Incorrect'):'⏭ Skipped';
+    let oh='';
+    opts.forEach((o,j)=>{let cl='rc-option';if(j===cs)cl+=' correct-ans';else if(ia&&j===uc)cl+=' user-wrong';oh+=`<div class="${cl}"><span class="opt-l">${letters[j]}</span><span>${o}</span></div>`;});
+    c.innerHTML+=`<div class="review-card"><div class="rc-meta"><div class="rc-num">Q${i+1}</div><div class="rc-lesson">${q.lesson} · ${q.lessonName}</div><div class="rc-badge ${badge}">${bt}</div></div><div class="rc-question">${q.question}</div><div class="rc-options">${oh}</div><div class="rc-exp"><strong>💡 Explanation</strong>${q.explanation}</div></div>`;
+  });showScreen('review');
+}
+function showResults(){showScreen('results');}
+function retakeTest(){startTest();}
+
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden&&!state.submitted&&state.startTime){
+    state.tabSwitches++;document.getElementById('tabCount').textContent=state.tabSwitches;
+    document.getElementById('tabWarning').classList.add('show');
+    setTimeout(()=>document.getElementById('tabWarning').classList.remove('show'),5000);
+  }
+});
+</script>
+</body>
+</html>

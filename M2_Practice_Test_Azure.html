@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>M2 Practice Test · Azure AI/ML · K21 Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #1A1248; --navy-mid: #2E2080; --green: #8DC63F; --green-hover: #79B030;
+    --green-tint: #F1F8E8; --blue: #1B9BD9; --blue-tint: #EBF6FD;
+    --page-bg: #F7F8FA; --card: #FFFFFF; --border: #E8EAEE;
+    --text-primary: #111827; --text-secondary: #4B5563; --text-muted: #9CA3AF;
+    --red: #EF4444; --red-tint: #FEF2F2; --amber: #F59E0B; --amber-tint: #FFFBEB;
+    --radius: 14px; --radius-sm: 8px;
+    --shadow: 0 1px 4px rgba(0,0,0,.06); --shadow-md: 0 4px 16px rgba(0,0,0,.10);
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--page-bg); color: var(--text-primary); min-height: 100vh; }
+
+  .site-header { background: var(--navy); padding: 14px 24px; display: flex; align-items: center; gap: 10px; position: sticky; top: 0; z-index: 200; }
+  .logo-mark { width: 34px; height: 34px; background: var(--green); border-radius: 8px; display: grid; place-items: center; font-weight: 800; font-size: 15px; color: #fff; flex-shrink: 0; }
+  .logo-text { font-size: 17px; font-weight: 700; color: #fff; }
+  .logo-text span { color: var(--green); }
+  .header-sub { margin-left: auto; font-size: 12px; color: rgba(255,255,255,0.55); font-weight: 500; text-align: right; line-height: 1.4; }
+
+  .quiz-header { display: none; background: var(--navy); border-top: 1px solid rgba(255,255,255,0.08); padding: 10px 24px; align-items: center; gap: 12px; position: sticky; top: 62px; z-index: 199; }
+  .quiz-header.active { display: flex; }
+  .q-counter { font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.9); }
+  .q-counter span { color: var(--green); }
+  .btn-submit-top { margin-left: auto; background: var(--green); color: #fff; border: none; border-radius: var(--radius-sm); padding: 7px 16px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; transition: background .2s; }
+  .btn-submit-top:hover { background: var(--green-hover); }
+  .timer { font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.08); padding: 5px 12px; border-radius: 20px; font-variant-numeric: tabular-nums; }
+
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  .landing-tag { display: inline-flex; align-items: center; gap: 6px; background: var(--green-tint); color: var(--green-hover); font-size: 12px; font-weight: 700; padding: 5px 12px; border-radius: 20px; margin-bottom: 18px; }
+  .landing-title { font-size: clamp(24px, 5vw, 38px); font-weight: 800; color: var(--navy); line-height: 1.2; margin-bottom: 14px; }
+  .landing-title span { color: var(--green); }
+  .landing-desc { font-size: 16px; color: var(--text-secondary); line-height: 1.65; max-width: 640px; margin-bottom: 28px; }
+  .stats-row { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 32px; }
+  .stat-card { background: var(--card); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 16px 22px; text-align: center; flex: 1; min-width: 120px; }
+  .stat-num { font-size: 26px; font-weight: 800; color: var(--navy); }
+  .stat-label { font-size: 12px; color: var(--text-muted); font-weight: 500; margin-top: 2px; }
+  .lessons-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-bottom: 32px; }
+  .lesson-chip { background: var(--card); border: 1.5px solid var(--border); border-radius: 10px; padding: 10px 14px; display: flex; align-items: center; gap: 9px; }
+  .lesson-badge { width: 26px; height: 26px; border-radius: 6px; background: var(--blue-tint); color: var(--blue); font-size: 10px; font-weight: 700; display: grid; place-items: center; flex-shrink: 0; }
+  .lesson-chip-text { font-size: 12px; font-weight: 600; color: var(--text-primary); line-height: 1.3; }
+  .btn-start { background: var(--navy); color: #fff; border: none; border-radius: var(--radius); padding: 16px 36px; font-size: 17px; font-weight: 700; cursor: pointer; font-family: inherit; transition: background .2s, transform .15s; display: inline-flex; align-items: center; gap: 10px; }
+  .btn-start:hover { background: var(--navy-mid); transform: translateY(-2px); }
+  .hint-text { margin-top: 14px; font-size: 13px; color: var(--text-muted); }
+  .hint-text span { color: var(--blue); }
+
+  #quiz { max-width: 820px; margin: 0 auto; padding: 24px 20px 80px; }
+  .quiz-layout { display: grid; grid-template-columns: 1fr 240px; gap: 20px; align-items: start; }
+  @media(max-width: 720px) { .quiz-layout { grid-template-columns: 1fr; } }
+
+  .question-card { background: var(--card); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow); }
+  .q-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+  .q-num { font-size: 13px; font-weight: 600; color: var(--text-muted); }
+  .q-lesson-tag { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 20px; background: var(--blue-tint); color: var(--blue); }
+  .btn-flag { margin-left: auto; font-size: 12px; font-weight: 600; color: var(--text-muted); border: 1.5px solid var(--border); background: none; border-radius: 20px; padding: 4px 12px; cursor: pointer; font-family: inherit; transition: all .15s; display: flex; align-items: center; gap: 5px; }
+  .btn-flag.flagged { background: var(--amber-tint); color: var(--amber); border-color: var(--amber); }
+  .btn-flag:hover { border-color: var(--amber); color: var(--amber); }
+  .q-text { font-size: 17px; font-weight: 600; line-height: 1.55; color: var(--text-primary); margin-bottom: 22px; }
+  .options-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .option-btn { background: #fff; border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 13px 16px; text-align: left; cursor: pointer; font-family: inherit; font-size: 14.5px; color: var(--text-primary); line-height: 1.45; display: flex; align-items: flex-start; gap: 12px; transition: all .15s; font-weight: 500; }
+  .option-btn:hover:not(:disabled) { border-color: var(--navy); background: rgba(26,18,72,.03); }
+  .option-btn .opt-letter { width: 24px; height: 24px; border-radius: 6px; background: var(--page-bg); border: 1.5px solid var(--border); display: grid; place-items: center; font-size: 11px; font-weight: 700; color: var(--text-muted); flex-shrink: 0; margin-top: 1px; transition: all .15s; }
+  .option-btn.selected .opt-letter { background: var(--navy); border-color: var(--navy); color: #fff; }
+  .option-btn.selected { border-color: var(--navy); background: rgba(26,18,72,.04); }
+  .option-btn.correct { border-color: var(--green); background: var(--green-tint); }
+  .option-btn.correct .opt-letter { background: var(--green); border-color: var(--green); color: #fff; }
+  .option-btn.wrong { border-color: var(--red); background: var(--red-tint); }
+  .option-btn.wrong .opt-letter { background: var(--red); border-color: var(--red); color: #fff; }
+  .option-btn:disabled { cursor: default; }
+
+  .explanation-box { background: var(--green-tint); border: 1.5px solid #c3e289; border-radius: var(--radius-sm); padding: 14px 16px; font-size: 13.5px; line-height: 1.6; color: #3D6B15; display: none; margin-bottom: 16px; }
+  .explanation-box strong { display: block; margin-bottom: 4px; font-weight: 700; }
+  .explanation-box.visible { display: block; }
+  .explanation-box.wrong-exp { background: var(--red-tint); border-color: #fca5a5; color: #7F1D1D; }
+
+  .nav-row { display: flex; gap: 10px; align-items: center; }
+  .btn-nav { background: var(--page-bg); border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 10px 18px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; color: var(--text-primary); transition: all .15s; }
+  .btn-nav:hover { border-color: var(--navy); color: var(--navy); }
+  .btn-nav.primary { background: var(--navy); color: #fff; border-color: var(--navy); margin-left: auto; }
+  .btn-nav.primary:hover { background: var(--navy-mid); }
+  .last-q-msg { font-size: 12.5px; color: var(--text-muted); text-align: center; display: none; flex: 1; }
+
+  .nav-panel { background: var(--card); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow); position: sticky; top: 128px; }
+  .nav-panel h4 { font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 12px; }
+  .nav-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 14px; }
+  .nav-dot { width: 36px; height: 36px; border-radius: 8px; border: 1.5px solid var(--border); background: #fff; font-size: 12px; font-weight: 700; color: var(--text-muted); display: grid; place-items: center; cursor: pointer; transition: all .15s; }
+  .nav-dot:hover { border-color: var(--navy); color: var(--navy); }
+  .nav-dot.current { border-color: var(--navy); background: var(--navy); color: #fff; }
+  .nav-dot.answered { background: var(--green-tint); border-color: var(--green); color: #3D6B15; }
+  .nav-dot.flagged { background: var(--amber-tint); border-color: var(--amber); color: var(--amber); }
+  .nav-dot.correct-nav { background: var(--green); border-color: var(--green); color: #fff; }
+  .nav-dot.wrong-nav { background: var(--red); border-color: var(--red); color: #fff; }
+  .nav-legend { font-size: 11px; color: var(--text-muted); display: flex; flex-direction: column; gap: 5px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+
+  .results-header { background: var(--card); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 32px; box-shadow: var(--shadow-md); margin-bottom: 20px; text-align: center; }
+  .score-ring { width: 110px; height: 110px; border-radius: 50%; border: 7px solid var(--border); margin: 0 auto 18px; display: grid; place-items: center; }
+  .score-ring.pass { border-color: var(--green); }
+  .score-ring.fail { border-color: var(--red); }
+  .score-pct { font-size: 30px; font-weight: 800; color: var(--navy); }
+  .score-label { font-size: 12px; color: var(--text-muted); font-weight: 500; margin-top: -2px; }
+  .results-title { font-size: 22px; font-weight: 800; color: var(--navy); margin-bottom: 6px; }
+  .results-sub { font-size: 14px; color: var(--text-secondary); margin-bottom: 22px; }
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 22px; }
+  @media(max-width: 560px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+  .r-stat { background: var(--page-bg); border-radius: var(--radius-sm); padding: 14px; text-align: center; }
+  .r-stat-val { font-size: 20px; font-weight: 800; color: var(--navy); }
+  .r-stat-key { font-size: 11px; color: var(--text-muted); font-weight: 500; margin-top: 2px; }
+  .results-btns { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  .btn-results { padding: 11px 22px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; transition: all .15s; }
+  .btn-results.primary { background: var(--navy); color: #fff; border: none; }
+  .btn-results.primary:hover { background: var(--navy-mid); }
+  .btn-results.secondary { background: #fff; color: var(--navy); border: 1.5px solid var(--border); }
+  .btn-results.secondary:hover { border-color: var(--navy); }
+
+  .lesson-breakdown { background: var(--card); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow); margin-bottom: 20px; }
+  .breakdown-title { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 16px; }
+  .lesson-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .lesson-row:last-child { margin-bottom: 0; }
+  .lr-tag { font-size: 11px; font-weight: 700; color: var(--blue); background: var(--blue-tint); padding: 3px 8px; border-radius: 20px; flex-shrink: 0; min-width: 28px; text-align: center; }
+  .lr-name { font-size: 13px; font-weight: 500; color: var(--text-primary); flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lr-bar-wrap { width: 110px; height: 7px; background: var(--border); border-radius: 4px; overflow: hidden; flex-shrink: 0; }
+  .lr-bar { height: 100%; border-radius: 4px; background: var(--green); }
+  .lr-bar.bad { background: var(--red); }
+  .lr-bar.ok { background: var(--amber); }
+  .lr-score { font-size: 13px; font-weight: 700; color: var(--text-secondary); width: 42px; text-align: right; flex-shrink: 0; }
+
+  .review-header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; flex-wrap: wrap; }
+  .review-title { font-size: 20px; font-weight: 800; color: var(--navy); }
+  .review-sub { font-size: 13px; color: var(--text-muted); }
+  .btn-back { background: var(--page-bg); border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 9px 16px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; color: var(--text-secondary); transition: all .15s; margin-left: auto; }
+  .btn-back:hover { border-color: var(--navy); color: var(--navy); }
+  .review-card { background: var(--card); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 22px; margin-bottom: 14px; box-shadow: var(--shadow); }
+  .rc-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+  .rc-num { font-size: 12px; font-weight: 700; color: var(--text-muted); }
+  .rc-lesson { font-size: 11px; font-weight: 700; color: var(--blue); background: var(--blue-tint); padding: 2px 8px; border-radius: 20px; }
+  .rc-badge { font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 20px; }
+  .rc-badge.correct { background: var(--green-tint); color: #3D6B15; }
+  .rc-badge.wrong { background: var(--red-tint); color: var(--red); }
+  .rc-badge.skipped { background: var(--amber-tint); color: var(--amber); }
+  .rc-question { font-size: 15px; font-weight: 600; color: var(--text-primary); margin-bottom: 14px; line-height: 1.5; }
+  .rc-options { display: flex; flex-direction: column; gap: 7px; margin-bottom: 14px; }
+  .rc-option { padding: 9px 14px; border-radius: var(--radius-sm); font-size: 13.5px; display: flex; align-items: flex-start; gap: 10px; border: 1.5px solid var(--border); }
+  .rc-option.correct-ans { border-color: var(--green); background: var(--green-tint); color: #3D6B15; }
+  .rc-option.user-wrong { border-color: var(--red); background: var(--red-tint); color: var(--red); }
+  .rc-option .opt-l { font-weight: 700; font-size: 12px; width: 18px; flex-shrink: 0; margin-top: 1px; }
+  .rc-exp { background: var(--page-bg); border-left: 3px solid var(--green); padding: 12px 14px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; font-size: 13px; line-height: 1.6; color: var(--text-secondary); }
+  .rc-exp strong { color: var(--navy); font-weight: 700; display: block; margin-bottom: 3px; }
+
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 999; display: none; place-items: center; }
+  .modal-overlay.show { display: grid; }
+  .modal { background: #fff; border-radius: var(--radius); padding: 28px; max-width: 380px; width: 90%; box-shadow: var(--shadow-md); text-align: center; }
+  .modal h3 { font-size: 18px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+  .modal p { font-size: 14px; color: var(--text-secondary); margin-bottom: 22px; line-height: 1.5; }
+  .modal-btns { display: flex; gap: 10px; justify-content: center; }
+  .btn-modal { padding: 10px 22px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; }
+  .btn-modal.cancel { background: var(--page-bg); border: 1.5px solid var(--border); color: var(--text-primary); }
+  .btn-modal.confirm { background: var(--navy); color: #fff; border: none; }
+
+  .tab-warning { background: var(--red); color: #fff; text-align: center; padding: 8px 16px; font-size: 13px; font-weight: 600; display: none; position: sticky; top: 110px; z-index: 198; }
+  .tab-warning.show { display: block; }
+  .retake-row { display: flex; justify-content: center; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="logo-mark">K21</div>
+  <div class="logo-text">K21 <span>Academy</span></div>
+  <div class="header-sub">Azure AI/ML Job Focus Program<br/>Module 2 · Practice Test</div>
+</header>
+
+<div class="quiz-header" id="quizHeader">
+  <div class="q-counter">M2: NLP, Speech &amp; Information Extraction &nbsp;·&nbsp; Q <span id="qCounterNum">1</span> / 35</div>
+  <div class="timer" id="timer">00:00</div>
+  <button class="btn-submit-top" onclick="openSubmitModal()">📋 Submit Exam</button>
+</div>
+
+<div class="tab-warning" id="tabWarning">⚠️ Tab switch detected! Return to the test. Attempts: <span id="tabCount">0</span></div>
+
+<!-- ════ LANDING ════ -->
+<div id="landing" class="screen active">
+  <div style="max-width:780px;margin:0 auto;padding:40px 20px 60px;">
+    <div class="landing-tag">📋 Azure AI/ML · K21 Academy</div>
+    <h1 class="landing-title">NLP, Speech, Vision &amp;<br/><span>Information Extraction — Module 2</span></h1>
+    <p class="landing-desc">Test your understanding across all 10 lessons in Module 2 of the Azure AI/ML Job Focus Program. Covers NLP fundamentals, text analysis, translation, question answering, conversational AI, custom text classification, custom NER, speech recognition, Azure AI Search, and advanced NLP concepts — with full explanations after every answer.</p>
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-num">📝 35</div><div class="stat-label">Questions</div></div>
+      <div class="stat-card"><div class="stat-num">📚 10</div><div class="stat-label">Lessons</div></div>
+      <div class="stat-card"><div class="stat-num">🔄 ∞</div><div class="stat-label">Retries</div></div>
+    </div>
+    <p style="font-size:13px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;">10 Lessons Covered</p>
+    <div class="lessons-grid">
+      <div class="lesson-chip"><div class="lesson-badge">L1</div><div class="lesson-chip-text">Introduction to NLP</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L2</div><div class="lesson-chip-text">Analyzing Text</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L3</div><div class="lesson-chip-text">Translating Text</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L4</div><div class="lesson-chip-text">Question Answering Solutions</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L5</div><div class="lesson-chip-text">Conversational Language Model</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L6</div><div class="lesson-chip-text">Custom Text Classification</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L7</div><div class="lesson-chip-text">Custom Named Entity Recognition</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L8</div><div class="lesson-chip-text">Speech Recognition</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L9</div><div class="lesson-chip-text">Azure AI Search</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L10</div><div class="lesson-chip-text">Natural Language Processing (NLP)</div></div>
+    </div>
+    <button class="btn-start" onclick="startTest()">🚀 Start Practice Test</button>
+    <p class="hint-text">💡 <span>Options shuffle every attempt</span> · Explanations after every answer · No time pressure</p>
+  </div>
+</div>
+
+<!-- ════ QUIZ ════ -->
+<div id="quiz" class="screen">
+  <div class="quiz-layout">
+    <div>
+      <div class="question-card">
+        <div class="q-meta">
+          <div class="q-num">Question <span id="qNum">1</span> of 35</div>
+          <div class="q-lesson-tag" id="qLessonTag">L1</div>
+          <button class="btn-flag" id="btnFlag" onclick="toggleFlag()">🏳 Flag</button>
+        </div>
+        <div class="q-text" id="qText">Loading…</div>
+        <div class="options-list" id="optionsList"></div>
+        <div class="explanation-box" id="explanationBox"></div>
+        <div class="nav-row">
+          <button class="btn-nav" id="btnPrev" onclick="goToPrev()">← Previous</button>
+          <div class="last-q-msg" id="lastQMsg">🎯 Last question! Click <strong>Submit Exam</strong> above.</div>
+          <button class="btn-nav primary" id="btnNext" onclick="goToNext()">Next →</button>
+        </div>
+      </div>
+    </div>
+    <div class="nav-panel">
+      <h4>Question Navigator</h4>
+      <div class="nav-grid" id="navGrid"></div>
+      <div class="nav-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--green);"></div><span>Answered</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--amber);"></div><span>Flagged</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--border);"></div><span>Not visited</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ RESULTS ════ -->
+<div id="results" class="screen">
+  <div style="max-width:720px;margin:0 auto;padding:40px 20px 60px;">
+    <div class="landing-tag">🏁 Azure AI/ML Job Focus Program</div>
+    <div class="results-header">
+      <div class="score-ring" id="scoreRing">
+        <div><div class="score-pct" id="scorePct">0%</div><div class="score-label">Score</div></div>
+      </div>
+      <div class="results-title" id="resultsTitle">Test Complete · Azure AI/ML</div>
+      <div class="results-sub">Module 2 — NLP, Speech, Vision &amp; Information Extraction</div>
+      <div class="stats-grid">
+        <div class="r-stat"><div class="r-stat-val" id="rCorrect">0 / 35</div><div class="r-stat-key">Correct Answers</div></div>
+        <div class="r-stat"><div class="r-stat-val" id="rTime">—</div><div class="r-stat-key">⏱️ Time</div></div>
+        <div class="r-stat"><div class="r-stat-val" id="rWrong">—</div><div class="r-stat-key">❌ Incorrect</div></div>
+        <div class="r-stat"><div class="r-stat-val" id="rSkipped">—</div><div class="r-stat-key">⏭️ Skipped</div></div>
+      </div>
+      <div class="results-btns">
+        <button class="btn-results primary" onclick="showReview()">📋 Review All Questions &amp; Answers</button>
+        <button class="btn-results secondary" onclick="retakeTest()">🔄 Retake Test</button>
+      </div>
+    </div>
+    <div class="lesson-breakdown">
+      <div class="breakdown-title">📊 Per-Lesson Breakdown</div>
+      <div id="lessonBreakdown"></div>
+    </div>
+    <div class="retake-row"><button class="btn-results secondary" onclick="retakeTest()">🔄 Retake Test</button></div>
+  </div>
+</div>
+
+<!-- ════ REVIEW ════ -->
+<div id="review" class="screen">
+  <div style="max-width:820px;margin:0 auto;padding:28px 20px 60px;">
+    <div class="review-header">
+      <div>
+        <div class="review-title">Questions &amp; Answers Review</div>
+        <div class="review-sub">All 35 questions with correct answers and explanations</div>
+      </div>
+      <button class="btn-back" onclick="showResults()">← Back to Results</button>
+    </div>
+    <div id="reviewCards"></div>
+    <div class="retake-row">
+      <button class="btn-back" onclick="showResults()">← Back to Results</button>
+      <button class="btn-results primary" onclick="retakeTest()" style="padding:10px 22px;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;background:var(--navy);color:#fff;">🔄 Retake Test</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="submitModal">
+  <div class="modal">
+    <h3>📋 Submit Exam?</h3>
+    <p>Are you sure you want to submit? Unanswered questions will be marked as skipped.</p>
+    <div class="modal-btns">
+      <button class="btn-modal cancel" onclick="closeSubmitModal()">Continue Quiz</button>
+      <button class="btn-modal confirm" onclick="submitExam()">Yes, Submit</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+//  QUESTION BANK — Azure AI/ML · Module 2
+//  35 Qs | 10 Lessons | Answer dist: A×9  B×9  C×9  D×8
+// ═══════════════════════════════════════════════════════════════
+const QUESTIONS = [
+
+  // ─── L1: Introduction to NLP (4 Qs) ──────────────────────────────────
+  {
+    lesson:'L1', lessonName:'Introduction to NLP',
+    question:'What are the two fundamental tasks that every NLP system must handle when working with human language?',
+    options:[
+      'Natural Language Understanding (NLU) — interpreting the meaning of input text, and Natural Language Generation (NLG) — producing coherent, meaningful text output',
+      'Named Entity Recognition (NER) and Part-of-Speech (POS) tagging applied to every document in the pipeline',
+      'Tokenisation of raw text and binary sentiment classification into positive or negative categories',
+      'Speech-to-text transcription and text-to-speech synthesis for multimodal AI applications'
+    ],
+    answer:0,
+    explanation:'NLP broadly divides into two complementary tasks: NLU (making sense of what the user said — intent, sentiment, entities) and NLG (producing fluent, contextually appropriate language output). Both are required for full conversational AI. Azure AI Language and Azure OpenAI services address both sides — with pre-built models for NLU tasks and generative models (GPT) for NLG tasks.'
+  },
+  {
+    lesson:'L1', lessonName:'Introduction to NLP',
+    question:'What is "tokenisation" in an NLP preprocessing pipeline?',
+    options:[
+      'Encrypting text data before it is transmitted securely to an Azure Language API endpoint',
+      'Splitting raw text into individual units — words, subwords, or characters — that a model can represent numerically and process',
+      'Assigning a unique numeric document ID to each text file in a corpus for database indexing',
+      'Converting named entities detected in a document into anonymised placeholder tokens for PII compliance'
+    ],
+    answer:1,
+    explanation:'Tokenisation is the foundational NLP preprocessing step that splits a raw string into discrete units (tokens). Word tokenisation splits on spaces/punctuation. Subword tokenisation (BPE, WordPiece — used by BERT and GPT models) breaks rare words into smaller meaningful pieces, enabling models to handle out-of-vocabulary words gracefully. Each token is then mapped to a numeric ID the model processes mathematically.'
+  },
+  {
+    lesson:'L1', lessonName:'Introduction to NLP',
+    question:'Which Azure service provides ready-to-use pre-built NLP capabilities — including sentiment analysis, key phrase extraction, language detection, and named entity recognition — without requiring you to train a custom model?',
+    options:[
+      'Azure Machine Learning AutoML configured with an NLP classification task',
+      'Azure Cognitive Search with AI enrichment skills attached to an indexer',
+      'Azure AI Language service (previously called the Text Analytics API)',
+      'Azure Bot Service integrated with LUIS language understanding components'
+    ],
+    answer:2,
+    explanation:'Azure AI Language (formerly Text Analytics) is Microsoft\'s dedicated NLP service offering pre-built, API-accessible language features including: sentiment analysis with opinion mining, key phrase extraction, named entity recognition, entity linking, PII detection and redaction, language detection, and text summarisation. No model training is required — you call the REST API or SDK with your text and receive structured results immediately.'
+  },
+  {
+    lesson:'L1', lessonName:'Introduction to NLP',
+    question:'What is "stop word removal" as a preprocessing step in NLP pipelines, and when might you deliberately skip it?',
+    options:[
+      'Filtering out all punctuation and special characters before applying tokenisation to raw input text',
+      'Removing words that appear only once across the entire training corpus to reduce vocabulary sparsity',
+      'Eliminating domain-specific technical jargon that the model was not exposed to during pre-training',
+      'Discarding common, low-information words ("the", "is", "and", "a") that contribute noise — though stop words should be kept for tasks like sentiment analysis where "not" or "but" carry critical meaning'
+    ],
+    answer:3,
+    explanation:'Stop words are high-frequency function words that typically add little semantic content to bag-of-words models, so removing them reduces noise and vocabulary size. However, for tasks like sentiment analysis ("I do NOT recommend this") or question answering ("what is the capital of France?"), stop words carry essential meaning. Modern transformer models like BERT process the full token sequence without stop word removal, as their attention mechanism weights tokens by contextual relevance.'
+  },
+
+  // ─── L2: Analyzing Text (3 Qs) ────────────────────────────────────────
+  {
+    lesson:'L2', lessonName:'Analyzing Text',
+    question:'In Azure AI Language, what does the "sentiment analysis" feature return for an input document?',
+    options:[
+      'A document-level sentiment label (positive, negative, or neutral) with confidence scores — and optionally per-sentence sentiment and opinion mining (aspect-level sentiment) for targets like product features',
+      'A ranked list of all named entities detected — people, places, organisations — with their category labels and confidence scores',
+      'The language in which the text is written, expressed as an ISO 639-1 code with a confidence percentage',
+      'A set of key phrases that represent the main topics and themes discussed across the document'
+    ],
+    answer:0,
+    explanation:'Azure AI Language sentiment analysis returns: (1) document-level sentiment: positive/negative/neutral/mixed with a three-way confidence score tuple summing to 1.0; (2) sentence-level breakdown; and optionally (3) opinion mining (aspect-based sentiment) — identifying specific targets ("battery life", "customer service") and the sentiment expressed toward each ("positive", "negative"). This granularity makes it far more actionable than a simple thumbs up/down.'
+  },
+  {
+    lesson:'L2', lessonName:'Analyzing Text',
+    question:'What is "opinion mining" (aspect-based sentiment analysis) in Azure AI Language, and how does it go beyond standard sentiment analysis?',
+    options:[
+      'Extracting all factual claims from a document and cross-referencing them against a structured knowledge base for fact-checking',
+      'Identifying specific aspects or targets mentioned in text — such as "food quality" or "wait time" — and determining the sentiment expressed toward each individual aspect, rather than just the document as a whole',
+      'Detecting whether a piece of text was authored by a human or generated by an AI language model',
+      'Automatically consolidating opinions from multiple customer reviews into a summarised bullet-point digest'
+    ],
+    answer:1,
+    explanation:'Standard sentiment analysis returns one label for a whole document ("negative"). Opinion mining is granular: for a review like "The pizza was delicious but the service was slow", it returns: {target:"pizza", sentiment:"positive"} AND {target:"service", sentiment:"negative"}. This level of detail enables businesses to act on specific aspects — improving service without assuming everything is wrong just because the overall review was negative. Enabled in Azure AI Language by adding the opinion mining parameter.'
+  },
+  {
+    lesson:'L2', lessonName:'Analyzing Text',
+    question:'When calling the Azure AI Language "key phrase extraction" feature, what does it produce?',
+    options:[
+      'A list of synonyms and semantically related terms for the primary subject of the input document',
+      'A corrected version of the input text with spelling, grammar, and punctuation errors automatically fixed',
+      'A collection of the most significant phrases that capture the core topics and themes in the text — extracted without requiring predefined category labels or training data',
+      'A readability complexity score and estimated reading time in minutes for the input document'
+    ],
+    answer:2,
+    explanation:'Key phrase extraction identifies and returns the most important noun phrases that represent what the document is about. For example, from a hotel review it might return ["stunning sea view", "comfortable beds", "slow room service"]. Unlike classification, it requires no predefined labels — it works zero-shot on any text. It\'s commonly used for content tagging, search index enrichment in Azure AI Search, and summarising large document collections into representative keywords.'
+  },
+
+  // ─── L3: Translating Text (3 Qs) ─────────────────────────────────────
+  {
+    lesson:'L3', lessonName:'Translating Text',
+    question:'What is Azure AI Translator and what is its primary function?',
+    options:[
+      'A service that converts spoken audio into written text transcripts simultaneously across multiple target languages',
+      'A developer tool that detects the programming language of source code and suggests equivalent code in other languages',
+      'An Azure service that analyses the sentiment of non-English text before translating it to a target language',
+      'A cloud translation API that converts text between 100+ languages using neural machine translation (NMT) models, with optional domain customisation through Custom Translator and glossary support'
+    ],
+    answer:3,
+    explanation:'Azure AI Translator (formerly Cognitive Services Translator) uses neural machine translation to translate text across 100+ languages and language variants. It supports text translation, document translation (preserving layout in Word, PDF, etc.), transliteration (script conversion), language detection, and dictionary lookup. For specialised domains (legal, medical, technical), Custom Translator lets you fine-tune models on your own parallel bilingual data.'
+  },
+  {
+    lesson:'L3', lessonName:'Translating Text',
+    question:'What is "transliteration" in the context of the Azure AI Translator service, and how is it different from translation?',
+    options:[
+      'Converting the script used to write a word into another writing system — for example, rendering Arabic words phonetically using Latin characters — without changing the underlying meaning or language of the words',
+      'Automatically detecting the source language of input text before triggering the translation pipeline',
+      'Replacing culturally specific idioms and expressions with functionally equivalent phrases in the target language and culture',
+      'Improving translation quality by aligning source and target language sentence pairs from parallel bilingual training corpora'
+    ],
+    answer:0,
+    explanation:'Transliteration converts text from one writing script to another phonetically — for example, the Arabic word "مرحبا" → "marhaba" in Latin script — without translating the meaning. This is useful for: rendering foreign names in a local script, creating phonetic pronunciation guides, and displaying non-Latin text in systems that only support Latin characters. Contrast with translation, which changes both script and language meaning. Azure Translator supports transliteration for many script pairs.'
+  },
+  {
+    lesson:'L3', lessonName:'Translating Text',
+    question:'How does "Custom Translator" in Azure AI Translator differ from the standard out-of-the-box translation service?',
+    options:[
+      'Custom Translator operates offline on-premises, whereas the standard service requires an internet connection to Azure data centres',
+      'Custom Translator lets you train domain-specific translation models using your own parallel bilingual sentence pairs — producing higher-quality translations for specialised vocabulary like legal contracts, medical reports, or engineering specifications',
+      'Custom Translator supports only batch document translation, while the standard service handles sentence-by-sentence real-time text translation',
+      'Custom Translator is a no-code tool designed for business users, while the standard service requires Python SDK integration by professional developers'
+    ],
+    answer:1,
+    explanation:'The standard Azure Translator is general-purpose and works well for everyday language. Custom Translator extends it by letting you upload parallel sentence pairs (source + correct translation in your domain) to fine-tune a custom translation system. This is particularly valuable for: legal documents where precise term mapping matters, medical records with specialised terminology, proprietary product names, and industry jargon that general models mistranslate. Custom models are hosted in your Azure subscription and accessed via the same API with a category ID parameter.'
+  },
+
+  // ─── L4: Question Answering Solutions (4 Qs) ─────────────────────────
+  {
+    lesson:'L4', lessonName:'Question Answering Solutions',
+    question:'What is "Azure AI Language — Question Answering" (formerly QnA Maker) designed to do?',
+    options:[
+      'Automatically generate a new FAQ document from a set of raw customer support ticket transcripts and chat logs',
+      'Search the live internet and return the highest-ranked webpage that answers a user\'s query in real time',
+      'Build a knowledge base from existing content sources — URLs, documents, structured FAQ files — and extract or generate precise answers to natural language questions posed against that knowledge base',
+      'Train a large language model from scratch on proprietary company data to answer highly specialised domain questions'
+    ],
+    answer:2,
+    explanation:'Azure Question Answering ingests content from multiple sources (public URLs, uploaded Word/PDF documents, structured .tsv/.xlsx QnA files, and manually authored pairs) and creates a searchable knowledge base. At inference time, a user\'s question is matched against this KB to extract the most relevant answer — either verbatim from a stored answer or generated from a retrieved passage. It\'s the backbone of FAQ bots, customer support automation, and internal knowledge assistants built with Azure Bot Service.'
+  },
+  {
+    lesson:'L4', lessonName:'Question Answering Solutions',
+    question:'In Azure Question Answering, what is a "knowledge base"?',
+    options:[
+      'The Azure SQL database table that persists all historical user conversation turns and their matched answer records',
+      'The ML model weights that the Question Answering service continuously updates as new user queries arrive',
+      'The Azure Cognitive Search index that stores vectorised document chunks for semantic similarity retrieval',
+      'A curated collection of question-answer pairs — sourced from URLs, documents, and manually authored FAQs — that the service searches to find and return the best matching answer for incoming user queries'
+    ],
+    answer:3,
+    explanation:'A knowledge base (KB) in Azure Question Answering is the core asset: a set of QnA pairs. Each pair has: one or more questions (including phrasings/alternates), an answer, optional metadata tags for filtering, and a confidence score at inference time. The KB is stored in an Azure AI Search index under the hood. You manage the KB through the Language Studio portal — adding sources, testing, reviewing, and publishing a version to a production endpoint your bot or app calls.'
+  },
+  {
+    lesson:'L4', lessonName:'Question Answering Solutions',
+    question:'What is "active learning" in the context of Azure Question Answering, and why is it valuable?',
+    options:[
+      'A continuous feedback loop where real user queries that matched poorly are surfaced as suggested new questions to add or existing questions to improve — enabling the knowledge base to get smarter from real usage over time',
+      'A technique for pre-populating the knowledge base by having a generative AI model synthesise thousands of plausible question-answer pairs from your source documents',
+      'A reinforcement learning mechanism where the service rewards itself when users click "helpful" after receiving an answer',
+      'An automated daily job that scrapes newly published content from registered URLs and adds it to the knowledge base automatically'
+    ],
+    answer:0,
+    explanation:'Active learning in Azure Question Answering analyses incoming user queries that received low-confidence matches or no match, then clusters them into suggested questions to add to existing QnA pairs. Admins review these suggestions in Language Studio and accept or reject them. Over time, the KB covers more phrasing variations, improving match rates from real-world usage patterns — a closed-loop quality improvement cycle that reduces manual maintenance effort significantly.'
+  },
+  {
+    lesson:'L4', lessonName:'Question Answering Solutions',
+    question:'What is the key difference between "extractive" and "generative" question answering approaches?',
+    options:[
+      'Extractive QA uses neural networks; generative QA uses traditional keyword search and TF-IDF ranking algorithms without any learned model',
+      'Extractive QA identifies and returns a verbatim text span from a source document as the answer; generative QA uses a language model to synthesise a new, fluent answer from retrieved context — which may not exist word-for-word in any single source',
+      'Extractive QA works only on structured database tables; generative QA processes only unstructured free-text documents',
+      'Extractive QA is available only in English; generative QA supports multilingual answer generation across all 100+ Azure Translator languages'
+    ],
+    answer:1,
+    explanation:'Extractive QA (used in traditional QnA Maker / Azure Question Answering) finds the exact answer span within a retrieved document and returns it verbatim — highly reliable but limited to answers that exist literally in the content. Generative QA (used in Azure OpenAI RAG patterns) retrieves relevant chunks, then uses a language model (e.g. GPT-4o) to synthesise a new, natural-sounding answer that combines information from multiple sources — more flexible but requires careful grounding to prevent hallucination. Azure AI Foundry supports both patterns.'
+  },
+
+  // ─── L5: Conversational Language Model (4 Qs) ────────────────────────
+  {
+    lesson:'L5', lessonName:'Conversational Language Model',
+    question:'What is "Conversational Language Understanding" (CLU) in Azure AI Language?',
+    options:[
+      'A speech transcription service that converts call-centre audio recordings into time-stamped structured text',
+      'A pre-configured FAQ chatbot that answers common customer queries without needing any customisation or training',
+      'A service for training custom natural language understanding models that classify user utterances into intents and extract entities — enabling intelligent chatbots and applications to understand what users want and act accordingly',
+      'An Azure OpenAI feature that maintains conversation history context across multiple turns for more coherent dialogue'
+    ],
+    answer:2,
+    explanation:'CLU (Conversational Language Understanding) is the successor to LUIS (Language Understanding Intelligent Service) in Azure AI Language. You define a schema of intents (what the user wants to do) and entities (specific information to extract), provide training utterances, train the model, and deploy it. Your bot calls the CLU endpoint with the user\'s message and receives the top intent + extracted entities to trigger the right downstream action — for example, "BookFlight" with entities {destination:"London", date:"next Friday"}.'
+  },
+  {
+    lesson:'L5', lessonName:'Conversational Language Model',
+    question:'In Conversational Language Understanding (CLU), what is an "intent"?',
+    options:[
+      'The list of training utterances a developer must label for each entity type in the CLU model schema',
+      'The structured JSON response payload that CLU returns to the calling application after classifying an input utterance',
+      'A pre-labelled training dataset automatically generated by CLU from the application\'s historical conversation logs',
+      'The categorised goal or purpose behind a user\'s utterance — such as "BookFlight", "CheckAccountBalance", or "CancelOrder" — which the application maps to a specific downstream action or workflow'
+    ],
+    answer:3,
+    explanation:'An intent represents what the user wants to accomplish. Each intent is populated with training utterances (example phrases a user might say to express that intent). CLU learns to generalise from these examples so it can correctly classify new, unseen phrasings. You also define a "None" intent for out-of-scope queries your application can\'t handle. At inference time, CLU returns the predicted intent with a confidence score, which your application uses to route the conversation correctly.'
+  },
+  {
+    lesson:'L5', lessonName:'Conversational Language Model',
+    question:'In CLU, what is an "entity" and how does it complement the "intent" in understanding a user utterance?',
+    options:[
+      'A specific piece of information extracted from the user\'s utterance — like a date, destination city, or product name — that provides the parameters needed to actually fulfil the identified intent',
+      'A curated synonym list that maps alternative phrasings of the same concept to a single canonical label used in training',
+      'A confidence threshold configuration value that determines when CLU should escalate an ambiguous utterance to a human support agent',
+      'A pre-built language model component that CLU uses internally to handle out-of-vocabulary and domain-specific terms'
+    ],
+    answer:0,
+    explanation:'While an intent tells you WHAT the user wants, entities provide the specifics — the WHO, WHAT, WHERE, WHEN parameters. For "Book a flight to Paris next Monday", the intent is "BookFlight", the entities are {destination:"Paris", date:"next Monday"}. Without entities, you know the user wants to book a flight but can\'t do it. CLU supports prebuilt entities (dates, numbers), learned entities (custom domain types), and list/regex entities for structured formats like order IDs or postal codes.'
+  },
+  {
+    lesson:'L5', lessonName:'Conversational Language Model',
+    question:'What is the difference between "prebuilt" entities and "learned" (custom) entities in CLU?',
+    options:[
+      'Prebuilt entities require annotated training utterances; learned entities use regular expression pattern matching requiring no examples',
+      'Prebuilt entities are ready-to-use extractors for common data types — dates, times, numbers, email addresses, phone numbers — requiring no training data; learned entities are custom types trained from your own labelled utterance examples',
+      'Prebuilt entities work only in English language models; learned entities can be trained on utterances in any of CLU\'s 96 supported languages',
+      'Prebuilt entities are extracted client-side within the SDK library; learned entities are processed server-side by the CLU inference endpoint in Azure'
+    ],
+    answer:1,
+    explanation:'Prebuilt entities in CLU cover universally common data types that are expensive to train from scratch — dates ("next Tuesday", "12/03/2025"), numbers, currencies, ordinals, phone numbers, email addresses, and more. They\'re on by default and require zero labelled examples. Learned (custom) entities are domain-specific types you define and train — e.g., "ProductCode", "ContractClause", "FlightClass" — requiring annotated utterance examples. Using prebuilt entities for standard types saves significant annotation effort.'
+  },
+
+  // ─── L6: Custom Text Classification (3 Qs) ───────────────────────────
+  {
+    lesson:'L6', lessonName:'Custom Text Classification',
+    question:'What is "Custom Text Classification" in Azure AI Language, and when should you use it instead of the pre-built sentiment analysis feature?',
+    options:[
+      'A tool for automatically fixing grammar and spelling errors in customer-facing marketing content at scale',
+      'A service that clusters semantically similar documents into groups without needing predefined category labels',
+      'A feature that trains a custom classification model on your own labelled documents — use it when you need domain-specific categories your business defines, such as "Invoice", "Contract", "Policy", or "Complaint", that pre-built classifiers don\'t cover',
+      'A built-in feature that classifies all text into one of five fixed sentiment intensity levels from very negative to very positive'
+    ],
+    answer:2,
+    explanation:'The pre-built sentiment analysis returns positive/negative/neutral — useful for general opinion polarity. Custom Text Classification lets you define any set of categories meaningful to your business — like a legal firm routing "Employment", "IP", "Contract Dispute" document types, or a support team triaging "Billing", "Technical", "Shipping" ticket categories. You provide labelled training documents, Azure AI Language trains a model, and you deploy it as an API endpoint. Minimum training data: 10 documents per class (50+ recommended).'
+  },
+  {
+    lesson:'L6', lessonName:'Custom Text Classification',
+    question:'In Azure Custom Text Classification, what is the distinction between "single-label" and "multi-label" project types?',
+    options:[
+      'Single-label classification uses a neural network architecture; multi-label uses a logistic regression algorithm',
+      'Single-label projects require more labelled training documents than multi-label to achieve comparable accuracy',
+      'Single-label returns a confidence score from 0–1; multi-label returns a ranked list without individual scores',
+      'Single-label assigns exactly one category to each document; multi-label allows a document to belong to multiple categories simultaneously — appropriate when a document genuinely spans several classes'
+    ],
+    answer:3,
+    explanation:'Single-label classification (mutually exclusive categories): each document gets one label — like routing a support ticket to exactly one department. Multi-label classification: a document can have multiple labels simultaneously — like tagging a news article as both "Technology" and "Business". Choosing the right type is important: single-label uses a softmax output (categories compete), while multi-label uses independent binary sigmoid outputs (each category decided independently). Use multi-label when content legitimately covers several themes.'
+  },
+  {
+    lesson:'L6', lessonName:'Custom Text Classification',
+    question:'What is the minimum recommended number of labelled training documents per class in Azure Custom Text Classification, and what does the service use to evaluate model quality?',
+    options:[
+      'At least 10 documents per class as an absolute minimum, with 50 or more recommended per class for production-grade performance; quality is evaluated using Precision, Recall, and F1 score on a held-out test dataset',
+      'At least 500 documents per class — the Azure service enforces this requirement to ensure the underlying transformer model converges properly during fine-tuning',
+      'Exactly 100 documents per class with equal class balance enforced — the service rejects training jobs that don\'t meet this strict balanced dataset requirement',
+      'No minimum documents are required — even a single labelled example per class is sufficient for the few-shot learning capability built into Azure AI Language'
+    ],
+    answer:0,
+    explanation:'Azure AI Language Custom Text Classification recommends at least 50 labelled documents per class for reliable performance, with 10 as the hard minimum to even submit a training job. The service evaluates the trained model using Precision (how many predicted labels were correct), Recall (how many actual labels were correctly found), and F1 score (harmonic mean of both) on a held-out test split or cross-validation. You can view per-class metrics in Language Studio to identify weak categories that need more training data.'
+  },
+
+  // ─── L7: Custom Named Entity Recognition (4 Qs) ──────────────────────
+  {
+    lesson:'L7', lessonName:'Custom Named Entity Recognition',
+    question:'What is "Custom Named Entity Recognition" (Custom NER) in Azure AI Language?',
+    options:[
+      'A pre-built service that detects standard entity types — Person, Location, Organisation — in any text without requiring labelled training data or custom configuration',
+      'A feature that lets you define and train a model to recognise domain-specific entity types — such as contract clause numbers, pharmaceutical drug codes, or engineering part IDs — that the standard pre-built NER service doesn\'t cover',
+      'An automated PII (personally identifiable information) anonymisation tool that replaces all detected entities with placeholder tokens for GDPR compliance',
+      'A computer vision service that extracts text entities from scanned documents and images using optical character recognition (OCR)'
+    ],
+    answer:1,
+    explanation:'The pre-built NER in Azure AI Language recognises standard entity types (Person, Location, Organisation, Date, URL, etc.) without training. Custom NER extends this to domain-specific types that are unique to your business: a legal firm might need "ClauseNumber", "LiabilityLimit", "GoverningLaw"; a pharmaceutical company might need "DrugName", "ClinicalTrialID", "DosageMg". You define the entity schema, annotate examples in your training documents, train the model in Language Studio, and deploy it to an endpoint.'
+  },
+  {
+    lesson:'L7', lessonName:'Custom Named Entity Recognition',
+    question:'In Custom NER, what does the "labelling" (annotation) step involve, and why is it the most critical part of the project?',
+    options:[
+      'Uploading training documents to Azure Blob Storage and tagging each file with the Azure AI Language project ID and resource key',
+      'Having the standard pre-built NER service pre-annotate documents automatically, which a human reviewer then corrects and approves',
+      'Manually selecting and highlighting specific spans of text within training documents and assigning each span to the correct custom entity type — creating the ground-truth annotations that the model learns to replicate',
+      'Writing JSON schema definitions that specify the regex patterns and validation rules for each custom entity type to be extracted'
+    ],
+    answer:2,
+    explanation:'Labelling (annotation) is the most critical and time-consuming step in Custom NER. In Language Studio, you open each training document, manually select text spans (a word, phrase, or string of characters), and tag each span with the appropriate entity type. The model learns what linguistic patterns surround each entity type from these human-annotated examples. Label quality directly determines model quality — inconsistent, sparse, or incorrect labels produce an unreliable model, regardless of training volume. Clear labelling guidelines across your team are essential.'
+  },
+  {
+    lesson:'L7', lessonName:'Custom Named Entity Recognition',
+    question:'After training a Custom NER model in Azure AI Language, what step must be completed before the model can serve real-time inference requests from applications?',
+    options:[
+      'Exporting the trained model as an ONNX binary file and uploading it to an Azure ML managed online endpoint',
+      'Enabling Azure Private Link networking on the Language resource to allow the model to connect back to the training storage account',
+      'Retraining the model at least three times with different random seeds and selecting the ensemble average for deployment',
+      'Deploying the trained model to a named "deployment slot" within the Azure AI Language project — this provisions the public or private API endpoint that your applications call for inference, keeping training and serving infrastructure separate'
+    ],
+    answer:3,
+    explanation:'In Azure AI Language Custom NER, training and deployment are separate steps. Training creates a versioned model artifact. Deployment assigns that model to a named deployment (e.g., "production", "staging") and provisions the inference endpoint. This separation allows: A/B testing (two deployments running simultaneously), zero-downtime model updates (deploy new version to staging, test, then redirect production), and rollback (revert production deployment to a previous model version). Applications use the project name + deployment name in their API calls.'
+  },
+  {
+    lesson:'L7', lessonName:'Custom Named Entity Recognition',
+    question:'Which evaluation metric is primarily used to assess Custom NER model quality, and what does it measure in this context?',
+    options:[
+      'F1 score — the harmonic mean of Precision (what fraction of all predicted entity spans are correctly identified) and Recall (what fraction of all actual entity spans in the test set were found) — balancing both false positives and false negatives',
+      'Accuracy — the percentage of all tokens in the dataset that are correctly classified as either belonging to a named entity span or as background non-entity text',
+      'BLEU score — measuring how closely the model\'s entity boundaries match reference annotations produced by a second human annotator using n-gram overlap',
+      'AUC-ROC — the area under the receiver operating characteristic curve measuring the entity detection probability threshold tradeoff across all classes'
+    ],
+    answer:0,
+    explanation:'F1 score is the standard for NER evaluation because it balances two failure modes: Precision penalises false positives (predicting entities that aren\'t there — extracting "John" as a drug name). Recall penalises false negatives (missing real entities — failing to extract a genuine drug name). Azure Language Studio reports entity-level F1, Precision, and Recall per entity type in the test evaluation view, letting you identify which entity types need more training examples or better labelling consistency.'
+  },
+
+  // ─── L8: Speech Recognition (3 Qs) ───────────────────────────────────
+  {
+    lesson:'L8', lessonName:'Speech Recognition',
+    question:'What is the Azure AI Speech service\'s "Speech-to-Text" (STT) feature and what does it produce as output?',
+    options:[
+      'A service that converts written text prompts into natural-sounding synthesised audio across 400+ voices and 140+ languages',
+      'A service that transcribes spoken audio — from microphones, audio files, or real-time streams — into written text, with support for real-time transcription, batch audio processing, speaker diarisation, and custom acoustic/language model adaptation',
+      'A real-time translation service that converts spoken audio in one language directly into written text in a different target language simultaneously',
+      'A service that analyses audio recordings to detect the speaker\'s emotional state, tone, and sentiment from vocal characteristics and prosody'
+    ],
+    answer:1,
+    explanation:'Azure AI Speech Speech-to-Text converts spoken audio into text using deep neural network acoustic models. It supports: (1) real-time streaming transcription for live applications; (2) batch transcription for processing large audio file collections asynchronously; (3) speaker diarisation — identifying who spoke when; (4) Custom Speech — adapting models to your acoustic environment and vocabulary; (5) phrase lists — boosting recognition of domain-specific terms. Output includes the transcript, word-level timestamps, confidence scores, and (optionally) speaker labels.'
+  },
+  {
+    lesson:'L8', lessonName:'Speech Recognition',
+    question:'What is "speaker diarisation" in the context of Azure AI Speech, and what problem does it solve?',
+    options:[
+      'The process of removing background noise and reverberation from an audio recording before transcription to improve accuracy',
+      'Automatically identifying the language being spoken in an audio clip when the language is unknown in advance',
+      'Segmenting an audio recording by speaker — labelling each segment with "Speaker 1", "Speaker 2", etc. — so a multi-person conversation transcript clearly shows who said what rather than producing an undifferentiated wall of text',
+      'Detecting and timestamping segments of audio that contain profanity, sensitive content, or policy violations for content moderation review'
+    ],
+    answer:2,
+    explanation:'Speaker diarisation solves the "who said what" problem in multi-participant audio. A typical call-centre recording might have an agent and a customer speaking alternately. Without diarisation, the transcript is a single stream with no attribution. Diarisation segments the audio into speaker turns and labels each segment ("Speaker 1: How can I help?", "Speaker 2: My order hasn\'t arrived."), making transcripts far more usable for analysis, CRM integration, QA review, and conversational AI training data creation. Azure Batch Transcription supports diarisation automatically.'
+  },
+  {
+    lesson:'L8', lessonName:'Speech Recognition',
+    question:'What does "Custom Speech" model training in Azure AI Speech enable you to do, and when is it necessary?',
+    options:[
+      'Clone a custom text-to-speech voice from a small sample of a target speaker\'s audio recordings for personalised synthesis',
+      'Define custom wake words and trigger phrases that activate a speech-enabled smart device when spoken aloud by the user',
+      'Enable simultaneous real-time translation of spoken input from one language into spoken output in a different target language',
+      'Adapt the Azure Speech-to-Text acoustic and language models to your specific domain vocabulary, acoustic environment (background noise, microphone quality), or regional speaker accents — improving recognition accuracy for specialised terminology or challenging recording conditions'
+    ],
+    answer:3,
+    explanation:'The standard Azure STT model is optimised for general-purpose speech. Custom Speech lets you address its shortcomings for your use case: (1) Acoustic adaptation — if your audio has specific microphone types, background noise, or room acoustics, you provide audio+transcript pairs to adapt the acoustic model; (2) Language adaptation — if your domain uses specialised terminology (medical procedures, legal terms, product names) that the general model mishears, you provide a domain-specific language model corpus. Custom Speech is commonly used in call centres, clinical documentation, and manufacturing floor voice interfaces.'
+  },
+
+  // ─── L9: Azure AI Search (4 Qs) ──────────────────────────────────────
+  {
+    lesson:'L9', lessonName:'Azure AI Search',
+    question:'What is Azure AI Search (formerly Azure Cognitive Search) and what is its primary use case?',
+    options:[
+      'A cloud search platform for building intelligent full-text and vector search experiences over enterprise content — indexing documents from Blob Storage, SQL, Cosmos DB, and SharePoint, with AI enrichment to extract structured knowledge from unstructured data at scale',
+      'A web search engine API that queries the public internet and returns ranked results like Bing or Google Search',
+      'An Azure database service optimised for storing and querying structured product catalogue data with keyword filter facets',
+      'A security monitoring tool that searches through Azure activity logs and resource telemetry to detect anomalous events'
+    ],
+    answer:0,
+    explanation:'Azure AI Search is Microsoft\'s search-as-a-service platform. Key capabilities: (1) Full-text search with BM25 ranking, faceting, filtering, highlighting; (2) AI enrichment — applying cognitive skills (OCR, entity extraction, translation, key phrases) during indexing to enrich content from unstructured PDFs, images, and Office documents; (3) Vector search — storing embeddings alongside metadata for semantic/hybrid search; (4) Semantic ranking — language model re-ranking of top results. It\'s the search backbone for RAG (Retrieval-Augmented Generation) architectures with Azure OpenAI.'
+  },
+  {
+    lesson:'L9', lessonName:'Azure AI Search',
+    question:'In Azure AI Search, what is an "indexer" and what role does it play in the data ingestion pipeline?',
+    options:[
+      'The component that stores the final enriched, searchable document representations — equivalent to a database table of indexed content',
+      'An automated crawler and data pipeline that pulls content from a configured data source — such as Azure Blob Storage, SQL Database, Cosmos DB, or SharePoint — transforms and AI-enriches it, then loads the result into the search index on a configurable schedule',
+      'The BM25 ranking algorithm implementation that scores search results based on term frequency, document length, and inverse document frequency statistics',
+      'A custom code module (Azure Function) that you write to perform specialised data transformation on each document before it enters the enrichment pipeline'
+    ],
+    answer:1,
+    explanation:'An indexer in Azure AI Search is the automated ETL (Extract, Transform, Load) mechanism. It connects to a data source (blob storage, SQL, Cosmos DB, etc.), optionally applies a skillset for AI enrichment, and populates or incrementally updates the search index. Indexers can run on-demand or on a schedule (e.g., every 5 minutes, daily). Change detection mechanisms ensure only new or modified documents are re-processed, making them efficient for large document collections that evolve over time.'
+  },
+  {
+    lesson:'L9', lessonName:'Azure AI Search',
+    question:'What is a "skillset" in Azure AI Search\'s AI enrichment pipeline, and what does it produce?',
+    options:[
+      'The set of role-based access control (RBAC) permissions that determine which Azure AD users and groups can query the search index',
+      'A collection of field mappings that define how source document fields correspond to destination fields in the search index schema',
+      'An ordered set of cognitive processing steps — such as OCR, language detection, entity recognition, key phrase extraction, image analysis, and translation — applied to each document during indexing to extract and add enriched content into the search index',
+      'A query language template that defines valid boolean search query syntax patterns that users of the search application can construct'
+    ],
+    answer:2,
+    explanation:'A skillset is a pipeline of AI-powered transformations applied to each document as the indexer processes it. Built-in cognitive skills include: OCR (extracting text from scanned documents/images), entity recognition, key phrase extraction, sentiment analysis, language detection, and translation. You can also add custom skills (Azure Functions, Azure ML endpoints) for proprietary transformations. The enriched content — extracted entities, translated text, image captions — gets stored as additional searchable fields in the index, turning unstructured content into queryable knowledge.'
+  },
+  {
+    lesson:'L9', lessonName:'Azure AI Search',
+    question:'What is "semantic ranking" in Azure AI Search, and how does it improve upon standard BM25 keyword search ranking?',
+    options:[
+      'A ranking approach that sorts search results purely by document ingestion date — showing the most recently indexed documents first regardless of query relevance',
+      'A scoring method based on TF-IDF statistics that weights search terms by their rarity across the document corpus using the classic information retrieval formula',
+      'A query expansion feature that uses knowledge graphs to automatically add synonyms and related concepts to the user\'s search query before executing it',
+      'A language-model-powered re-ranking layer that rescores the top BM25 results by understanding the semantic meaning of the query and each candidate document — surfacing the most genuinely relevant results even when exact keyword overlap is minimal'
+    ],
+    answer:3,
+    explanation:'Standard BM25 keyword search ranks by term frequency matching — documents with more occurrences of the query words rank higher. This fails when the best answer uses different vocabulary than the query. Semantic ranking in Azure AI Search uses Microsoft\'s language models (based on Bing\'s semantic understanding technology) to re-score the top 50 BM25 results by comparing the deep semantic meaning of the query against each document, not just keyword overlap. It also generates semantic captions — highlighted answer passages from the document. This dramatically improves answer quality for natural language queries.'
+  },
+
+  // ─── L10: Natural Language Processing (3 Qs) ─────────────────────────
+  {
+    lesson:'L10', lessonName:'Natural Language Processing (NLP)',
+    question:'What is a "word embedding" and why is it foundational to modern NLP?',
+    options:[
+      'A technique that represents words as dense, continuous numeric vectors in a high-dimensional space — where semantically similar words are positioned close together — enabling ML models to work with text mathematically and capture meaning relationships like "king - man + woman ≈ queen"',
+      'A method that splits long input documents into fixed-size overlapping chunks before feeding them to a transformer language model with a limited context window',
+      'A data structure that maps every unique word in a vocabulary to a single unique integer ID using a hash table for fast token lookup',
+      'A position-encoding technique that weights words differently based on their frequency and location within the input text sequence'
+    ],
+    answer:0,
+    explanation:'Word embeddings (Word2Vec, GloVe, FastText) were the breakthrough that replaced sparse one-hot vectors with dense, 100–300-dimensional continuous vectors learned from large corpora. Similar words cluster together in this space (cat and kitten are close; cat and automobile are far apart). They capture analogical relationships: king−man+woman≈queen. Modern transformers (BERT, GPT) generate contextual embeddings — where the same word gets different vectors depending on its surrounding context — which are far more powerful than static word embeddings. Azure OpenAI provides embedding models (text-embedding-3) for downstream similarity and retrieval tasks.'
+  },
+  {
+    lesson:'L10', lessonName:'Natural Language Processing (NLP)',
+    question:'What is the "Transformer" architecture and why did it revolutionise NLP when introduced in 2017?',
+    options:[
+      'A deep learning model that processes text character by character using stacked convolutional filter layers with residual connections',
+      'A neural network architecture introduced in "Attention is All You Need" that replaces recurrence with self-attention mechanisms — processing all tokens in a sequence simultaneously in parallel, capturing long-range dependencies efficiently, and forming the foundation of BERT, GPT, and Azure OpenAI\'s entire model family',
+      'A rule-based linguistic pipeline that applies hand-crafted context-free grammars to parse syntactic sentence structure into constituency trees',
+      'A reinforcement learning framework that trains NLP agents to answer questions through iterative interactions with a simulated text-based environment'
+    ],
+    answer:1,
+    explanation:'The Transformer (Vaswani et al., 2017) replaced RNNs\' sequential processing with self-attention — each token attends to all other tokens in the sequence simultaneously, capturing dependencies regardless of distance. This enables massive parallelisation during training (unlike sequential RNNs) and better long-range dependency modelling. All modern large language models — BERT (encoder-only, understanding tasks), GPT (decoder-only, generation tasks), T5 (encoder-decoder) — are Transformer-based. Azure OpenAI\'s GPT-4o, and Azure AI Language\'s models, are all built on Transformer foundations.'
+  },
+  {
+    lesson:'L10', lessonName:'Natural Language Processing (NLP)',
+    question:'In the context of Azure OpenAI and production NLP, what does "fine-tuning" a language model mean, and how does it differ from prompting?',
+    options:[
+      'Adjusting the model\'s inference temperature, top-p, and frequency penalty parameters to control the style and creativity of text generation at runtime',
+      'Retraining the entire language model from random weight initialisation on a new domain-specific text corpus from scratch — requiring millions of GPU-hours',
+      'Taking a pre-trained language model and continuing its training on a smaller, task-specific labelled dataset — adapting its knowledge and behaviour to a specialised domain while preserving broad language understanding from pre-training, unlike prompting which guides the model without weight changes',
+      'Compressing a large language model into a smaller, faster distilled version using knowledge distillation techniques for edge or mobile deployment'
+    ],
+    answer:2,
+    explanation:'Fine-tuning adds a training phase on top of pre-training: you take a pre-trained model (e.g., GPT-4o base) and continue training it on your labelled examples — (prompt, ideal response) pairs — using supervised learning to adjust the model\'s weights to fit your task or style. The result: a model that behaves more consistently in your domain without needing long few-shot examples in every prompt. Prompting (in-context learning) guides behaviour without any weight updates. Azure OpenAI supports fine-tuning of select models (GPT-4o-mini, GPT-3.5) via the Fine-tuning API, producing a private model variant hosted in your subscription.'
+  }
+
+]; // end QUESTIONS
+
+// ════════════════════════════════
+//  ENGINE
+// ════════════════════════════════
+const TOTAL = QUESTIONS.length; // 35
+
+let state = {
+  questions:[], currentIdx:0, userAnswers:[], shuffledOptions:[], shuffledAnswers:[],
+  flagged:[], answered:[], startTime:null, endTime:null, timerInterval:null,
+  tabSwitches:0, submitted:false
+};
+
+function shuffleArray(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+
+function startTest(){
+  state.questions=[...QUESTIONS];
+  state.currentIdx=0;
+  state.userAnswers=new Array(TOTAL).fill(-1);
+  state.flagged=new Array(TOTAL).fill(false);
+  state.answered=new Array(TOTAL).fill(false);
+  state.submitted=false; state.tabSwitches=0; state.startTime=Date.now();
+  state.shuffledOptions=[]; state.shuffledAnswers=[];
+  state.questions.forEach(q=>{
+    const ct=q.options[q.answer];
+    const sh=shuffleArray(q.options);
+    state.shuffledOptions.push(sh);
+    state.shuffledAnswers.push(sh.indexOf(ct));
+  });
+  showScreen('quiz');
+  document.getElementById('quizHeader').classList.add('active');
+  buildNavGrid(); renderQuestion(); startTimer();
+}
+
+function startTimer(){
+  clearInterval(state.timerInterval);
+  state.timerInterval=setInterval(()=>{
+    const e=Math.floor((Date.now()-state.startTime)/1000);
+    document.getElementById('timer').textContent=`${String(Math.floor(e/60)).padStart(2,'0')}:${String(e%60).padStart(2,'0')}`;
+  },1000);
+}
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function renderQuestion(){
+  const idx=state.currentIdx, q=state.questions[idx];
+  const opts=state.shuffledOptions[idx], cs=state.shuffledAnswers[idx];
+  const uc=state.userAnswers[idx], ia=state.answered[idx];
+  document.getElementById('qNum').textContent=idx+1;
+  document.getElementById('qCounterNum').textContent=idx+1;
+  document.getElementById('qLessonTag').textContent=q.lesson;
+  document.getElementById('qText').textContent=q.question;
+  const bf=document.getElementById('btnFlag');
+  bf.className='btn-flag'+(state.flagged[idx]?' flagged':'');
+  bf.innerHTML=state.flagged[idx]?'🚩 Flagged':'🏳 Flag';
+  const letters=['A','B','C','D'];
+  const ol=document.getElementById('optionsList'); ol.innerHTML='';
+  opts.forEach((ot,i)=>{
+    const btn=document.createElement('button'); btn.className='option-btn';
+    if(ia){btn.disabled=true; if(i===cs)btn.classList.add('correct'); else if(i===uc)btn.classList.add('wrong');}
+    else if(i===uc) btn.classList.add('selected');
+    btn.innerHTML=`<span class="opt-letter">${letters[i]}</span><span>${ot}</span>`;
+    if(!ia) btn.onclick=()=>selectAnswer(i);
+    ol.appendChild(btn);
+  });
+  const eb=document.getElementById('explanationBox');
+  if(ia){
+    eb.classList.add('visible');
+    const ok=uc===cs;
+    eb.className='explanation-box visible'+(ok?'':' wrong-exp');
+    eb.innerHTML=`<strong>${ok?'✅ Correct!':'❌ Incorrect'}</strong>${q.explanation}`;
+  } else { eb.className='explanation-box'; eb.innerHTML=''; }
+  document.getElementById('btnPrev').style.display=idx===0?'none':'';
+  const il=idx===TOTAL-1;
+  document.getElementById('btnNext').style.display=il?'none':'';
+  document.getElementById('lastQMsg').style.display=il?'block':'none';
+  updateNavGrid();
+}
+
+function selectAnswer(i){
+  const idx=state.currentIdx;
+  if(state.answered[idx])return;
+  state.userAnswers[idx]=i; state.answered[idx]=true; renderQuestion();
+}
+function toggleFlag(){state.flagged[state.currentIdx]=!state.flagged[state.currentIdx]; renderQuestion();}
+function goToNext(){if(state.currentIdx<TOTAL-1){state.currentIdx++;renderQuestion();}}
+function goToPrev(){if(state.currentIdx>0){state.currentIdx--;renderQuestion();}}
+function jumpTo(i){state.currentIdx=i;renderQuestion();}
+
+function buildNavGrid(){
+  const g=document.getElementById('navGrid'); g.innerHTML='';
+  for(let i=0;i<TOTAL;i++){
+    const d=document.createElement('div'); d.className='nav-dot'; d.textContent=i+1;
+    d.id=`navDot${i}`; d.onclick=()=>jumpTo(i); g.appendChild(d);
+  }
+}
+function updateNavGrid(){
+  for(let i=0;i<TOTAL;i++){
+    const d=document.getElementById(`navDot${i}`); if(!d)continue;
+    d.className='nav-dot';
+    if(i===state.currentIdx) d.classList.add('current');
+    else if(state.submitted){if(state.answered[i])d.classList.add(state.userAnswers[i]===state.shuffledAnswers[i]?'correct-nav':'wrong-nav');}
+    else if(state.flagged[i]) d.classList.add('flagged');
+    else if(state.answered[i]) d.classList.add('answered');
+  }
+}
+
+function openSubmitModal(){document.getElementById('submitModal').classList.add('show');}
+function closeSubmitModal(){document.getElementById('submitModal').classList.remove('show');}
+
+function submitExam(){
+  closeSubmitModal(); clearInterval(state.timerInterval);
+  state.endTime=Date.now(); state.submitted=true;
+  document.getElementById('quizHeader').classList.remove('active');
+  document.getElementById('tabWarning').classList.remove('show');
+  updateNavGrid(); computeResults(); showScreen('results');
+}
+
+function computeResults(){
+  let correct=0,wrong=0,skipped=0;
+  const lm={};
+  state.questions.forEach((q,i)=>{
+    if(!lm[q.lesson])lm[q.lesson]={name:q.lessonName,total:0,correct:0};
+    lm[q.lesson].total++;
+    if(!state.answered[i]){skipped++;return;}
+    if(state.userAnswers[i]===state.shuffledAnswers[i]){correct++;lm[q.lesson].correct++;}
+    else wrong++;
+  });
+  const pct=Math.round((correct/TOTAL)*100);
+  const e=Math.floor((state.endTime-state.startTime)/1000);
+  const mt=`${String(Math.floor(e/60)).padStart(2,'0')}:${String(e%60).padStart(2,'0')}`;
+  document.getElementById('scorePct').textContent=`${pct}%`;
+  document.getElementById('rCorrect').textContent=`${correct} / ${TOTAL}`;
+  document.getElementById('rTime').textContent=mt;
+  document.getElementById('rWrong').textContent=wrong;
+  document.getElementById('rSkipped').textContent=skipped;
+  document.getElementById('scoreRing').className='score-ring '+(pct>=70?'pass':'fail');
+  document.getElementById('resultsTitle').textContent=pct>=70?`✅ Well done! ${pct}% — Module 2 Complete`:`📘 Keep practising — ${pct}% — Review & Retry`;
+  const bd=document.getElementById('lessonBreakdown'); bd.innerHTML='';
+  Object.entries(lm).forEach(([tag,data])=>{
+    const pl=Math.round((data.correct/data.total)*100);
+    const bc=pl>=70?'':pl>=40?' ok':' bad';
+    bd.innerHTML+=`<div class="lesson-row"><div class="lr-tag">${tag}</div><div class="lr-name">${data.name}</div><div class="lr-bar-wrap"><div class="lr-bar${bc}" style="width:${pl}%"></div></div><div class="lr-score">${data.correct}/${data.total}</div></div>`;
+  });
+}
+
+function showReview(){
+  const letters=['A','B','C','D'];
+  const c=document.getElementById('reviewCards'); c.innerHTML='';
+  state.questions.forEach((q,i)=>{
+    const opts=state.shuffledOptions[i],cs=state.shuffledAnswers[i],uc=state.userAnswers[i],ia=state.answered[i];
+    const ok=ia&&uc===cs;
+    const badge=ia?(ok?'correct':'wrong'):'skipped';
+    const bt=ia?(ok?'✅ Correct':'❌ Incorrect'):'⏭ Skipped';
+    let oh='';
+    opts.forEach((o,j)=>{
+      let cl='rc-option';
+      if(j===cs)cl+=' correct-ans'; else if(ia&&j===uc)cl+=' user-wrong';
+      oh+=`<div class="${cl}"><span class="opt-l">${letters[j]}</span><span>${o}</span></div>`;
+    });
+    c.innerHTML+=`<div class="review-card"><div class="rc-meta"><div class="rc-num">Q${i+1}</div><div class="rc-lesson">${q.lesson} · ${q.lessonName}</div><div class="rc-badge ${badge}">${bt}</div></div><div class="rc-question">${q.question}</div><div class="rc-options">${oh}</div><div class="rc-exp"><strong>💡 Explanation</strong>${q.explanation}</div></div>`;
+  });
+  showScreen('review');
+}
+function showResults(){showScreen('results');}
+function retakeTest(){startTest();}
+
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden&&!state.submitted&&state.startTime){
+    state.tabSwitches++;
+    document.getElementById('tabCount').textContent=state.tabSwitches;
+    document.getElementById('tabWarning').classList.add('show');
+    setTimeout(()=>document.getElementById('tabWarning').classList.remove('show'),5000);
+  }
+});
+</script>
+</body>
+</html>

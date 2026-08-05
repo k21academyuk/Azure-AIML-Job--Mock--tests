@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>M12 Practice Test · Azure AI/ML · K21 Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy:#1A1248; --navy-mid:#2E2080; --green:#8DC63F; --green-hover:#79B030;
+    --green-tint:#F1F8E8; --blue:#1B9BD9; --blue-tint:#EBF6FD;
+    --page-bg:#F7F8FA; --card:#FFFFFF; --border:#E8EAEE;
+    --text-primary:#111827; --text-secondary:#4B5563; --text-muted:#9CA3AF;
+    --red:#EF4444; --red-tint:#FEF2F2; --amber:#F59E0B; --amber-tint:#FFFBEB;
+    --radius:14px; --radius-sm:8px;
+    --shadow:0 1px 4px rgba(0,0,0,.06); --shadow-md:0 4px 16px rgba(0,0,0,.10);
+  }
+  html{scroll-behavior:smooth;}
+  body{font-family:'DM Sans',sans-serif;background:var(--page-bg);color:var(--text-primary);min-height:100vh;}
+  .site-header{background:var(--navy);padding:14px 24px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:200;}
+  .logo-mark{width:34px;height:34px;background:var(--green);border-radius:8px;display:grid;place-items:center;font-weight:800;font-size:15px;color:#fff;flex-shrink:0;}
+  .logo-text{font-size:17px;font-weight:700;color:#fff;} .logo-text span{color:var(--green);}
+  .header-sub{margin-left:auto;font-size:12px;color:rgba(255,255,255,0.55);font-weight:500;text-align:right;line-height:1.4;}
+  .quiz-header{display:none;background:var(--navy);border-top:1px solid rgba(255,255,255,0.08);padding:10px 24px;align-items:center;gap:12px;position:sticky;top:62px;z-index:199;}
+  .quiz-header.active{display:flex;}
+  .q-counter{font-size:14px;font-weight:600;color:rgba(255,255,255,0.9);} .q-counter span{color:var(--green);}
+  .btn-submit-top{margin-left:auto;background:var(--green);color:#fff;border:none;border-radius:var(--radius-sm);padding:7px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s;}
+  .btn-submit-top:hover{background:var(--green-hover);}
+  .timer{font-size:14px;font-weight:600;color:rgba(255,255,255,0.8);background:rgba(255,255,255,0.08);padding:5px 12px;border-radius:20px;font-variant-numeric:tabular-nums;}
+  .screen{display:none;} .screen.active{display:block;}
+  .landing-tag{display:inline-flex;align-items:center;gap:6px;background:var(--green-tint);color:var(--green-hover);font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;margin-bottom:18px;}
+  .landing-title{font-size:clamp(22px,5vw,36px);font-weight:800;color:var(--navy);line-height:1.2;margin-bottom:14px;}
+  .landing-title span{color:var(--green);}
+  .landing-desc{font-size:15px;color:var(--text-secondary);line-height:1.65;max-width:680px;margin-bottom:28px;}
+  .stats-row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:28px;}
+  .stat-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:14px 20px;text-align:center;flex:1;min-width:110px;}
+  .stat-num{font-size:24px;font-weight:800;color:var(--navy);} .stat-label{font-size:12px;color:var(--text-muted);font-weight:500;margin-top:2px;}
+  .lessons-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin-bottom:28px;}
+  .lesson-chip{background:var(--card);border:1.5px solid var(--border);border-radius:10px;padding:10px 13px;display:flex;align-items:center;gap:8px;}
+  .lesson-badge{width:26px;height:26px;border-radius:6px;background:var(--blue-tint);color:var(--blue);font-size:10px;font-weight:700;display:grid;place-items:center;flex-shrink:0;}
+  .lesson-chip-text{font-size:12px;font-weight:600;color:var(--text-primary);line-height:1.3;}
+  .btn-start{background:var(--navy);color:#fff;border:none;border-radius:var(--radius);padding:16px 36px;font-size:17px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s,transform .15s;display:inline-flex;align-items:center;gap:10px;}
+  .btn-start:hover{background:var(--navy-mid);transform:translateY(-2px);}
+  .hint-text{margin-top:14px;font-size:13px;color:var(--text-muted);} .hint-text span{color:var(--blue);}
+  #quiz{max-width:840px;margin:0 auto;padding:24px 20px 80px;}
+  .quiz-layout{display:grid;grid-template-columns:1fr 250px;gap:20px;align-items:start;}
+  @media(max-width:740px){.quiz-layout{grid-template-columns:1fr;}}
+  .question-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow);}
+  .q-meta{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap;}
+  .q-num{font-size:13px;font-weight:600;color:var(--text-muted);}
+  .q-lesson-tag{font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;background:var(--blue-tint);color:var(--blue);}
+  .btn-flag{margin-left:auto;font-size:12px;font-weight:600;color:var(--text-muted);border:1.5px solid var(--border);background:none;border-radius:20px;padding:4px 12px;cursor:pointer;font-family:inherit;transition:all .15s;display:flex;align-items:center;gap:5px;}
+  .btn-flag.flagged{background:var(--amber-tint);color:var(--amber);border-color:var(--amber);}
+  .q-text{font-size:17px;font-weight:600;line-height:1.55;color:var(--text-primary);margin-bottom:22px;}
+  .options-list{display:flex;flex-direction:column;gap:10px;margin-bottom:22px;}
+  .option-btn{background:#fff;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:13px 16px;text-align:left;cursor:pointer;font-family:inherit;font-size:14.5px;color:var(--text-primary);line-height:1.45;display:flex;align-items:flex-start;gap:12px;transition:all .15s;font-weight:500;}
+  .option-btn:hover:not(:disabled){border-color:var(--navy);background:rgba(26,18,72,.03);}
+  .option-btn .opt-letter{width:24px;height:24px;border-radius:6px;background:var(--page-bg);border:1.5px solid var(--border);display:grid;place-items:center;font-size:11px;font-weight:700;color:var(--text-muted);flex-shrink:0;margin-top:1px;transition:all .15s;}
+  .option-btn.selected .opt-letter{background:var(--navy);border-color:var(--navy);color:#fff;}
+  .option-btn.selected{border-color:var(--navy);background:rgba(26,18,72,.04);}
+  .option-btn.correct{border-color:var(--green);background:var(--green-tint);}
+  .option-btn.correct .opt-letter{background:var(--green);border-color:var(--green);color:#fff;}
+  .option-btn.wrong{border-color:var(--red);background:var(--red-tint);}
+  .option-btn.wrong .opt-letter{background:var(--red);border-color:var(--red);color:#fff;}
+  .option-btn:disabled{cursor:default;}
+  .explanation-box{background:var(--green-tint);border:1.5px solid #c3e289;border-radius:var(--radius-sm);padding:14px 16px;font-size:13.5px;line-height:1.6;color:#3D6B15;display:none;margin-bottom:16px;}
+  .explanation-box strong{display:block;margin-bottom:4px;font-weight:700;}
+  .explanation-box.visible{display:block;}
+  .explanation-box.wrong-exp{background:var(--red-tint);border-color:#fca5a5;color:#7F1D1D;}
+  .nav-row{display:flex;gap:10px;align-items:center;}
+  .btn-nav{background:var(--page-bg);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:10px 18px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--text-primary);transition:all .15s;}
+  .btn-nav:hover{border-color:var(--navy);color:var(--navy);}
+  .btn-nav.primary{background:var(--navy);color:#fff;border-color:var(--navy);margin-left:auto;}
+  .btn-nav.primary:hover{background:var(--navy-mid);}
+  .last-q-msg{font-size:12.5px;color:var(--text-muted);text-align:center;display:none;flex:1;}
+  .nav-panel{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);position:sticky;top:128px;}
+  .nav-panel h4{font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;}
+  .nav-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:14px;}
+  .nav-dot{width:34px;height:34px;border-radius:7px;border:1.5px solid var(--border);background:#fff;font-size:11px;font-weight:700;color:var(--text-muted);display:grid;place-items:center;cursor:pointer;transition:all .15s;}
+  .nav-dot:hover{border-color:var(--navy);color:var(--navy);}
+  .nav-dot.current{border-color:var(--navy);background:var(--navy);color:#fff;}
+  .nav-dot.answered{background:var(--green-tint);border-color:var(--green);color:#3D6B15;}
+  .nav-dot.flagged{background:var(--amber-tint);border-color:var(--amber);color:var(--amber);}
+  .nav-dot.correct-nav{background:var(--green);border-color:var(--green);color:#fff;}
+  .nav-dot.wrong-nav{background:var(--red);border-color:var(--red);color:#fff;}
+  .nav-legend{font-size:11px;color:var(--text-muted);display:flex;flex-direction:column;gap:4px;}
+  .legend-item{display:flex;align-items:center;gap:6px;}
+  .legend-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
+  .results-header{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:32px;box-shadow:var(--shadow-md);margin-bottom:20px;text-align:center;}
+  .score-ring{width:110px;height:110px;border-radius:50%;border:7px solid var(--border);margin:0 auto 18px;display:grid;place-items:center;}
+  .score-ring.pass{border-color:var(--green);} .score-ring.fail{border-color:var(--red);}
+  .score-pct{font-size:30px;font-weight:800;color:var(--navy);}
+  .score-label{font-size:12px;color:var(--text-muted);font-weight:500;margin-top:-2px;}
+  .results-title{font-size:21px;font-weight:800;color:var(--navy);margin-bottom:6px;}
+  .results-sub{font-size:14px;color:var(--text-secondary);margin-bottom:22px;}
+  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px;}
+  @media(max-width:560px){.stats-grid{grid-template-columns:repeat(2,1fr);}}
+  .r-stat{background:var(--page-bg);border-radius:var(--radius-sm);padding:14px;text-align:center;}
+  .r-stat-val{font-size:20px;font-weight:800;color:var(--navy);}
+  .r-stat-key{font-size:11px;color:var(--text-muted);font-weight:500;margin-top:2px;}
+  .results-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+  .btn-results{padding:11px 22px;border-radius:var(--radius-sm);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;}
+  .btn-results.primary{background:var(--navy);color:#fff;border:none;} .btn-results.primary:hover{background:var(--navy-mid);}
+  .btn-results.secondary{background:#fff;color:var(--navy);border:1.5px solid var(--border);} .btn-results.secondary:hover{border-color:var(--navy);}
+  .lesson-breakdown{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);margin-bottom:20px;}
+  .breakdown-title{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:16px;}
+  .lesson-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .lesson-row:last-child{margin-bottom:0;}
+  .lr-tag{font-size:11px;font-weight:700;padding:3px 7px;border-radius:20px;flex-shrink:0;min-width:28px;text-align:center;background:var(--blue-tint);color:var(--blue);}
+  .lr-name{font-size:13px;font-weight:500;color:var(--text-primary);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .lr-bar-wrap{width:100px;height:7px;background:var(--border);border-radius:4px;overflow:hidden;flex-shrink:0;}
+  .lr-bar{height:100%;border-radius:4px;background:var(--green);}
+  .lr-bar.bad{background:var(--red);} .lr-bar.ok{background:var(--amber);}
+  .lr-score{font-size:13px;font-weight:700;color:var(--text-secondary);width:38px;text-align:right;flex-shrink:0;}
+  .review-header{display:flex;align-items:center;gap:12px;margin-bottom:22px;flex-wrap:wrap;}
+  .review-title{font-size:20px;font-weight:800;color:var(--navy);} .review-sub{font-size:13px;color:var(--text-muted);}
+  .btn-back{background:var(--page-bg);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:9px 16px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--text-secondary);transition:all .15s;margin-left:auto;}
+  .btn-back:hover{border-color:var(--navy);color:var(--navy);}
+  .review-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:22px;margin-bottom:14px;box-shadow:var(--shadow);}
+  .rc-meta{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+  .rc-num{font-size:12px;font-weight:700;color:var(--text-muted);}
+  .rc-lesson{font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;background:var(--blue-tint);color:var(--blue);}
+  .rc-badge{font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px;}
+  .rc-badge.correct{background:var(--green-tint);color:#3D6B15;} .rc-badge.wrong{background:var(--red-tint);color:var(--red);} .rc-badge.skipped{background:var(--amber-tint);color:var(--amber);}
+  .rc-question{font-size:15px;font-weight:600;color:var(--text-primary);margin-bottom:14px;line-height:1.5;}
+  .rc-options{display:flex;flex-direction:column;gap:7px;margin-bottom:14px;}
+  .rc-option{padding:9px 14px;border-radius:var(--radius-sm);font-size:13.5px;display:flex;align-items:flex-start;gap:10px;border:1.5px solid var(--border);}
+  .rc-option.correct-ans{border-color:var(--green);background:var(--green-tint);color:#3D6B15;}
+  .rc-option.user-wrong{border-color:var(--red);background:var(--red-tint);color:var(--red);}
+  .rc-option .opt-l{font-weight:700;font-size:12px;width:18px;flex-shrink:0;margin-top:1px;}
+  .rc-exp{background:var(--page-bg);border-left:3px solid var(--green);padding:12px 14px;border-radius:0 var(--radius-sm) var(--radius-sm) 0;font-size:13px;line-height:1.6;color:var(--text-secondary);}
+  .rc-exp strong{color:var(--navy);font-weight:700;display:block;margin-bottom:3px;}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:999;display:none;place-items:center;}
+  .modal-overlay.show{display:grid;}
+  .modal{background:#fff;border-radius:var(--radius);padding:28px;max-width:380px;width:90%;box-shadow:var(--shadow-md);text-align:center;}
+  .modal h3{font-size:18px;font-weight:700;color:var(--navy);margin-bottom:8px;}
+  .modal p{font-size:14px;color:var(--text-secondary);margin-bottom:22px;line-height:1.5;}
+  .modal-btns{display:flex;gap:10px;justify-content:center;}
+  .btn-modal{padding:10px 22px;border-radius:var(--radius-sm);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
+  .btn-modal.cancel{background:var(--page-bg);border:1.5px solid var(--border);color:var(--text-primary);}
+  .btn-modal.confirm{background:var(--navy);color:#fff;border:none;}
+  .tab-warning{background:var(--red);color:#fff;text-align:center;padding:8px 16px;font-size:13px;font-weight:600;display:none;position:sticky;top:110px;z-index:198;}
+  .tab-warning.show{display:block;}
+  .retake-row{display:flex;justify-content:center;gap:10px;margin-top:12px;flex-wrap:wrap;}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="logo-mark">K21</div>
+  <div class="logo-text">K21 <span>Academy</span></div>
+  <div class="header-sub">Azure AI/ML Job Focus Program<br/>Module 12 · Practice Test</div>
+</header>
+<div class="quiz-header" id="quizHeader">
+  <div class="q-counter">M12: Deep Dive into Transformer Architectures &nbsp;·&nbsp; Q <span id="qCounterNum">1</span> / 40</div>
+  <div class="timer" id="timer">00:00</div>
+  <button class="btn-submit-top" onclick="openSubmitModal()">📋 Submit Exam</button>
+</div>
+<div class="tab-warning" id="tabWarning">⚠️ Tab switch detected! Return to the test. Attempts: <span id="tabCount">0</span></div>
+
+<!-- LANDING -->
+<div id="landing" class="screen active">
+  <div style="max-width:820px;margin:0 auto;padding:40px 20px 60px;">
+    <div class="landing-tag">📋 Azure AI/ML · K21 Academy</div>
+    <h1 class="landing-title">Deep Dive into<br/><span>Transformer Architectures — Module 12</span></h1>
+    <p class="landing-desc">Test your understanding across all 11 lessons in Module 12. Covers the evolution of language AI from rule-based systems through RNNs and LSTMs, tokenization (BPE, WordPiece), word embeddings, the self-attention mechanism, the original Transformer architecture, positional encoding, encoder-decoder and decoder-only designs, RLHF and advanced LLMs, and the evolution from BERT through GPT-4 and T5.</p>
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-num">📝 40</div><div class="stat-label">Questions</div></div>
+      <div class="stat-card"><div class="stat-num">📚 11</div><div class="stat-label">Lessons</div></div>
+      <div class="stat-card"><div class="stat-num">🔄 ∞</div><div class="stat-label">Retries</div></div>
+    </div>
+    <p style="font-size:13px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;">11 Lessons Covered</p>
+    <div class="lessons-grid">
+      <div class="lesson-chip"><div class="lesson-badge">L1</div><div class="lesson-chip-text">Evolution of Language AI</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L2</div><div class="lesson-chip-text">Tokenization</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L3</div><div class="lesson-chip-text">Embeddings</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L4</div><div class="lesson-chip-text">Transformer</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L5</div><div class="lesson-chip-text">Original Transformer Architecture</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L6</div><div class="lesson-chip-text">Transformer Advantages &amp; Limitations</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L7</div><div class="lesson-chip-text">Encoder-Decoder Architecture</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L8</div><div class="lesson-chip-text">Positional Encoding &amp; Attention Mechanism</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L9</div><div class="lesson-chip-text">Decoder-Only Architecture</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L10</div><div class="lesson-chip-text">Advanced LLMs</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L11</div><div class="lesson-chip-text">Evolution of Models (BERT → GPT-4 → T5)</div></div>
+    </div>
+    <button class="btn-start" onclick="startTest()">🚀 Start Practice Test</button>
+    <p class="hint-text">💡 <span>Options shuffle every attempt</span> · Explanations after every answer · No time pressure</p>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz" class="screen">
+  <div class="quiz-layout">
+    <div>
+      <div class="question-card">
+        <div class="q-meta">
+          <div class="q-num">Question <span id="qNum">1</span> of 40</div>
+          <div class="q-lesson-tag" id="qLessonTag">L1</div>
+          <button class="btn-flag" id="btnFlag" onclick="toggleFlag()">🏳 Flag</button>
+        </div>
+        <div class="q-text" id="qText">Loading…</div>
+        <div class="options-list" id="optionsList"></div>
+        <div class="explanation-box" id="explanationBox"></div>
+        <div class="nav-row">
+          <button class="btn-nav" id="btnPrev" onclick="goToPrev()">← Previous</button>
+          <div class="last-q-msg" id="lastQMsg">🎯 Last question! Click <strong>Submit Exam</strong> above.</div>
+          <button class="btn-nav primary" id="btnNext" onclick="goToNext()">Next →</button>
+        </div>
+      </div>
+    </div>
+    <div class="nav-panel">
+      <h4>Question Navigator</h4>
+      <div class="nav-grid" id="navGrid"></div>
+      <div class="nav-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--green);"></div><span>Answered</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--amber);"></div><span>Flagged</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--border);"></div><span>Not visited</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div id="results" class="screen">
+  <div style="max-width:740px;margin:0 auto;padding:40px 20px 60px;">
+    <div class="landing-tag">🏁 Azure AI/ML Job Focus Program</div>
+    <div class="results-header">
+      <div class="score-ring" id="scoreRing"><div><div class="score-pct" id="scorePct">0%</div><div class="score-label">Score</div></div></div>
+      <div class="results-title" id="resultsTitle">Test Complete · Azure AI/ML</div>
+      <div class="results-sub">Module 12 — Deep Dive into Transformer Architectures</div>
+      <div class="stats-grid">
+        <div class="r-stat"><div class="r-stat-val" id="rCorrect">0 / 40</div><div class="r-stat-key">Correct Answers</div></div>
+        <div class="r-stat"><div class="r-stat-val" id="rTime">—</div><div class="r-stat-key">⏱️ Time</div></div>
+        <div class="r-stat"><div class="r-stat-val" id="rWrong">—</div><div class="r-stat-key">❌ Incorrect</div></div>
+        <div class="r-stat"><div class="r-stat-val" id="rSkipped">—</div><div class="r-stat-key">⏭️ Skipped</div></div>
+      </div>
+      <div class="results-btns">
+        <button class="btn-results primary" onclick="showReview()">📋 Review All Questions &amp; Answers</button>
+        <button class="btn-results secondary" onclick="retakeTest()">🔄 Retake Test</button>
+      </div>
+    </div>
+    <div class="lesson-breakdown"><div class="breakdown-title">📊 Per-Lesson Breakdown</div><div id="lessonBreakdown"></div></div>
+    <div class="retake-row"><button class="btn-results secondary" onclick="retakeTest()">🔄 Retake Test</button></div>
+  </div>
+</div>
+
+<!-- REVIEW -->
+<div id="review" class="screen">
+  <div style="max-width:840px;margin:0 auto;padding:28px 20px 60px;">
+    <div class="review-header">
+      <div><div class="review-title">Questions &amp; Answers Review</div><div class="review-sub">All 40 questions with correct answers and explanations</div></div>
+      <button class="btn-back" onclick="showResults()">← Back to Results</button>
+    </div>
+    <div id="reviewCards"></div>
+    <div class="retake-row">
+      <button class="btn-back" onclick="showResults()">← Back to Results</button>
+      <button class="btn-results primary" onclick="retakeTest()" style="padding:10px 22px;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;background:var(--navy);color:#fff;">🔄 Retake Test</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="submitModal">
+  <div class="modal">
+    <h3>📋 Submit Exam?</h3>
+    <p>Are you sure you want to submit? Unanswered questions will be marked as skipped.</p>
+    <div class="modal-btns">
+      <button class="btn-modal cancel" onclick="closeSubmitModal()">Continue Quiz</button>
+      <button class="btn-modal confirm" onclick="submitExam()">Yes, Submit</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════
+//  QUESTION BANK — Azure AI/ML · Module 12
+//  40 Qs | L1–L11 Transformer Architectures | A×10 B×10 C×10 D×10
+// ═══════════════════════════════════════════════════════════════════════
+const QUESTIONS=[
+
+// ─── L1: Evolution of Language AI (4 Qs) ─────────────────────────────
+{lesson:'L1',lessonName:'Evolution of Language AI',
+question:'What were the major limitations of rule-based NLP systems that motivated the shift to statistical and deep learning approaches?',
+options:[
+'Rule-based NLP required thousands of hand-crafted linguistic rules that were brittle, could not generalise to unseen text, could not handle ambiguity or context-dependent meaning, and demanded constant expert maintenance — making them impractical for the breadth and variability of real-world language',
+'Rule-based NLP systems were computationally too expensive for cloud deployment because executing hundreds of grammar rules per token required prohibitive CPU resources at internet scale',
+'Rule-based NLP systems exclusively processed structured tabular data and were categorically incapable of reading or generating unstructured natural language text',
+'Rule-based systems were replaced primarily because they required GPU hardware that was unavailable until the deep learning era began around 2012 with AlexNet'
+],
+answer:0,
+explanation:'Rule-based NLP (e.g., early parsers, grammar checkers) was built on manually crafted linguistic rules — part-of-speech grammars, dependency rules, handwritten lexicons. The fundamental problems: (1) Brittleness — one unseen sentence construction breaks everything; (2) Inability to handle ambiguity — "bank" can be a river bank or a financial institution, and rules struggle to resolve this from context; (3) Coverage — natural language has infinite valid constructions; (4) Maintenance cost — adding new domains required expert linguists. Statistical approaches (n-grams, HMMs, CRFs) and then deep learning replaced rules with learned patterns from data, dramatically improving robustness and coverage.'},
+
+{lesson:'L1',lessonName:'Evolution of Language AI',
+question:'What is a Recurrent Neural Network (RNN) and what fundamental weakness made it insufficient for modern NLP requirements?',
+options:[
+'An RNN is a convolutional architecture stacking multiple filters over text sequences to detect local n-gram patterns in parallel for text classification tasks',
+'An RNN is a neural network with recurrent connections processing tokens one-at-a-time sequentially, maintaining a hidden state that theoretically captures prior context — but it suffers from the vanishing gradient problem (gradients shrink exponentially over long sequences), making it unreliable for long-range dependencies, and its sequential nature prevents parallelisation during training',
+'An RNN is a self-supervised model learning language representations by predicting masked words in a sentence, similar to how BERT operates with bidirectional masked attention',
+'An RNN is a vector database architecture storing each word as a trainable embedding that retrieves nearest neighbours during language generation to form coherent text output'
+],
+answer:1,
+explanation:'RNNs process sequences token-by-token, passing a compressed "hidden state" from each step to the next. In theory, this state carries all relevant prior context. In practice, two critical problems emerge: (1) Vanishing gradient — during backpropagation through time (BPTT), gradients are multiplied by weight matrices at each time step; over long sequences they shrink toward zero, meaning early tokens have essentially no effect on the loss — the model "forgets" distant context; (2) Sequential bottleneck — token N cannot be processed until token N-1 is done, so training cannot be parallelised across tokens — unlike Transformers which process the entire sequence simultaneously. Both problems were eventually solved by the Transformer architecture.'},
+
+{lesson:'L1',lessonName:'Evolution of Language AI',
+question:'What is Long Short-Term Memory (LSTM) and how did it partially improve upon vanilla RNNs — and why was it still ultimately surpassed?',
+options:[
+'LSTM is a form of attention mechanism replacing fixed hidden states with dynamically weighted summaries of all previous tokens, later surpassed by global Transformer self-attention across the full sequence',
+'LSTM is a model compression technique reducing RNN parameter counts using gating functions, surpassed because compressed models have insufficient capacity for large-scale language modelling',
+'LSTM introduced gating mechanisms — input, forget, and output gates — that control what information is written to, erased from, and read from a persistent cell state, partially solving vanishing gradients; but LSTMs remained sequential (preventing parallel training), struggled with very long dependencies, and were computationally heavier per token than Transformers which parallelise the entire sequence at once',
+'LSTM replaced word embeddings with byte-pair encodings, later surpassed by modern tokenisation schemes like SentencePiece and WordPiece used in BERT and GPT models'
+],
+answer:2,
+explanation:'LSTMs (Hochreiter & Schmidhuber, 1997) added three trainable gates to the vanilla RNN cell: (1) Input gate — decides what new information to store in the cell state; (2) Forget gate — decides what to erase from the cell state; (3) Output gate — decides what to output from the cell state. The cell state acts as a long-term "conveyor belt" that can carry information across many timesteps with only additive (not multiplicative) updates — alleviating but not eliminating vanishing gradients. LSTMs dominated NLP from ~2013–2017. They were surpassed by Transformers for two core reasons: (1) Still sequential — training is O(n) in sequence length and cannot be parallelised; (2) The Transformer\'s self-attention attends to ALL positions simultaneously with equal computational cost, making it fundamentally more scalable.'},
+
+{lesson:'L1',lessonName:'Evolution of Language AI',
+question:'What was the "Attention Is All You Need" paper (Vaswani et al., 2017) and why is it considered one of the most impactful papers in AI history?',
+options:[
+'A 2017 Microsoft Research paper introducing pre-training language models on Wikipedia, showing unsupervised pre-training could replace task-specific supervised training for NLP benchmarks',
+'A 2017 Google DeepMind paper proposing the first use of embedding layers for mapping words to dense numeric vectors, replacing one-hot encodings in neural NLP pipelines',
+'A 2017 OpenAI paper introducing GPT-1 — the first large language model trained on internet text with unsupervised next-word prediction — establishing the pre-train then fine-tune paradigm',
+'A 2017 Google Brain paper proposing the Transformer architecture — replacing recurrence entirely with self-attention that lets every token attend to every other simultaneously, enabling full parallel training and directly enabling BERT, GPT, T5, and all subsequent large language models that power modern AI'
+],
+answer:3,
+explanation:'"Attention Is All You Need" (Vaswani, Shazeer, Parmar et al., Google Brain / Google Research, 2017) introduced the Transformer — a radical departure from all prior sequence modelling. Key claims: (1) Self-attention alone, without any recurrence or convolution, is sufficient for state-of-the-art sequence modelling; (2) The architecture fully parallelises training (all token pairs processed simultaneously); (3) Self-attention can directly model arbitrarily long dependencies without distance penalty. The paper achieved BLEU records on WMT English-to-German and English-to-French translation with far less training time. Its ripple effects: BERT (2018), GPT-2 (2019), XLNet, RoBERTa, T5, GPT-3 (2020), GPT-4, Claude, Gemini — every major LLM is a Transformer derivative.'},
+
+// ─── L2: Tokenization (4 Qs) ─────────────────────────────────────────
+{lesson:'L2',lessonName:'Tokenization',
+question:'What is tokenization in large language models, and why is the subword approach — rather than character-level or whole-word-level — the preferred strategy?',
+options:[
+'Tokenization converts raw text into subword units that balance vocabulary size and expressiveness — character-level tokens make sequences very long with too little meaning per unit; whole-word vocabularies are excessively large and cannot handle misspellings or out-of-vocabulary words; subword tokenization finds a practical middle ground handling both common and rare words efficiently',
+'Tokenization is a security process replacing sensitive PII text with non-sensitive placeholder tokens before text is sent to a cloud language model API for compliance reasons',
+'Tokenization splits text into sentences using punctuation rules, then assigns each sentence a sequential integer ID for indexing in a vector database search system',
+'Tokenization is a text compression algorithm reducing byte size before API transmission by replacing common character sequences with shorter symbolic codes for bandwidth efficiency'
+],
+answer:0,
+explanation:'LLMs cannot process raw text strings — they require discrete integer IDs as input. Three granularity options exist: (1) Character-level — sequences become very long (a 1000-word document might be 5000 chars), and each character carries little semantic meaning; (2) Word-level — English has millions of word forms; the vocabulary becomes unmanageably large, and rare/misspelled words become [UNK] (unknown) tokens; (3) Subword — a corpus-derived vocabulary of ~30,000–100,000 subword pieces that covers common words as single tokens ("running") and splits rare words ("serendipitous" → "ser", "en", "dip", "it", "ous"). Subword tokenization is the universal standard: BPE (used by GPT), WordPiece (used by BERT), Unigram/SentencePiece (used by T5, Llama).'},
+
+{lesson:'L2',lessonName:'Tokenization',
+question:'What is Byte-Pair Encoding (BPE) tokenization — used by GPT models — and how does it iteratively build its vocabulary from raw text?',
+options:[
+'BPE assigns a unique token ID to every individual Unicode character in the training corpus, maintaining strict character-level granularity throughout the model\'s processing pipeline for maximum coverage',
+'BPE is a data-compression-derived algorithm that starts with a character-level vocabulary, then iteratively merges the most frequently co-occurring adjacent character or subword pair into a new vocabulary token — repeating until the target vocabulary size is reached, so common words become single tokens while rare words are represented as sequences of known subword pieces',
+'BPE splits text at whitespace and punctuation word boundaries, then applies SHA-256 hashing to each resulting word string to produce its numeric token ID for the vocabulary',
+'BPE is a neural tokenizer trained end-to-end with the language model using a small auxiliary network that learns optimal text-to-token boundaries jointly during the main pre-training process'
+],
+answer:1,
+explanation:'BPE (originally a data compression algorithm, adapted for NLP by Sennrich et al., 2016) works as follows: (1) Start with a character-level vocabulary where each character is a token; (2) Count the frequency of all adjacent token pairs in the training corpus; (3) Merge the most frequent pair into a new combined token and add it to the vocabulary; (4) Repeat steps 2–3 until the vocabulary reaches the target size (e.g., 50,257 for GPT-2, 100,256 for GPT-4). The result: frequent character sequences like "ing", "tion", "the" become single tokens; common words like "running" become one token; rare words like "photosynthesis" might split into ["photo", "syn", "thesis"]. Azure OpenAI GPT models use tiktoken, a fast BPE implementation. Roughly 1 token ≈ 4 characters ≈ ¾ of a word in English.'},
+
+{lesson:'L2',lessonName:'Tokenization',
+question:'What is WordPiece tokenization — used by BERT — and how does its merging criterion differ from BPE?',
+options:[
+'WordPiece is identical to BPE but operates on raw bytes instead of characters, enabling it to handle any Unicode text without a separate unknown-token fallback for non-ASCII scripts',
+'WordPiece tokenization splits text at word boundaries only and never creates cross-word subword merges, preserving whole-word semantic integrity for downstream classification tasks',
+'WordPiece similarly starts with a character vocabulary and iteratively merges subword pairs, but selects merges that maximise the training corpus\'s likelihood under a language model (not simply the most frequent pair) — this model-likelihood criterion tends to produce linguistically more coherent subword units than pure frequency-based BPE',
+'WordPiece uses a fixed dictionary of 30,000 medical and scientific subword fragments derived from PubMed, making it exclusively appropriate for biomedical NLP applications'
+],
+answer:2,
+explanation:'WordPiece (Schuster & Nakamura, 2012; popularised for NLP by Google\'s BERT team) starts identically to BPE: initialise with characters, iteratively merge. The key difference is in the merge selection criterion: BPE selects the pair that appears most frequently in the corpus; WordPiece selects the pair whose merger maximises the language model likelihood of the training data — formally, it prefers merges where the merged unit\'s frequency is high relative to the frequency of its individual components. This ratio-based criterion means WordPiece tends to keep meaningful units together and is more conservative about merging low-frequency pairs. In practice, the vocabularies produced are similar but WordPiece subwords tend to align better with morphological units. BERT uses a 30,000-token WordPiece vocabulary with [unused] tokens and special tokens [CLS], [SEP], [MASK].'},
+
+{lesson:'L2',lessonName:'Tokenization',
+question:'What does the tokenizer "vocabulary size" parameter control, and what are the trade-offs of setting it too small or too large?',
+options:[
+'Vocabulary size controls the maximum token length in characters — larger vocabularies allow longer tokens compressing more text, while smaller vocabularies force shorter tokens creating longer sequences',
+'Vocabulary size controls how many unique training documents the model ingests — a vocabulary of 50,000 means exactly 50,000 training documents are processed per epoch',
+'Vocabulary size controls the maximum context window length — a vocabulary of 128,000 tokens means the context window holds 128,000 tokens simultaneously',
+'Vocabulary size determines the number of rows in the embedding lookup table (vocab_size × d_model): too small → rare words get split into many subpieces (longer sequences, lost meaning); too large → the embedding matrix becomes enormous with rarely-seen tokens receiving insufficient gradient signal during training'
+],
+answer:3,
+explanation:'The vocabulary (or "tokenizer vocab") is the lookup table mapping token strings to IDs, and the model\'s embedding layer has exactly vocab_size rows. Trade-offs: Too small (e.g., 5,000): Many words split into many subword pieces. "Photosynthesis" might become 6+ tokens. Sequences grow long (increasing compute), and fine-grained lexical semantics are lost. Too large (e.g., 500,000): The embedding matrix grows proportionally (500,000 × 4,096 = 2B+ parameters just for embeddings). Rare tokens have very few training examples — their embeddings are under-trained. The embedding lookup itself becomes slow. Common ranges: BERT uses 30,522; GPT-2 uses 50,257; GPT-4/Claude Sonnet uses ~100,000+. Larger modern vocabularies better handle multilingual text and code without excessive splitting.'},
+
+// ─── L3: Embeddings (4 Qs) ───────────────────────────────────────────
+{lesson:'L3',lessonName:'Embeddings',
+question:'What is a word embedding and what key property of learned embeddings — demonstrated by Word2Vec — makes them far more powerful than one-hot encodings?',
+options:[
+'A word embedding is a dense, low-dimensional vector where geometrically similar vectors represent semantically similar words — critically, vector arithmetic encodes semantic relationships: "king" − "man" + "woman" ≈ "queen" — something impossible with one-hot encodings where every word is equidistant from every other word in the vocabulary',
+'A word embedding is a compressed binary encoding of each word\'s ASCII character sequence, where shorter common words receive shorter Huffman codes for more efficient storage and transmission',
+'A word embedding is a one-hot vector of length equal to the full vocabulary size, with exactly one element set to 1 and all others to 0, serving as the input representation to neural language models',
+'A word embedding is a frequency count of how often each word co-occurs with context words in a sliding window, normalised into a probability distribution for semantic distance comparison'
+],
+answer:0,
+explanation:'One-hot encodings (a vector of all zeros except a single 1 at the word\'s index) treat every word as maximally different from every other — "cat" and "kitten" are as different as "cat" and "democracy". They also cannot be used in neural networks efficiently (vocabularies of 50,000+ create sparse 50,000-dimensional inputs). Word2Vec (Mikolov et al., 2013) changed this: by training to predict surrounding context words (Skip-gram) or predict a word from its context (CBOW), it learned dense 100–300 dimensional vectors where semantically related words cluster geometrically. The famous "king − man + woman ≈ queen" analogy showed that linear vector arithmetic captures semantic relationships. This was the first widely adopted pre-trained representation for NLP, enabling effective transfer learning before Transformers.'},
+
+{lesson:'L3',lessonName:'Embeddings',
+question:'What is the fundamental difference between "static" word embeddings (Word2Vec, GloVe) and "contextual" embeddings produced by Transformers like BERT?',
+options:[
+'Static embeddings are stored as files on disk; contextual embeddings are computed dynamically using a small auxiliary neural network called at inference time for each new word encountered',
+'Static embeddings assign each word exactly one fixed vector regardless of surrounding context — the word "bank" has one vector whether it means a river bank or a financial institution; contextual embeddings produce different vectors for the same word based on the full sentence context, so "bank" in financial text gets a different embedding than "bank" in a nature text',
+'Static embeddings are trained only on English text; contextual embeddings are multilingual by design and automatically produce language-agnostic representations for cross-lingual transfer learning',
+'Static embeddings are produced by recurrent neural networks processing text sequentially; contextual embeddings are produced by convolutional neural networks with fixed-size receptive fields over tokens'
+],
+answer:1,
+explanation:'The polysemy problem: natural language is full of words with multiple meanings. "Bank" (financial), "bank" (river), "bank" (to tilt an aircraft). "Bat" (sports), "bat" (animal). Word2Vec and GloVe assign each word a single "average" vector that blends all its meanings — it can\'t distinguish context. BERT and GPT generate contextual embeddings: the same token type produces a different embedding vector depending on the full surrounding sequence. "I went to the bank to deposit money" produces a finance-flavoured "bank" vector; "The fish swam near the bank of the river" produces a geography-flavoured vector. This is achieved because Transformer self-attention mixes information from all tokens in the sequence to compute each token\'s final representation — every word\'s embedding is a function of its entire context.'},
+
+{lesson:'L3',lessonName:'Embeddings',
+question:'What is the embedding layer in a Transformer model and what role does it play as the first processing step before attention?',
+options:[
+'An embedding layer is a normalisation layer scaling each input token\'s integer ID to a floating-point value between −1 and 1 to prevent gradient explosion during deep network training',
+'An embedding layer is the final linear projection layer converting the model\'s last hidden state vectors back to vocabulary-space logits for next-token probability prediction',
+'An embedding layer is a learnable lookup table — a matrix of shape [vocab_size × d_model] — that maps each discrete integer token ID to a dense, continuous d_model-dimensional vector, converting the symbolic discrete input into a continuous vector space processable by the neural network\'s mathematical operations including attention and feed-forward layers',
+'An embedding layer is a pre-trained feature extractor borrowed from a CNN image encoder, repurposed to encode visual pixel features from token glyph images for multimodal language-vision models'
+],
+answer:2,
+explanation:'Every Transformer\'s first step is the embedding lookup. The model maintains an Embedding matrix E of shape [V × d_model] where V is the vocabulary size and d_model is the model\'s hidden dimension (e.g., 768 for BERT-base, 4,096 for GPT-3-like models). For each token ID i in the input sequence, the model simply looks up row i of E — this is computationally equivalent to multiplying a one-hot vector by E. The result is a sequence of d_model-dimensional vectors — one per token — that are passed to the first Transformer layer. The embedding matrix is initialised randomly and learned jointly with all other model parameters during pre-training. The same embedding matrix is often (with transposition) used at the output to project hidden states back to vocabulary logit scores.'},
+
+{lesson:'L3',lessonName:'Embeddings',
+question:'What are Azure OpenAI text-embedding models and how are they applied in RAG and semantic search applications?',
+options:[
+'Azure OpenAI text-embedding converts documents into JPEG image thumbnails that can be visually compared using perceptual hashing for near-duplicate document detection workflows',
+'Azure OpenAI text-embedding is the tokenization step converting raw text into BPE token IDs before submitting the token sequence to the GPT-4o chat completions endpoint',
+'Azure OpenAI text-embedding converts documents into encrypted byte arrays stored securely in Azure Blob Storage with customer-managed keys for compliance and data governance',
+'Azure OpenAI text-embedding models (e.g., text-embedding-3-large, text-embedding-3-small) convert text into high-dimensional numerical vectors where semantically similar texts cluster geometrically close — enabling RAG (retrieve top-k semantically similar document chunks for the user\'s query vector) and Azure AI Search semantic ranking (find documents by conceptual meaning rather than exact keyword match)'
+],
+answer:3,
+explanation:'Azure OpenAI text-embedding models produce fixed-size vectors (e.g., 3,072 dimensions for text-embedding-3-large) that capture the semantic meaning of text. Key applications: (1) RAG (Retrieval-Augmented Generation): embed all your knowledge base documents → store in Azure AI Search vector index → at query time, embed the user\'s question → find the top-k most similar document chunks by cosine distance → inject them as context into the GPT-4o prompt → get a grounded, non-hallucinated answer. (2) Semantic search: find documents conceptually related to the query even when exact query words don\'t appear in the documents. (3) Clustering and classification: group similar support tickets; classify by topic. The text-embedding-3-large model outperforms the older text-embedding-ada-002 on multilingual and cross-lingual similarity benchmarks.'},
+
+// ─── L4: Transformer (4 Qs) ──────────────────────────────────────────
+{lesson:'L4',lessonName:'Transformer',
+question:'What is the fundamental innovation of the Transformer architecture compared to all prior neural sequence models?',
+options:[
+'The Transformer replaced sequential recurrence with self-attention — a mechanism allowing every token to directly and simultaneously attend to every other token in the sequence — enabling full parallelisation during training and capturing arbitrary-range dependencies without vanishing gradient limitations that plagued RNN and LSTM architectures',
+'The Transformer introduced convolutional feature extractors applied over overlapping sliding windows of text tokens, enabling local pattern detection similar to how CNNs process image pixel grids',
+'The Transformer was the first architecture to use pre-trained ImageNet CNN weights as a fixed feature extractor for text, enabling transfer learning from computer vision to NLP without architectural changes',
+'The Transformer was the first sequence model trained with gradient descent, replacing expectation-maximisation used by all prior statistical NLP models including HMMs and conditional random fields'
+],
+answer:0,
+explanation:'The Transformer\'s revolutionary insight was that recurrence is unnecessary for sequence modelling — self-attention alone can capture all relevant relationships between tokens. The implications: (1) Parallelism: since attention computes all token-to-token relationships simultaneously (as a matrix operation), training can be fully parallelised on GPUs/TPUs — training a 175B parameter model becomes feasible; (2) Long-range dependencies: any two tokens can attend to each other with equal computational cost regardless of their distance (position 1 can directly attend to position 1000), unlike RNNs where information must pass through 999 sequential steps with gradient degradation; (3) Scalability: more parameters + more data = better performance, enabling the scaling laws that drove GPT-3, GPT-4, and subsequent LLMs.'},
+
+{lesson:'L4',lessonName:'Transformer',
+question:'What is self-attention in a Transformer and what does it conceptually compute for each token in the sequence?',
+options:[
+'Self-attention is a gating mechanism selectively activating or suppressing individual neurons in a Transformer layer based on the statistical frequency of each token in the training corpus',
+'Self-attention is a mechanism where each token computes a weighted sum over all other tokens\' representations — the weights (attention scores) reflect how relevant each other token is to understanding the current token\'s meaning, allowing the model to dynamically incorporate contextual information from anywhere in the sequence',
+'Self-attention is a normalisation technique scaling each token\'s vector by the square root of the total sequence length to prevent attention score saturation in deep Transformer layers',
+'Self-attention is a memory retrieval mechanism looking up the most semantically similar token from a pre-trained embedding table and replacing the current token\'s representation with that retrieved vector'
+],
+answer:1,
+explanation:'Conceptually, self-attention asks each token: "given my current representation, which other tokens in this sequence are most useful for understanding what I mean, and how much should I borrow from each?" The output for each token is a contextualised representation that has "read" from the rest of the sequence according to learned relevance weights. For example, in "The animal didn\'t cross the street because it was too tired", when processing "it", self-attention learns to assign high weight to "animal" (the referent), allowing the model to resolve pronoun coreference. Mathematically: the output for each token is the weighted sum of Value vectors, where weights come from the softmax-normalised dot products between that token\'s Query and all tokens\' Keys.'},
+
+{lesson:'L4',lessonName:'Transformer',
+question:'In the Transformer attention mechanism, what are the Query, Key, and Value vectors and how do they interact to produce the attention output?',
+options:[
+'Query is the model\'s current hidden state; Key is the previous layer\'s output; Value is the positional encoding — concatenated and passed through a linear layer to produce the attention-weighted representation for each token',
+'Query, Key, and Value are three separate copies of the full token sequence that are element-wise multiplied, then normalised with softmax to produce an attention-weighted average of the input representations',
+'For each token, Query ("what am I looking for?"), Key ("what information do I contain?"), and Value ("what will I contribute?") — attention scores are dot products between one token\'s Query and all tokens\' Keys, softmax-normalised, then used to compute a weighted sum of Value vectors — producing a context-enriched output for each position',
+'Query and Key are identical vectors derived from the encoder output; Value is the decoder\'s masked self-attention output; together they implement cross-attention between encoder memory and the decoder\'s generated token sequence'
+],
+answer:2,
+explanation:'The QKV framework is one of the most important concepts in modern AI: Each token i produces three vectors via learned linear projections of its embedding: Q_i (query — what this token is "looking for" in context), K_i (key — what this token "offers" as content), V_i (value — the actual information this token contributes if attended to). Attention computation: (1) Compute scores: s_ij = Q_i · K_j / √d_k for all j; (2) Normalise: a_ij = softmax(s_ij) — weights summing to 1; (3) Aggregate: output_i = Σ_j a_ij · V_j. The analogy to information retrieval: Q is a search query, K is a document descriptor, V is the document content. High Q·K score means "this document is relevant to my query" — retrieve more of its V content.'},
+
+{lesson:'L4',lessonName:'Transformer',
+question:'What is multi-head attention and why does it provide richer representations than a single wide attention computation?',
+options:[
+'Multi-head attention runs attention computations multiple times sequentially, with each pass focused on a different positional range — near-context, mid-range context, and full-sequence context windows',
+'Multi-head attention applies attention over multiple vocabulary partitions simultaneously, with each head responsible for tokens from a different subset of the full model vocabulary',
+'Multi-head attention uses multiple independent attention computations on differently projected subspaces, where each head can specialise in a different type of linguistic relationship simultaneously',
+'Multi-head attention runs H parallel attention operations each with reduced d_k = d_model/H dimensional Q, K, V projections — different heads can simultaneously attend to different relationship types (syntactic, semantic, coreference) — outputs concatenated and projected back to d_model, giving richer representational power than one single wide attention head of the same total parameter count'
+],
+answer:3,
+explanation:'With a single attention head, the model learns one set of Q, K, V projections — one particular way of measuring token relevance. Multi-head attention (with H heads) runs H independent attention computations on H different learned projections of the input: each head projects to Q_h, K_h, V_h with dimension d_model/H (so total compute is similar to single head). Different heads empirically specialise in different relationships: Head 1 might learn syntactic subject-verb agreement, Head 2 coreference ("she" → "Mary"), Head 3 positional proximity, Head 4 semantic similarity, etc. The outputs from all H heads are concatenated then linearly projected: MultiHead(Q,K,V) = Concat(head_1,...,head_H)W^O. This diversity of learned attention patterns is what gives Transformers their remarkable representational flexibility. BERT-base has 12 heads; GPT-3 has 96 heads.'},
+
+// ─── L5: Original Transformer Architecture (4 Qs) ────────────────────
+{lesson:'L5',lessonName:'Original Transformer Architecture',
+question:'The original 2017 Transformer was designed for what task, and what were its two major architectural components?',
+options:[
+'Designed for neural machine translation; it had an Encoder stack processing the full source sequence with bidirectional self-attention, and a Decoder stack generating the target sequence autoregressively with masked self-attention and cross-attention to the encoder\'s representations',
+'Designed for image classification, with the encoder processing image patches and the decoder generating a class probability label — later adapted for NLP through fine-tuning on language corpora',
+'Designed for speech recognition, converting audio waveforms through a CNN encoder into phoneme sequences and then words through a CTC-loss decoder beam search algorithm',
+'Designed for reinforcement learning from human feedback, where the encoder serves as a reward model and the decoder serves as the policy model being optimised with PPO'
+],
+answer:0,
+explanation:'The 2017 Vaswani et al. Transformer was motivated by machine translation (WMT English-German and English-French benchmarks). Architecture: (1) Encoder: 6 identical layers, each with multi-head self-attention (bidirectional — every source token attends to all others) + position-wise FFN + residual connections + LayerNorm. Processes the source sentence in parallel, producing a rich contextual representation of the entire source sequence. (2) Decoder: 6 identical layers, each with masked (causal) self-attention (can only attend to previously generated target tokens) + cross-attention to the encoder\'s output (where Q comes from the decoder and K, V come from the encoder) + FFN + residual + LayerNorm. Generates the target translation one token at a time autoregressively. This encoder-decoder structure became the template for T5, mBART, and many translation and summarisation models.'},
+
+{lesson:'L5',lessonName:'Original Transformer Architecture',
+question:'In an original Transformer encoder layer, what is the role of the position-wise feed-forward network (FFN) that follows the self-attention sub-layer?',
+options:[
+'The FFN is a recurrent layer refining the self-attention output by processing each token sequentially, introducing short-range sequential computation for dependency modelling between adjacent positions',
+'The FFN applies two learned linear transformations with a non-linear activation (ReLU or GeLU) in between, processing each token position independently — acting as a per-token non-linear transformation that expands then contracts the dimensionality (typically 4× expansion: d_model → 4×d_model → d_model), adding computational depth and expressive capacity',
+'The FFN is a cross-attention layer querying the model\'s vocabulary embeddings to find which output tokens are most relevant to each input token\'s current context representation',
+'The FFN is a batch normalisation layer normalising the variance of each attention head\'s output independently before the residual connection adds them to the main hidden state pathway'
+],
+answer:1,
+explanation:'After multi-head attention allows each token to "collect" information from the rest of the sequence, the FFN applies a learned non-linear transformation independently to each token\'s updated representation: FFN(x) = max(0, xW_1 + b_1)W_2 + b_2 (with ReLU) or with GeLU activation. The key properties: (1) Position-wise — applied identically and independently to each token\'s vector; no information passes between positions; (2) Two-layer MLP — typically expands to 4× d_model (the "expansion ratio") then contracts back: 512→2048→512 in the base model, 4096→16384→4096 in GPT-3. This expansion-contraction acts as a per-token reasoning step, allowing the model to apply complex non-linear transformations to the attention-aggregated context. Research suggests FFN layers may function as associative "key-value memories" storing factual knowledge.'},
+
+{lesson:'L5',lessonName:'Original Transformer Architecture',
+question:'What is layer normalisation in a Transformer and why is it applied after the self-attention and feed-forward sub-layers?',
+options:[
+'Layer normalisation is a dropout variant randomly zeroing 10% of attention scores per layer to prevent overfitting to high-frequency word co-occurrences in the training corpus',
+'Layer normalisation is a gradient clipping technique capping the L2-norm of the gradient vector for each Transformer layer to prevent exploding gradients during backpropagation',
+'Layer normalisation normalises each token\'s hidden state vector to zero mean and unit variance across its feature dimensions, then applies a learned affine transformation (scale γ and shift β) — applied after attention and FFN sub-layers to stabilise activation magnitudes throughout deep Transformer stacks (6–96+ layers), preventing gradient explosion or vanishing that would destabilise training',
+'Layer normalisation is a linear projection reducing each sub-layer\'s output from 4×d_model back to d_model, serving as the bottleneck between the expanded FFN dimensionality and the main residual stream dimension'
+],
+answer:2,
+explanation:'LayerNorm(x) = γ × (x − μ) / (σ + ε) + β, where μ and σ are the mean and standard deviation computed across the d_model features of a single token\'s vector, and γ, β are learnable parameters (initialised to 1 and 0). Unlike BatchNorm (which normalises across the batch dimension), LayerNorm normalises within each individual token\'s representation, making it independent of batch size and sequence length — crucial for variable-length NLP sequences. Why it matters: in a 12-layer Transformer, activations pass through 24+ non-linear operations. Without normalisation, activation magnitudes can grow or shrink uncontrollably — making gradients too large (unstable training) or too small (no learning signal). LayerNorm keeps activations in a stable range throughout, enabling training of very deep models. Note: modern models (GPT-J, Llama) often use Pre-LayerNorm (before sub-layers) instead of Post-LayerNorm for better training stability.'},
+
+{lesson:'L5',lessonName:'Original Transformer Architecture',
+question:'What is the residual (skip) connection in the Transformer and what training advantage does it provide for deep networks?',
+options:[
+'Residual connections are the cross-attention pathways connecting encoder final hidden states to each decoder layer, allowing the decoder to access source context directly rather than through a compressed bottleneck vector',
+'Residual connections are backward attention links letting each token attend to its own representation from the previous Transformer layer, rather than being limited to attending to other tokens\' current representations',
+'Residual connections add positional encoding terms to the input at each layer to refresh position information that self-attention accumulates noise on after multiple layers of processing',
+'Residual connections add the sub-layer\'s input directly to its output (output = input + sublayer(input)), creating gradient highways that allow loss gradients to flow directly back to early layers without passing through sub-layer operations — making it possible to train very deep Transformer stacks (12, 24, 96+ layers) without severe vanishing gradient problems'
+],
+answer:3,
+explanation:'Residual connections (He et al., 2016 from ResNets — immediately adopted into Transformers) are the single most important training technique for deep networks. Without them, in a 12-layer Transformer, gradients backpropagating from the loss at the output must pass through 12+ sequential operations before reaching early layer parameters — at each step being multiplied by Jacobians that can be less than 1, causing the gradient signal to vanish. With residual connections, the gradient has a "shortcut highway": it can flow directly from the output loss through the chain of additions to any earlier layer — each addition node perfectly preserves gradient magnitude (derivative of a + b with respect to a is 1). This enables training Transformers with 96+ layers (GPT-3 has 96), 100+ billion parameters. The architecture becomes: x → LayerNorm → MultiHeadAttention → + x → LayerNorm → FFN → + x → next layer.'},
+
+// ─── L6: Transformer Advantages & Limitations (3 Qs) ─────────────────
+{lesson:'L6',lessonName:'Transformer Advantages & Limitations',
+question:'What are the three most significant advantages of Transformer architectures over prior RNN and LSTM-based sequence models?',
+options:[
+'Full parallelisation during training (all tokens processed simultaneously instead of sequentially), direct long-range attention (any two tokens attend to each other with equal cost regardless of distance), and superior scalability (performance consistently improves with more parameters and data — enabling billion-parameter LLMs that RNNs could never achieve)',
+'Transformers consume less GPU memory than LSTMs because attention computations are sparse, activating only a small fraction of parameters per forward pass through the network layers',
+'Transformers eliminate the need for any training data by using symbolic logic rules derived from mathematical first principles to generate language structure representations',
+'Transformers are significantly faster at inference than RNNs because they generate entire output sequences in one parallel forward pass rather than the token-by-token sequential decoding required by recurrent architectures'
+],
+answer:0,
+explanation:'The three transformative advantages of Transformers over RNNs/LSTMs: (1) Full parallelisation: In an RNN, token t cannot be processed until token t-1 completes — training is inherently sequential with O(n) serial operations. Transformers compute attention for all position pairs simultaneously as matrix multiplications on GPUs — enabling 100× speedups in wall-clock training time. (2) Direct long-range dependencies: RNNs/LSTMs must pass information through every intermediate timestep — over 100 steps, gradients vanish and information degrades. Self-attention directly connects any two positions with O(1) sequential operations. (3) Scalability: Empirically (Kaplan et al. scaling laws, 2020), Transformer performance scales predictably as power laws with model size, dataset size, and compute — enabling confident investment in 175B GPT-3, 540B PaLM, ~1T GPT-4.'},
+
+{lesson:'L6',lessonName:'Transformer Advantages & Limitations',
+question:'What is the "quadratic attention complexity" problem and why does it pose a fundamental challenge for standard Transformer models?',
+options:[
+'Quadratic complexity means Transformers require four times as many parameters as equivalent RNN models, making them too large to fit in GPU memory for sequences longer than 512 tokens',
+'Standard self-attention computes attention scores between ALL pairs of tokens, so memory and computation scale as O(n²) in sequence length n — a 4,096-token sequence requires ~16 million attention computations and a 100,000-token sequence requires 10 billion, making very long contexts extremely expensive and motivating efficient attention variants like FlashAttention, Sparse Attention, and Ring Attention',
+'Quadratic complexity refers to the second-order Taylor expansion needed to compute accurate gradient updates for attention weight matrices during backpropagation through Transformer layers',
+'Quadratic complexity means Transformer accuracy degrades quadratically as vocabulary size increases, limiting the practical vocabulary ceiling to approximately 50,000 subword tokens for stable training'
+],
+answer:1,
+explanation:'The attention score matrix has shape [n × n] where n is the sequence length — for every pair (i, j) of tokens, the model computes Q_i · K_j. Memory requirement: storing the attention score matrix is O(n²) — at n=4,096, that\'s 16M floats × 96 heads × 4 bytes ≈ 6GB just for attention scores. Computation is also O(n²·d_k) per layer. For context: GPT-4 supports 128K tokens — the n² term alone is 16 billion entries per attention head, necessitating special optimisations. Solutions developed: (1) FlashAttention (Dao et al., 2022) — IO-aware exact attention implementation that avoids materialising the full n×n matrix; (2) Sparse/Local Attention — attend only to nearby tokens or learnable sparse patterns; (3) Linear Attention — approximate attention with O(n) cost; (4) Ring Attention — distribute the sequence across multiple GPUs. Long-context models in Azure OpenAI (GPT-4o with 128K context) use these techniques.'},
+
+{lesson:'L6',lessonName:'Transformer Advantages & Limitations',
+question:'What are the primary limitations of current Transformer-based LLMs that remain active research challenges?',
+options:[
+'Transformers cannot process any text longer than 512 tokens and require chunk-wise recurrence modifications to handle even short paragraphs or standard business documents',
+'Transformers are limited to English-only text because their tokenizers were designed for Latin-script alphabets and are categorically unable to represent Chinese, Arabic, or other non-Latin scripts',
+'Key limitations include: fixed finite context window per inference call, quadratic attention scaling cost for very long contexts, hallucination (generating confident but factually incorrect outputs), knowledge cutoff at training time (no real-time updates), high energy and compute cost for training and inference, and difficulty with precise mathematical and formal reasoning without external tool use',
+'Transformers cannot be fine-tuned after initial pre-training because catastrophic forgetting immediately and completely erases all pre-trained language knowledge when any task-specific gradient update is applied'
+],
+answer:2,
+explanation:'Despite LLMs\' remarkable capabilities, significant limitations remain: (1) Context window: Each inference call starts fresh — the model has no persistent memory beyond its context window (though techniques like RAG and long-context models partially mitigate this). (2) Quadratic scaling: Very long contexts remain computationally expensive. (3) Hallucination: Models generate plausible-sounding but incorrect facts; this is intrinsic to next-token prediction training. Mitigation: RAG, grounding, system prompts. (4) Knowledge cutoff: LLMs cannot access events after training without retrieval augmentation. (5) Energy cost: Training GPT-4 scale models requires megawatt-hours of electricity. (6) Formal reasoning: Without external tools (code interpreters, calculators), LLMs make arithmetic and logical reasoning errors. (7) Alignment: Getting models to reliably follow instructions without harmful outputs requires significant additional work (RLHF, Constitutional AI).'},
+
+// ─── L7: Encoder-Decoder Architecture (4 Qs) ─────────────────────────
+{lesson:'L7',lessonName:'Encoder-Decoder Architecture',
+question:'In the encoder-decoder Transformer, what is the distinct role of the encoder stack versus the decoder stack?',
+options:[
+'The encoder stack generates output tokens autoregressively using masked self-attention; the decoder scores the complete generated sequence quality using a learned reward model for training',
+'The encoder stack is active only during training to compute the training loss; during inference only the decoder processes the prompt directly without any encoder cross-attention mechanism',
+'The encoder stack applies convolutional filters to extract local n-gram features; the decoder applies self-attention to these features to generate long-range output sequences with cross-attention conditioning',
+'The encoder stack processes the full input sequence with unrestricted bidirectional self-attention, building rich contextual representations of every source token; the decoder generates the output autoregressively using masked (causal) self-attention and cross-attention to the encoder\'s output representations to use source context at each generation step'
+],
+answer:3,
+explanation:'The encoder-decoder split reflects a "read everything, then write one step at a time" paradigm: Encoder: receives the full source sequence (e.g., an English sentence). Each encoder layer applies bidirectional self-attention — every token can attend to all others in both directions (left and right context). After N encoder layers, each source token has a rich representation that reflects its full surrounding context. The encoder runs once and its output is cached. Decoder: generates target tokens one-by-one. Each decoder layer has three sub-components: (1) Masked self-attention — over previously generated target tokens (causal); (2) Cross-attention — Q from decoder, K and V from the encoder output — the decoder dynamically "reads" the most relevant source positions at each generation step; (3) FFN. The decoding loop continues until an end-of-sequence token is generated.'},
+
+{lesson:'L7',lessonName:'Encoder-Decoder Architecture',
+question:'What is cross-attention in the encoder-decoder Transformer and how does it mechanically differ from self-attention?',
+options:[
+'In cross-attention, Query vectors come from the decoder\'s current hidden state while Key and Value vectors come from the encoder\'s final output — allowing the decoder to selectively attend to relevant source positions at each decoding step; in self-attention, all of Q, K, V originate from the same sequence being processed',
+'Cross-attention is a form where both Query and Key come from the encoder output while Value comes from the decoder hidden state — the encoder directs the decoder on which positions to update at each step',
+'Cross-attention replaces the feed-forward network in the decoder, serving as a direct memory lookup from encoder outputs rather than requiring an additional linear projection sub-layer',
+'Cross-attention computes attention between the sequence and a set of learned memory slots rather than between positions within the sequence, enabling O(1) complexity per decoding step'
+],
+answer:0,
+explanation:'In self-attention: Q, K, V = linear projections of the SAME sequence — each token attends to others in the same sequence. In cross-attention (in the decoder): Q = linear projection of the decoder\'s current hidden state (what the decoder "wants to know"); K, V = linear projections of the ENCODER\'s final output (what the encoded source "has to offer"). For each decoder position at each generation step, cross-attention computes dot products between the decoder\'s Q and all encoder K vectors — softmax-weighted sum of encoder V vectors. This is the mechanism by which the decoder "reads" the source: when generating a French translation word, the decoder\'s cross-attention looks back at the encoded English representations to find the most relevant source content for the current target position. It can dynamically focus on different source words at different target generation steps, implementing a form of learnable soft alignment.'},
+
+{lesson:'L7',lessonName:'Encoder-Decoder Architecture',
+question:'What are the best-suited use cases for encoder-decoder Transformer models compared to encoder-only or decoder-only models?',
+options:[
+'Encoder-decoder models are best for generating embeddings and semantic similarity because they produce bidirectional contextual representations capturing full sentence meaning for dense vector comparison',
+'Encoder-decoder models are best suited for sequence-to-sequence transformation tasks — machine translation, text summarisation, question answering with generated answers, code generation from natural language descriptions, and text simplification — where the encoder processes a complete input and the decoder generates a complete, potentially different-length output',
+'Encoder-decoder models are best for next-token text generation tasks like chatbots and story writing because the encoder provides a rich prefix context the decoder leverages via greedy decoding',
+'Encoder-decoder models are best for classification and sequence labelling tasks such as sentiment analysis, named entity recognition, and text categorisation requiring single labels per input'
+],
+answer:1,
+explanation:'Task-architecture matching: Encoder-only (BERT, RoBERTa, DeBERTa): ideal for understanding tasks where the output is a label, score, or extracted span from the input — sentiment analysis, NER, sentence classification, extractive QA (span prediction). Bidirectional context makes representations maximally informative for classification. Decoder-only (GPT-series, Claude, Llama): ideal for open-ended text generation — chat, creative writing, code completion. Trained on next-token prediction, they are natural generators. Encoder-decoder (T5, BART, mBART, Flan-T5): ideal when input and output are both sequences that may differ structurally — translation (English → French), summarisation (1000 words → 100 words), QA with generated answers, data-to-text. The encoder processes the input holistically; the decoder generates a flexible-length output with cross-attention access to encoded context.'},
+
+{lesson:'L7',lessonName:'Encoder-Decoder Architecture',
+question:'What does the encoder-only versus decoder-only distinction mean in terms of the attention pattern used by each architecture?',
+options:[
+'Encoder-only models use positional encodings from learned embeddings; decoder-only models use fixed sinusoidal encodings — this positional encoding difference determines their respective NLP task suitability and generalisation properties',
+'Encoder-only models use feed-forward networks with ReLU activations; decoder-only models use GeLU activations — this difference in non-linearity determines whether the architecture suits understanding or generation',
+'Encoder-only models have more layers than decoder-only models; decoder-only models have more attention heads — the imbalanced depth versus width makes encoders better at contextual understanding and decoders better at fluent generation',
+'Encoder-only models use bidirectional (unrestricted) self-attention where every token attends to every other token in both directions; decoder-only models use causal (masked) self-attention where each token attends only to previous tokens — making encoders strong at contextual understanding tasks and decoders natural autoregressive text generators'
+],
+answer:3,
+explanation:'The attention mask is the fundamental architectural distinction: Encoder-only (BERT): attention_mask[i][j] = 1 for ALL j — token i can attend to ALL other tokens including those to its right. This means the representation of each token is informed by the full sentence context, ideal for understanding tasks. Training: Masked Language Modelling (predict [MASK] tokens using left+right context). Decoder-only (GPT): attention_mask[i][j] = 1 only if j ≤ i — token i can attend ONLY to positions ≤ i (itself and all preceding tokens). This causal constraint means each position only has access to its left context — required for autoregressive generation (you can\'t look ahead at future tokens you haven\'t generated yet). Training: next-token prediction (each position predicts the next token using only left context, allowing training to be done in one forward pass across all positions simultaneously).'},
+
+// ─── L8: Positional Encoding & Attention Mechanism (4 Qs) ────────────
+{lesson:'L8',lessonName:'Positional Encoding & Attention Mechanism',
+question:'Why do Transformers require positional encoding and what would happen without it?',
+options:[
+'Self-attention is permutation-invariant — it treats input as an unordered set of tokens and produces identical outputs regardless of token order; without positional encoding a Transformer cannot distinguish "The dog bit the man" from "The man bit the dog", making word order completely invisible to the model',
+'Positional encoding is needed because GPU memory addresses input tokens non-sequentially, and position codes tell the hardware which physical memory address each token\'s vector should be stored at',
+'Positional encoding compensates for tokenization splitting words into subword pieces, and positional codes tell the model which subword pieces came from the same original whole word',
+'Positional encoding is needed because the embedding lookup table returns the same vector for a given token ID regardless of sentence position, and positional codes add sentence-level disambiguation to distinguish repeated tokens'
+],
+answer:0,
+explanation:'Self-attention computes attention between all pairs of tokens using only their content vectors (Q, K, V from embeddings). The operation is fundamentally invariant to the order of the input sequence: shuffle "The dog bit the man" to "man The bit dog the" — the set of attention scores computed between the same token IDs would be identical (just assigned to different output positions). The model cannot distinguish position-dependent grammar. Positional encoding injects position information: each token\'s representation is augmented with a position-dependent signal PE(pos, dim) that differentiates "the" appearing at position 1 from "the" at position 8. Without this, the model would learn the statistical co-occurrences between tokens but completely ignore syntax, word order, and the grammatical role of position. Tests confirm: a Transformer without positional encoding performs at chance level on tasks where word order matters.'},
+
+{lesson:'L8',lessonName:'Positional Encoding & Attention Mechanism',
+question:'What is sinusoidal positional encoding from the original Transformer and what property makes it appealing for sequence modelling?',
+options:[
+'Sinusoidal positional encoding adds phase-shifted audio sine waves to token embeddings, enabling the model to process both text and audio in the same unified architecture without modality-specific preprocessing',
+'Sinusoidal positional encoding adds fixed sine and cosine waves of different frequencies to each token\'s embedding — each position gets a unique encoding pattern, and the relative offset between any two positions can be expressed as a linear function of their individual encodings, potentially supporting generalisation to sequence lengths beyond those seen during training',
+'Sinusoidal positional encoding is a learned encoding trained jointly with the model that empirically converges to sine-like patterns but can adapt to the positional statistics specific to the training domain',
+'Sinusoidal positional encoding encodes the 2D position (row, column) of each token within a fixed grid document layout, enabling models to understand spatial page structure in scanned document processing applications'
+],
+answer:1,
+explanation:'Original Transformer positional encoding: PE(pos, 2i) = sin(pos / 10000^(2i/d_model)); PE(pos, 2i+1) = cos(pos / 10000^(2i/d_model)). Different sine/cosine frequencies at different dimensions create a unique pattern for each position. Key properties: (1) Unique: each position pos has a unique d_model-dimensional vector; (2) Relative expressibility: PE(pos+k) can be written as a linear function of PE(pos) for any fixed offset k — so the model can compute relative distances from absolute encodings through attention; (3) No training required: fixed deterministically, reducing parameter count; (4) Bounded: values always between -1 and 1, preventing magnitude issues. Limitation: generalisation to much longer sequences than training is poor in practice. Modern models use learned positional embeddings (GPT-3) or relative position schemes (RoPE, ALiBi) that better extrapolate.'},
+
+{lesson:'L8',lessonName:'Positional Encoding & Attention Mechanism',
+question:'What is Rotary Position Embedding (RoPE), used in modern LLMs like Llama and GPT-4, and what advantage does it offer over original sinusoidal encodings?',
+options:[
+'RoPE is a trainable embedding using 3D rotation matrices in hyperspherical space to encode positions, reducing positional interference between distant tokens in the attention matrix',
+'RoPE encodes position by adding a learnable bias vector to each token\'s embedding at the embedding layer, with one unique bias vector per absolute position learned during pre-training',
+'RoPE encodes position by rotating Q and K vectors in pairs of dimensions by an angle proportional to the token\'s absolute position — the Q·K dot product then depends only on the relative position (i − j), making attention scores naturally relative rather than absolute and enabling better generalisation to context lengths longer than those seen during training',
+'RoPE is a post-training technique adding positional information to an already-trained LLM by fine-tuning only positional embedding parameters on longer-context data without touching attention weights'
+],
+answer:2,
+explanation:'RoPE (Su et al., 2021, adopted in RoFormer, Llama, Falcon, GPT-NeoX) is the dominant positional encoding scheme in modern open-weight LLMs. Mechanism: for each dimension pair (2i, 2i+1) of the Q and K vectors, apply a 2D rotation by angle θ = pos × base^(-2i/d) where base is typically 10,000. After rotation, Q_i · K_j = f(i − j) — the dot product depends only on the RELATIVE position difference, not absolute positions. Benefits over absolute sinusoidal encoding: (1) Relative: attention naturally reflects token distance rather than absolute position — this is linguistically more appropriate (the word 3 positions before me is relevant regardless of whether I\'m at position 5 or 500); (2) Length generalisation: relative encoding extrapolates more gracefully to longer sequences than training (further extended by "YaRN" and "LongRoPE" techniques); (3) No extra parameters needed. Llama 2 (7B–70B), Mistral, Falcon all use RoPE.'},
+
+{lesson:'L8',lessonName:'Positional Encoding & Attention Mechanism',
+question:'What is scaled dot-product attention — the specific formula used to compute attention scores — and why is the scaling factor critical?',
+options:[
+'Scaled dot-product attention computes scores as element-wise products of Query and Key vectors, scaled by the maximum Key vector value to ensure numerical stability across different sequence lengths at inference time',
+'Scaled dot-product attention normalises Q and K to unit length via L2 normalisation before computing dot products, then applies sigmoid instead of softmax to allow multiple tokens to independently receive high attention weights',
+'Scaled dot-product attention computes Attention(Q,K,V) = tanh(QK^T / d_k) × V using tanh instead of softmax so attention scores can be negative, actively suppressing irrelevant tokens rather than merely de-prioritising them',
+'Scaled dot-product attention computes Attention(Q,K,V) = softmax(QK^T / √d_k) × V where dividing by √d_k is critical — without it, dot products grow proportionally to d_k in magnitude, pushing softmax into saturation regions where all probability mass concentrates on one token and gradients vanish, preventing the model from learning nuanced attention distributions'
+],
+answer:3,
+explanation:'The complete scaled dot-product attention formula: Attention(Q, K, V) = softmax(QK^T / √d_k) · V. Step by step: (1) QK^T — compute raw attention scores: matrix multiply Q [n×d_k] by K^T [d_k×n] → score matrix [n×n]; (2) / √d_k — scale by the square root of the key dimension d_k; (3) softmax(·) — normalise each row to a probability distribution summing to 1; (4) · V — compute weighted sum of Value vectors. Why the √d_k scaling? When Q and K are unit-variance random vectors of dimension d_k, their dot product has variance d_k (each of d_k dimensions contributes variance ≈ 1). For d_k = 64, dot products have standard deviation 8 — softmax concentrates strongly on the max value. For d_k = 512, standard deviation 22 — softmax is even more extreme, approaching a one-hot distribution where gradients essentially vanish. Dividing by √d_k brings variance back to 1, keeping softmax in a well-conditioned regime.'},
+
+// ─── L9: Decoder-Only Architecture (3 Qs) ────────────────────────────
+{lesson:'L9',lessonName:'Decoder-Only Architecture',
+question:'What defines a decoder-only Transformer and what makes it the preferred design for large generative language models like GPT?',
+options:[
+'A decoder-only Transformer uses only causal (masked) self-attention — each token attends to all preceding tokens but not future ones — trained via next-token prediction: given all previous tokens predict the next. This autoregressive objective scales exceptionally well with data and compute, and inference naturally generates text by repeatedly predicting and appending the next token',
+'A decoder-only Transformer uses bidirectional self-attention but restricts it to a sliding window of the 512 nearest preceding tokens, making it more memory-efficient than full self-attention encoder models for long documents',
+'A decoder-only Transformer has no attention layers — it uses only feed-forward networks over a fixed context window to predict the next token, enabling fast inference on consumer CPU hardware without GPU requirements',
+'A decoder-only Transformer processes the entire output sequence in one parallel forward pass using non-autoregressive decoding, making it much faster at inference than encoder-decoder models requiring sequential token generation'
+],
+answer:0,
+explanation:'Decoder-only Transformers (GPT family, Llama, Claude, Gemini, Mistral) are defined by: (1) Causal self-attention: the attention mask enforces that position i can only attend to positions 1...i — future tokens are masked out with -∞ before softmax; (2) Training objective: next-token prediction (language modelling) — for a text sequence [t_1, t_2,...,t_n], the model learns to predict t_{i+1} given t_1...t_i, for all i simultaneously during training; (3) Inference: process the prompt, then autoregressively generate one token at a time by sampling from the predicted probability distribution, appending it to the context, and repeating. Why this design dominates: (1) Simplicity — one architecture, one training objective; (2) Scale — scaling laws work extremely well for language modelling; (3) In-context learning — at inference, the model can "read" examples from the prompt and apply the pattern; (4) Versatility — instruction tuning + RLHF converts a language model into a capable general-purpose assistant.'},
+
+{lesson:'L9',lessonName:'Decoder-Only Architecture',
+question:'What is causal masking in a decoder-only Transformer and why must it be applied during training?',
+options:[
+'Causal masking randomly drops 15% of input tokens during training similar to BERT\'s MLM approach, forcing robust representations that do not over-rely on any single token being present',
+'Causal masking applies a triangular mask to the attention score matrix setting future token positions to −∞ (zero weight after softmax) — enforcing that each token attends only to previous tokens so training-time supervision (predicting all positions in parallel) is equivalent to what the model does autoregressively at inference time',
+'Causal masking encrypts token embeddings with a random key derived from the training step, preventing overfitting by ensuring no two training batches see identical numerical token representations',
+'Causal masking evicts Key-Value cache entries older than the context window during inference, preventing stale context from degrading generation quality in long multi-turn conversations'
+],
+answer:1,
+explanation:'The causal mask is a lower-triangular binary matrix applied before softmax in the attention computation. For a sequence of length n, the mask M[i][j] = 0 if j ≤ i (allowed), -∞ if j > i (masked). Adding -∞ to logits before softmax gives e^{-∞} = 0 probability weight. Why this is necessary for training: Next-token prediction requires that position i only uses tokens 1...i to predict token i+1. During training, we compute the loss over ALL positions simultaneously (for efficiency): position 1 predicts token 2, position 2 predicts token 3, etc. Without the causal mask, self-attention at position 5 could "cheat" by directly reading token 6 (the answer it\'s supposed to predict) — the model would learn the trivial solution of copying the next token from its attention context. The causal mask enforces the constraint that each position can only "see" prior context, making the training objective identical to what happens autoregressively at inference.'},
+
+{lesson:'L9',lessonName:'Decoder-Only Architecture',
+question:'How does a decoder-only LLM generate text at inference time, and what is "temperature" doing mathematically during the sampling process?',
+options:[
+'The decoder-only LLM processes the entire prompt in one forward pass and outputs the complete generated response simultaneously as a single batched computation with no sequential token generation',
+'The LLM sorts all possible output sequences by joint probability and returns the single highest-probability complete sentence in one deterministic forward pass without any sequential decoding',
+'At inference time the LLM generates text autoregressively — process all prompt tokens → compute probability distribution over vocabulary for the next token → sample a token → append to context → repeat; temperature T divides the logits before softmax (logits/T): T<1 sharpens the distribution toward high-probability tokens (more deterministic); T>1 flattens it (more diverse/creative), directly controlling output variety and coherence',
+'The LLM uses beam search with beam width equal to the full vocabulary size, maintaining all possible token sequences in parallel and pruning to the top-B candidates after every generation step'
+],
+answer:2,
+explanation:'Inference loop for a decoder-only LLM: (1) Encode the prompt (tokenise, embed, run through all Transformer layers) — producing a Key-Value (KV) cache for all prompt positions; (2) From the final layer\'s output at the last prompt position, project to vocabulary logits (shape: [vocab_size]); (3) Apply temperature: logits_scaled = logits / T; apply softmax to get probabilities; (4) Sample the next token (or argmax for greedy decoding); (5) Append to the context, add its KV to the cache; (6) Feed only the new token through the model (KV cache provides all prior context efficiently); (7) Repeat until end-of-sequence token or max length. Temperature T: T=0 → argmax (always pick highest probability token) — deterministic, repetitive; T=0.7 (common default) — slightly randomised, coherent; T=1.0 — sample directly from the learned distribution; T=2.0 → nearly uniform distribution — very creative but often incoherent. Azure OpenAI API exposes temperature as a parameter from 0 to 2.'},
+
+// ─── L10: Advanced LLMs (3 Qs) ───────────────────────────────────────
+{lesson:'L10',lessonName:'Advanced LLMs',
+question:'What is Reinforcement Learning from Human Feedback (RLHF) and why is it a critical alignment step for production LLMs like GPT-4o?',
+options:[
+'RLHF is a technique where the LLM autonomously browses the internet and uses its own quality assessment to generate rewards for its outputs, enabling self-supervised improvement without human annotation',
+'RLHF is a method of training the LLM\'s tokenizer on human preference data about which subword segmentation strategies feel most natural when reading AI-generated text outputs',
+'RLHF augments the pre-training corpus by inserting human-written sentences between machine-generated ones, creating a blended training signal that improves output fluency and factual accuracy',
+'RLHF aligns LLM behaviour with human preferences: (1) a reward model is trained on human preference rankings of model outputs; (2) the LLM is fine-tuned with Proximal Policy Optimisation (PPO) using the reward model as a training signal — steering the model toward helpful, harmless, and honest outputs rather than simply statistically likely next tokens'
+],
+answer:3,
+explanation:'Pre-trained LLMs optimise next-token prediction — they become very good at generating plausible text, but "plausible" includes unhelpful, harmful, or dishonest content. RLHF (Stiennon et al. 2020; Ouyang et al. 2022 — InstructGPT) adds a human preference alignment step: (1) SFT (Supervised Fine-Tuning): fine-tune the pre-trained model on human-written demonstrations of good responses; (2) Reward Model Training: collect pairs of model outputs and ask human raters which is better; train a reward model RM(prompt, response) → score to predict human preference; (3) PPO Fine-Tuning: use the RM as a reward signal to further fine-tune the LLM with reinforcement learning — maximise E[RM(prompt, response)] while staying close to the SFT model (KL penalty). Result: models that follow instructions better, refuse harmful requests, are more factual, and communicate more naturally. GPT-4o, Claude, and Gemini all use variants of this pipeline (Claude uses Constitutional AI, a variant of RLHF).'},
+
+{lesson:'L10',lessonName:'Advanced LLMs',
+question:'What is the Mixture of Experts (MoE) architecture in LLMs and what efficiency advantage does it provide over a dense Transformer?',
+options:[
+'In MoE, the feed-forward network is replaced by multiple specialised "expert" networks plus a learned router that activates only a small subset of experts per token — enabling enormous total parameter counts while keeping per-token inference compute proportional only to the activated expert subset, achieving much better parameter efficiency than a dense model of the same compute cost',
+'MoE replaces the attention mechanism with a committee of small specialised attention modules each trained on a different language, voting on the next token through ensemble majority voting',
+'MoE is a training data strategy mixing examples from expert human curators with internet-scraped data in a fixed ratio, improving quality without any changes to the underlying dense Transformer architecture',
+'MoE is a deployment routing strategy directing different query types to different fine-tuned model variants — customer service to one specialist model, coding to another — using a text classifier router running before the main LLM inference pipeline'
+],
+answer:0,
+explanation:'Dense Transformer: every forward pass activates ALL parameters — doubling parameters doubles inference cost. MoE Transformer (Shazeer et al. 2017; popularised by Switch Transformer, Mixtral, GPT-4): Replace each FFN layer with N expert FFN networks (e.g., 64 experts) plus a router network. The router takes each token\'s representation and selects top-k experts to activate (typically k=2). Only the k activated experts compute for each token. Result: if total parameters = N × expert_size, activated parameters per token = k × expert_size. Example: Mixtral 8×7B has 8 experts × 7B params per expert ≈ 47B total parameters, but only 2 experts activate per token = 13B active parameters → compute similar to a 13B dense model but with 47B total parameters available. This "parameter efficiency" means MoE models punch above their compute weight. The router learns which expert specialises in which types of content — some learn code, some learn mathematical notation, some learn specific languages.'},
+
+{lesson:'L10',lessonName:'Advanced LLMs',
+question:'What is in-context learning (ICL) and how does it allow LLMs to perform new tasks without any gradient updates?',
+options:[
+'ICL is a training method injecting synthetic in-domain examples into the pre-training corpus to teach the model domain-specific knowledge before task-specific fine-tuning is applied to specialise the model',
+'ICL is the emergent ability of large language models to adapt to new tasks from a small number of input-output demonstrations placed directly in the prompt — the model recognises the pattern without any weight updates and applies it to the new query, performing zero-shot, one-shot, or few-shot adaptation purely through attention over the in-context examples',
+'ICL is a continual learning mechanism where the LLM incrementally updates its weights by storing compressed summaries of each user conversation, enabling persistent learning over millions of deployment interactions without catastrophic forgetting',
+'ICL is a caching mechanism storing previously computed Key-Value attention states from identical prompts server-side and reusing them for new requests, reducing inference latency for high-frequency common query templates'
+],
+answer:1,
+explanation:'In-context learning (ICL) is one of the most surprising emergent capabilities of large LLMs (Brown et al., GPT-3, 2020). The mechanism: place examples in the prompt and the model — without any weight updates — generalises the pattern to new inputs. Example zero-shot: "Translate French to English: Bonjour → ". Example few-shot: "Positive: Great movie! Negative: Terrible service. Positive: Loved it! Negative: " → the model continues the pattern and outputs "Boring plot." Why it works: during pre-training on massive text, the model has seen countless examples of tasks being demonstrated in text (tutorials, Q&As, code examples, worked problems). It learns meta-patterns — "when the text shows input→output examples, the next output follows that pattern". This is not gradient-based learning — no weights change — it\'s purely inference through attention over the provided examples. ICL capability scales with model size (emergent above ~1B params) and improves with more examples up to the context window limit.'},
+
+// ─── L11: Evolution of Models (BERT → GPT-4 → T5) (3 Qs) ─────────────
+{lesson:'L11',lessonName:'Evolution of Models (BERT → GPT-4 → T5)',
+question:'What was BERT\'s key architectural innovation and training approach, and for what types of NLP tasks does it excel?',
+options:[
+'BERT is a decoder-only Transformer trained on next-token prediction that excels at text generation tasks like chatbot responses, creative writing, and code completion through autoregressive decoding',
+'BERT uses an encoder-decoder architecture with cross-attention, pre-trained on parallel multilingual corpora, excelling primarily at machine translation and multilingual text understanding',
+'BERT (Bidirectional Encoder Representations from Transformers) is an encoder-only model with fully bidirectional self-attention, pre-trained with Masked Language Modelling (predicting randomly masked tokens using BOTH left AND right context) and Next Sentence Prediction — this bidirectional training makes BERT excel at understanding-centric tasks: text classification, named entity recognition, extractive question answering, and semantic textual similarity',
+'BERT is a hybrid architecture combining convolutional layers for local pattern detection with Transformer self-attention for global context, pre-trained on a mixture of ImageNet visual labels and Wikipedia text for multimodal understanding'
+],
+answer:2,
+explanation:'BERT (Devlin et al., Google, 2018) introduced two key ideas: (1) Bidirectional encoding: unlike GPT-1 which was left-to-right, BERT\'s self-attention is unrestricted — each token sees the full sentence context in both directions simultaneously. This makes BERT representations much richer for understanding tasks. (2) Masked Language Modelling (MLM): randomly mask 15% of tokens, then train the model to predict the masked tokens using all unmasked context. This forces deep bidirectional understanding. (3) Next Sentence Prediction (NSP): given two sentences A and B, predict whether B follows A in the corpus — pre-trains sentence-level relationship understanding. BERT base: 12 layers, 768 hidden, 12 heads, 110M parameters. BERT large: 24 layers, 1024 hidden, 16 heads, 340M. BERT achieved SOTA across 11 NLP benchmarks in 2018. Widely used in Azure AI Search for semantic ranking of search results.'},
+
+{lesson:'L11',lessonName:'Evolution of Models (BERT → GPT-4 → T5)',
+question:'How does T5 (Text-To-Text Transfer Transformer) extend the encoder-decoder architecture into a universal NLP framework?',
+options:[
+'T5 uses encoder-decoder architecture but replaces the decoder\'s self-attention with a retrieval mechanism fetching relevant passages from a database rather than generating tokens from the learned language model probability distribution',
+'T5 replaces the encoder-decoder with a Mixture of Experts architecture where specialised sub-networks are activated per input type (translation vs. summarisation vs. QA) automatically without task-specific routing configuration',
+'T5 reframes every NLP task — classification, translation, summarisation, question answering, coreference — as a text-to-text problem: both input and output are always text strings, with task-specific text prefixes in the input ("translate English to French:", "summarise:", "question:") directing the encoder-decoder on what to produce, enabling one model trained uniformly across diverse tasks with a single format',
+'T5 extends the encoder-decoder by adding a third "task encoder" module receiving a natural language task description that conditions both encoder and decoder via task-aware layer normalisation throughout the network'
+],
+answer:2,
+explanation:'T5 (Raffel et al., Google, 2019 — "Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer") proposes a radical simplification: convert EVERY NLP task into the same format: text in → text out. Classification: input = "sst2 sentence: The movie was great." → output = "positive"; Translation: input = "translate English to French: The house is wonderful." → output = "La maison est merveilleuse."; Summarisation: input = "summarise: [article]" → output = "Summary text"; QA: input = "question: What color is the sky? context: The sky is blue." → output = "blue". Benefits: (1) No task-specific output layers or architectures — one model handles all; (2) Easy multi-task training — mix all task data in one training run; (3) Transfer learning trivially applies across all tasks. T5 was pre-trained on the "Colossal Clean Crawled Corpus" (C4, ~750GB). Flan-T5 (instruction-tuned T5) achieves GPT-3-level performance on many benchmarks at a fraction of the size.'},
+
+{lesson:'L11',lessonName:'Evolution of Models (BERT → GPT-4 → T5)',
+question:'Trace the evolution from GPT-1 through GPT-4 — what changed with each generation in terms of scale, capability, and training methodology?',
+options:[
+'GPT-1 used an encoder-only architecture; GPT-2 added the decoder; GPT-3 added cross-attention to external knowledge bases; GPT-4 replaced the Transformer with a state-space model for more efficient long-context processing',
+'Each GPT generation shrank for efficiency: GPT-1 had 1.75B parameters, GPT-2 had 350M, GPT-3 had 175M, and GPT-4 uses a 7B distilled model enabling the shift from cloud servers to mobile edge inference',
+'GPT-1 through GPT-4 use identical architectures — only the training dataset size changed, doubling with each version while parameters remained fixed at 117M parameters throughout all four generations',
+'GPT-1 (2018, 117M params) established decoder-only pre-training on BooksCorpus; GPT-2 (2019, 1.5B) demonstrated emergent few-shot capabilities and sparked misuse debates; GPT-3 (2020, 175B) showed powerful in-context learning; GPT-4 (2023, undisclosed architecture/size, multimodal) significantly improved reasoning and instruction-following via RLHF, added vision input, and was deployed commercially via Azure OpenAI Service for enterprise applications'
+],
+answer:3,
+explanation:'GPT evolution timeline: GPT-1 (Radford et al., OpenAI, June 2018): 12-layer decoder Transformer, 117M parameters, trained on BooksCorpus (7,000 books). Introduced the pre-train-on-language-modelling then fine-tune paradigm. SOTA on 9/12 tasks. GPT-2 (Feb 2019): 1.5B parameters, trained on WebText (Reddit outlinks, 40GB). OpenAI initially withheld full release due to misuse concerns — generating coherent long-form text felt alarming. Demonstrated zero-shot task performance without fine-tuning. GPT-3 (Brown et al., May 2020): 175B parameters, 300B tokens from Common Crawl + Books + Wikipedia + WebText2. Landmark: few-shot in-context learning without gradient updates. Commercially available via API. GPT-4 (March 2023): Architecture/parameter count undisclosed. Key advances: multimodal (accepts images and text); significantly improved reasoning on professional exams (bar exam, USMLE, GRE); RLHF alignment substantially more sophisticated; deployed at scale via Azure OpenAI Service including GPT-4o (October 2023 — "omni", faster + cheaper, native multimodal). Available in Azure AI Foundry for enterprise RAG, agents, and custom deployments.'}
+
+]; // end QUESTIONS
+
+// ════════════════════════════════
+//  ENGINE
+// ════════════════════════════════
+const TOTAL=QUESTIONS.length; // 40
+
+let state={questions:[],currentIdx:0,userAnswers:[],shuffledOptions:[],shuffledAnswers:[],flagged:[],answered:[],startTime:null,endTime:null,timerInterval:null,tabSwitches:0,submitted:false};
+
+function shuffleArray(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function startTest(){
+  state.questions=[...QUESTIONS];state.currentIdx=0;
+  state.userAnswers=new Array(TOTAL).fill(-1);state.flagged=new Array(TOTAL).fill(false);
+  state.answered=new Array(TOTAL).fill(false);state.submitted=false;state.tabSwitches=0;state.startTime=Date.now();
+  state.shuffledOptions=[];state.shuffledAnswers=[];
+  state.questions.forEach(q=>{const ct=q.options[q.answer];const sh=shuffleArray(q.options);state.shuffledOptions.push(sh);state.shuffledAnswers.push(sh.indexOf(ct));});
+  showScreen('quiz');document.getElementById('quizHeader').classList.add('active');buildNavGrid();renderQuestion();startTimer();
+}
+
+function startTimer(){clearInterval(state.timerInterval);state.timerInterval=setInterval(()=>{const e=Math.floor((Date.now()-state.startTime)/1000);document.getElementById('timer').textContent=`${String(Math.floor(e/60)).padStart(2,'0')}:${String(e%60).padStart(2,'0')}`;},1000);}
+
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+
+function renderQuestion(){
+  const idx=state.currentIdx,q=state.questions[idx];
+  const opts=state.shuffledOptions[idx],cs=state.shuffledAnswers[idx],uc=state.userAnswers[idx],ia=state.answered[idx];
+  document.getElementById('qNum').textContent=idx+1;document.getElementById('qCounterNum').textContent=idx+1;
+  document.getElementById('qLessonTag').textContent=q.lesson;
+  const bf=document.getElementById('btnFlag');bf.className='btn-flag'+(state.flagged[idx]?' flagged':'');bf.innerHTML=state.flagged[idx]?'🚩 Flagged':'🏳 Flag';
+  document.getElementById('qText').textContent=q.question;
+  const letters=['A','B','C','D'];const ol=document.getElementById('optionsList');ol.innerHTML='';
+  opts.forEach((ot,i)=>{const btn=document.createElement('button');btn.className='option-btn';
+    if(ia){btn.disabled=true;if(i===cs)btn.classList.add('correct');else if(i===uc)btn.classList.add('wrong');}
+    else if(i===uc)btn.classList.add('selected');
+    btn.innerHTML=`<span class="opt-letter">${letters[i]}</span><span>${ot}</span>`;
+    if(!ia)btn.onclick=()=>selectAnswer(i);ol.appendChild(btn);});
+  const eb=document.getElementById('explanationBox');
+  if(ia){const ok=uc===cs;eb.className='explanation-box visible'+(ok?'':' wrong-exp');eb.innerHTML=`<strong>${ok?'✅ Correct!':'❌ Incorrect'}</strong>${q.explanation}`;}
+  else{eb.className='explanation-box';eb.innerHTML='';}
+  document.getElementById('btnPrev').style.display=idx===0?'none':'';
+  const il=idx===TOTAL-1;document.getElementById('btnNext').style.display=il?'none':'';
+  document.getElementById('lastQMsg').style.display=il?'block':'none';updateNavGrid();
+}
+
+function selectAnswer(i){const idx=state.currentIdx;if(state.answered[idx])return;state.userAnswers[idx]=i;state.answered[idx]=true;renderQuestion();}
+function toggleFlag(){state.flagged[state.currentIdx]=!state.flagged[state.currentIdx];renderQuestion();}
+function goToNext(){if(state.currentIdx<TOTAL-1){state.currentIdx++;renderQuestion();}}
+function goToPrev(){if(state.currentIdx>0){state.currentIdx--;renderQuestion();}}
+function jumpTo(i){state.currentIdx=i;renderQuestion();}
+
+function buildNavGrid(){
+  const g=document.getElementById('navGrid');g.innerHTML='';
+  for(let i=0;i<TOTAL;i++){
+    const d=document.createElement('div');d.className='nav-dot';d.textContent=i+1;d.id=`navDot${i}`;d.onclick=()=>jumpTo(i);g.appendChild(d);
+  }
+}
+function updateNavGrid(){
+  for(let i=0;i<TOTAL;i++){const d=document.getElementById(`navDot${i}`);if(!d)continue;d.className='nav-dot';
+    if(i===state.currentIdx)d.classList.add('current');
+    else if(state.submitted){if(state.answered[i])d.classList.add(state.userAnswers[i]===state.shuffledAnswers[i]?'correct-nav':'wrong-nav');}
+    else if(state.flagged[i])d.classList.add('flagged');
+    else if(state.answered[i])d.classList.add('answered');}
+}
+
+function openSubmitModal(){document.getElementById('submitModal').classList.add('show');}
+function closeSubmitModal(){document.getElementById('submitModal').classList.remove('show');}
+
+function submitExam(){
+  closeSubmitModal();clearInterval(state.timerInterval);state.endTime=Date.now();state.submitted=true;
+  document.getElementById('quizHeader').classList.remove('active');document.getElementById('tabWarning').classList.remove('show');
+  updateNavGrid();computeResults();showScreen('results');
+}
+
+function computeResults(){
+  let correct=0,wrong=0,skipped=0;const lm={};
+  state.questions.forEach((q,i)=>{
+    if(!lm[q.lesson])lm[q.lesson]={name:q.lessonName,total:0,correct:0};
+    lm[q.lesson].total++;
+    if(!state.answered[i]){skipped++;return;}
+    if(state.userAnswers[i]===state.shuffledAnswers[i]){correct++;lm[q.lesson].correct++;}else wrong++;
+  });
+  const pct=Math.round((correct/TOTAL)*100);const e=Math.floor((state.endTime-state.startTime)/1000);
+  document.getElementById('scorePct').textContent=`${pct}%`;document.getElementById('rCorrect').textContent=`${correct} / ${TOTAL}`;
+  document.getElementById('rTime').textContent=`${String(Math.floor(e/60)).padStart(2,'0')}:${String(e%60).padStart(2,'0')}`;
+  document.getElementById('rWrong').textContent=wrong;document.getElementById('rSkipped').textContent=skipped;
+  document.getElementById('scoreRing').className='score-ring '+(pct>=70?'pass':'fail');
+  document.getElementById('resultsTitle').textContent=pct>=70?`✅ Well done! ${pct}% — Module 12 Complete`:`📘 Keep practising — ${pct}% — Review & Retry`;
+  const bd=document.getElementById('lessonBreakdown');bd.innerHTML='';
+  Object.entries(lm).forEach(([tag,data])=>{
+    const pl=Math.round((data.correct/data.total)*100);const bc=pl>=70?'':pl>=40?' ok':' bad';
+    bd.innerHTML+=`<div class="lesson-row"><div class="lr-tag">${tag}</div><div class="lr-name">${data.name}</div><div class="lr-bar-wrap"><div class="lr-bar${bc}" style="width:${pl}%"></div></div><div class="lr-score">${data.correct}/${data.total}</div></div>`;
+  });
+}
+
+function showReview(){
+  const letters=['A','B','C','D'];const c=document.getElementById('reviewCards');c.innerHTML='';
+  state.questions.forEach((q,i)=>{
+    const opts=state.shuffledOptions[i],cs=state.shuffledAnswers[i],uc=state.userAnswers[i],ia=state.answered[i];
+    const ok=ia&&uc===cs;const badge=ia?(ok?'correct':'wrong'):'skipped';const bt=ia?(ok?'✅ Correct':'❌ Incorrect'):'⏭ Skipped';
+    let oh='';
+    opts.forEach((o,j)=>{let cl='rc-option';if(j===cs)cl+=' correct-ans';else if(ia&&j===uc)cl+=' user-wrong';oh+=`<div class="${cl}"><span class="opt-l">${letters[j]}</span><span>${o}</span></div>`;});
+    c.innerHTML+=`<div class="review-card"><div class="rc-meta"><div class="rc-num">Q${i+1}</div><div class="rc-lesson">${q.lesson} · ${q.lessonName}</div><div class="rc-badge ${badge}">${bt}</div></div><div class="rc-question">${q.question}</div><div class="rc-options">${oh}</div><div class="rc-exp"><strong>💡 Explanation</strong>${q.explanation}</div></div>`;
+  });showScreen('review');
+}
+function showResults(){showScreen('results');}
+function retakeTest(){startTest();}
+
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden&&!state.submitted&&state.startTime){
+    state.tabSwitches++;document.getElementById('tabCount').textContent=state.tabSwitches;
+    document.getElementById('tabWarning').classList.add('show');
+    setTimeout(()=>document.getElementById('tabWarning').classList.remove('show'),5000);
+  }
+});
+</script>
+</body>
+</html>

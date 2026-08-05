@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>M1 Practice Test · Azure AI/ML · K21 Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #1A1248;
+    --navy-mid: #2E2080;
+    --green: #8DC63F;
+    --green-hover: #79B030;
+    --green-tint: #F1F8E8;
+    --blue: #1B9BD9;
+    --blue-tint: #EBF6FD;
+    --page-bg: #F7F8FA;
+    --card: #FFFFFF;
+    --border: #E8EAEE;
+    --text-primary: #111827;
+    --text-secondary: #4B5563;
+    --text-muted: #9CA3AF;
+    --red: #EF4444;
+    --red-tint: #FEF2F2;
+    --amber: #F59E0B;
+    --amber-tint: #FFFBEB;
+    --radius: 14px;
+    --radius-sm: 8px;
+    --shadow: 0 1px 4px rgba(0,0,0,.06);
+    --shadow-md: 0 4px 16px rgba(0,0,0,.10);
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--page-bg); color: var(--text-primary); min-height: 100vh; }
+
+  .site-header { background: var(--navy); padding: 14px 24px; display: flex; align-items: center; gap: 10px; position: sticky; top: 0; z-index: 200; }
+  .logo-mark { width: 34px; height: 34px; background: var(--green); border-radius: 8px; display: grid; place-items: center; font-weight: 800; font-size: 15px; color: #fff; letter-spacing: -0.5px; flex-shrink: 0; }
+  .logo-text { font-size: 17px; font-weight: 700; color: #fff; }
+  .logo-text span { color: var(--green); }
+  .header-sub { margin-left: auto; font-size: 12px; color: rgba(255,255,255,0.55); font-weight: 500; text-align: right; line-height: 1.4; }
+
+  .quiz-header { display: none; background: var(--navy); border-top: 1px solid rgba(255,255,255,0.08); padding: 10px 24px; align-items: center; gap: 12px; position: sticky; top: 62px; z-index: 199; }
+  .quiz-header.active { display: flex; }
+  .q-counter { font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.9); }
+  .q-counter span { color: var(--green); }
+  .btn-submit-top { margin-left: auto; background: var(--green); color: #fff; border: none; border-radius: var(--radius-sm); padding: 7px 16px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; transition: background .2s; }
+  .btn-submit-top:hover { background: var(--green-hover); }
+  .timer { font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.08); padding: 5px 12px; border-radius: 20px; font-variant-numeric: tabular-nums; }
+
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  #landing { max-width: 780px; margin: 0 auto; padding: 40px 20px 60px; }
+  .landing-tag { display: inline-flex; align-items: center; gap: 6px; background: var(--green-tint); color: var(--green-hover); font-size: 12px; font-weight: 700; padding: 5px 12px; border-radius: 20px; margin-bottom: 18px; letter-spacing: .3px; }
+  .landing-title { font-size: clamp(24px, 5vw, 38px); font-weight: 800; color: var(--navy); line-height: 1.2; margin-bottom: 14px; }
+  .landing-title span { color: var(--green); }
+  .landing-desc { font-size: 16px; color: var(--text-secondary); line-height: 1.65; max-width: 640px; margin-bottom: 28px; }
+  .stats-row { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 32px; }
+  .stat-card { background: var(--card); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 16px 22px; text-align: center; flex: 1; min-width: 120px; }
+  .stat-num { font-size: 26px; font-weight: 800; color: var(--navy); }
+  .stat-label { font-size: 12px; color: var(--text-muted); font-weight: 500; margin-top: 2px; }
+  .lessons-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(175px, 1fr)); gap: 10px; margin-bottom: 32px; }
+  .lesson-chip { background: var(--card); border: 1.5px solid var(--border); border-radius: 10px; padding: 10px 14px; display: flex; align-items: center; gap: 9px; }
+  .lesson-badge { width: 26px; height: 26px; border-radius: 6px; background: var(--blue-tint); color: var(--blue); font-size: 10px; font-weight: 700; display: grid; place-items: center; flex-shrink: 0; }
+  .lesson-chip-text { font-size: 12px; font-weight: 600; color: var(--text-primary); line-height: 1.3; }
+  .btn-start { background: var(--navy); color: #fff; border: none; border-radius: var(--radius); padding: 16px 36px; font-size: 17px; font-weight: 700; cursor: pointer; font-family: inherit; transition: background .2s, transform .15s; display: inline-flex; align-items: center; gap: 10px; }
+  .btn-start:hover { background: var(--navy-mid); transform: translateY(-2px); }
+  .hint-text { margin-top: 14px; font-size: 13px; color: var(--text-muted); }
+  .hint-text span { color: var(--blue); }
+
+  #quiz { max-width: 820px; margin: 0 auto; padding: 24px 20px 80px; }
+  .quiz-layout { display: grid; grid-template-columns: 1fr 240px; gap: 20px; align-items: start; }
+  @media(max-width: 720px) { .quiz-layout { grid-template-columns: 1fr; } }
+
+  .question-card { background: var(--card); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow); }
+  .q-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+  .q-num { font-size: 13px; font-weight: 600; color: var(--text-muted); }
+  .q-lesson-tag { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 20px; background: var(--blue-tint); color: var(--blue); }
+  .btn-flag { margin-left: auto; font-size: 12px; font-weight: 600; color: var(--text-muted); border: 1.5px solid var(--border); background: none; border-radius: 20px; padding: 4px 12px; cursor: pointer; font-family: inherit; transition: all .15s; display: flex; align-items: center; gap: 5px; }
+  .btn-flag.flagged { background: var(--amber-tint); color: var(--amber); border-color: var(--amber); }
+  .btn-flag:hover { border-color: var(--amber); color: var(--amber); }
+  .q-text { font-size: 17px; font-weight: 600; line-height: 1.55; color: var(--text-primary); margin-bottom: 22px; }
+  .options-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .option-btn { background: #fff; border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 13px 16px; text-align: left; cursor: pointer; font-family: inherit; font-size: 14.5px; color: var(--text-primary); line-height: 1.45; display: flex; align-items: flex-start; gap: 12px; transition: all .15s; font-weight: 500; }
+  .option-btn:hover:not(:disabled) { border-color: var(--navy); background: rgba(26,18,72,.03); }
+  .option-btn .opt-letter { width: 24px; height: 24px; border-radius: 6px; background: var(--page-bg); border: 1.5px solid var(--border); display: grid; place-items: center; font-size: 11px; font-weight: 700; color: var(--text-muted); flex-shrink: 0; margin-top: 1px; transition: all .15s; }
+  .option-btn.selected .opt-letter { background: var(--navy); border-color: var(--navy); color: #fff; }
+  .option-btn.selected { border-color: var(--navy); background: rgba(26,18,72,.04); }
+  .option-btn.correct { border-color: var(--green); background: var(--green-tint); }
+  .option-btn.correct .opt-letter { background: var(--green); border-color: var(--green); color: #fff; }
+  .option-btn.wrong { border-color: var(--red); background: var(--red-tint); }
+  .option-btn.wrong .opt-letter { background: var(--red); border-color: var(--red); color: #fff; }
+  .option-btn:disabled { cursor: default; }
+
+  .explanation-box { background: var(--green-tint); border: 1.5px solid #c3e289; border-radius: var(--radius-sm); padding: 14px 16px; font-size: 13.5px; line-height: 1.6; color: #3D6B15; display: none; margin-bottom: 16px; }
+  .explanation-box strong { display: block; margin-bottom: 4px; font-weight: 700; }
+  .explanation-box.visible { display: block; }
+  .explanation-box.wrong-exp { background: var(--red-tint); border-color: #fca5a5; color: #7F1D1D; }
+
+  .nav-row { display: flex; gap: 10px; align-items: center; }
+  .btn-nav { background: var(--page-bg); border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 10px 18px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; color: var(--text-primary); transition: all .15s; }
+  .btn-nav:hover { border-color: var(--navy); color: var(--navy); }
+  .btn-nav.primary { background: var(--navy); color: #fff; border-color: var(--navy); margin-left: auto; }
+  .btn-nav.primary:hover { background: var(--navy-mid); }
+  .last-q-msg { font-size: 12.5px; color: var(--text-muted); text-align: center; display: none; flex: 1; }
+
+  .nav-panel { background: var(--card); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow); position: sticky; top: 128px; }
+  .nav-panel h4 { font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 12px; }
+  .nav-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 14px; }
+  .nav-dot { width: 36px; height: 36px; border-radius: 8px; border: 1.5px solid var(--border); background: #fff; font-size: 12px; font-weight: 700; color: var(--text-muted); display: grid; place-items: center; cursor: pointer; transition: all .15s; }
+  .nav-dot:hover { border-color: var(--navy); color: var(--navy); }
+  .nav-dot.current { border-color: var(--navy); background: var(--navy); color: #fff; }
+  .nav-dot.answered { background: var(--green-tint); border-color: var(--green); color: #3D6B15; }
+  .nav-dot.flagged { background: var(--amber-tint); border-color: var(--amber); color: var(--amber); }
+  .nav-dot.correct-nav { background: var(--green); border-color: var(--green); color: #fff; }
+  .nav-dot.wrong-nav { background: var(--red); border-color: var(--red); color: #fff; }
+  .nav-legend { font-size: 11px; color: var(--text-muted); display: flex; flex-direction: column; gap: 5px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+
+  #results { max-width: 720px; margin: 0 auto; padding: 40px 20px 60px; }
+  .results-header { background: var(--card); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 32px; box-shadow: var(--shadow-md); margin-bottom: 20px; text-align: center; }
+  .score-ring { width: 110px; height: 110px; border-radius: 50%; border: 7px solid var(--border); margin: 0 auto 18px; display: grid; place-items: center; }
+  .score-ring.pass { border-color: var(--green); }
+  .score-ring.fail { border-color: var(--red); }
+  .score-pct { font-size: 30px; font-weight: 800; color: var(--navy); }
+  .score-label { font-size: 12px; color: var(--text-muted); font-weight: 500; margin-top: -2px; }
+  .results-title { font-size: 22px; font-weight: 800; color: var(--navy); margin-bottom: 6px; }
+  .results-sub { font-size: 14px; color: var(--text-secondary); margin-bottom: 22px; }
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 22px; }
+  @media(max-width: 560px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+  .r-stat { background: var(--page-bg); border-radius: var(--radius-sm); padding: 14px; text-align: center; }
+  .r-stat-val { font-size: 20px; font-weight: 800; color: var(--navy); }
+  .r-stat-key { font-size: 11px; color: var(--text-muted); font-weight: 500; margin-top: 2px; }
+  .results-btns { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  .btn-results { padding: 11px 22px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; transition: all .15s; }
+  .btn-results.primary { background: var(--navy); color: #fff; border: none; }
+  .btn-results.primary:hover { background: var(--navy-mid); }
+  .btn-results.secondary { background: #fff; color: var(--navy); border: 1.5px solid var(--border); }
+  .btn-results.secondary:hover { border-color: var(--navy); }
+
+  .lesson-breakdown { background: var(--card); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow); margin-bottom: 20px; }
+  .breakdown-title { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 16px; }
+  .lesson-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .lesson-row:last-child { margin-bottom: 0; }
+  .lr-tag { font-size: 11px; font-weight: 700; color: var(--blue); background: var(--blue-tint); padding: 3px 8px; border-radius: 20px; flex-shrink: 0; min-width: 28px; text-align: center; }
+  .lr-name { font-size: 13px; font-weight: 500; color: var(--text-primary); flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lr-bar-wrap { width: 120px; height: 7px; background: var(--border); border-radius: 4px; overflow: hidden; flex-shrink: 0; }
+  .lr-bar { height: 100%; border-radius: 4px; background: var(--green); }
+  .lr-bar.bad { background: var(--red); }
+  .lr-bar.ok { background: var(--amber); }
+  .lr-score { font-size: 13px; font-weight: 700; color: var(--text-secondary); width: 42px; text-align: right; flex-shrink: 0; }
+
+  #review { max-width: 820px; margin: 0 auto; padding: 28px 20px 60px; }
+  .review-header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; flex-wrap: wrap; }
+  .review-title { font-size: 20px; font-weight: 800; color: var(--navy); }
+  .review-sub { font-size: 13px; color: var(--text-muted); }
+  .btn-back { background: var(--page-bg); border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 9px 16px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; color: var(--text-secondary); transition: all .15s; margin-left: auto; }
+  .btn-back:hover { border-color: var(--navy); color: var(--navy); }
+  .review-card { background: var(--card); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 22px; margin-bottom: 14px; box-shadow: var(--shadow); }
+  .rc-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+  .rc-num { font-size: 12px; font-weight: 700; color: var(--text-muted); }
+  .rc-lesson { font-size: 11px; font-weight: 700; color: var(--blue); background: var(--blue-tint); padding: 2px 8px; border-radius: 20px; }
+  .rc-badge { font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 20px; }
+  .rc-badge.correct { background: var(--green-tint); color: #3D6B15; }
+  .rc-badge.wrong { background: var(--red-tint); color: var(--red); }
+  .rc-badge.skipped { background: var(--amber-tint); color: var(--amber); }
+  .rc-question { font-size: 15px; font-weight: 600; color: var(--text-primary); margin-bottom: 14px; line-height: 1.5; }
+  .rc-options { display: flex; flex-direction: column; gap: 7px; margin-bottom: 14px; }
+  .rc-option { padding: 9px 14px; border-radius: var(--radius-sm); font-size: 13.5px; display: flex; align-items: flex-start; gap: 10px; border: 1.5px solid var(--border); }
+  .rc-option.correct-ans { border-color: var(--green); background: var(--green-tint); color: #3D6B15; }
+  .rc-option.user-wrong { border-color: var(--red); background: var(--red-tint); color: var(--red); }
+  .rc-option .opt-l { font-weight: 700; font-size: 12px; width: 18px; flex-shrink: 0; margin-top: 1px; }
+  .rc-exp { background: var(--page-bg); border-left: 3px solid var(--green); padding: 12px 14px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; font-size: 13px; line-height: 1.6; color: var(--text-secondary); }
+  .rc-exp strong { color: var(--navy); font-weight: 700; display: block; margin-bottom: 3px; }
+
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 999; display: none; place-items: center; }
+  .modal-overlay.show { display: grid; }
+  .modal { background: #fff; border-radius: var(--radius); padding: 28px; max-width: 380px; width: 90%; box-shadow: var(--shadow-md); text-align: center; }
+  .modal h3 { font-size: 18px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+  .modal p { font-size: 14px; color: var(--text-secondary); margin-bottom: 22px; line-height: 1.5; }
+  .modal-btns { display: flex; gap: 10px; justify-content: center; }
+  .btn-modal { padding: 10px 22px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; }
+  .btn-modal.cancel { background: var(--page-bg); border: 1.5px solid var(--border); color: var(--text-primary); }
+  .btn-modal.confirm { background: var(--navy); color: #fff; border: none; }
+
+  .tab-warning { background: var(--red); color: #fff; text-align: center; padding: 8px 16px; font-size: 13px; font-weight: 600; display: none; position: sticky; top: 110px; z-index: 198; }
+  .tab-warning.show { display: block; }
+  .retake-row { display: flex; justify-content: center; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="logo-mark">K21</div>
+  <div class="logo-text">K21 <span>Academy</span></div>
+  <div class="header-sub">Azure AI/ML Job Focus Program<br/>Module 1 · Practice Test</div>
+</header>
+
+<div class="quiz-header" id="quizHeader">
+  <div class="q-counter">M1: AI/ML &amp; Azure Fundamentals &nbsp;·&nbsp; Q <span id="qCounterNum">1</span> / 30</div>
+  <div class="timer" id="timer">00:00</div>
+  <button class="btn-submit-top" onclick="openSubmitModal()">📋 Submit Exam</button>
+</div>
+
+<div class="tab-warning" id="tabWarning">⚠️ Tab switch detected! Return to the test. Attempts: <span id="tabCount">0</span></div>
+
+<!-- ════ LANDING ════ -->
+<div id="landing" class="screen active">
+  <div style="max-width:780px;margin:0 auto;padding:40px 20px 60px;">
+    <div class="landing-tag">📋 Azure AI/ML · K21 Academy</div>
+    <h1 class="landing-title">AI, ML &amp; Azure Fundamentals<br/><span>Module 1 Practice Test</span></h1>
+    <p class="landing-desc">Test your understanding across all 8 lessons in Module 1 of the Azure AI/ML Job Focus Program. Covers fundamental AI concepts, machine learning, Azure ML, supervised/unsupervised learning, deep learning, feature engineering, hyperparameter tuning, and MLOps — with full explanations after every answer.</p>
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-num">📝 30</div><div class="stat-label">Questions</div></div>
+      <div class="stat-card"><div class="stat-num">📚 8</div><div class="stat-label">Lessons</div></div>
+      <div class="stat-card"><div class="stat-num">🔄 ∞</div><div class="stat-label">Retries</div></div>
+    </div>
+    <p style="font-size:13px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;">8 Lessons Covered</p>
+    <div class="lessons-grid">
+      <div class="lesson-chip"><div class="lesson-badge">L1</div><div class="lesson-chip-text">Fundamental AI Concepts</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L2</div><div class="lesson-chip-text">Fundamentals of Machine Learning</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L3</div><div class="lesson-chip-text">Azure Machine Learning</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L4</div><div class="lesson-chip-text">Supervised vs. Unsupervised Learning</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L5</div><div class="lesson-chip-text">Deep Learning &amp; Neural Networks</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L6</div><div class="lesson-chip-text">Feature Engineering</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L7</div><div class="lesson-chip-text">Hyperparameter Tuning</div></div>
+      <div class="lesson-chip"><div class="lesson-badge">L8</div><div class="lesson-chip-text">MLOps on Azure</div></div>
+    </div>
+    <button class="btn-start" onclick="startTest()">🚀 Start Practice Test</button>
+    <p class="hint-text">💡 <span>Options shuffle every attempt</span> · Explanations after every answer · No time pressure</p>
+  </div>
+</div>
+
+<!-- ════ QUIZ ════ -->
+<div id="quiz" class="screen">
+  <div class="quiz-layout">
+    <div>
+      <div class="question-card" id="questionCard">
+        <div class="q-meta">
+          <div class="q-num">Question <span id="qNum">1</span> of 30</div>
+          <div class="q-lesson-tag" id="qLessonTag">L1</div>
+          <button class="btn-flag" id="btnFlag" onclick="toggleFlag()">🏳 Flag</button>
+        </div>
+        <div class="q-text" id="qText">Loading…</div>
+        <div class="options-list" id="optionsList"></div>
+        <div class="explanation-box" id="explanationBox"></div>
+        <div class="nav-row">
+          <button class="btn-nav" id="btnPrev" onclick="goToPrev()">← Previous</button>
+          <div class="last-q-msg" id="lastQMsg">🎯 Last question! Click <strong>Submit Exam</strong> above.</div>
+          <button class="btn-nav primary" id="btnNext" onclick="goToNext()">Next →</button>
+        </div>
+      </div>
+    </div>
+    <div class="nav-panel">
+      <h4>Question Navigator</h4>
+      <div class="nav-grid" id="navGrid"></div>
+      <div class="nav-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--green);"></div><span>Answered</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--amber);"></div><span>Flagged</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--border);"></div><span>Not visited</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ RESULTS ════ -->
+<div id="results" class="screen">
+  <div style="max-width:720px;margin:0 auto;padding:40px 20px 60px;">
+    <div class="landing-tag">🏁 Azure AI/ML Job Focus Program</div>
+    <div class="results-header">
+      <div class="score-ring" id="scoreRing">
+        <div><div class="score-pct" id="scorePct">0%</div><div class="score-label">Score</div></div>
+      </div>
+      <div class="results-title" id="resultsTitle">Test Complete · Azure AI/ML</div>
+      <div class="results-sub">Module 1 — AI, ML &amp; Azure Fundamentals</div>
+      <div class="stats-grid">
+        <div class="r-stat"><div class="r-stat-val" id="rCorrect">0 / 30</div><div class="r-stat-key">Correct Answers</div></div>
+        <div class="r-stat"><div class="r-stat-val" id="rTime">—</div><div class="r-stat-key">⏱️ Time</div></div>
+        <div class="r-stat"><div class="r-stat-val" id="rWrong">—</div><div class="r-stat-key">❌ Incorrect</div></div>
+        <div class="r-stat"><div class="r-stat-val" id="rSkipped">—</div><div class="r-stat-key">⏭️ Skipped</div></div>
+      </div>
+      <div class="results-btns">
+        <button class="btn-results primary" onclick="showReview()">📋 Review All Questions &amp; Answers</button>
+        <button class="btn-results secondary" onclick="retakeTest()">🔄 Retake Test</button>
+      </div>
+    </div>
+    <div class="lesson-breakdown">
+      <div class="breakdown-title">📊 Per-Lesson Breakdown</div>
+      <div id="lessonBreakdown"></div>
+    </div>
+    <div class="retake-row">
+      <button class="btn-results secondary" onclick="retakeTest()">🔄 Retake Test</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ REVIEW ════ -->
+<div id="review" class="screen">
+  <div style="max-width:820px;margin:0 auto;padding:28px 20px 60px;">
+    <div class="review-header">
+      <div>
+        <div class="review-title">Questions &amp; Answers Review</div>
+        <div class="review-sub">All 30 questions with correct answers and explanations</div>
+      </div>
+      <button class="btn-back" onclick="showResults()">← Back to Results</button>
+    </div>
+    <div id="reviewCards"></div>
+    <div class="retake-row">
+      <button class="btn-back" onclick="showResults()">← Back to Results</button>
+      <button class="btn-results primary" onclick="retakeTest()" style="padding:10px 22px;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;background:var(--navy);color:#fff;">🔄 Retake Test</button>
+    </div>
+  </div>
+</div>
+
+<!-- SUBMIT MODAL -->
+<div class="modal-overlay" id="submitModal">
+  <div class="modal">
+    <h3>📋 Submit Exam?</h3>
+    <p>Are you sure you want to submit? Unanswered questions will be marked as skipped.</p>
+    <div class="modal-btns">
+      <button class="btn-modal cancel" onclick="closeSubmitModal()">Continue Quiz</button>
+      <button class="btn-modal confirm" onclick="submitExam()">Yes, Submit</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════
+//  QUESTION BANK — Azure AI/ML · Module 1
+//  30 Qs | 8 Lessons | Answer dist: A×8 B×8 C×7 D×7
+// ══════════════════════════════════════════════════════
+const QUESTIONS = [
+
+  // ─── L1: Fundamental AI Concepts (3 Qs) ───────────────────────────────
+  {
+    lesson:'L1', lessonName:'Fundamental AI Concepts',
+    question:'Which of the following BEST describes Artificial Intelligence (AI)?',
+    options:[
+      'A computer system that mimics human intelligence to perform tasks, reason, learn, and adapt',
+      'A programming language designed specifically for data science and analytics',
+      'A database technology used to store large amounts of structured enterprise data',
+      'A cloud-computing framework for deploying and scaling web applications'
+    ],
+    answer:0,
+    explanation:'AI refers to systems or machines that simulate human intelligence to perform tasks and can iteratively improve based on the information they collect. It encompasses machine learning, deep learning, NLP, and computer vision — all focused on automating cognitive tasks that historically required human intelligence.'
+  },
+  {
+    lesson:'L1', lessonName:'Fundamental AI Concepts',
+    question:'What distinguishes "Narrow AI" (Weak AI) from "General AI" (Strong AI / AGI)?',
+    options:[
+      'Narrow AI uses neural networks while General AI relies exclusively on rule-based expert systems',
+      'Narrow AI is designed for a specific task, while General AI can perform any intellectual task a human can',
+      'Narrow AI requires significantly more computing power and data than General AI',
+      'Narrow AI is older technology, while General AI describes all current commercial AI products'
+    ],
+    answer:1,
+    explanation:'Narrow AI (Weak AI) is designed and optimised for a specific task — like facial recognition, spam filtering, or image captioning. General AI (AGI) would theoretically understand, learn, and apply intelligence across any domain at human level. All current AI systems — including all Azure AI services — are Narrow AI. AGI remains a research goal, not a commercial reality.'
+  },
+  {
+    lesson:'L1', lessonName:'Fundamental AI Concepts',
+    question:'Which branch of AI focuses specifically on enabling computers to understand, interpret, and generate human language?',
+    options:[
+      'Computer Vision',
+      'Robotic Process Automation (RPA)',
+      'Natural Language Processing (NLP)',
+      'Predictive Analytics'
+    ],
+    answer:2,
+    explanation:'Natural Language Processing (NLP) is the AI discipline enabling machines to understand and generate human language. It powers Azure AI Language services including sentiment analysis, named entity recognition, text summarisation, key phrase extraction, and conversational AI through Azure Bot Service and Azure OpenAI. NLP sits at the intersection of linguistics, computer science, and machine learning.'
+  },
+
+  // ─── L2: Fundamentals of Machine Learning (4 Qs) ──────────────────────
+  {
+    lesson:'L2', lessonName:'Fundamentals of Machine Learning',
+    question:'How does machine learning fundamentally differ from traditional rule-based programming?',
+    options:[
+      'ML requires cloud infrastructure; traditional programming runs only on local on-premises servers',
+      'ML uses more programming languages than traditional software development approaches',
+      'Traditional programming needs GPUs; ML only requires standard CPUs to operate',
+      'In traditional programming, rules are written explicitly by developers; in ML, the algorithm discovers rules automatically from data'
+    ],
+    answer:3,
+    explanation:'Traditional programming requires developers to manually code all rules (if/then logic). Machine learning flips this: you provide data and expected outcomes, and the algorithm learns the mapping rules itself. This makes ML powerful for complex tasks — like image recognition or fraud detection — where writing explicit rules would be impractical or impossible, regardless of developer skill.'
+  },
+  {
+    lesson:'L2', lessonName:'Fundamentals of Machine Learning',
+    question:'In a standard ML workflow, what happens during the "training" phase?',
+    options:[
+      'The algorithm is exposed to data and adjusts its internal parameters to minimise prediction error',
+      'The final trained model is packaged and deployed to a cloud inference endpoint',
+      'Raw data is collected, cleaned, and split into training and test sets by data engineers',
+      'The model\'s accuracy is evaluated and benchmarked against a held-out test dataset'
+    ],
+    answer:0,
+    explanation:'During training, the ML algorithm processes examples (training data) and iteratively adjusts its internal parameters — such as weights in a neural network or split thresholds in a decision tree — to minimise a loss function. This is the "learning" step. Training is followed by validation (hyperparameter tuning) and then final testing on a completely held-out dataset to measure real-world generalisation.'
+  },
+  {
+    lesson:'L2', lessonName:'Fundamentals of Machine Learning',
+    question:'What is "overfitting" in a machine learning model?',
+    options:[
+      'When the model has too few parameters to capture the important patterns in the training data (underfitting)',
+      'When the model memorises training data — including noise — so well that it performs poorly on new, unseen data',
+      'When the training process consumes too many compute resources and exceeds the project budget',
+      'When model predictions are consistently biased in a single direction regardless of input'
+    ],
+    answer:1,
+    explanation:'Overfitting occurs when a model learns the training data — including its noise and random fluctuations — too precisely, and therefore fails to generalise to new data. Signs include very high training accuracy with significantly lower test accuracy (a large train-test gap). Common remedies include regularisation (L1/L2), dropout (for neural networks), cross-validation, and collecting more diverse training data.'
+  },
+  {
+    lesson:'L2', lessonName:'Fundamentals of Machine Learning',
+    question:'What is the "bias-variance tradeoff" and why is it central to choosing the right model complexity?',
+    options:[
+      'The balance between model training speed and prediction accuracy on the validation set',
+      'The tension between a model being too simple (high bias, underfitting) and too complex (high variance, overfitting) — finding the sweet spot that minimises total generalisation error',
+      'The tradeoff between using labelled versus unlabelled data when building a training dataset',
+      'The balance between the number of input features selected and the volume of training examples required'
+    ],
+    answer:1,
+    explanation:'High bias means the model is too simple — it fails to capture real patterns (underfitting). High variance means the model is too complex — it captures noise and fails to generalise (overfitting). Total prediction error = Bias² + Variance + irreducible noise. Techniques like regularisation, cross-validation, pruning, and ensembling help find the right complexity. This tradeoff underpins most ML model selection decisions in Azure ML AutoML.'
+  },
+
+  // ─── L3: Azure Machine Learning (4 Qs) ───────────────────────────────
+  {
+    lesson:'L3', lessonName:'Azure Machine Learning',
+    question:'What is Azure Machine Learning at its core?',
+    options:[
+      'A NoSQL database service optimised for storing and querying ML training datasets at scale',
+      'A virtual machine image pre-installed with popular deep learning frameworks like PyTorch and TensorFlow',
+      'A cloud-based, end-to-end platform for building, training, deploying, and managing ML models at enterprise scale',
+      'A Power BI add-in that adds automated chart generation and ML-powered analytics to dashboards'
+    ],
+    answer:2,
+    explanation:'Azure Machine Learning is Microsoft\'s comprehensive cloud ML platform. It supports the full ML lifecycle — data preparation, experiment tracking, model training (both code-first with Python SDK/CLI and no-code with Designer), hyperparameter tuning with HyperDrive, automated ML, deployment to managed online and batch endpoints, and production monitoring including data drift detection.'
+  },
+  {
+    lesson:'L3', lessonName:'Azure Machine Learning',
+    question:'In Azure Machine Learning, what is the primary purpose of a "Workspace"?',
+    options:[
+      'A virtual network configuration that isolates and secures ML traffic from public internet access',
+      'A pricing tier in the Azure portal that determines how many compute nodes can be provisioned',
+      'A specialised storage container designed exclusively for storing model artifact binary files',
+      'The top-level Azure resource that organises all ML assets — experiments, datasets, models, compute targets, and environments — for a project'
+    ],
+    answer:3,
+    explanation:'An Azure ML Workspace is the central organisational resource. It ties together all the assets and tools a team needs: registered datasets, experiment runs with metrics, trained and registered models, compute targets (clusters, instances), environments, and deployment endpoints. A workspace corresponds to an Azure resource and is associated with a storage account, key vault, container registry, and Application Insights for monitoring.'
+  },
+  {
+    lesson:'L3', lessonName:'Azure Machine Learning',
+    question:'Which Azure Machine Learning feature automatically tries multiple algorithms and hyperparameter combinations to surface the best model for a given dataset and task?',
+    options:[
+      'Automated ML (AutoML)',
+      'Azure ML Designer — the visual drag-and-drop pipeline canvas',
+      'Azure ML Compute Clusters — multi-node distributed training infrastructure',
+      'Azure ML Pipelines — reusable workflow orchestration for batch jobs'
+    ],
+    answer:0,
+    explanation:'Automated ML (AutoML) automates the time-consuming, iterative task of algorithm selection, feature engineering, and hyperparameter optimisation. It evaluates dozens of algorithm-hyperparameter combinations in parallel, applies advanced techniques like ensembling (voting, stacking), and presents a leaderboard of the best models. AutoML is available for classification, regression, time-series forecasting, computer vision, and NLP tasks within Azure ML.'
+  },
+  {
+    lesson:'L3', lessonName:'Azure Machine Learning',
+    question:'What type of interface does Azure ML Studio\'s "Designer" provide for building ML pipelines?',
+    options:[
+      'A command-line interface (CLI) for scripting and automating ML workflows with YAML or Python',
+      'A drag-and-drop, no-code/low-code visual canvas for connecting data, transformation, and algorithm modules into a complete pipeline',
+      'A Jupyter notebook environment pre-loaded with Azure ML SDK v2 examples and tutorials',
+      'A SQL-style query builder for defining data transformation and feature engineering logic on tabular data'
+    ],
+    answer:1,
+    explanation:'Azure ML Studio Designer provides a drag-and-drop visual canvas that lets you build complete ML pipelines by connecting pre-built modules — for data ingestion, data transformation, feature engineering, algorithm selection, model training, and evaluation — without writing code. You can also integrate custom Python script modules. This makes ML accessible to business analysts and domain experts alongside professional data scientists with Python expertise.'
+  },
+
+  // ─── L4: Supervised vs. Unsupervised Learning (4 Qs) ─────────────────
+  {
+    lesson:'L4', lessonName:'Supervised vs. Unsupervised Learning',
+    question:'What is the defining characteristic that makes a learning problem "supervised"?',
+    options:[
+      'The model trains autonomously without any human-provided guidance, data, or intervention',
+      'The algorithm discovers natural groupings in data without any predefined output categories',
+      'The training data includes both input features AND the correct corresponding output labels (ground truth)',
+      'The algorithm learns through trial-and-error interactions with an environment using reward signals'
+    ],
+    answer:2,
+    explanation:'In supervised learning, every training example is an (input, label) pair — the algorithm learns to map inputs to correct outputs by minimising prediction error. Examples include email spam detection (label = spam/not spam), house price prediction (label = sale price £), and image classification (label = cat/dog). Azure ML AutoML supports supervised classification and regression tasks with automatic feature engineering and model selection.'
+  },
+  {
+    lesson:'L4', lessonName:'Supervised vs. Unsupervised Learning',
+    question:'Which of the following is a classic example of an unsupervised learning algorithm?',
+    options:[
+      'Linear Regression — predicting a continuous numeric output from input features',
+      'Decision Tree Classifier — assigning inputs to predefined labelled categories',
+      'Logistic Regression — computing binary outcome probabilities like click/no-click',
+      'K-Means Clustering — automatically grouping data points into K clusters based on feature similarity'
+    ],
+    answer:3,
+    explanation:'K-Means Clustering is unsupervised because it discovers natural groupings in data with no predefined labels. The algorithm assigns each data point to the nearest cluster centroid and iteratively refines clusters by minimising intra-cluster variance. Real-world use cases include customer segmentation, anomaly detection, document grouping, and image compression. Azure ML Designer includes K-Means as a built-in module.'
+  },
+  {
+    lesson:'L4', lessonName:'Supervised vs. Unsupervised Learning',
+    question:'A company has 5,000 customer records — 200 are manually labelled "churned" or "retained" and 4,800 have no labels. Labelling more records is expensive. Which learning approach makes the best use of this data?',
+    options:[
+      'Semi-supervised learning — leveraging the small labelled set alongside the large unlabelled pool to build a better model than either subset alone',
+      'Pure supervised learning — training exclusively on the 200 labelled records and discarding the 4,800 unlabelled ones',
+      'Reinforcement learning — using a reward system to penalise incorrect churn predictions over time',
+      'Zero-shot learning — applying a model pre-trained on an entirely different domain without any fine-tuning'
+    ],
+    answer:0,
+    explanation:'Semi-supervised learning is ideal when you have a large unlabelled dataset and only a small labelled set — precisely this scenario. The model uses the labelled examples to anchor its decision boundaries and leverages the unlabelled data\'s distribution to improve feature representations, typically outperforming a purely supervised model trained on only the 200 labelled records. This reduces the expensive labelling burden dramatically while still achieving strong predictive performance.'
+  },
+  {
+    lesson:'L4', lessonName:'Supervised vs. Unsupervised Learning',
+    question:'In supervised learning, what is "k-fold cross-validation" used for?',
+    options:[
+      'Distributing training workloads evenly across k Azure compute nodes for parallel processing speed',
+      'Converting k different categorical label columns into a single numeric target variable for algorithms',
+      'Reliably estimating a model\'s generalisation performance by rotating training and validation splits across k equal data partitions',
+      'Combining the predictions of k different ML algorithms into a single ensemble output via majority vote'
+    ],
+    answer:2,
+    explanation:'K-fold cross-validation splits training data into k equal folds, trains k models — each time holding out one fold for validation and training on the remaining k-1 folds — then averages the validation scores. This gives a much more reliable generalisation estimate than a single train-test split, especially with limited data. It also reveals performance variance across folds. Azure ML AutoML uses cross-validation automatically and reports mean ± std of performance metrics.'
+  },
+
+  // ─── L5: Deep Learning & Neural Networks (4 Qs) ──────────────────────
+  {
+    lesson:'L5', lessonName:'Deep Learning & Neural Networks',
+    question:'What is the primary role of an "activation function" within a neural network neuron?',
+    options:[
+      'To randomly initialise the starting weight values of the neural network before training begins',
+      'To introduce non-linearity into the model, enabling it to learn complex, non-linear patterns in data',
+      'To determine the learning rate that controls how large each weight update step is during training',
+      'To automatically partition the dataset into training, validation, and test splits before each epoch'
+    ],
+    answer:1,
+    explanation:'Without activation functions, a neural network — regardless of its depth — would be mathematically equivalent to a single linear transformation, limiting it to solving only linear problems. Activation functions like ReLU (Rectified Linear Unit), Sigmoid, and Tanh introduce non-linearity, allowing deep networks to approximate any complex continuous function. ReLU is the most widely used activation in modern deep learning due to its simplicity and effectiveness at preventing vanishing gradients.'
+  },
+  {
+    lesson:'L5', lessonName:'Deep Learning & Neural Networks',
+    question:'What does "backpropagation" do in the training of a neural network?',
+    options:[
+      'It feeds new input data through the trained network layer by layer to generate inference predictions',
+      'It randomly reinitialises all network weights whenever the model gets stuck in a local minimum',
+      'It calculates gradients of the loss function with respect to every weight and propagates error signals backwards through the network so an optimiser can update weights',
+      'It adds additional hidden layers to the network architecture dynamically to increase model capacity'
+    ],
+    answer:2,
+    explanation:'Backpropagation is the core algorithm for training neural networks. It works in two passes per training batch: (1) Forward pass — input flows through the network, producing a prediction and computing the loss; (2) Backward pass — the chain rule is applied layer-by-layer from output to input, computing partial derivatives of the loss with respect to every weight. These gradients are then used by an optimiser (SGD, Adam, RMSProp) to update weights in the direction that reduces loss.'
+  },
+  {
+    lesson:'L5', lessonName:'Deep Learning & Neural Networks',
+    question:'Which neural network architecture is specifically optimised for processing sequential data — such as time-series readings or text — because it retains information across time steps?',
+    options:[
+      'Convolutional Neural Network (CNN) — applies spatial filter kernels that slide across a grid-like input',
+      'Generative Adversarial Network (GAN) — consists of competing generator and discriminator sub-networks',
+      'Autoencoder — learns compressed latent-space representations of inputs through encoding and decoding',
+      'Recurrent Neural Network (RNN) / LSTM — maintains a hidden state memory that persists information across each sequential step'
+    ],
+    answer:3,
+    explanation:'Recurrent Neural Networks (RNNs) — and improved variants LSTM (Long Short-Term Memory) and GRU (Gated Recurrent Unit) — are built for sequential data. They maintain a hidden state that acts as memory across time steps, capturing temporal dependencies. This makes them suitable for time-series forecasting, NLP, speech recognition, and anomaly detection in logs. Azure ML supports training these via PyTorch and TensorFlow in managed compute environments.'
+  },
+  {
+    lesson:'L5', lessonName:'Deep Learning & Neural Networks',
+    question:'What is a Convolutional Neural Network (CNN) specifically designed for, and what architectural feature makes it efficient for this task?',
+    options:[
+      'Sequential text data — attention mechanisms that dynamically weight the importance of each word in context',
+      'Tabular structured data — fully connected dense layers that process flattened feature vectors efficiently',
+      'Audio frequency data — Fourier transform layers that decompose waveforms into frequency components',
+      'Image and grid-like spatial data — learnable convolutional filter kernels that detect local spatial patterns while sharing weights across the entire input, drastically reducing parameters'
+    ],
+    answer:3,
+    explanation:'CNNs are the backbone of computer vision. Instead of connecting every pixel to every neuron (which would be computationally prohibitive for images), CNNs apply small learnable filters (kernels) that slide spatially across the image, detecting local patterns. Early layers detect low-level features (edges, textures); deeper layers combine them into shapes and objects. Weight sharing across positions dramatically reduces the parameter count. Azure AI Vision and Azure ML both use CNN-based architectures for image classification, object detection, and segmentation tasks.'
+  },
+
+  // ─── L6: Feature Engineering (4 Qs) ──────────────────────────────────
+  {
+    lesson:'L6', lessonName:'Feature Engineering',
+    question:'What is "feature engineering" in the context of the ML pipeline?',
+    options:[
+      'The process of using domain knowledge to create, transform, or select input variables that improve a model\'s predictive power',
+      'The process of distributing model training workloads across multiple Azure compute cluster nodes simultaneously',
+      'An automated neural architecture search technique that generates new network designs without human input',
+      'A model deployment strategy for packaging trained ML models into containerised REST API endpoints'
+    ],
+    answer:0,
+    explanation:'Feature engineering is the art and science of transforming raw data into features (input variables) that best represent the underlying problem to the model. Good features often improve model performance more than switching algorithms. Tasks include creating interaction features, applying mathematical transforms (log, square root for skewed data), encoding categorical variables, extracting temporal features from dates, and handling missing values. Azure ML Designer includes built-in transformation modules for many of these operations.'
+  },
+  {
+    lesson:'L6', lessonName:'Feature Engineering',
+    question:'What is "one-hot encoding" used for in feature engineering?',
+    options:[
+      'Encrypting sensitive personally identifiable information (PII) in the dataset before model training',
+      'Converting categorical variables into a binary vector format that ML algorithms can process as numeric input',
+      'Compressing high-dimensional feature matrices to reduce memory consumption and speed up training',
+      'Scaling continuous numeric features to a standard 0–1 range using min-max normalisation'
+    ],
+    answer:1,
+    explanation:'One-hot encoding converts categorical variables (e.g., "Colour: Red, Green, Blue") into binary indicator columns: Red=[1,0,0], Green=[0,1,0], Blue=[0,0,1]. Most ML algorithms require numeric inputs and cannot process raw string categories. One-hot encoding avoids imposing a false ordinal relationship between categories — which label encoding (Red=0, Green=1, Blue=2) would imply. Azure ML Designer provides a built-in "Convert to Indicator Values" module for this transformation.'
+  },
+  {
+    lesson:'L6', lessonName:'Feature Engineering',
+    question:'Why is "feature scaling" (normalisation or standardisation) particularly important when training models like SVMs, K-Nearest Neighbours, or neural networks?',
+    options:[
+      'It increases the total number of training samples by synthetically generating augmented data points',
+      'It converts text-based features into dense numeric vector representations suitable for numeric algorithms',
+      'It ensures all features contribute proportionally, preventing features with larger numeric ranges from dominating distance calculations and gradient descent updates',
+      'It automatically identifies and eliminates irrelevant or redundant features from the training dataset'
+    ],
+    answer:2,
+    explanation:'Features with large numeric ranges (e.g., income in £100,000s) dominate features with small ranges (e.g., age 20–65) in distance-based algorithms (KNN, SVM) and gradient-descent-based algorithms (neural networks, linear regression). Without scaling, the optimiser chases steeper gradients from large-scale features, slowing convergence. Normalisation (min-max, scales to [0,1]) and standardisation (z-score, mean=0 std=1) level the playing field. Azure ML Designer has normalise data and standardise data modules built in.'
+  },
+  {
+    lesson:'L6', lessonName:'Feature Engineering',
+    question:'What is "dimensionality reduction" and why is it a valuable feature engineering technique?',
+    options:[
+      'Transforming a high-dimensional feature space into fewer meaningful dimensions while retaining the most important variance — reducing overfitting risk, speeding up training, and enabling visualisation of complex datasets',
+      'Removing duplicate training rows from the dataset to improve data quality and reduce unnecessary storage costs',
+      'Decreasing the number of hidden layers in a neural network to simplify its architecture and reduce training time',
+      'Reducing the learning rate hyperparameter to slow gradient descent and achieve more precise weight adjustments'
+    ],
+    answer:0,
+    explanation:'Dimensionality reduction techniques like PCA (Principal Component Analysis) and t-SNE compress many features into fewer dimensions by identifying the axes of maximum variance or preserving local structure. Benefits include: fewer features → less overfitting (curse of dimensionality), faster training, lower memory/storage costs, and the ability to visualise high-dimensional data in 2D or 3D scatterplots. Azure ML Designer includes a PCA module, and scikit-learn\'s PCA is available in custom training scripts.'
+  },
+
+  // ─── L7: Hyperparameter Tuning (4 Qs) ────────────────────────────────
+  {
+    lesson:'L7', lessonName:'Hyperparameter Tuning',
+    question:'What is the key distinction between a model "parameter" and a "hyperparameter"?',
+    options:[
+      'Parameters define the model architecture; hyperparameters describe the statistical properties of the training data',
+      'Parameters are set manually by the practitioner before training; hyperparameters are learned automatically from labelled data',
+      'Parameters are only applicable in deep neural networks; hyperparameters are only used in classical ML algorithms',
+      'Parameters are values learned automatically from training data (e.g., neural network weights); hyperparameters are configuration values set before training begins (e.g., learning rate, tree depth, batch size)'
+    ],
+    answer:3,
+    explanation:'Model parameters — like neural network weights, linear regression coefficients, or SVM support vectors — are learned automatically during training by minimising a loss function. Hyperparameters — like learning rate, number of layers, number of trees, max depth, regularisation strength (lambda), and batch size — are set by the practitioner before training begins and control the learning algorithm itself. Choosing optimal hyperparameters is critical for achieving the best model performance and is a core workflow step in Azure ML with HyperDrive.'
+  },
+  {
+    lesson:'L7', lessonName:'Hyperparameter Tuning',
+    question:'Which Azure Machine Learning service is specifically designed to automate the search for optimal hyperparameter combinations across multiple parallel training runs?',
+    options:[
+      'Azure ML HyperDrive',
+      'Azure ML Pipelines — reusable step-based workflow orchestration',
+      'Azure ML Environments — dependency and container image management',
+      'Azure Data Factory — cloud ETL and data integration pipelines'
+    ],
+    answer:0,
+    explanation:'HyperDrive is Azure ML\'s built-in hyperparameter tuning service. You define a hyperparameter search space (discrete choices, uniform ranges, log-uniform ranges), choose a sampling strategy (Random, Grid, or Bayesian), and specify an early termination policy (Bandit, Median Stopping, Truncation Selection). HyperDrive automatically orchestrates multiple parallel training runs, tracks metrics, and identifies the best configuration — all integrated with the Azure ML workspace for full experiment tracking and reproducibility.'
+  },
+  {
+    lesson:'L7', lessonName:'Hyperparameter Tuning',
+    question:'What is "Bayesian optimisation" in the context of hyperparameter tuning, and how does it differ from random search?',
+    options:[
+      'An exhaustive search method that evaluates every single possible hyperparameter combination in a defined grid',
+      'An intelligent search strategy that uses results from previous trial runs to build a probabilistic surrogate model and guide subsequent searches toward more promising hyperparameter regions',
+      'A completely random sampling strategy that selects hyperparameter combinations with no consideration of prior experimental results',
+      'A technique that automatically adjusts hyperparameter values dynamically during live model inference in a production deployment'
+    ],
+    answer:1,
+    explanation:'Bayesian optimisation builds a surrogate probabilistic model (typically a Gaussian Process) of the objective function (model performance vs. hyperparameter configuration). It uses this surrogate to select the most informative next configuration to evaluate — balancing exploration (trying unknown regions) and exploitation (refining known good regions). Compared to random or grid search, it finds near-optimal hyperparameters using significantly fewer expensive training runs. Azure ML HyperDrive supports Bayesian sampling natively, making it the most efficient option for costly deep learning training jobs.'
+  },
+  {
+    lesson:'L7', lessonName:'Hyperparameter Tuning',
+    question:'What is an "early termination policy" in Azure ML HyperDrive, and what problem does it solve?',
+    options:[
+      'A rule that stops all training jobs after a fixed wall-clock time regardless of their current performance metrics',
+      'A policy that automatically cancels underperforming hyperparameter runs before they complete, saving compute cost while preserving the quality of the final best model',
+      'A technique that halts model training when validation loss begins to rise, preventing further overfitting to training data',
+      'A configuration setting that terminates the entire HyperDrive experiment after a predefined maximum number of total runs'
+    ],
+    answer:1,
+    explanation:'Early termination policies in HyperDrive — including Bandit Policy (cancels runs performing >X% worse than the best), Median Stopping Policy (cancels runs below the running median), and Truncation Selection Policy (cancels the lowest N% of runs at each interval) — monitor ongoing training jobs and cancel those clearly underperforming compared to the current best run. This typically saves 30–80% of compute cost in large hyperparameter sweeps by focusing resources on the most promising configurations rather than waiting for every run to finish.'
+  },
+
+  // ─── L8: MLOps on Azure (3 Qs) ───────────────────────────────────────
+  {
+    lesson:'L8', lessonName:'MLOps on Azure',
+    question:'What is the primary goal of MLOps (Machine Learning Operations)?',
+    options:[
+      'To fully replace data scientists with automated AI tools that require no human review or oversight',
+      'To reduce Azure cloud spend by strictly limiting the number of ML experiments a team can run per month',
+      'To streamline, automate, and standardise the end-to-end ML lifecycle — from data preparation and training through deployment, monitoring, and retraining — enabling reliable production ML at scale',
+      'To convert Python-based ML models into Java or C# code so they can run natively on enterprise application servers'
+    ],
+    answer:2,
+    explanation:'MLOps applies DevOps principles — CI (continuous integration), CD (continuous delivery), automation, monitoring, and feedback loops — to machine learning. Its goal is to close the gap between ML experimentation and reliable production systems. A complete Azure MLOps pipeline spans: data versioning → model training → automated evaluation gates → model registration → automated deployment → production monitoring (data drift, latency, accuracy) → trigger-based retraining pipelines, all governed by Azure DevOps or GitHub Actions.'
+  },
+  {
+    lesson:'L8', lessonName:'MLOps on Azure',
+    question:'In Azure MLOps, what is "data drift" (a form of model drift) and why is monitoring it critical for production ML systems?',
+    options:[
+      'Data drift occurs when an ML model is accidentally deployed to the wrong Azure region during a release pipeline',
+      'Data drift is when the ML training codebase becomes incompatible with a new version of the Azure ML Python SDK',
+      'Data drift refers to latency in Azure data pipelines that causes delays in ML model training job scheduling',
+      'Data drift is the statistical change in input data distribution over time — causing a deployed model\'s accuracy to gradually degrade because the real world no longer matches the patterns it was trained on'
+    ],
+    answer:3,
+    explanation:'Data drift (or concept drift) is one of the most common causes of ML model degradation in production. For example, a customer churn model trained on pre-pandemic spending data performs poorly post-pandemic because consumer behaviour shifted significantly. Azure ML\'s Dataset Monitor service automatically measures statistical drift between a training baseline dataset and live scoring data (using metrics like Jensen-Shannon distance, Wasserstein distance), sends alerts when drift exceeds a threshold, and can trigger automated retraining pipelines to keep models current.'
+  },
+  {
+    lesson:'L8', lessonName:'MLOps on Azure',
+    question:'Which Azure service provides version control, CI/CD pipeline orchestration, and work item tracking to form the DevOps backbone of an Azure MLOps strategy?',
+    options:[
+      'Azure DevOps — combining Azure Repos (Git version control) and Azure Pipelines (CI/CD automation) integrated with Azure ML SDK/CLI for end-to-end ML delivery',
+      'Azure Cosmos DB — a globally distributed multi-model NoSQL database used for storing model performance experiment logs',
+      'Azure Logic Apps — a serverless no-code workflow automation service for enterprise business process integration',
+      'Azure Cognitive Search — an AI-powered cloud search service for enterprise knowledge retrieval and RAG pipelines'
+    ],
+    answer:0,
+    explanation:'Azure DevOps provides the CI/CD backbone for MLOps on Azure. Azure Repos hosts ML code (training scripts, pipeline YAML, environment configs) with full Git version control and branch policies. Azure Pipelines automates the build → train → evaluate → register → deploy workflow, integrating with Azure ML CLI v2 to trigger training runs and manage deployment releases. Azure Boards tracks work items and backlogs. Combined with Azure ML\'s model registry, this creates a fully automated, auditable ML delivery pipeline where every model version is traceable to a specific code commit and training run.'
+  }
+
+]; // end QUESTIONS
+
+// ══════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════
+const TOTAL = QUESTIONS.length; // 30
+
+let state = {
+  questions: [],
+  currentIdx: 0,
+  userAnswers: [],
+  shuffledOptions: [],
+  shuffledAnswers: [],
+  flagged: [],
+  answered: [],
+  startTime: null,
+  endTime: null,
+  timerInterval: null,
+  tabSwitches: 0,
+  submitted: false
+};
+
+function shuffleArray(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function startTest() {
+  state.questions = [...QUESTIONS];
+  state.currentIdx = 0;
+  state.userAnswers = new Array(TOTAL).fill(-1);
+  state.flagged = new Array(TOTAL).fill(false);
+  state.answered = new Array(TOTAL).fill(false);
+  state.submitted = false;
+  state.tabSwitches = 0;
+  state.startTime = Date.now();
+  state.shuffledOptions = [];
+  state.shuffledAnswers = [];
+  state.questions.forEach(q => {
+    const correctText = q.options[q.answer];
+    const shuffled = shuffleArray(q.options);
+    state.shuffledOptions.push(shuffled);
+    state.shuffledAnswers.push(shuffled.indexOf(correctText));
+  });
+  showScreen('quiz');
+  document.getElementById('quizHeader').classList.add('active');
+  buildNavGrid();
+  renderQuestion();
+  startTimer();
+}
+
+function startTimer() {
+  clearInterval(state.timerInterval);
+  state.timerInterval = setInterval(() => {
+    const elapsed = Math.floor((Date.now() - state.startTime) / 1000);
+    const m = String(Math.floor(elapsed / 60)).padStart(2, '0');
+    const s = String(elapsed % 60).padStart(2, '0');
+    document.getElementById('timer').textContent = `${m}:${s}`;
+  }, 1000);
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function renderQuestion() {
+  const idx = state.currentIdx;
+  const q = state.questions[idx];
+  const opts = state.shuffledOptions[idx];
+  const correctShuffle = state.shuffledAnswers[idx];
+  const userChoice = state.userAnswers[idx];
+  const isAnswered = state.answered[idx];
+
+  document.getElementById('qNum').textContent = idx + 1;
+  document.getElementById('qCounterNum').textContent = idx + 1;
+  document.getElementById('qLessonTag').textContent = q.lesson;
+  document.getElementById('qText').textContent = q.question;
+
+  const btnFlag = document.getElementById('btnFlag');
+  btnFlag.className = 'btn-flag' + (state.flagged[idx] ? ' flagged' : '');
+  btnFlag.innerHTML = state.flagged[idx] ? '🚩 Flagged' : '🏳 Flag';
+
+  const letters = ['A', 'B', 'C', 'D'];
+  const optList = document.getElementById('optionsList');
+  optList.innerHTML = '';
+  opts.forEach((optText, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    if (isAnswered) {
+      btn.disabled = true;
+      if (i === correctShuffle) btn.classList.add('correct');
+      else if (i === userChoice) btn.classList.add('wrong');
+    } else if (i === userChoice) {
+      btn.classList.add('selected');
+    }
+    btn.innerHTML = `<span class="opt-letter">${letters[i]}</span><span>${optText}</span>`;
+    if (!isAnswered) btn.onclick = () => selectAnswer(i);
+    optList.appendChild(btn);
+  });
+
+  const expBox = document.getElementById('explanationBox');
+  if (isAnswered) {
+    expBox.classList.add('visible');
+    const correct = userChoice === correctShuffle;
+    expBox.className = 'explanation-box visible' + (correct ? '' : ' wrong-exp');
+    expBox.innerHTML = `<strong>${correct ? '✅ Correct!' : '❌ Incorrect'}</strong>${q.explanation}`;
+  } else {
+    expBox.className = 'explanation-box';
+    expBox.innerHTML = '';
+  }
+
+  document.getElementById('btnPrev').style.display = idx === 0 ? 'none' : '';
+  const isLast = idx === TOTAL - 1;
+  document.getElementById('btnNext').style.display = isLast ? 'none' : '';
+  document.getElementById('lastQMsg').style.display = isLast ? 'block' : 'none';
+  updateNavGrid();
+}
+
+function selectAnswer(optIdx) {
+  const idx = state.currentIdx;
+  if (state.answered[idx]) return;
+  state.userAnswers[idx] = optIdx;
+  state.answered[idx] = true;
+  renderQuestion();
+}
+
+function toggleFlag() {
+  const idx = state.currentIdx;
+  state.flagged[idx] = !state.flagged[idx];
+  renderQuestion();
+}
+
+function goToNext() {
+  if (state.currentIdx < TOTAL - 1) { state.currentIdx++; renderQuestion(); }
+}
+function goToPrev() {
+  if (state.currentIdx > 0) { state.currentIdx--; renderQuestion(); }
+}
+function jumpTo(idx) { state.currentIdx = idx; renderQuestion(); }
+
+function buildNavGrid() {
+  const grid = document.getElementById('navGrid');
+  grid.innerHTML = '';
+  for (let i = 0; i < TOTAL; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'nav-dot';
+    dot.textContent = i + 1;
+    dot.id = `navDot${i}`;
+    dot.onclick = () => jumpTo(i);
+    grid.appendChild(dot);
+  }
+}
+
+function updateNavGrid() {
+  for (let i = 0; i < TOTAL; i++) {
+    const dot = document.getElementById(`navDot${i}`);
+    if (!dot) continue;
+    dot.className = 'nav-dot';
+    if (i === state.currentIdx) dot.classList.add('current');
+    else if (state.submitted) {
+      if (state.answered[i]) dot.classList.add(state.userAnswers[i] === state.shuffledAnswers[i] ? 'correct-nav' : 'wrong-nav');
+    } else if (state.flagged[i]) {
+      dot.classList.add('flagged');
+    } else if (state.answered[i]) {
+      dot.classList.add('answered');
+    }
+  }
+}
+
+function openSubmitModal() { document.getElementById('submitModal').classList.add('show'); }
+function closeSubmitModal() { document.getElementById('submitModal').classList.remove('show'); }
+
+function submitExam() {
+  closeSubmitModal();
+  clearInterval(state.timerInterval);
+  state.endTime = Date.now();
+  state.submitted = true;
+  document.getElementById('quizHeader').classList.remove('active');
+  document.getElementById('tabWarning').classList.remove('show');
+  updateNavGrid();
+  computeResults();
+  showScreen('results');
+}
+
+function computeResults() {
+  let correct = 0, wrong = 0, skipped = 0;
+  const lessonMap = {};
+  state.questions.forEach((q, i) => {
+    if (!lessonMap[q.lesson]) lessonMap[q.lesson] = { name: q.lessonName, total: 0, correct: 0 };
+    lessonMap[q.lesson].total++;
+    if (!state.answered[i]) { skipped++; return; }
+    if (state.userAnswers[i] === state.shuffledAnswers[i]) { correct++; lessonMap[q.lesson].correct++; }
+    else wrong++;
+  });
+
+  const pct = Math.round((correct / TOTAL) * 100);
+  const elapsed = Math.floor((state.endTime - state.startTime) / 1000);
+  const m = String(Math.floor(elapsed / 60)).padStart(2, '0');
+  const s = String(elapsed % 60).padStart(2, '0');
+
+  document.getElementById('scorePct').textContent = `${pct}%`;
+  document.getElementById('rCorrect').textContent = `${correct} / ${TOTAL}`;
+  document.getElementById('rTime').textContent = `${m}:${s}`;
+  document.getElementById('rWrong').textContent = wrong;
+  document.getElementById('rSkipped').textContent = skipped;
+
+  document.getElementById('scoreRing').className = 'score-ring ' + (pct >= 70 ? 'pass' : 'fail');
+  document.getElementById('resultsTitle').textContent = pct >= 70
+    ? `✅ Well done! ${pct}% — Module 1 Complete`
+    : `📘 Keep practising — ${pct}% — Review & Retry`;
+
+  const bd = document.getElementById('lessonBreakdown');
+  bd.innerHTML = '';
+  Object.entries(lessonMap).forEach(([tag, data]) => {
+    const pctL = Math.round((data.correct / data.total) * 100);
+    const barClass = pctL >= 70 ? '' : pctL >= 40 ? ' ok' : ' bad';
+    bd.innerHTML += `
+      <div class="lesson-row">
+        <div class="lr-tag">${tag}</div>
+        <div class="lr-name">${data.name}</div>
+        <div class="lr-bar-wrap"><div class="lr-bar${barClass}" style="width:${pctL}%"></div></div>
+        <div class="lr-score">${data.correct}/${data.total}</div>
+      </div>`;
+  });
+}
+
+function showReview() {
+  const letters = ['A', 'B', 'C', 'D'];
+  const container = document.getElementById('reviewCards');
+  container.innerHTML = '';
+  state.questions.forEach((q, i) => {
+    const opts = state.shuffledOptions[i];
+    const correct = state.shuffledAnswers[i];
+    const userChoice = state.userAnswers[i];
+    const isAnswered = state.answered[i];
+    const isCorrect = isAnswered && userChoice === correct;
+    const badge = isAnswered ? (isCorrect ? 'correct' : 'wrong') : 'skipped';
+    const badgeText = isAnswered ? (isCorrect ? '✅ Correct' : '❌ Incorrect') : '⏭ Skipped';
+    let optHtml = '';
+    opts.forEach((o, j) => {
+      let cls = 'rc-option';
+      if (j === correct) cls += ' correct-ans';
+      else if (isAnswered && j === userChoice) cls += ' user-wrong';
+      optHtml += `<div class="${cls}"><span class="opt-l">${letters[j]}</span><span>${o}</span></div>`;
+    });
+    container.innerHTML += `
+      <div class="review-card">
+        <div class="rc-meta">
+          <div class="rc-num">Q${i + 1}</div>
+          <div class="rc-lesson">${q.lesson} · ${q.lessonName}</div>
+          <div class="rc-badge ${badge}">${badgeText}</div>
+        </div>
+        <div class="rc-question">${q.question}</div>
+        <div class="rc-options">${optHtml}</div>
+        <div class="rc-exp"><strong>💡 Explanation</strong>${q.explanation}</div>
+      </div>`;
+  });
+  showScreen('review');
+}
+
+function showResults() { showScreen('results'); }
+function retakeTest() { startTest(); }
+
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden && !state.submitted && state.startTime) {
+    state.tabSwitches++;
+    document.getElementById('tabCount').textContent = state.tabSwitches;
+    document.getElementById('tabWarning').classList.add('show');
+    setTimeout(() => document.getElementById('tabWarning').classList.remove('show'), 5000);
+  }
+});
+</script>
+</body>
+</html>
