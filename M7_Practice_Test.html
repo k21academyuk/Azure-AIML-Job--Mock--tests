@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Module 7: Agentic AI & Multimodal Systems — Practice Test | Azure AI/ML/GenAI Job Oriented Program</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#F7F8FA; --surface:#FFFFFF; --border:#E8EAEE;
+  --text-1:#111827; --text-2:#4B5563; --text-3:#9CA3AF;
+  --green:#8DC63F; --green-mid:#79B030; --green-bg:#F1F8E8; --green-dark:#4A7A1B;
+  --navy:#1A1248; --navy-mid:#2E2080; --blue:#1B9BD9;
+  --amber:#F5A623; --amber-bg:#FFF6E5; --amber-dark:#8A5A00;
+  --red:#E5484D; --red-bg:#FDECEC; --red-dark:#A9231F;
+  --radius:16px; --radius-lg:24px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text-1);-webkit-font-smoothing:antialiased;min-height:100vh;}
+.screen{display:none;}
+.screen.active{display:block;}
+
+/* ---------- Top bar ---------- */
+.topbar{
+  background:var(--navy); color:#fff; padding:14px 28px;
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;
+}
+.topbar .brand{display:flex; align-items:center; gap:10px; font-weight:800; font-size:15px;}
+.topbar .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--green);}
+.topbar .program{font-size:12px; color:#C9C4E8; font-weight:500;}
+
+/* ---------- Start screen ---------- */
+.start-wrap{max-width:820px; margin:0 auto; padding:48px 20px 70px;}
+.eyebrow{
+  display:inline-flex; align-items:center; gap:7px; background:var(--green-bg);
+  border:1px solid #C8E89A; color:var(--green-dark); font-size:11px; font-weight:700;
+  letter-spacing:.08em; text-transform:uppercase; padding:5px 13px; border-radius:100px; margin-bottom:16px;
+}
+.eyebrow i{width:5px;height:5px;background:var(--green);border-radius:50%;display:inline-block;font-style:normal;}
+.start-title{font-size:clamp(26px,4vw,36px); font-weight:800; letter-spacing:-.025em; line-height:1.2; margin-bottom:10px;}
+.start-title .accent{color:var(--green-mid);}
+.start-sub{color:var(--text-2); font-size:15.5px; line-height:1.6; margin-bottom:28px; max-width:640px;}
+
+.info-cards{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:28px;}
+.info-card{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); padding:22px 18px; text-align:center;}
+.info-card .v{font-size:32px; font-weight:800; color:var(--navy); line-height:1;}
+.info-card .k{font-size:12.5px; font-weight:700; color:var(--text-2); margin-top:8px;}
+
+.lesson-table{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); overflow:hidden; margin-bottom:28px;}
+.lesson-table .lt-head{background:var(--navy); color:#fff; padding:14px 20px; font-weight:700; font-size:14px; display:flex; justify-content:space-between;}
+.lesson-row{display:flex; justify-content:space-between; align-items:center; padding:12px 20px; border-top:1px solid var(--border); font-size:14px;}
+.lesson-row:first-of-type{border-top:none;}
+.lesson-row .ln{color:var(--text-1); font-weight:600;}
+.lesson-row .lc{color:var(--text-3); font-weight:500;}
+.lesson-row .badge{background:var(--green-bg); color:var(--green-dark); font-size:12px; font-weight:700; padding:3px 10px; border-radius:100px;}
+
+.band-legend{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); padding:20px; margin-bottom:32px;}
+.band-legend .bl-title{font-size:13px; font-weight:700; color:var(--text-1); margin-bottom:12px;}
+.band-row{display:flex; align-items:center; gap:12px; padding:8px 0;}
+.band-dot{width:11px;height:11px;border-radius:50%; flex-shrink:0;}
+.band-row .bt{font-weight:700; font-size:13.5px; min-width:150px;}
+.band-row .bd{font-size:13px; color:var(--text-2);}
+
+.notice{
+  display:flex; gap:10px; align-items:flex-start; background:var(--green-bg); border:1px solid #C8E89A;
+  border-radius:12px; padding:14px 16px; font-size:13.5px; color:var(--green-dark); margin-bottom:28px; line-height:1.5;
+}
+
+.btn-primary{
+  display:inline-flex; align-items:center; gap:10px; background:var(--navy); color:#fff;
+  font-family:'DM Sans',sans-serif; font-size:15px; font-weight:700; padding:15px 32px;
+  border-radius:100px; border:none; cursor:pointer; box-shadow:0 4px 20px rgba(26,18,72,.22);
+  transition:background .2s, transform .18s, box-shadow .2s;
+}
+.btn-primary:hover{background:var(--navy-mid); transform:translateY(-2px); box-shadow:0 8px 28px rgba(26,18,72,.3);}
+.btn-green{
+  display:inline-flex; align-items:center; gap:10px; background:var(--green); color:#fff;
+  font-family:'DM Sans',sans-serif; font-size:15px; font-weight:700; padding:15px 32px;
+  border-radius:100px; border:none; cursor:pointer; box-shadow:0 4px 16px rgba(141,198,63,.35);
+  transition:background .2s, transform .18s, box-shadow .2s;
+}
+.btn-green:hover{background:var(--green-mid); transform:translateY(-2px); box-shadow:0 8px 28px rgba(141,198,63,.45);}
+.btn-outline{
+  display:inline-flex; align-items:center; gap:8px; background:#fff; color:var(--navy);
+  font-family:'DM Sans',sans-serif; font-size:14px; font-weight:700; padding:12px 24px;
+  border-radius:100px; border:1.5px solid var(--navy); cursor:pointer; transition:all .18s;
+}
+.btn-outline:hover{background:var(--navy); color:#fff;}
+
+/* ---------- Exam screen ---------- */
+.exam-header{
+  background:var(--navy); color:#fff; padding:14px 24px; display:flex; align-items:center;
+  justify-content:space-between; flex-wrap:wrap; gap:12px; position:sticky; top:0; z-index:50;
+}
+.exam-title{font-weight:700; font-size:14.5px;}
+.exam-title span{color:#B9E27A;}
+.exam-meta{display:flex; align-items:center; gap:18px; font-size:13px;}
+.timer-pill{
+  display:flex; align-items:center; gap:7px; background:rgba(255,255,255,.1); padding:7px 14px;
+  border-radius:100px; font-weight:700; font-variant-numeric:tabular-nums;
+}
+.timer-pill .lbl{font-weight:500; color:#C9C4E8; font-size:11px; text-transform:uppercase; letter-spacing:.05em;}
+.progress-pill{background:rgba(255,255,255,.1); padding:7px 14px; border-radius:100px; font-weight:700;}
+
+.exam-body{display:grid; grid-template-columns:1fr 300px; gap:22px; max-width:1200px; margin:0 auto; padding:24px 20px 80px;}
+@media (max-width:880px){.exam-body{grid-template-columns:1fr;}}
+
+.q-card{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius-lg); padding:28px;}
+.q-top{display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:16px;}
+.q-num{font-size:12px; font-weight:700; color:var(--text-3); text-transform:uppercase; letter-spacing:.06em;}
+.lesson-tag{
+  display:inline-block; background:var(--green-bg); color:var(--green-dark); font-size:11.5px;
+  font-weight:700; padding:4px 11px; border-radius:100px; margin-top:6px;
+}
+.flag-btn{
+  display:flex; align-items:center; gap:6px; background:#fff; border:1.5px solid var(--border);
+  color:var(--text-2); font-family:'DM Sans',sans-serif; font-weight:700; font-size:13px;
+  padding:8px 16px; border-radius:100px; cursor:pointer; transition:all .18s; flex-shrink:0;
+}
+.flag-btn.flagged{background:var(--amber-bg); border-color:#F0C77C; color:var(--amber-dark);}
+.flag-btn:hover{border-color:var(--amber);}
+
+.q-text{font-size:17px; font-weight:600; line-height:1.55; color:var(--text-1); margin-bottom:22px;}
+
+.option{
+  display:flex; align-items:flex-start; gap:13px; padding:14px 16px; border:1.5px solid var(--border);
+  border-radius:12px; margin-bottom:10px; cursor:pointer; transition:all .15s; background:#fff;
+}
+.option:hover{border-color:var(--green); background:var(--green-bg);}
+.option.selected{border-color:var(--navy); background:#EEEBFA;}
+.option .opt-key{
+  width:26px; height:26px; border-radius:50%; border:1.5px solid var(--border); flex-shrink:0;
+  display:flex; align-items:center; justify-content:center; font-weight:700; font-size:12.5px; color:var(--text-2);
+}
+.option.selected .opt-key{background:var(--navy); border-color:var(--navy); color:#fff;}
+.option .opt-text{font-size:14.5px; line-height:1.5; color:var(--text-1); padding-top:3px;}
+
+.q-nav-btns{display:flex; justify-content:space-between; margin-top:22px; gap:10px;}
+
+/* Sidebar navigator */
+.sidebar{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius-lg); padding:20px; align-self:start; position:sticky; top:88px;}
+.sb-title{font-size:13px; font-weight:700; color:var(--text-1); margin-bottom:14px;}
+.nav-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:8px; margin-bottom:18px;}
+.nav-cell{
+  aspect-ratio:1; border-radius:8px; border:1.5px solid var(--border); background:#fff;
+  display:flex; align-items:center; justify-content:center; font-size:12.5px; font-weight:700;
+  color:var(--text-2); cursor:pointer; transition:all .15s; position:relative;
+}
+.nav-cell:hover{border-color:var(--navy);}
+.nav-cell.current{border-color:var(--navy); border-width:2px;}
+.nav-cell.answered{background:var(--green-bg); border-color:#C8E89A; color:var(--green-dark);}
+.nav-cell.flagged::after{
+  content:''; position:absolute; top:-3px; right:-3px; width:9px; height:9px; border-radius:50%; background:var(--amber);
+}
+.legend{display:flex; flex-direction:column; gap:8px; font-size:12px; color:var(--text-2); margin-bottom:18px;}
+.legend .lg-row{display:flex; align-items:center; gap:8px;}
+.legend .sw{width:13px; height:13px; border-radius:4px; border:1.5px solid var(--border);}
+.legend .sw.answered{background:var(--green-bg); border-color:#C8E89A;}
+.legend .sw.flagged{background:#fff; position:relative;}
+.legend .sw.flagged::after{content:'';position:absolute;top:-3px;right:-3px;width:8px;height:8px;border-radius:50%;background:var(--amber);}
+
+/* ---------- Results screen ---------- */
+.results-wrap{max-width:820px; margin:0 auto; padding:48px 20px 80px;}
+.band-hero{border-radius:var(--radius-lg); padding:36px; text-align:center; margin-bottom:28px;}
+.band-hero.strong{background:var(--green-bg); border:1.5px solid #C8E89A;}
+.band-hero.good{background:var(--amber-bg); border:1.5px solid #F0C77C;}
+.band-hero.needs{background:var(--red-bg); border:1.5px solid #F3B4B6;}
+.band-emoji{font-size:44px; margin-bottom:10px;}
+.band-label{font-size:24px; font-weight:800; margin-bottom:6px;}
+.band-hero.strong .band-label{color:var(--green-dark);}
+.band-hero.good .band-label{color:var(--amber-dark);}
+.band-hero.needs .band-label{color:var(--red-dark);}
+.band-msg{font-size:15px; color:var(--text-2); margin-bottom:18px;}
+.score-big{font-size:46px; font-weight:800; color:var(--navy);}
+.score-sub{font-size:13.5px; color:var(--text-3); font-weight:600;}
+
+.stat-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:28px;}
+.stat-card{background:var(--surface); border:1.5px solid var(--border); border-radius:12px; padding:16px; text-align:center;}
+.stat-card .sv{font-size:22px; font-weight:800; color:var(--navy);}
+.stat-card .sl{font-size:11.5px; color:var(--text-3); font-weight:700; text-transform:uppercase; letter-spacing:.04em; margin-top:3px;}
+
+.lesson-breakdown{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); padding:22px; margin-bottom:28px;}
+.lb-title{font-size:15px; font-weight:700; margin-bottom:16px;}
+.lb-row{margin-bottom:14px;}
+.lb-top{display:flex; justify-content:space-between; font-size:13px; font-weight:600; margin-bottom:6px;}
+.lb-top .lb-name{color:var(--text-1);}
+.lb-top .lb-score{color:var(--text-2);}
+.lb-bar-bg{background:#F0F1F4; border-radius:100px; height:9px; overflow:hidden;}
+.lb-bar-fill{height:100%; border-radius:100px; background:var(--green);}
+.lb-bar-fill.mid{background:var(--amber);}
+.lb-bar-fill.low{background:var(--red);}
+
+.action-row{display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:8px;}
+
+/* ---------- Review screen ---------- */
+.review-wrap{max-width:820px; margin:0 auto; padding:32px 20px 80px;}
+.review-filters{display:flex; gap:8px; margin-bottom:22px; flex-wrap:wrap;}
+.rf-btn{
+  background:#fff; border:1.5px solid var(--border); color:var(--text-2); font-family:'DM Sans',sans-serif;
+  font-weight:700; font-size:13px; padding:8px 16px; border-radius:100px; cursor:pointer; transition:all .15s;
+}
+.rf-btn.active{background:var(--navy); border-color:var(--navy); color:#fff;}
+.review-q{background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); padding:22px; margin-bottom:16px;}
+.review-q .rq-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;}
+.result-tag{font-size:11.5px; font-weight:700; padding:3px 11px; border-radius:100px;}
+.result-tag.correct{background:var(--green-bg); color:var(--green-dark);}
+.result-tag.incorrect{background:var(--red-bg); color:var(--red-dark);}
+.result-tag.skipped{background:#F0F1F4; color:var(--text-2);}
+.review-q .rq-text{font-size:15px; font-weight:600; margin-bottom:14px; line-height:1.5;}
+.rq-opt{padding:10px 14px; border-radius:10px; margin-bottom:7px; font-size:13.5px; border:1.5px solid var(--border); display:flex; gap:10px;}
+.rq-opt.correct-answer{background:var(--green-bg); border-color:#C8E89A; color:var(--green-dark); font-weight:600;}
+.rq-opt.wrong-answer{background:var(--red-bg); border-color:#F3B4B6; color:var(--red-dark); font-weight:600;}
+.rq-explain{background:#F7F8FA; border-radius:10px; padding:13px 15px; font-size:13px; color:var(--text-2); line-height:1.55; margin-top:10px;}
+.rq-explain b{color:var(--text-1);}
+
+footer.k21-footer{text-align:center; padding:22px; font-size:12px; color:var(--text-3);}
+</style>
+</head>
+<body>
+
+<!-- ============ START SCREEN ============ -->
+<div id="screen-start" class="screen active">
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span> K21 Academy</div>
+    <div class="program">Azure AI/ML/GenAI Job Oriented Program</div>
+  </div>
+  <div class="start-wrap">
+    <div class="eyebrow"><i></i>Module Practice Test</div>
+    <div class="start-title">Module 7: <span class="accent">Agentic AI & Multimodal Systems</span></div>
+    <p class="start-sub">A quick knowledge check across all five lessons in this module. This is practice, not an exam — take your time, review explanations, and retry as many times as you like.</p>
+
+    <div class="info-cards">
+      <div class="info-card"><div class="v">20</div><div class="k">Questions</div></div>
+      <div class="info-card"><div class="v">5</div><div class="k">Lessons</div></div>
+      <div class="info-card"><div class="v">∞</div><div class="k">Retries</div></div>
+    </div>
+
+    <div class="lesson-table">
+      <div class="lt-head"><span>Lessons Covered</span><span>Questions</span></div>
+      <div id="lesson-coverage"></div>
+    </div>
+
+    <div class="band-legend">
+      <div class="bl-title">How your score is shown</div>
+      <div class="band-row"><span class="band-dot" style="background:var(--green);"></span><span class="bt" style="color:var(--green-dark);">🟢 80–100% Strong</span><span class="bd">Ready to move to the next module</span></div>
+      <div class="band-row"><span class="band-dot" style="background:var(--amber);"></span><span class="bt" style="color:var(--amber-dark);">🟡 60–79% Good Progress</span><span class="bd">Review 1–2 lessons and retry</span></div>
+      <div class="band-row"><span class="band-dot" style="background:var(--red);"></span><span class="bt" style="color:var(--red-dark);">🔴 Below 60% Needs Review</span><span class="bd">Revisit the module before moving on</span></div>
+    </div>
+
+    <div class="notice">💡 There's no countdown and no fail state — this is here to help you find gaps, not to pressure you. Flag anything you're unsure of and revisit it in review mode afterward.</div>
+
+    <button class="btn-primary" onclick="startExam()">Start Practice →</button>
+  </div>
+  <footer class="k21-footer">K21 Academy · Azure AI/ML/GenAI Job Oriented Program · Module 7 Practice Test</footer>
+</div>
+
+<!-- ============ EXAM SCREEN ============ -->
+<div id="screen-exam" class="screen">
+  <div class="exam-header">
+    <div class="exam-title">Module 7 · <span>Agentic AI & Multimodal Systems</span></div>
+    <div class="exam-meta">
+      <div class="timer-pill"><span class="lbl">Time</span><span id="timer-display">0:00</span></div>
+      <div class="progress-pill"><span id="progress-display">Q1 / 20</span></div>
+    </div>
+  </div>
+  <div class="exam-body">
+    <div class="q-card">
+      <div class="q-top">
+        <div>
+          <div class="q-num" id="q-num-label">Question 1 of 20</div>
+          <div class="lesson-tag" id="q-lesson-tag">Lesson 1</div>
+        </div>
+        <button class="flag-btn" id="flag-btn" onclick="toggleFlag()">🚩 Flag for review</button>
+      </div>
+      <div class="q-text" id="q-text"></div>
+      <div id="options-container"></div>
+      <div class="q-nav-btns">
+        <button class="btn-outline" id="prev-btn" onclick="prevQuestion()">← Previous</button>
+        <button class="btn-outline" id="next-btn" onclick="nextQuestion()">Next →</button>
+      </div>
+    </div>
+    <div class="sidebar">
+      <div class="sb-title">Question Navigator</div>
+      <div class="nav-grid" id="nav-grid"></div>
+      <div class="legend">
+        <div class="lg-row"><span class="sw answered"></span> Answered</div>
+        <div class="lg-row"><span class="sw"></span> Unanswered</div>
+        <div class="lg-row"><span class="sw flagged"></span> Flagged</div>
+      </div>
+      <button class="btn-green" style="width:100%; justify-content:center;" onclick="confirmSubmit()">Submit Practice Test</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ RESULTS SCREEN ============ -->
+<div id="screen-results" class="screen">
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span> K21 Academy</div>
+    <div class="program">Azure AI/ML/GenAI Job Oriented Program</div>
+  </div>
+  <div class="results-wrap">
+    <div class="band-hero" id="band-hero">
+      <div class="band-emoji" id="band-emoji">🟢</div>
+      <div class="band-label" id="band-label">Strong</div>
+      <div class="band-msg" id="band-msg">Ready to move to the next module</div>
+      <div class="score-big" id="score-big">0%</div>
+      <div class="score-sub" id="score-sub">0 of 20 correct</div>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-card"><div class="sv" id="stat-correct">0</div><div class="sl">Correct</div></div>
+      <div class="stat-card"><div class="sv" id="stat-incorrect">0</div><div class="sl">Incorrect</div></div>
+      <div class="stat-card"><div class="sv" id="stat-skipped">0</div><div class="sl">Skipped</div></div>
+      <div class="stat-card"><div class="sv" id="stat-time">0:00</div><div class="sl">Time Taken</div></div>
+    </div>
+
+    <div class="lesson-breakdown">
+      <div class="lb-title">Lesson-wise Breakdown</div>
+      <div id="lesson-breakdown-body"></div>
+    </div>
+
+    <div class="action-row">
+      <button class="btn-primary" onclick="showReview()">📋 Review Answers</button>
+      <button class="btn-green" onclick="location.reload()">🔄 Retry Practice Test</button>
+    </div>
+  </div>
+  <footer class="k21-footer">K21 Academy · Azure AI/ML/GenAI Job Oriented Program · Module 7 Practice Test</footer>
+</div>
+
+<!-- ============ REVIEW SCREEN ============ -->
+<div id="screen-review" class="screen">
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span> K21 Academy</div>
+    <div class="program">Review Mode · Module 7</div>
+  </div>
+  <div class="review-wrap">
+    <div class="review-filters">
+      <button class="rf-btn active" data-filter="all" onclick="setReviewFilter('all')">All (20)</button>
+      <button class="rf-btn" data-filter="correct" onclick="setReviewFilter('correct')">✅ Correct</button>
+      <button class="rf-btn" data-filter="incorrect" onclick="setReviewFilter('incorrect')">❌ Incorrect</button>
+      <button class="rf-btn" data-filter="skipped" onclick="setReviewFilter('skipped')">⬜ Skipped</button>
+      <button class="rf-btn" data-filter="flagged" onclick="setReviewFilter('flagged')">🚩 Flagged</button>
+    </div>
+    <div id="review-list"></div>
+    <div class="action-row">
+      <button class="btn-primary" onclick="backToResults()">← Back to Results</button>
+      <button class="btn-green" onclick="location.reload()">🔄 Retry Practice Test</button>
+    </div>
+  </div>
+  <footer class="k21-footer">K21 Academy · Azure AI/ML/GenAI Job Oriented Program · Module 7 Practice Test</footer>
+</div>
+
+<!-- ============ SUBMIT CONFIRM MODAL ============ -->
+<div id="submit-modal" style="display:none; position:fixed; inset:0; background:rgba(17,24,39,.55); z-index:100; align-items:center; justify-content:center;">
+  <div style="background:#fff; border-radius:20px; padding:28px; max-width:380px; width:90%; text-align:center;">
+    <div style="font-size:17px; font-weight:800; margin-bottom:10px;">Submit practice test?</div>
+    <div id="modal-unanswered-msg" style="font-size:13.5px; color:var(--text-2); margin-bottom:20px; line-height:1.5;"></div>
+    <div style="display:flex; gap:10px; justify-content:center;">
+      <button class="btn-outline" onclick="closeSubmitModal()">Keep working</button>
+      <button class="btn-green" onclick="submitExam()">Submit</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const QUESTIONS = [
+  {
+    id: 1,
+    lesson: 1,
+    lessonName: "AI Agents Basics",
+    question: "What most fundamentally distinguishes an AI agent from a single LLM completion call?",
+    options: [
+      { key: "A", text: "An agent always uses a larger model than a plain completion call" },
+      { key: "B", text: "An agent can perceive its environment, reason over multiple steps, and take actions (often via tools) to pursue a goal, rather than just returning one static response to one prompt" },
+      { key: "C", text: "An agent never uses a language model at all" },
+      { key: "D", text: "An agent is simply a chatbot with a different color theme" }
+    ],
+    correct: "B",
+    explanation: "A single completion call maps one prompt to one response. An agent wraps an LLM in a loop that can perceive context, reason about what to do next, call tools or take actions, and iterate — pursuing a goal across multiple steps rather than answering once."
+  },
+  {
+    id: 2,
+    lesson: 1,
+    lessonName: "AI Agents Basics",
+    question: "In the typical 'perceive → reason → act' agent loop, what does the 'reason' step primarily involve?",
+    options: [
+      { key: "A", text: "Physically restarting the underlying server" },
+      { key: "B", text: "Encrypting the user's original prompt" },
+      { key: "C", text: "Using the LLM to decide, based on the current state and goal, what the next action or tool call should be" },
+      { key: "D", text: "Deleting all prior conversation history" }
+    ],
+    correct: "C",
+    explanation: "The reasoning step is where the LLM acts as the decision-making engine: given the current observations and the stated goal, it determines what the next best action, tool call, or response should be before the agent acts on that decision."
+  },
+  {
+    id: 3,
+    lesson: 1,
+    lessonName: "AI Agents Basics",
+    question: "Which combination of components is generally considered core to a working AI agent architecture?",
+    options: [
+      { key: "A", text: "An LLM as the reasoning engine, a set of tools/functions it can call, some form of memory or state, and a planning/control loop" },
+      { key: "B", text: "Only a static FAQ database and no model at all" },
+      { key: "C", text: "A spreadsheet macro and a print statement" },
+      { key: "D", text: "A single hardcoded if/else chain with no model involved" }
+    ],
+    correct: "A",
+    explanation: "Most agent architectures combine an LLM for reasoning, tools or functions the agent can invoke to act on the world, memory to track state across steps, and a control loop that decides when to keep going or stop."
+  },
+  {
+    id: 4,
+    lesson: 1,
+    lessonName: "AI Agents Basics",
+    question: "Why is 'memory' an important design consideration for AI agents, especially over multi-turn or multi-step tasks?",
+    options: [
+      { key: "A", text: "Memory is only needed to make the interface look more advanced" },
+      { key: "B", text: "Without some way to retain context — recent actions, intermediate results, or user preferences — an agent may repeat steps, lose track of the goal, or contradict earlier decisions" },
+      { key: "C", text: "Memory is required to reduce the size of the model's weights" },
+      { key: "D", text: "Memory only matters for agents that never call any tools" }
+    ],
+    correct: "B",
+    explanation: "Because an agent may take many steps to complete a task, it needs memory of what has already happened — prior actions, tool outputs, decisions — to avoid repeating work, staying consistent, and correctly tracking progress toward the goal."
+  },
+  {
+    id: 5,
+    lesson: 2,
+    lessonName: "Building Agents",
+    question: "What is the main purpose of a well-crafted system prompt (or persona/instructions) when building an agent?",
+    options: [
+      { key: "A", text: "It has no effect on agent behavior and is purely cosmetic" },
+      { key: "B", text: "It defines the agent's role, boundaries, tone, and how it should approach tasks and use its available tools, shaping behavior consistently across the interaction" },
+      { key: "C", text: "It is only used to set the model's temperature parameter" },
+      { key: "D", text: "It replaces the need for any tools or functions" }
+    ],
+    correct: "B",
+    explanation: "The system prompt establishes the agent's identity, scope, constraints, and expected behavior — for example, when to use which tool, how to handle ambiguous requests, and what tone to use — and this guidance persists across the agent's steps."
+  },
+  {
+    id: 6,
+    lesson: 2,
+    lessonName: "Building Agents",
+    question: "What does 'tool calling' (or function calling) allow an LLM-based agent to do?",
+    options: [
+      { key: "A", text: "Directly modify its own trained weights in real time" },
+      { key: "B", text: "Invoke external functions, APIs, or services — such as a search, a database lookup, or a calculator — based on structured output the model generates, extending it beyond text generation alone" },
+      { key: "C", text: "Skip the reasoning step entirely" },
+      { key: "D", text: "Guarantee zero hallucinations in every response" }
+    ],
+    correct: "B",
+    explanation: "Tool/function calling lets the model output a structured request (like a function name and arguments) that the surrounding application executes against a real API, database, or service, and then feeds the result back to the model — letting the agent act on the world, not just describe it."
+  },
+  {
+    id: 7,
+    lesson: 2,
+    lessonName: "Building Agents",
+    question: "Why is enforcing a strict schema (e.g. JSON with defined fields) important when an agent calls a tool?",
+    options: [
+      { key: "A", text: "A defined schema lets the surrounding application reliably parse the model's intended action and arguments, reducing errors from free-form text that could be ambiguous or malformed" },
+      { key: "B", text: "Schemas make the model respond in a random language each time" },
+      { key: "C", text: "Schemas prevent the model from ever calling more than one tool in its lifetime" },
+      { key: "D", text: "Schemas are only relevant for image generation, never for tool calls" }
+    ],
+    correct: "A",
+    explanation: "A structured schema constrains the model's output to a predictable, machine-parseable format, so the application code calling the actual tool can reliably extract the function name and arguments without brittle text parsing or ambiguity."
+  },
+  {
+    id: 8,
+    lesson: 2,
+    lessonName: "Building Agents",
+    question: "The ReAct-style pattern (reason, then act, then observe, repeat) is useful for agents primarily because it:",
+    options: [
+      { key: "A", text: "Forces the agent to complete every task in exactly one step" },
+      { key: "B", text: "Interleaves explicit reasoning with tool use and observation of results, letting the agent adjust its plan based on what it actually learns at each step rather than committing to a single upfront plan" },
+      { key: "C", text: "Removes the need for any system prompt" },
+      { key: "D", text: "Only works with image inputs, never text" }
+    ],
+    correct: "B",
+    explanation: "By alternating reasoning, action, and observation, the agent can incorporate real feedback (like a tool's actual output) into its next decision, making it more robust to unexpected results than a plan generated once and executed blindly."
+  },
+  {
+    id: 9,
+    lesson: 3,
+    lessonName: "Autonomous Agents & Multimodal AI",
+    question: "What generally makes an agent 'autonomous' rather than simply 'assisted'?",
+    options: [
+      { key: "A", text: "It can carry out multiple steps toward a goal — including deciding what to do next — with minimal or no step-by-step human input between actions" },
+      { key: "B", text: "It requires a human to approve every single token generated" },
+      { key: "C", text: "It only works with a single, hardcoded action and never varies" },
+      { key: "D", text: "It cannot access any external tools" }
+    ],
+    correct: "A",
+    explanation: "Autonomy refers to the degree to which an agent can plan and execute a sequence of actions on its own, without a human manually approving or prompting each individual step, as opposed to a purely human-driven, one-turn-at-a-time assistant."
+  },
+  {
+    id: 10,
+    lesson: 3,
+    lessonName: "Autonomous Agents & Multimodal AI",
+    question: "What does 'multimodal AI' refer to?",
+    options: [
+      { key: "A", text: "A model that can only process plain text and nothing else" },
+      { key: "B", text: "A model or system that can understand and/or generate across multiple types of data — such as text, images, audio, or video — often reasoning jointly across them" },
+      { key: "C", text: "Running the same text model on multiple different cloud regions" },
+      { key: "D", text: "A model that requires exactly two GPUs to run" }
+    ],
+    correct: "B",
+    explanation: "Multimodal AI describes systems capable of processing and/or producing more than one modality of data — for example, taking an image and text together as input, or generating text from audio — rather than being limited to a single data type like text alone."
+  },
+  {
+    id: 11,
+    lesson: 3,
+    lessonName: "Autonomous Agents & Multimodal AI",
+    question: "What is a key risk that guardrails aim to address when giving an autonomous agent more independence to loop through multiple steps?",
+    options: [
+      { key: "A", text: "The agent might get stuck in unproductive loops, take unintended or costly actions, or drift from the original goal, so limits like step caps, approval gates, or scoped permissions help contain that risk" },
+      { key: "B", text: "Guardrails are only needed to reduce the model's file size" },
+      { key: "C", text: "Autonomous agents cannot make any mistakes by definition" },
+      { key: "D", text: "Guardrails exist purely to slow down response time for no functional reason" }
+    ],
+    correct: "A",
+    explanation: "The more autonomy and steps an agent has, the more opportunity there is for it to loop unproductively, take an irreversible or costly action, or veer off the intended task — so guardrails like maximum iterations, human approval for sensitive actions, and scoped tool permissions are used to bound that risk."
+  },
+  {
+    id: 12,
+    lesson: 3,
+    lessonName: "Autonomous Agents & Multimodal AI",
+    question: "Which of the following is a practical example of a multimodal use case?",
+    options: [
+      { key: "A", text: "A system that takes a photo of a whiteboard along with a text question and produces a written summary that references specific parts of the image" },
+      { key: "B", text: "A calculator app that only adds two numbers" },
+      { key: "C", text: "A text editor with spell-check and nothing else" },
+      { key: "D", text: "A model that can only ever output the same fixed string of text" }
+    ],
+    correct: "A",
+    explanation: "Interpreting an image (the whiteboard photo) together with a text prompt and producing a grounded text response is a classic multimodal task, since the system reasons jointly across image and text modalities rather than handling just one."
+  },
+  {
+    id: 13,
+    lesson: 4,
+    lessonName: "Real-world Applications",
+    question: "In a real-world customer support agent that can query an order database and, when needed, escalate to a human, what is the primary benefit of this design?",
+    options: [
+      { key: "A", text: "It guarantees the agent will never need human involvement again" },
+      { key: "B", text: "It lets the agent resolve routine, well-defined queries automatically using real data, while routing ambiguous or high-stakes cases to a human, balancing efficiency with appropriate oversight" },
+      { key: "C", text: "It removes the need for the database entirely" },
+      { key: "D", text: "It forces every single query to go to a human regardless of complexity" }
+    ],
+    correct: "B",
+    explanation: "Combining tool access (to look up real order data) with an escalation path lets the agent handle straightforward, high-volume requests automatically while ensuring cases that are ambiguous, sensitive, or outside its competence are handed to a human — a common and practical production pattern."
+  },
+  {
+    id: 14,
+    lesson: 4,
+    lessonName: "Real-world Applications",
+    question: "In a multi-agent pipeline where a 'research agent' gathers information and a separate 'writer agent' drafts the final content, what is the main advantage of splitting responsibilities this way?",
+    options: [
+      { key: "A", text: "Each agent can be given a narrower, more specialized role and prompt, which often improves reliability and makes the system easier to debug, versus one agent trying to do everything at once" },
+      { key: "B", text: "Splitting agents always doubles the cost with no other benefit" },
+      { key: "C", text: "It guarantees zero errors across the whole pipeline" },
+      { key: "D", text: "It eliminates the need for any tools in either agent" }
+    ],
+    correct: "A",
+    explanation: "Dividing a complex task across specialized agents — each with a focused role, prompt, and toolset — tends to produce more reliable, easier-to-debug behavior than a single generalist agent attempting research, synthesis, and writing all at once."
+  },
+  {
+    id: 15,
+    lesson: 4,
+    lessonName: "Real-world Applications",
+    question: "When moving an agent-based application from prototype to production, which set of concerns becomes especially important?",
+    options: [
+      { key: "A", text: "None — production concerns are identical to a quick demo" },
+      { key: "B", text: "Cost per run, latency, error handling and retries, logging/observability, and safeguards against unexpected or unsafe actions" },
+      { key: "C", text: "Only the color scheme of the user interface" },
+      { key: "D", text: "Whether the agent can generate poetry" }
+    ],
+    correct: "B",
+    explanation: "Production agent systems need to account for real operational concerns beyond a demo: the cost and latency of repeated LLM/tool calls, robust error handling when tools fail, observability to debug agent decisions, and safeguards to prevent unsafe or unintended actions at scale."
+  },
+  {
+    id: 16,
+    lesson: 4,
+    lessonName: "Real-world Applications",
+    question: "Why is 'human-in-the-loop' approval often built into agents that can take high-stakes actions (e.g. sending payments, deleting records, or emailing customers)?",
+    options: [
+      { key: "A", text: "It ensures a person reviews and confirms consequential or hard-to-reverse actions before they happen, reducing the risk of costly mistakes from an autonomous decision" },
+      { key: "B", text: "It has no real safety benefit and is only used for show" },
+      { key: "C", text: "It is required for every single low-risk read-only action as well, with no distinction" },
+      { key: "D", text: "It replaces the need for the agent to reason at all" }
+    ],
+    correct: "A",
+    explanation: "For actions that are costly, irreversible, or sensitive, requiring explicit human approval before execution provides a safety check against agent errors or misjudgments, while lower-risk actions can often proceed autonomously."
+  },
+  {
+    id: 17,
+    lesson: 5,
+    lessonName: "Semantic Kernel",
+    question: "What is Microsoft's Semantic Kernel, at a high level?",
+    options: [
+      { key: "A", text: "An open-source SDK for orchestrating LLM calls, plugins, memory, and planning inside applications (e.g. in .NET, Python, or Java), used to build AI-powered apps and agents" },
+      { key: "B", text: "A proprietary Azure hardware chip for running GPUs faster" },
+      { key: "C", text: "A replacement operating system kernel for Windows Server" },
+      { key: "D", text: "A database engine unrelated to AI" }
+    ],
+    correct: "A",
+    explanation: "Semantic Kernel is an open-source SDK from Microsoft that helps developers integrate LLMs into applications by orchestrating prompts, plugins/functions, memory, and planning — providing a framework for building AI features and agents on top of models."
+  },
+  {
+    id: 18,
+    lesson: 5,
+    lessonName: "Semantic Kernel",
+    question: "In Semantic Kernel, what is the role of the 'Kernel' object itself?",
+    options: [
+      { key: "A", text: "It acts as the central orchestrator that ties together the connected AI model(s), registered plugins/functions, and memory, coordinating how a request flows through them" },
+      { key: "B", text: "It is only a logging utility with no other function" },
+      { key: "C", text: "It is a UI component for rendering charts" },
+      { key: "D", text: "It exclusively manages network security settings" }
+    ],
+    correct: "A",
+    explanation: "The Kernel in Semantic Kernel is the central object that wires together the configured AI service(s), the plugins/functions available to it, and memory connectors, and coordinates execution when the application invokes a function or a plan."
+  },
+  {
+    id: 19,
+    lesson: 5,
+    lessonName: "Semantic Kernel",
+    question: "In Semantic Kernel, what is the distinction between a 'native function' and a 'semantic function' within a plugin?",
+    options: [
+      { key: "A", text: "A native function is regular code (e.g. C# or Python) the plugin exposes to do deterministic work, while a semantic function is defined by a natural-language prompt template that the LLM executes" },
+      { key: "B", text: "There is no difference; the terms are interchangeable" },
+      { key: "C", text: "Native functions can only run in the browser, never on a server" },
+      { key: "D", text: "Semantic functions can never accept any input parameters" }
+    ],
+    correct: "A",
+    explanation: "A native function wraps ordinary application code (for deterministic operations like calling an API or doing a calculation), while a semantic function is essentially a reusable prompt template invoked through the LLM — both can be exposed as callable functions within a plugin."
+  },
+  {
+    id: 20,
+    lesson: 5,
+    lessonName: "Semantic Kernel",
+    question: "How does Semantic Kernel typically fit into building an AI agent (for example, alongside Azure AI Foundry's agent capabilities)?",
+    options: [
+      { key: "A", text: "It provides the orchestration layer — connecting the model, plugins/tools, memory, and planning logic — that developers use to assemble and run an agent's reasoning and action loop within their application" },
+      { key: "B", text: "It has no relationship to agents and is used only for static websites" },
+      { key: "C", text: "It replaces the need for any language model in the agent" },
+      { key: "D", text: "It can only be used with a single hardcoded plugin and no others" }
+    ],
+    correct: "A",
+    explanation: "Semantic Kernel is commonly used as the orchestration layer for agentic applications: it connects the model to callable plugins/tools, manages memory and context, and can drive planning so a developer can assemble an agent's perceive-reason-act loop within a .NET, Python, or Java app, including alongside Azure AI Foundry agent services."
+  }
+];
+
+</script>
+<script>
+// ==========================================================
+// STATE
+// ==========================================================
+const TOTAL_Q = QUESTIONS.length;
+let current = 0;
+let answers = new Array(TOTAL_Q).fill(null);   // selected key or null
+let flagged = new Array(TOTAL_Q).fill(false);
+let startTime = null;
+let timerInterval = null;
+let elapsedSeconds = 0;
+let reviewFilter = 'all';
+
+// ==========================================================
+// LESSON COVERAGE (built on start screen)
+// ==========================================================
+function buildLessonCoverage() {
+  const counts = {};
+  const order = [];
+  QUESTIONS.forEach(q => {
+    if (!(q.lesson in counts)) { counts[q.lesson] = { name: q.lessonName, n: 0 }; order.push(q.lesson); }
+    counts[q.lesson].n++;
+  });
+  const container = document.getElementById('lesson-coverage');
+  order.sort((a,b) => a-b).forEach(l => {
+    const row = document.createElement('div');
+    row.className = 'lesson-row';
+    row.innerHTML = `<span class="ln">Lesson ${l}: ${counts[l].name}</span><span class="badge">${counts[l].n} Qs</span>`;
+    container.appendChild(row);
+  });
+}
+buildLessonCoverage();
+
+// ==========================================================
+// START
+// ==========================================================
+function startExam() {
+  document.getElementById('screen-start').classList.remove('active');
+  document.getElementById('screen-exam').classList.add('active');
+  startTime = Date.now();
+  timerInterval = setInterval(updateTimer, 1000);
+  buildNavGrid();
+  renderQuestion();
+}
+
+function updateTimer() {
+  elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
+  const m = Math.floor(elapsedSeconds / 60);
+  const s = elapsedSeconds % 60;
+  document.getElementById('timer-display').textContent = `${m}:${s.toString().padStart(2,'0')}`;
+}
+
+// ==========================================================
+// RENDER QUESTION
+// ==========================================================
+function renderQuestion() {
+  const q = QUESTIONS[current];
+  document.getElementById('q-num-label').textContent = `Question ${current + 1} of ${TOTAL_Q}`;
+  document.getElementById('q-lesson-tag').textContent = `Lesson ${q.lesson}: ${q.lessonName}`;
+  document.getElementById('q-text').textContent = q.question;
+  document.getElementById('progress-display').textContent = `Q${current + 1} / ${TOTAL_Q}`;
+
+  const flagBtn = document.getElementById('flag-btn');
+  flagBtn.classList.toggle('flagged', flagged[current]);
+  flagBtn.innerHTML = flagged[current] ? '🚩 Flagged' : '🚩 Flag for review';
+
+  const optContainer = document.getElementById('options-container');
+  optContainer.innerHTML = '';
+  q.options.forEach(opt => {
+    const div = document.createElement('div');
+    div.className = 'option' + (answers[current] === opt.key ? ' selected' : '');
+    div.onclick = () => selectAnswer(opt.key);
+    div.innerHTML = `<span class="opt-key">${opt.key}</span><span class="opt-text">${opt.text}</span>`;
+    optContainer.appendChild(div);
+  });
+
+  document.getElementById('prev-btn').disabled = current === 0;
+  document.getElementById('prev-btn').style.opacity = current === 0 ? '0.4' : '1';
+  document.getElementById('next-btn').textContent = current === TOTAL_Q - 1 ? 'Finish →' : 'Next →';
+
+  updateNavGrid();
+}
+
+function selectAnswer(key) {
+  answers[current] = key;
+  renderQuestion();
+}
+
+function toggleFlag() {
+  flagged[current] = !flagged[current];
+  renderQuestion();
+}
+
+function nextQuestion() {
+  if (current < TOTAL_Q - 1) { current++; renderQuestion(); }
+  else { confirmSubmit(); }
+}
+function prevQuestion() {
+  if (current > 0) { current--; renderQuestion(); }
+}
+
+// ==========================================================
+// NAVIGATOR
+// ==========================================================
+function buildNavGrid() {
+  const grid = document.getElementById('nav-grid');
+  grid.innerHTML = '';
+  for (let i = 0; i < TOTAL_Q; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'nav-cell';
+    cell.id = `nav-cell-${i}`;
+    cell.textContent = i + 1;
+    cell.onclick = () => { current = i; renderQuestion(); };
+    grid.appendChild(cell);
+  }
+}
+function updateNavGrid() {
+  for (let i = 0; i < TOTAL_Q; i++) {
+    const cell = document.getElementById(`nav-cell-${i}`);
+    cell.classList.toggle('current', i === current);
+    cell.classList.toggle('answered', answers[i] !== null);
+    cell.classList.toggle('flagged', flagged[i]);
+  }
+}
+
+// ==========================================================
+// SUBMIT
+// ==========================================================
+function confirmSubmit() {
+  const unanswered = answers.filter(a => a === null).length;
+  const msg = unanswered === 0
+    ? `You've answered all ${TOTAL_Q} questions. Ready to see your results?`
+    : `You have ${unanswered} unanswered question${unanswered > 1 ? 's' : ''}. You can still submit — unanswered questions count as skipped, not wrong.`;
+  document.getElementById('modal-unanswered-msg').textContent = msg;
+  document.getElementById('submit-modal').style.display = 'flex';
+}
+function closeSubmitModal() {
+  document.getElementById('submit-modal').style.display = 'none';
+}
+
+function submitExam() {
+  clearInterval(timerInterval);
+  document.getElementById('submit-modal').style.display = 'none';
+  document.getElementById('screen-exam').classList.remove('active');
+  document.getElementById('screen-results').classList.add('active');
+  renderResults();
+}
+
+// ==========================================================
+// RESULTS
+// ==========================================================
+function renderResults() {
+  let correct = 0, incorrect = 0, skipped = 0;
+  answers.forEach((a, i) => {
+    if (a === null) skipped++;
+    else if (a === QUESTIONS[i].correct) correct++;
+    else incorrect++;
+  });
+  const pct = Math.round((correct / TOTAL_Q) * 100);
+
+  document.getElementById('stat-correct').textContent = correct;
+  document.getElementById('stat-incorrect').textContent = incorrect;
+  document.getElementById('stat-skipped').textContent = skipped;
+  const m = Math.floor(elapsedSeconds / 60), s = elapsedSeconds % 60;
+  document.getElementById('stat-time').textContent = `${m}:${s.toString().padStart(2,'0')}`;
+
+  document.getElementById('score-big').textContent = `${pct}%`;
+  document.getElementById('score-sub').textContent = `${correct} of ${TOTAL_Q} correct`;
+
+  const hero = document.getElementById('band-hero');
+  const emoji = document.getElementById('band-emoji');
+  const label = document.getElementById('band-label');
+  const msg = document.getElementById('band-msg');
+
+  if (pct >= 80) {
+    hero.className = 'band-hero strong';
+    emoji.textContent = '🟢'; label.textContent = 'Strong';
+    msg.textContent = "Ready to move to the next module.";
+  } else if (pct >= 60) {
+    hero.className = 'band-hero good';
+    emoji.textContent = '🟡'; label.textContent = 'Good Progress';
+    msg.textContent = "Review 1–2 lessons and retry.";
+  } else {
+    hero.className = 'band-hero needs';
+    emoji.textContent = '🔴'; label.textContent = 'Needs Review';
+    msg.textContent = "Revisit the module before moving on.";
+  }
+
+  renderLessonBreakdown();
+}
+
+function renderLessonBreakdown() {
+  const lessonStats = {};
+  const order = [];
+  QUESTIONS.forEach((q, i) => {
+    if (!(q.lesson in lessonStats)) {
+      lessonStats[q.lesson] = { name: q.lessonName, total: 0, correct: 0 };
+      order.push(q.lesson);
+    }
+    lessonStats[q.lesson].total++;
+    if (answers[i] === q.correct) lessonStats[q.lesson].correct++;
+  });
+  order.sort((a,b) => a-b);
+  const body = document.getElementById('lesson-breakdown-body');
+  body.innerHTML = '';
+  order.forEach(l => {
+    const st = lessonStats[l];
+    const pct = Math.round((st.correct / st.total) * 100);
+    const barClass = pct >= 80 ? '' : pct >= 60 ? 'mid' : 'low';
+    const row = document.createElement('div');
+    row.className = 'lb-row';
+    row.innerHTML = `
+      <div class="lb-top"><span class="lb-name">Lesson ${l}: ${st.name}</span><span class="lb-score">${st.correct}/${st.total}</span></div>
+      <div class="lb-bar-bg"><div class="lb-bar-fill ${barClass}" style="width:${pct}%;"></div></div>
+    `;
+    body.appendChild(row);
+  });
+}
+
+// ==========================================================
+// REVIEW MODE
+// ==========================================================
+function showReview() {
+  document.getElementById('screen-results').classList.remove('active');
+  document.getElementById('screen-review').classList.add('active');
+  renderReviewList();
+}
+function backToResults() {
+  document.getElementById('screen-review').classList.remove('active');
+  document.getElementById('screen-results').classList.add('active');
+}
+function setReviewFilter(f) {
+  reviewFilter = f;
+  document.querySelectorAll('.rf-btn').forEach(b => b.classList.toggle('active', b.dataset.filter === f));
+  renderReviewList();
+}
+function renderReviewList() {
+  const list = document.getElementById('review-list');
+  list.innerHTML = '';
+  QUESTIONS.forEach((q, i) => {
+    const a = answers[i];
+    const status = a === null ? 'skipped' : (a === q.correct ? 'correct' : 'incorrect');
+    if (reviewFilter === 'correct' && status !== 'correct') return;
+    if (reviewFilter === 'incorrect' && status !== 'incorrect') return;
+    if (reviewFilter === 'skipped' && status !== 'skipped') return;
+    if (reviewFilter === 'flagged' && !flagged[i]) return;
+
+    const card = document.createElement('div');
+    card.className = 'review-q';
+    let tagHtml = status === 'correct'
+      ? '<span class="result-tag correct">✅ Correct</span>'
+      : status === 'incorrect'
+        ? '<span class="result-tag incorrect">❌ Incorrect</span>'
+        : '<span class="result-tag skipped">⬜ Skipped</span>';
+    if (flagged[i]) tagHtml += ' <span class="result-tag" style="background:var(--amber-bg); color:var(--amber-dark);">🚩 Flagged</span>';
+
+    let optsHtml = '';
+    q.options.forEach(opt => {
+      let cls = '';
+      if (opt.key === q.correct) cls = 'correct-answer';
+      else if (opt.key === a && a !== q.correct) cls = 'wrong-answer';
+      optsHtml += `<div class="rq-opt ${cls}"><span>${opt.key}</span><span>${opt.text}</span></div>`;
+    });
+
+    card.innerHTML = `
+      <div class="rq-top"><span class="lesson-tag">Lesson ${q.lesson}: ${q.lessonName}</span>${tagHtml}</div>
+      <div class="rq-text">Q${i + 1}. ${q.question}</div>
+      ${optsHtml}
+      <div class="rq-explain"><b>Explanation:</b> ${q.explanation}</div>
+    `;
+    list.appendChild(card);
+  });
+
+  if (list.innerHTML === '') {
+    list.innerHTML = '<div style="text-align:center; color:var(--text-3); padding:40px 0;">No questions match this filter.</div>';
+  }
+}
+
+</script>
+</body>
+</html>
